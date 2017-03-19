@@ -163,7 +163,7 @@ a.c1 {font-weight: normal;}
       <div class="caption-wrap">
         <div id="info" style="visibility: visible;">
           <p id="info_speak_now" style="display:none">
-            Speak now.
+            Now listening...
           </p>
           <p id="info_no_speech" style="display:none">
             No speech was detected. You may need to adjust your <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">microphone
@@ -203,7 +203,7 @@ document.getElementById('final_span').innerHTML = window.localStorage.getItem("t
 function clear_saved() {
   if (confirm('Clear saved transcript?')) {
     window.localStorage.setItem("transcript", final_transcript);
-    $('.final_span').text(''); 
+    $('#final_span').text(''); 
   }
 }
 
@@ -248,7 +248,7 @@ if (!('webkitSpeechRecognition' in window)) {
     if (ignore_onend) {
       return;
     }
-    start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
+    
     if (!final_transcript) {
       showInfo('info_start');
       return;
@@ -267,6 +267,7 @@ if (!('webkitSpeechRecognition' in window)) {
   };
 
   recognition.onresult = function(event) {
+    console.log(final_transcript);
     var interim_transcript = '';
     if (typeof(event.results) == 'undefined') {
       recognition.onend = null;
