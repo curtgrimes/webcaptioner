@@ -1,0 +1,27 @@
+stages:
+  - deploy
+
+Staging:
+  stage: deploy
+  script:
+    - sudo mkdir -p /opt/webcaptioner.example.com /opt/webcaptioner.example.com/public
+    - sudo cp -r public/* /opt/webcaptioner.example.com/public
+    - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled
+    - sudo apt-get -yq install letsencrypt
+    - sudo letsencrypt certonly --non-interactive --webroot -w /opt/webcaptioner.example.com/public -d webcaptioner.example.com -d www.webcaptioner.example.com -m curt@example.com --agree-tos
+    - sudo cp nginx/webcaptioner.example.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
+    - sudo service nginx restart
+  environment:
+    name: staging
+    url: https://webcaptioner.example.com
+
+Production:
+  stage: deploy
+  script:
+    - echo "Deploy to production server"
+  environment:
+    name: production
+    url: https://example.com
+  when: manual
+  only:
+  - master
