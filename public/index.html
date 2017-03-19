@@ -199,6 +199,7 @@ showInfo('info_start');
 
 
 document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
+window.scrollTo(0,document.body.scrollHeight);
 
 function clear_saved() {
   if (confirm('Clear saved transcript?')) {
@@ -208,7 +209,7 @@ function clear_saved() {
 }
 
 var create_email = false;
-var final_transcript = '';
+var final_transcript = window.localStorage.getItem("transcript") || '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
