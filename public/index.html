@@ -344,7 +344,7 @@ function showInfo(s) {
   crossorigin="anonymous"></script>
   <script>
     $(function(){
-      $('#final_span').on('kekyup', function(event) {
+      $('#final_span').on('keyup', function(event) {
         final_transcript = $('#final_span').text();
         window.localStorage.setItem("transcript", final_transcript);
       });
