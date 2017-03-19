@@ -203,9 +203,9 @@ window.scrollTo(0,document.body.scrollHeight);
 
 function clear_saved() {
   if (confirm('Clear saved transcript?')) {
-    window.localStorage.setItem("transcript", final_transcript);
     $('#final_span').text(''); 
     final_transcript = '';
+    window.localStorage.setItem("transcript", final_transcript);
   }
 }
 
@@ -335,6 +335,13 @@ function showInfo(s) {
     info.style.visibility = 'hidden';
   }
 }
+
+$(function(){
+   $('#final_span').on('kekyup', function(event) {
+    final_transcript = $('#final_span').text();
+    window.localStorage.setItem("transcript", final_transcript);
+ });
+})
 
     </script>
   
