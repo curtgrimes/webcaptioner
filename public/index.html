@@ -224,6 +224,7 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.onstart = function() {
     recognizing = true;
     showInfo('info_speak_now');
+    window.scrollTo(0,document.body.scrollHeight);
   };
 
   recognition.onerror = function(event) {
