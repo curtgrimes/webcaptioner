@@ -114,7 +114,6 @@
     color: #fffeaf;
     }
     .final {
-    color: #fff;
     padding-right: 3px;
     }
     .button {
@@ -142,8 +141,9 @@
 
 
 .caption-wrap {
+    color: #fff;
   max-width:1200px;
-  margin:0 auto;
+  margin:0 auto 150px auto;
   font-weight:bold;
   text-transform:uppercase;
   font-size:3.5em;
@@ -157,8 +157,8 @@ a.c1 {font-weight: normal;}
   </head>
   <body class="" id="grid">
     <div class="browser-landing" id="main">
-      <div id="div_start">
-        <a href="javascript:void(0)" onclick="startButton(event)">Start</a>
+      <div id="div_start" style="position:fixed;right:0;bottom:0">
+        <a href="javascript:void(0)" onclick="startButton(event)" id="startButton">Start</a><br/><br/><a href="javascript:void(0)" onclick="clear_saved()">Clear</a>
       </div>
       <div class="caption-wrap">
         <div id="info" style="visibility: visible;">
@@ -197,6 +197,16 @@ a.c1 {font-weight: normal;}
 
 showInfo('info_start');
 
+
+document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
+
+function clear_saved() {
+  if (confirm('Clear saved transcript?')) {
+    window.localStorage.setItem("transcript", final_transcript);
+    $('.final_span').text(''); 
+  }
+}
+
 var create_email = false;
 var final_transcript = '';
 var recognizing = false;
@@ -212,17 +222,14 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.onstart = function() {
     recognizing = true;
     showInfo('info_speak_now');
-    start_img.src = '/intl/en/chrome/assets/common/images/content/mic-animate.gif';
   };
 
   recognition.onerror = function(event) {
     if (event.error == 'no-speech') {
-      start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
       showInfo('info_no_speech');
       ignore_onend = true;
     }
     if (event.error == 'audio-capture') {
-      start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
       showInfo('info_no_microphone');
       ignore_onend = true;
     }
@@ -277,12 +284,8 @@ if (!('webkitSpeechRecognition' in window)) {
     final_transcript = capitalize(final_transcript);
     final_span.innerHTML = linebreak(final_transcript);
     interim_span.innerHTML = linebreak(interim_transcript);
-
+    window.localStorage.setItem("transcript", final_transcript);
     window.scrollTo(0,document.body.scrollHeight);
-
-    if (final_transcript || interim_transcript) {
-      showButtons('inline-block');
-    }
   };
 }
 
@@ -302,53 +305,20 @@ function capitalize(s) {
   return s.replace(first_char, function(m) { return m.toUpperCase(); });
 }
 
-function createEmail() {
-  var n = final_transcript.indexOf('\n');
-  if (n < 0 || n >= 80) {
-    n = 40 + final_transcript.substring(40).indexOf(' ');
-  }
-  var subject = encodeURI(final_transcript.substring(0, n));
-  var body = encodeURI(final_transcript.substring(n + 1));
-  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
-}
-
-function copyButton() {
-  if (recognizing) {
-    recognizing = false;
-    recognition.stop();
-  }
-  copy_button.style.display = 'none';
-  copy_info.style.display = 'inline-block';
-  showInfo('');
-}
-
-function emailButton() {
-  if (recognizing) {
-    create_email = true;
-    recognizing = false;
-    recognition.stop();
-  } else {
-    createEmail();
-  }
-  email_button.style.display = 'none';
-  email_info.style.display = 'inline-block';
-  showInfo('');
-}
-
 function startButton(event) {
   if (recognizing) {
     recognition.stop();
+    $('#startButton').text('Start');
     return;
   }
+  $('#startButton').text('Stop');
   final_transcript = '';
   recognition.lang = 'en-US';
   recognition.start();
   ignore_onend = false;
   final_span.innerHTML = '';
   interim_span.innerHTML = '';
-  start_img.src = '/intl/en/chrome/assets/common/images/content/mic-slash.gif';
   showInfo('info_allow');
-  showButtons('none');
   start_timestamp = event.timeStamp;
 }
 
@@ -365,18 +335,10 @@ function showInfo(s) {
   }
 }
 
-var current_style;
-function showButtons(style) {
-  if (style == current_style) {
-    return;
-  }
-  current_style = style;
-  copy_button.style.display = style;
-  email_button.style.display = style;
-  copy_info.style.display = 'none';
-  email_info.style.display = 'none';
-}
     </script>
   
-
+<script
+  src="https://code.jquery.com/jquery-3.2.0.min.js"
+  integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
+  crossorigin="anonymous"></script>
 </body></html>
