@@ -313,11 +313,9 @@ function startButton(event) {
     return;
   }
   $('#startButton').text('Stop');
-  final_transcript = '';
   recognition.lang = 'en-US';
   recognition.start();
   ignore_onend = false;
-  final_span.innerHTML = '';
   interim_span.innerHTML = '';
   showInfo('info_allow');
   start_timestamp = event.timeStamp;
