@@ -7,6 +7,7 @@ Staging:
     - sudo mkdir -p /opt/webcaptioner.example.com /opt/webcaptioner.example.com/public
     - sudo cp -r public/* /opt/webcaptioner.example.com/public
     - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled
+    - sudo service nginx restart
     - sudo apt-get -yq install letsencrypt
     - sudo letsencrypt certonly --non-interactive --webroot -w /opt/webcaptioner.example.com/public -d webcaptioner.example.com -d www.webcaptioner.example.com -m curt@example.com --agree-tos
     - sudo cp nginx/webcaptioner.example.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config

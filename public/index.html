@@ -1,26 +1,13 @@
 <!DOCTYPE html>
-<!-- saved from url=(0055)https://www.google.com/intl/en/chrome/demos/speech.html -->
 <html class="js consumer build-stable chrome win64-incapable mac twisty-js" lang="en" id="mac"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <script src="./transcription_files/cb=gapi.loaded_0" async=""></script><script type="text/javascript" async="" src="./transcription_files/plusone.js" gapi_processed="true"></script><script type="text/javascript" async="" src="https://ssl.google-analytics.com/ga.js"></script><script>
-(function(e, p){
-    var m = location.href.match(/platform=(win8|win|mac|linux|cros)/);
-    e.id = (m && m[1]) ||
-           (p.indexOf('Windows NT 6.2') > -1 ? 'win8' : p.indexOf('Windows') > -1 ? 'win' : p.indexOf('Mac') > -1 ? 'mac' : p.indexOf('CrOS') > -1 ? 'cros' : 'linux');
-    e.className = e.className.replace(/\bno-js\b/,'js');
-  })(document.documentElement, window.navigator.userAgent)
-    </script>
     
     <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
     <meta content="Google Chrome is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier." name="description">
     <title>
       Chrome Browser
     </title>
-    <link href="https://plus.google.com/100585555255542998765" rel="publisher">
-    <link href="https://www.google.com/images/icons/product/chrome-32.png" rel="icon" type="image/ico">
-    
-    <script src="./transcription_files/autotrack.js">
-</script><style type="text/css">
+    <style type="text/css">
 :root div[style^="height: 16px; font: bold 12px/16px"],
 :root body > div[align]:first-child + style + table[cellpadding="0"][width="100%"] > tbody:only-child > tr:only-child > td:only-child,
 :root [style="border: 1px solid rgb(51, 102, 204);"],
@@ -93,19 +80,22 @@
 :root #center_col > #\5f Emc,
 :root #bottomads,
 :root #rhs_block .xpdopen > ._OKe > div > .mod > ._yYf
-{ display: none !important; }</style><style type="text/css">iframe[src="//2542116.fls.doubleclick.net/activityi;src=2542116;type=clien612;cat=chrom0;ord=936679616804.8031?"]
-{display:none !important;}</style>
+{ display: none !important; }</style>
 
 <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
 
-
-    <script>
-new gweb.analytics.AutoTrack({
-          profile: 'UA-26908291-1'
-        });
-    </script>
     <style>
-#info {
+      html,body {
+        background:#000;
+        font-family: 'Lato', sans-serif;
+      }
+
+      a, a:visited, a:hover {
+        color:#b7d3ff;
+        text-decoration:none;
+        cursor:pointer;
+      }
+    #info {
     font-size: 20px;
     }
     #div_start {
@@ -118,12 +108,13 @@ new gweb.analytics.AutoTrack({
     border: 0;
     background-color:transparent;
     padding: 0;
+    color:#ccc;
     }
     .interim {
-    color: gray;
+    color: #fffeaf;
     }
     .final {
-    color: black;
+    color: #fff;
     padding-right: 3px;
     }
     .button {
@@ -153,10 +144,9 @@ new gweb.analytics.AutoTrack({
 .caption-wrap {
   max-width:1200px;
   margin:0 auto;
-  font-family: 'Lato', sans-serif;
   font-weight:bold;
   text-transform:uppercase;
-  font-size:3em;
+  font-size:3.5em;
 }
 
 
@@ -167,6 +157,9 @@ a.c1 {font-weight: normal;}
   </head>
   <body class="" id="grid">
     <div class="browser-landing" id="main">
+      <div id="div_start">
+        <a href="javascript:void(0)" onclick="startButton(event)">Start</a>
+      </div>
       <div class="caption-wrap">
         <div id="info" style="visibility: visible;">
           <p id="info_speak_now" style="display:none">
@@ -195,63 +188,12 @@ a.c1 {font-weight: normal;}
             Web Speech API is not supported by this browser. Upgrade to <a href="https://www.google.com/chrome">Chrome</a> version 25 or later.
           </p>
         </div>
-        <div id="div_start">
-          <button id="start_button" onclick="startButton(event)" style="display: inline-block;"><img alt="Start" id="start_img" src="./transcription_files/mic.gif"></button>
-        </div>
-        <div id="results">
-          <span class="final" id="final_span">One two three four five</span> <span class="interim" id="interim_span"></span>
-        </div>
-        <div id="copy">
-          <button class="button" id="copy_button" onclick="copyButton()">Copy and Paste</button>
-          <div id="copy_info">
-            <p>
-              Press Control-C to copy text.
-            </p>
-            <p>
-              (Command-C on Mac.)
-            </p>
-          </div><button class="button" id="email_button" onclick="emailButton()">Create
-          Email</button>
-          <div id="email_info">
-            <p>
-              Text sent to default email application.
-            </p>
-            <p>
-              (See chrome://settings/handlers to change.)
-            </p>
-          </div>
+        <div id="results" contenteditable="true" style="color:#fff">
+          <span class="final" id="final_span" contenteditable="true"></span> <span class="interim" id="interim_span"></span>
         </div>
       </div>
-    </div><script src="./transcription_files/chrome.min.js">
-</script> <script>
-var chrmMenuBar = new chrm.ui.MenuBar();
-      chrmMenuBar.decorate('nav');
-      var chrmLogo = new chrm.ui.Logo('logo');
-
-      var chrmscroll = new chrm.ui.SmoothScroll('scroll');
-      chrmscroll.init();
-
-
-
-  window.___gcfg = { lang: 'en' };
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-
-
-
-
-      var doubleTracker = new gweb.analytics.DoubleTrack('floodlight', {
-          src: 2542116,
-          type: 'clien612',
-          cat: 'chrom0'
-      });
-      doubleTracker.track();
-
-      doubleTracker.trackClass('doubletrack', true);
-    </script><iframe src="./transcription_files/activityi.html" width="1" height="1" style="display: none !important;" hidden=""></iframe> <script>
+    </div>
+<script>
 
 showInfo('info_start');
 
@@ -263,7 +205,6 @@ var start_timestamp;
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
-  start_button.style.display = 'inline-block';
   var recognition = new webkitSpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = true;
@@ -346,7 +287,7 @@ if (!('webkitSpeechRecognition' in window)) {
 }
 
 function upgrade() {
-  start_button.style.visibility = 'hidden';
+  
   showInfo('info_upgrade');
 }
 
