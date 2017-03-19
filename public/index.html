@@ -269,7 +269,9 @@ if (!('webkitSpeechRecognition' in window)) {
     }
   };
 
+var lastResultTime = (new Date()).getTime()/1000;
   recognition.onresult = function(event) {
+    lastResultTime = (new Date()).getTime()/1000;
     var interim_transcript = '';
     if (typeof(event.results) == 'undefined') {
       recognition.onend = null;
@@ -291,6 +293,13 @@ if (!('webkitSpeechRecognition' in window)) {
     window.scrollTo(0,document.body.scrollHeight);
   };
 }
+
+setInterval(function() {
+  var now = (new Date()).getTime()/1000;
+  if (recognizing && now - lastResultTime > 3) {
+    console.log("Should restart service");
+  }
+},3000);
 
 function upgrade() {
   
