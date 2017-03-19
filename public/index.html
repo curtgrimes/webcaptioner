@@ -206,6 +206,7 @@ function clear_saved() {
   if (confirm('Clear saved transcript?')) {
     window.localStorage.setItem("transcript", final_transcript);
     $('#final_span').text(''); 
+    final_transcript = '';
   }
 }
 
