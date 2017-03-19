@@ -336,17 +336,18 @@ function showInfo(s) {
   }
 }
 
-$(function(){
-   $('#final_span').on('kekyup', function(event) {
-    final_transcript = $('#final_span').text();
-    window.localStorage.setItem("transcript", final_transcript);
- });
-})
-
     </script>
   
 <script
   src="https://code.jquery.com/jquery-3.2.0.min.js"
   integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
   crossorigin="anonymous"></script>
+  <script>
+    $(function(){
+      $('#final_span').on('kekyup', function(event) {
+        final_transcript = $('#final_span').text();
+        window.localStorage.setItem("transcript", final_transcript);
+      });
+    });
+</script>
 </body></html>
