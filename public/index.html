@@ -271,7 +271,6 @@ if (!('webkitSpeechRecognition' in window)) {
   };
 
   recognition.onresult = function(event) {
-    console.log(final_transcript);
     var interim_transcript = '';
     if (typeof(event.results) == 'undefined') {
       recognition.onend = null;
