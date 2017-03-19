@@ -297,7 +297,8 @@ var lastResultTime = (new Date()).getTime()/1000;
 setInterval(function() {
   var now = (new Date()).getTime()/1000;
   if (recognizing && now - lastResultTime > 3) {
-    console.log("Should restart service");
+    recognition.stop();
+    recognition.start();
   }
 },3000);
 
