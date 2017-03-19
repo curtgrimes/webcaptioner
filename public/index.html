@@ -299,8 +299,8 @@ var lastResultTime = (new Date()).getTime()/1000;
 }
 
 setInterval(function() {
-  var now = (new Date()).getTime()/3000;
-  if (recognizing && now - lastResultTime > 1) {
+  var now = (new Date()).getTime()/1000;
+  if (recognizing && now - lastResultTime > 3) {
     restartingDueToFailure = true;
     recognition.stop();
   }
