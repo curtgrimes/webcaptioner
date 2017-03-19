@@ -299,12 +299,12 @@ var lastResultTime = (new Date()).getTime()/1000;
 }
 
 setInterval(function() {
-  var now = (new Date()).getTime()/1000;
+  var now = (new Date()).getTime()/3000;
   if (recognizing && now - lastResultTime > 1) {
     restartingDueToFailure = true;
     recognition.stop();
   }
-},1000);
+},3000);
 
 function upgrade() {
   
