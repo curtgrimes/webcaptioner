@@ -32,4 +32,4 @@ Production:
     url: https://webcaptioner.example.com
   when: manual
   only:
-  - master
+    - master
