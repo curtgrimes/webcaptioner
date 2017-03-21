@@ -5,6 +5,7 @@ Staging:
   stage: deploy
   script:
     - sudo mkdir -p /opt/staging.webcaptioner.example.com /opt/staging.webcaptioner.example.com/public
+    - sudo rm -rf /opt/staging.webcaptioner.example.com/public/*
     - sudo cp -r public/* /opt/staging.webcaptioner.example.com/public
     - sudo cp nginx/staging.webcaptioner.example.com.conf /etc/nginx/sites-enabled
     - sudo service nginx restart
@@ -20,6 +21,7 @@ Production:
   stage: deploy
   script:
     - sudo mkdir -p /opt/webcaptioner.example.com /opt/webcaptioner.example.com/public
+    - sudo rm -rf /opt/staging.webcaptioner.example.com/public/*
     - sudo cp -r public/* /opt/webcaptioner.example.com/public
     - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled
     - sudo service nginx restart
