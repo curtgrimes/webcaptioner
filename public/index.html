@@ -300,11 +300,11 @@ var lastResultTime = (new Date()).getTime()/1000;
 
 setInterval(function() {
   var now = (new Date()).getTime()/1000;
-  if (recognizing && now - lastResultTime > 2) {
+  if (recognizing && now - lastResultTime > 3) {
     restartingDueToFailure = true;
     recognition.stop();
   }
-},2000);
+},3000);
 
 function upgrade() {
   
