@@ -202,6 +202,7 @@ document.getElementById('final_span').innerHTML = window.localStorage.getItem("t
 window.scrollTo(0,document.body.scrollHeight);
 
 function clear_saved() {
+  ga('send','event','user','clearButtonClick');
   if (confirm('Clear saved transcript?')) {
     $('#final_span').text(''); 
     final_transcript = '';
@@ -317,11 +318,14 @@ function capitalize(s) {
 }
 
 function startButton(event) {
+
   if (recognizing) {
+    ga('send','event','user','stopButtonClick');
     recognition.stop();
     $('#startButton').text('Start');
     return;
   }
+  ga('send','event','user','startButtonClick');
   $('#startButton').text('Stop');
   recognition.lang = 'en-US';
   recognition.start();
