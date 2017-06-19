@@ -27,6 +27,7 @@ Production:
     - sudo rm -rf /opt/staging.webcaptioner.com/public/*
     - sudo cp -r public/* /opt/webcaptioner.com/public
     - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
+    - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled # old domain redirect
     - sudo service nginx restart
     - sudo apt-get -yq install software-properties-common
     - sudo add-apt-repository ppa:certbot/certbot
@@ -34,6 +35,7 @@ Production:
     - sudo apt-get -yq install python-certbot-nginx 
     - sudo certbot certonly --cert-name webcaptioner.com --non-interactive --webroot -w /opt/webcaptioner.com/public --domains webcaptioner.com,www.webcaptioner.com,webcaptioner.example.com,www.webcaptioner.example.com  -m curt@example.com --agree-tos
     - sudo cp nginx/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
+    - sudo cp nginx/webcaptioner.example.com-ssl.conf /etc/nginx/sites-enabled # old domain redirect
     - sudo service nginx restart
   environment:
     name: production
