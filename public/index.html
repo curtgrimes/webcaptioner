@@ -265,12 +265,6 @@ if (!('webkitSpeechRecognition' in window)) {
       return;
     }
     showInfo('');
-    if (window.getSelection) {
-      window.getSelection().removeAllRanges();
-      var range = document.createRange();
-      range.selectNode(document.getElementById('final_span'));
-      window.getSelection().addRange(range);
-    }
   };
 
 var lastResultTime = (new Date()).getTime()/1000;
