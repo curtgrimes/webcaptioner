@@ -251,6 +251,7 @@ if (!('webkitSpeechRecognition' in window)) {
   recognition.onend = function() {
     if (restartingDueToFailure) {
       console.log("Restarting due to failure");
+      ga('send','event','recognition','restartingDueToPossibleFailure');
       recognition.start();
       restartingDueToFailure = false;
       return;
