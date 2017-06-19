@@ -10,7 +10,7 @@ Staging:
     - sudo cp nginx/staging.webcaptioner.com.conf /etc/nginx/sites-enabled
     - sudo service nginx restart
     - sudo apt-get -yq install letsencrypt
-    - sudo letsencrypt certonly --non-interactive --webroot -w /opt/staging.webcaptioner.com/public -d staging.webcaptioner.com -d www.staging.webcaptioner.com -m curt@example.com --agree-tos
+    - sudo letsencrypt certonly --cert-name staging.webcaptioner.com --non-interactive --webroot -w /opt/staging.webcaptioner.com/public --domains staging.webcaptioner.com,www.staging.webcaptioner.com -m curt@example.com --agree-tos
     - sudo cp nginx/staging.webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
     - sudo service nginx restart 
   environment:
@@ -26,7 +26,7 @@ Production:
     - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
     - sudo service nginx restart
     - sudo apt-get -yq install letsencrypt
-    - sudo letsencrypt certonly --non-interactive --webroot -w /opt/webcaptioner.com/public -d webcaptioner.com -d www.webcaptioner.com -d webcaptioner.example.com -d www.webcaptioner.example.com  -m curt@example.com --agree-tos
+    - sudo letsencrypt certonly --cert-name webcaptioner.com --non-interactive --webroot -w /opt/webcaptioner.com/public --domains webcaptioner.com,www.webcaptioner.com,webcaptioner.example.com,www.webcaptioner.example.com  -m curt@example.com --agree-tos
     - sudo cp nginx/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
     - sudo service nginx restart
   environment:
