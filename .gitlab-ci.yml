@@ -8,11 +8,11 @@ Staging:
     - sudo rm -rf /opt/staging.webcaptioner.com/public/*
     - sudo cp -r public/* /opt/staging.webcaptioner.com/public
     - sudo cp nginx/staging.webcaptioner.com.conf /etc/nginx/sites-enabled
-    - sudo service nginx restartsystemctl status nginx.service
+    - sudo service nginx restart
     - sudo apt-get -yq install letsencrypt
     - sudo letsencrypt certonly --non-interactive --webroot -w /opt/staging.webcaptioner.com/public -d staging.webcaptioner.com -d www.staging.webcaptioner.com -m curt@example.com --agree-tos
     - sudo cp nginx/staging.webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
-    - sudo service nginx restart
+    - sudo service nginx restart 
   environment:
     name: staging
     url: https://staging.webcaptioner.com
