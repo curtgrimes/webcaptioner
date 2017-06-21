@@ -42,6 +42,7 @@ Production:
     - sudo npm install pm2 -g
     - cd /opt/webcaptioner.com/app
     - sudo npm install
+    - sudo gulp
     - sudo pm2 delete webcaptioner-prod || true # ignore if nothing to delete
     - sudo pm2 start bin/www -n webcaptioner-prod --update-env -f
     - sudo service nginx restart

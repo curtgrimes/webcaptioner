@@ -1,0 +1,42 @@
+    html, body {
+      background: #000;
+      font-family: 'Lato', sans-serif;
+    }
+
+    a, a:visited, a:hover {
+      color: #b7d3ff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    #info {
+      font-size: 20px;
+    }
+
+    #div_start {
+      float: right;
+    }
+
+    #start_button {
+      border: 0;
+      background-color: transparent;
+      padding: 0;
+      color: #ccc;
+    }
+
+    .interim {
+      color: #fffeaf;
+    }
+
+    .final {
+      padding-right: 3px;
+    }
+    .caption-wrap {
+      line-height: 1.3em;
+      color: #fff;
+      max-width: 1200px;
+      margin: 0 auto 150px auto;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 4em;
+    }

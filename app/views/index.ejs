@@ -1,378 +1,71 @@
 <!DOCTYPE html>
-<html class="js consumer build-stable chrome win64-incapable mac twisty-js" lang="en" id="mac"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    
-    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
-    <title>
-      Web Captioner
-    </title>
-    <style type="text/css">
-:root div[style^="height: 16px; font: bold 12px/16px"],
-:root body > div[align]:first-child + style + table[cellpadding="0"][width="100%"] > tbody:only-child > tr:only-child > td:only-child,
-:root [style="border: 1px solid rgb(51, 102, 204);"],
-:root [style="border: 1px solid rgb(51, 102, 153);"],
-:root [style="border: 1px solid rgb(241, 250, 248);"],
-:root [style="border: 1px solid rgb(145, 117, 77);"],
-:root [style="border: 1px solid rgb(0, 90, 136);"],
-:root .ts[style="margin:0 0 12px;height:92px;width:100%"],
-:root .nH.MC,
-:root .c[style="margin: 0pt;"],
-:root .GISRH3UDHB,
-:root .GGQPGYLCMCB,
-:root .GGQPGYLCD5,
-:root .GC3LC41DERB + div[style="position: relative; height: 170px;"],
-:root #tadsc,
-:root #ad,
-:root #sqh,
-:root .widget-pane-section-result[data-result-ad-type],
-:root .rscontainer > .ellip,
-:root .rhsvw[style="background-color:#fff;margin:0 0 14px;padding-bottom:1px;padding-top:1px;"],
-:root .ra[width="30%"][align="right"] + table[width="70%"][cellpadding="0"],
-:root .ra[align="right"][width="30%"],
-:root .ra[align="left"][width="30%"],
-:root .mw > #rcnt > #center_col > #taw > .c,
-:root .mw > #rcnt > #center_col > #taw > #tvcap > .c,
-:root .mod > ._jH + .rscontainer,
-:root .lads[width="100%"][style="background:#FFF8DD"],
-:root .commercial-unit-mobile-top,
-:root .commercial-unit-desktop-top,
-:root .commercial-unit-desktop-rhs,
-:root .ch[onclick="ga(this,event)"],
-:root .GPMV2XEDA2 > .GPMV2XEDP1 > .GPMV2XEDJBB,
-:root .GKJYXHBF2 > .GKJYXHBE2 > .GKJYXHBH5,
-:root .GJJKPX2N1 > .GJJKPX2M1 > .GJJKPX2P4,
-:root .GHOFUQ5BG2 > .GHOFUQ5BF2 > .GHOFUQ5BG5,
-:root .GFYY1SVE2 > .GFYY1SVD2 > .GFYY1SVG5,
-:root .GFYY1SVD2 > .GFYY1SVC2 > .GFYY1SVF5,
-:root .GB3L-QEDGY .GB3L-QEDF- > .GB3L-QEDE-,
-:root #topstuff > #tads,
-:root #tadsto.c,
-:root #tadsb.c,
-:root #tads.c,
-:root #tads + div + .c,
-:root #ssmiwdiv[jsdisplay],
-:root #rhswrapper > #rhssection[border="0"][bgcolor="#ffffff"],
-:root #rhs_block > script + .c._oc._Ve.rhsvw,
-:root #rhs_block > ol > .rhsvw > .kp-blk > .xpdopen > ._OKe > ol > ._DJe > .luhb-div,
-:root #rhs_block > .ts[cellspacing="0"][cellpadding="0"][style="padding:0"],
-:root #rhs_block > #mbEnd,
-:root #rhs_block .mod > .luhb-div > div[data-async-type="updateHotelBookingModule"],
-:root #rhs_block .mod > .gws-local-hotels__booking-module,
-:root #resultspanel > #topads,
-:root #mn div[style="position:relative"] > #center_col > div > ._dPg,
-:root #mn div[style="position:relative"] > #center_col > ._Ak,
-:root #mn #center_col > div > h2.spon:first-child + ol:last-child,
-:root #mn #center_col > div > h2.spon:first-child,
-:root #mclip_container:last-child,
-:root #mbEnd[cellspacing="0"][cellpadding="0"],
-:root #main_col > #center_col div[style="font-size:14px;margin:0 4px;padding:1px 5px;background:#fff7ed"],
-:root #cnt #center_col > #taw > #tvcap > .c._oc._Lp,
-:root #cnt #center_col > #res > #topstuff > .ts,
-:root #center_col > div[style="font-size:14px;margin-right:0;min-height:5px"] > div[style="font-size:14px;margin:0 4px;padding:1px 5px;background:#fff8e7"],
-:root #center_col > #taw > #tvcap > .rscontainer,
-:root #center_col > #resultStats + div[style="border:1px solid #dedede;margin-bottom:11px;padding:5px 7px 5px 6px"],
-:root #center_col > #resultStats + div + #res + #tads,
-:root #center_col > #resultStats + #tads + #res + #tads,
-:root #center_col > #resultStats + #tads,
-:root #center_col > #res > #topstuff + #search > div > #ires > #rso > #flun,
-:root #center_col > #main > .dfrd > .mnr-c > .c._oc._zs,
-:root #center_col > #\5f Emc,
-:root #bottomads,
-:root #rhs_block .xpdopen > ._OKe > div > .mod > ._yYf
-{ display: none !important; }</style>
+  <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+  <title>Web Captioner</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
+  <link href="/css/build.css" rel="stylesheet" />
+</head>
 
-<link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
-
-    <style>
-      html,body {
-        background:#000;
-        font-family: 'Lato', sans-serif;
-      }
-
-      a, a:visited, a:hover {
-        color:#b7d3ff;
-        text-decoration:none;
-        cursor:pointer;
-      }
-    #info {
-    font-size: 20px;
-    }
-    #div_start {
-    float: right;
-    }
-    #headline {
-    text-decoration: none
-    }
-    #start_button {
-    border: 0;
-    background-color:transparent;
-    padding: 0;
-    color:#ccc;
-    }
-    .interim {
-    color: #fffeaf;
-    }
-    .final {
-    padding-right: 3px;
-    }
-    .button {
-    display: none;
-    }
-    .marquee {
-    margin: 20px auto;
-    }
-
-    #buttons {
-    margin: 10px 0;
-    position: relative;
-    top: -50px;
-    }
-
-    #copy {
-    margin-top: 20px;
-    }
-
-    #copy > div {
-    display: none;
-    margin: 0 70px;
-    }
-
-
-
-.caption-wrap {
-    line-height: 1.3em;
-    color: #fff;
-    max-width: 1200px;
-    margin: 0 auto 150px auto;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 4em;
-}
-
-
-    </style>
-    <style>
-a.c1 {font-weight: normal;}
-    </style>
-  </head>
-  <body class="" id="grid">
-    <div class="browser-landing" id="main">
-      <div id="div_start" style="position:fixed;right:0;bottom:0">
-        <a href="javascript:void(0)" onclick="startButton(event)" id="startButton">Start</a><br/><br/><a href="javascript:void(0)" onclick="clear_saved()">Clear</a>
-      </div>
-      <div class="caption-wrap">
-        <div id="info" style="visibility: visible;">
-          <p id="info_speak_now" style="display:none">
-            Now listening...
-          </p>
-          <p id="info_no_speech" style="display:none">
-            No speech was detected. You may need to adjust your <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">microphone
+<body class="" id="grid">
+  <div class="browser-landing" id="main">
+    <div id="div_start" style="position:fixed;right:0;bottom:0">
+      <a href="javascript:void(0)" onclick="startButton(event)" id="startButton">Start</a><br/><br/><a href="javascript:void(0)"
+        onclick="clear_saved()">Clear</a>
+    </div>
+    <div class="caption-wrap">
+      <div id="info" style="visibility: visible;">
+        <p id="info_speak_now" style="display:none">
+          Now listening...
+        </p>
+        <p id="info_no_speech" style="display:none">
+          No speech was detected. You may need to adjust your <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">microphone
             settings</a>.
-          </p>
-          <p id="info_no_microphone" style="display:none">
-            No microphone was found. Ensure that a microphone is installed and that
-            <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+        </p>
+        <p id="info_no_microphone" style="display:none">
+          No microphone was found. Ensure that a microphone is installed and that
+          <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
             microphone settings</a> are configured correctly.
-          </p>
-          <p id="info_allow" style="display:none">
-            Click the "Allow" button above to enable your microphone.
-          </p>
-          <p id="info_denied" style="display:none">
-            Permission to use microphone was denied.
-          </p>
-          <p id="info_blocked" style="display:none">
-            Permission to use microphone is blocked. To change, go to
-            chrome://settings/contentExceptions#media-stream
-          </p>
-          <p id="info_upgrade" style="display:none">
-            Web Speech API is not supported by this browser. Upgrade to <a href="https://www.google.com/chrome">Chrome</a> version 25 or later.
-          </p>
-        </div>
-        <div id="results" style="color:#fff">
-          <span class="final" id="final_span" contenteditable="true"></span> <span class="interim" id="interim_span"></span>
-        </div>
+        </p>
+        <p id="info_allow" style="display:none">
+          Click the "Allow" button above to enable your microphone.
+        </p>
+        <p id="info_denied" style="display:none">
+          Permission to use microphone was denied.
+        </p>
+        <p id="info_blocked" style="display:none">
+          Permission to use microphone is blocked. To change, go to chrome://settings/contentExceptions#media-stream
+        </p>
+        <p id="info_upgrade" style="display:none">
+          Web Speech API is not supported by this browser. Upgrade to <a href="https://www.google.com/chrome">Chrome</a>          version 25 or later.
+        </p>
+      </div>
+      <div id="results" style="color:#fff">
+        <span class="final" id="final_span" contenteditable="true"></span> <span class="interim" id="interim_span"></span>
       </div>
     </div>
-<script>
-
-showInfo('info_start');
-
-
-document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
-window.scrollTo(0,document.body.scrollHeight);
-
-function clear_saved() {
-  ga('send','event','user','clearButtonClick');
-  if (confirm('Clear saved transcript?')) {
-    $('#final_span').text(''); 
-    final_transcript = '';
-    window.localStorage.setItem("transcript", final_transcript);
-  }
-}
-
-var create_email = false;
-var final_transcript = window.localStorage.getItem("transcript") || '';
-var recognizing = false;
-var ignore_onend;
-var start_timestamp;
-var restartingDueToFailure = false;
-if (!('webkitSpeechRecognition' in window)) {
-  upgrade();
-} else {
-  var recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-
-  recognition.onstart = function() {
-    recognizing = true;
-    showInfo('info_speak_now');
-    window.scrollTo(0,document.body.scrollHeight);
-  };
-
-  recognition.onerror = function(event) {
-    if (event.error == 'no-speech') {
-      showInfo('info_no_speech');
-      ignore_onend = true;
-    }
-    if (event.error == 'audio-capture') {
-      showInfo('info_no_microphone');
-      ignore_onend = true;
-    }
-    if (event.error == 'not-allowed') {
-      if (event.timeStamp - start_timestamp < 100) {
-        showInfo('info_blocked');
-      } else {
-        showInfo('info_denied');
-      }
-      ignore_onend = true;
-    }
-  };
-
-  recognition.onend = function() {
-    if (restartingDueToFailure) {
-      console.log("Restarting due to failure");
-      ga('send','event','recognition','restartingDueToPossibleFailure');
-      recognition.start();
-      restartingDueToFailure = false;
-      return;
-    }
-
-    recognizing = false;
-    if (ignore_onend) {
-      return;
-    }
-    
-    if (!final_transcript) {
-      showInfo('info_start');
-      return;
-    }
-    showInfo('');
-  };
-
-var lastResultTime = (new Date()).getTime()/1000;
-  recognition.onresult = function(event) {
-    lastResultTime = (new Date()).getTime()/1000;
-    var interim_transcript = '';
-    if (typeof(event.results) == 'undefined') {
-      recognition.onend = null;
-      recognition.stop();
-      upgrade();
-      return;
-    }
-    for (var i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript;
-      } else {
-        interim_transcript += event.results[i][0].transcript;
-      }
-    }
-    final_transcript = capitalize(final_transcript);
-    final_span.innerHTML = linebreak(final_transcript);
-    interim_span.innerHTML = linebreak(interim_transcript);
-    window.localStorage.setItem("transcript", final_transcript);
-    window.scrollTo(0,document.body.scrollHeight);
-  };
-}
-
-setInterval(function() {
-  var now = (new Date()).getTime()/1000;
-  if (recognizing && now - lastResultTime > 3) {
-    restartingDueToFailure = true;
-    recognition.stop();
-  }
-},3000);
-
-function upgrade() {
-  
-  showInfo('info_upgrade');
-}
-
-var two_line = /\n\n/g;
-var one_line = /\n/g;
-function linebreak(s) {
-  return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-}
-
-var first_char = /\S/;
-function capitalize(s) {
-  return s.replace(first_char, function(m) { return m.toUpperCase(); });
-}
-
-function startButton(event) {
-
-  if (recognizing) {
-    ga('send','event','user','stopButtonClick');
-    recognition.stop();
-    $('#startButton').text('Start');
-    return;
-  }
-  ga('send','event','user','startButtonClick');
-  $('#startButton').text('Stop');
-  recognition.lang = 'en-US';
-  recognition.start();
-  ignore_onend = false;
-  interim_span.innerHTML = '';
-  showInfo('info_allow');
-  start_timestamp = event.timeStamp;
-}
-
-function showInfo(s) {
-  if (s) {
-    for (var child = info.firstChild; child; child = child.nextSibling) {
-      if (child.style) {
-        child.style.display = child.id == s ? 'inline' : 'none';
-      }
-    }
-    info.style.visibility = 'visible';
-  } else {
-    info.style.visibility = 'hidden';
-  }
-}
-
-    </script>
-  
-<script
-  src="https://code.jquery.com/jquery-3.2.0.min.js"
-  integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
-  crossorigin="anonymous"></script>
+  </div>
   <script>
-    $(function(){
-      $('#final_span').on('keyup', function(event) {
-        final_transcript = $('#final_span').text();
-        window.localStorage.setItem("transcript", final_transcript);
-      });
-    });
-</script>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  </script>
 
-  ga('create', 'REMOVED', 'auto');
-  ga('send', 'pageview');
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
+    crossorigin="anonymous"></script>
+    <script src="/js/build.js"></script>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)    
+}, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-</script>
+    ga('create', 'REMOVED', 'auto');
+    ga('send', 'pageview');
+  </script>
 
-</body></html>
+</body>
+
+</html>
