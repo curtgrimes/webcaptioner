@@ -8,6 +8,7 @@ Staging:
     - sudo rm -rf /opt/staging.webcaptioner.com/public/*
     - sudo cp -r public/* /opt/staging.webcaptioner.com/public
     - sudo cp nginx/staging.webcaptioner.com.conf /etc/nginx/sites-enabled
+    - sudo rm /etc/nginx/sites-enabled/staging.webcaptioner.com-ssl.conf # because it may be referencing not-yet-created certs from an incomplete previous deployment
     - sudo service nginx restart
     - sudo apt-get -yq install software-properties-common
     - sudo add-apt-repository ppa:certbot/certbot
@@ -29,6 +30,7 @@ Production:
     - sudo cp -r ./* /opt/webcaptioner.com
     - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
     - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled # old domain redirect
+    - sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled/webcaptioner.example.com-ssl.conf # because they may be referencing not-yet-created certs from an incomplete previous deployment
     - sudo service nginx restart
     - sudo apt-get -yq install software-properties-common
     - sudo add-apt-repository ppa:certbot/certbot
