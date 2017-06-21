@@ -11,10 +11,6 @@
 
 <body class="" id="grid">
   <div class="browser-landing" id="main">
-    <div id="div_start" style="position:fixed;right:0;bottom:0">
-      <a href="javascript:void(0)" onclick="startButton(event)" id="startButton">Start</a><br/><br/><a href="javascript:void(0)"
-        onclick="clear_saved()">Clear</a>
-    </div>
     <div class="caption-wrap">
       <div id="info" style="visibility: visible;">
         <p id="info_speak_now" style="display:none">
@@ -47,9 +43,25 @@
       </div>
     </div>
   </div>
-  <script>
 
-  </script>
+
+<nav class="navbar fixed-bottom navbar-toggleable-md navbar-inverse bg-inverse">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <span class="navbar-brand">WebCaptioner</span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="javascript:void(0)" onclick="startButton(event)" id="startButton">Start</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:void(0)" onclick="clear_saved()">Clear</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
     crossorigin="anonymous"></script>
