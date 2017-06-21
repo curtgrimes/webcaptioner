@@ -16,6 +16,7 @@ Staging:
     - sudo certbot certonly --cert-name staging.webcaptioner.com --non-interactive --webroot -w /opt/staging.webcaptioner.com/public --domains staging.webcaptioner.com,www.staging.webcaptioner.com -m curt@example.com --agree-tos
     - sudo cp nginx/staging.webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
     - sudo service nginx restart 
+  when: manual
   environment:
     name: staging
     url: https://staging.webcaptioner.com
