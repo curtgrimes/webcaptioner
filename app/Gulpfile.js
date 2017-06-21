@@ -1,9 +1,9 @@
-let gulp = require('gulp');
-let concat = require('gulp-concat');  
-let rename = require('gulp-rename');  
-let uglify = require('gulp-uglify');
-let merge = require('gulp-merge');
-let cleanCSS = require('gulp-clean-css');
+var gulp = require('gulp');
+var concat = require('gulp-concat');  
+var rename = require('gulp-rename');  
+var uglify = require('gulp-uglify');
+var merge = require('gulp-merge');
+var cleanCSS = require('gulp-clean-css');
 
 gulp.task('default', function () {
     var jsStream = gulp.src('js/*')
