@@ -23,9 +23,9 @@ Staging:
 Production:
   stage: deploy
   script:
-    - sudo mkdir -p /opt/webcaptioner.com /opt/webcaptioner.com/public
-    - sudo rm -rf /opt/staging.webcaptioner.com/public/*
-    - sudo cp -r public/* /opt/webcaptioner.com/public
+    - sudo mkdir -p /opt/webcaptioner.com
+    - sudo rm -rf /opt/webcaptioner.com/*
+    - sudo cp -r ./* /opt/webcaptioner.com
     - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
     - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled # old domain redirect
     - sudo service nginx restart
@@ -33,13 +33,18 @@ Production:
     - sudo add-apt-repository ppa:certbot/certbot
     - sudo apt-get update
     - sudo apt-get -yq install python-certbot-nginx 
-    - sudo certbot certonly --cert-name webcaptioner.com --non-interactive --webroot -w /opt/webcaptioner.com/public --domains webcaptioner.com,www.webcaptioner.com,webcaptioner.example.com,www.webcaptioner.example.com  -m curt@example.com --agree-tos
+    - sudo certbot certonly --cert-name webcaptioner.com --non-interactive --webroot -w /opt/webcaptioner.com --domains webcaptioner.com,www.webcaptioner.com,webcaptioner.example.com,www.webcaptioner.example.com  -m curt@example.com --agree-tos
     - sudo cp nginx/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
     - sudo cp nginx/webcaptioner.example.com-ssl.conf /etc/nginx/sites-enabled # old domain redirect
+    - sudo npm install pm2 -g
+    - cd /opt/webcaptioner.com/app
+    - sudo npm install
+    - sudo pm2 delete webcaptioner-prod
+    - sudo pm2 start bin/www -n webcaptioner-prod --update-env -f
     - sudo service nginx restart
   environment:
     name: production
     url: https://webcaptioner.com
-  when: manual
+  #when: manual
   only:
     - master

@@ -1,0 +1,8 @@
+version: "3"
+services:
+  webcaptioner:
+    build: .
+    volumes:
+     - ./:/usr/src/app/
+    ports:
+     - "8101:8101"
