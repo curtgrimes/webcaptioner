@@ -122,6 +122,10 @@ function startButton(event) {
         ga('send', 'event', 'user', 'stopButtonClick');
         recognition.stop();
         $('#startButton').text('Start Captioning');
+        $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
+        clippingReadings = [];
+        lowLevelReadings = [];
+        clearInterval(levelCheckLoopInterval);
         document.webkitExitFullscreen();
         return;
     }
@@ -157,6 +161,7 @@ var WIDTH=500;
 var HEIGHT=50;
 var rafID = null;
 var meterWrapWidth;
+var levelCheckLoopInterval;
 function initMediaLevelMonitoring() {
 
     // grab our canvas
@@ -193,7 +198,7 @@ function initMediaLevelMonitoring() {
         alert('getUserMedia threw exception :' + e);
     }
 
-    setInterval(levelCheckLoop, 700);
+    levelCheckLoopInterval = setInterval(levelCheckLoop, 700);
 }
 
 
