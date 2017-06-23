@@ -121,7 +121,7 @@ function startButton(event) {
     if (recognizing) {
         ga('send', 'event', 'user', 'stopButtonClick');
         recognition.stop();
-        $('#startButton').text('Start');
+        $('#startButton').text('Start Captioning');
         document.webkitExitFullscreen();
         return;
     }
