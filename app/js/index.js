@@ -122,6 +122,7 @@ function startButton(event) {
         ga('send', 'event', 'user', 'stopButtonClick');
         recognition.stop();
         $('#startButton').text('Start');
+        document.webkitExitFullscreen();
         return;
     }
     ga('send', 'event', 'user', 'startButtonClick');
@@ -132,6 +133,7 @@ function startButton(event) {
     interim_span.innerHTML = '';
     showInfo('info_allow');
     start_timestamp = event.timeStamp;
+    document.body.webkitRequestFullscreen();
 }
 
 function showInfo(s) {
