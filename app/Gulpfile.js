@@ -10,7 +10,8 @@ gulp.task('default', function () {
     var jsStream = gulp.src([
             'js/*',
             'node_modules/bootstrap/js/dist/collapse.js',
-            'node_modules/bootstrap/js/dist/util.js'
+            'node_modules/bootstrap/js/dist/modal.js',
+            'node_modules/bootstrap/js/dist/util.js',
         ])
         .pipe(concat('build.js'))
         .pipe(uglify())

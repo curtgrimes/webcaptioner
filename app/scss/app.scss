@@ -1,3 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto');
+
+$font-family-sans-serif: 'Roboto', sans-serif;
+$headings-font-family: 'Cousine', monopsace;
+$headings-font-weight: 700;
+
+$brand-primary: #f0e500;
+$btn-primary-color: #000;
+$btn-primary-border: $brand-primary;
+
+$brand-info: #000;
+
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
+$modal-content-bg: $brand-primary;
+$modal-header-border-color: darken($modal-content-bg, 10%);
+$modal-header-border-width: 0;
+$modal-content-border-width: 20px;
+$modal-content-border-color: $brand-primary;
+
+$custom-control-indicator-bg: #fff;
+$custom-control-checked-indicator-bg: #000;
+
+
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/mixins";
 @import "../node_modules/bootstrap/scss/custom";
@@ -45,11 +70,31 @@
 // Utility classes
 @import "../node_modules/bootstrap/scss/utilities";
     
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  text-transform: uppercase;
+}
+
+.btn {
+  font-family: $headings-font-family;
+  font-weight:700;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+
+.navbar-brand {
+  font-family: $headings-font-family;
+  font-size:1.35rem;
+  text-transform: uppercase;
+}
     
+.btn-info:focus, .btn-info.focus {
+  box-shadow: 0 0 0 3px #fff;
+}
     
     html, body {
       background: #000;
-      font-family: 'Lato', sans-serif;
     }
 
     a, a:visited, a:hover {
@@ -77,11 +122,15 @@
       padding-right: 3px;
     }
     .caption-wrap {
-      line-height: 1.3em;
+      line-height: 1em;
       color: #fff;
       max-width: 1200px;
       margin: 0 auto 150px auto;
-      font-weight: bold;
       text-transform: uppercase;
-      font-size: 4em;
+      font-size: 4.2em;
+      font-family:'Cousine', monopsace;
+    }
+
+    .final:focus {
+      outline:0;
     }

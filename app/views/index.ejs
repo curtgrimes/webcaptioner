@@ -25,12 +25,31 @@
   <meta property="og:image:height" content="1200" />
   <meta property="fb:app_id" content="1339681726086659" />
 
-
-  <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
   <link href="/css/build.css" rel="stylesheet" />
 </head>
 
 <body class="" id="grid">
+<div class="modal" id="onboardingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2 class="modal-title" id="exampleModalLabel">Web Captioner</h2>
+        <p>Web Captioner lets you display open event captioning in your browser. Just bring a microphone.</p>
+<!--
+        <label class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input">
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">Don't show this message next time</span>
+        </label>
+-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Get Started</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <div class="browser-landing" id="main">
     <div class="caption-wrap">
       <div id="info" style="visibility: visible;">
@@ -87,9 +106,9 @@
   </div>
 </nav>
 
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
-    crossorigin="anonymous"></script>
-    <script src="/js/build.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+  <script src="/js/build.js"></script>
+  
   <script>
     (function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {

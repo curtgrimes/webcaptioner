@@ -1,9 +1,3 @@
-showInfo('info_start');
-
-
-document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
-window.scrollTo(0, document.body.scrollHeight);
-
 function clear_saved() {
     ga('send', 'event', 'user', 'clearButtonClick');
     if (confirm('Clear saved transcript?')) {
@@ -94,6 +88,7 @@ if (!('webkitSpeechRecognition' in window)) {
         interim_span.innerHTML = linebreak(interim_transcript);
         window.localStorage.setItem("transcript", final_transcript);
         window.scrollTo(0, document.body.scrollHeight);
+        window.getSelection().removeAllRanges(); // remove any current text selection
     };
 }
 
@@ -153,6 +148,15 @@ function showInfo(s) {
 }
 
 $(function () {
+    $('#onboardingModal').modal();
+
+    showInfo('info_start');
+
+
+    document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
+    window.scrollTo(0, document.body.scrollHeight);
+
+
     $('#final_span').on('keyup', function (event) {
         final_transcript = $('#final_span').text();
         window.localStorage.setItem("transcript", final_transcript);
