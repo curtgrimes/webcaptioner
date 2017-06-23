@@ -260,10 +260,10 @@ function levelCheckLoop() {
     lowLevelReadings.push(meter.checkLowLevel());
 
     // save just the past x readings
-    clippingReadings = clippingReadings.slice(-5);
+    clippingReadings = clippingReadings.slice(-10);
     lowLevelReadings = lowLevelReadings.slice(-10);
 
-    if ((clippingReadings.length > 0) && clippingReadings.filter(function (isClipping) {return isClipping;}).length / clippingReadings.length > .3) {
+    if ((clippingReadings.length > 0) && clippingReadings.filter(function (isClipping) {return isClipping;}).length / clippingReadings.length > .7) {
         $('#clippingMessage,#audioLevelWrap').removeAttr('hidden');
         meterWrapWidth = $('#meterWrap').width();
         showClippingMessage = true;

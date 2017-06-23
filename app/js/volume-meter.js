@@ -44,7 +44,7 @@ function createAudioMeter(audioContext,clipLevel,averaging,clipLag) {
 	processor.clipping = false;
 	processor.lastClip = 0;
 	processor.volume = 0;
-	processor.clipLevel = clipLevel || 0.98;
+	processor.clipLevel = clipLevel || 5; // Used to be <1 but this value seems to produce less false positives
 	processor.lowLevelThreshold = 0.01;
 	processor.averaging = averaging || 0.95;
 	processor.clipLag = clipLag || 750;
