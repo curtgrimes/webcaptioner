@@ -18,11 +18,15 @@ $border-radius-sm: 0;
 $modal-content-bg: $brand-primary;
 $modal-header-border-color: darken($modal-content-bg, 10%);
 $modal-header-border-width: 0;
-$modal-content-border-width: 20px;
+$modal-content-border-width: 0;
 $modal-content-border-color: $brand-primary;
 
 $custom-control-indicator-bg: #fff;
 $custom-control-checked-indicator-bg: #000;
+
+
+$fa-font-path: '/build/font-awesome';
+@import "../node_modules/font-awesome/scss/font-awesome.scss";
 
 
 @import "../node_modules/bootstrap/scss/variables";
@@ -83,6 +87,7 @@ h1, h2, h3, h4, h5, h6,
   font-weight:700;
   text-transform:uppercase;
   cursor:pointer;
+  padding:.575rem 1rem .425rem 1rem;
 }
 
 .navbar-brand {

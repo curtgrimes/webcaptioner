@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static/favicon')));
-app.use(express.static(path.join(__dirname, 'build')));
+app.use('/build', express.static(path.join(__dirname, 'build')));
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
 app.use('/', index);

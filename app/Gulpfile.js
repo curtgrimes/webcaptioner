@@ -14,8 +14,11 @@ gulp.task('default', function () {
             'node_modules/bootstrap/js/dist/util.js',
         ])
         .pipe(concat('build.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('build/js'));
+    
+    var fontAwesome = gulp.src('node_modules/font-awesome/fonts/*')
+        .pipe(gulp.dest('build/font-awesome'));
     
     var cssStream = gulp.src('scss/*')
         .pipe(concat('build.scss'))
@@ -23,5 +26,5 @@ gulp.task('default', function () {
         .pipe(cleanCSS())
         .pipe(gulp.dest('build/css'));
 
-    return merge(jsStream, cssStream);
+    return merge(jsStream, fontAwesome, cssStream);
 });
