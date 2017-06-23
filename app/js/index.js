@@ -126,7 +126,6 @@ function startButton(event) {
         clippingReadings = [];
         lowLevelReadings = [];
         clearInterval(levelCheckLoopInterval);
-        document.webkitExitFullscreen();
         return;
     }
     ga('send', 'event', 'user', 'startButtonClick');
@@ -138,7 +137,6 @@ function startButton(event) {
     showInfo('info_allow');
     start_timestamp = event.timeStamp;
     initMediaLevelMonitoring();
-    document.body.webkitRequestFullscreen();
 }
 
 function showInfo(s) {
