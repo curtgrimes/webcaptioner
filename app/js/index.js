@@ -150,6 +150,146 @@ function showInfo(s) {
     }
 }
 
+var audioContext = null;
+var meter = null;
+var canvasContext = null;
+var WIDTH=500;
+var HEIGHT=50;
+var rafID = null;
+var meterWrapWidth;
+function initMediaLevelMonitoring() {
+
+    // grab our canvas
+    $canvasContext = $('#meter');
+    
+    // monkeypatch Web Audio
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    
+    // grab an audio context
+    audioContext = new AudioContext();
+
+    // Attempt to get audio input
+    try {
+        // monkeypatch getUserMedia
+        navigator.getUserMedia = 
+            navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
+
+        // ask for an audio input
+        navigator.getUserMedia(
+        {
+            "audio": {
+                "mandatory": {
+                    "googEchoCancellation": "false",
+                    "googAutoGainControl": "false",
+                    "googNoiseSuppression": "false",
+                    "googHighpassFilter": "false"
+                },
+                "optional": []
+            },
+        }, gotStream, didntGetStream);
+    } catch (e) {
+        alert('getUserMedia threw exception :' + e);
+    }
+
+    setInterval(levelCheckLoop, 700);
+}
+
+
+function didntGetStream() {
+    alert('Stream generation failed.');
+}
+
+var mediaStreamSource = null;
+
+function gotStream(stream) {
+    // Create an AudioNode from the stream.
+    mediaStreamSource = audioContext.createMediaStreamSource(stream);
+
+    // Create a new volume meter and connect it.
+    meter = createAudioMeter(audioContext, 1);
+    mediaStreamSource.connect(meter);
+
+    // kick off the visual updating
+    drawLoop();
+}
+
+function drawLoop( time ) {
+    // clear the background
+    $canvasContext.width('0');
+
+    // check if we're currently clipping
+    if (meter.checkClipping()) {
+        $canvasContext
+            .addClass('bg-danger')
+            .removeClass('bg-success');
+        window.audioIsClipping = true;
+    }
+    else if (meter.checkLowLevel()) {
+        $canvasContext
+            .addClass('bg-danger')
+            .removeClass('bg-success');
+        window.audioLevelIsLow = true;
+    }
+    else {
+        $canvasContext
+            .addClass('bg-success')
+            .removeClass('bg-danger');
+        window.audioIsClipping = false;
+        window.audioLevelIsLow = false;
+    }
+
+    // draw a bar based on the current volume
+    $canvasContext.width(meterWrapWidth * Math.min(meter.volume * 4, 1) + 'px');
+    //canvasContext.fillRect(0, 0, meter.volume*WIDTH*1.4, HEIGHT);
+
+    // set up the next visual callback
+    rafID = window.requestAnimationFrame(drawLoop);
+}
+
+// level check loop
+var clippingReadings = [], lowLevelReadings = [],
+    showClippingMessage = false, showLowLevelmessage = false;
+    
+function levelCheckLoop() {
+    clippingReadings.push(meter.checkClipping());
+    lowLevelReadings.push(meter.checkLowLevel());
+
+    // save just the past x readings
+    clippingReadings = clippingReadings.slice(-5);
+    lowLevelReadings = lowLevelReadings.slice(-10);
+
+    if ((clippingReadings.length > 0) && clippingReadings.filter(function (isClipping) {return isClipping;}).length / clippingReadings.length > .3) {
+        $('#clippingMessage,#audioLevelWrap').removeAttr('hidden');
+        meterWrapWidth = $('#meterWrap').width();
+        showClippingMessage = true;
+    }
+    else {
+        $('#clippingMessage').attr('hidden','true');
+        showClippingMessage = false;
+    }
+
+    if ((lowLevelReadings.length > 0) && lowLevelReadings.filter(function(isLowLevel){return isLowLevel;}).length / lowLevelReadings.length > .7) {
+        $('#lowLevelMessage,#audioLevelWrap').removeAttr('hidden');
+        meterWrapWidth = $('#meterWrap').width();
+        showLowLevelmessage = true;
+
+        // Don't show both messages at once
+        $('#clippingMessage').attr('hidden','true');
+    }
+    else {
+        $('#lowLevelMessage').attr('hidden','true');
+        showLowLevelmessage = false;
+    }
+
+    if (!showClippingMessage && !showLowLevelmessage) {
+        $('#audioLevelWrap').attr('hidden','true');
+    }
+
+}
+
+
 $(function () {
     $('#onboardingModal').modal();
 
@@ -164,144 +304,4 @@ $(function () {
         final_transcript = $('#final_span').text();
         window.localStorage.setItem("transcript", final_transcript);
     });
-
-    var audioContext = null;
-    var meter = null;
-    var canvasContext = null;
-    var WIDTH=500;
-    var HEIGHT=50;
-    var rafID = null;
-    var meterWrapWidth;
-    
-    function initMediaLevelMonitoring() {
-
-        // grab our canvas
-        $canvasContext = $('#meter');
-        
-        // monkeypatch Web Audio
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        
-        // grab an audio context
-        audioContext = new AudioContext();
-
-        // Attempt to get audio input
-        try {
-            // monkeypatch getUserMedia
-            navigator.getUserMedia = 
-                navigator.getUserMedia ||
-                navigator.webkitGetUserMedia ||
-                navigator.mozGetUserMedia;
-
-            // ask for an audio input
-            navigator.getUserMedia(
-            {
-                "audio": {
-                    "mandatory": {
-                        "googEchoCancellation": "false",
-                        "googAutoGainControl": "false",
-                        "googNoiseSuppression": "false",
-                        "googHighpassFilter": "false"
-                    },
-                    "optional": []
-                },
-            }, gotStream, didntGetStream);
-        } catch (e) {
-            alert('getUserMedia threw exception :' + e);
-        }
-
-        setInterval(levelCheckLoop, 700);
-    }
-
-
-    function didntGetStream() {
-        alert('Stream generation failed.');
-    }
-
-    var mediaStreamSource = null;
-
-    function gotStream(stream) {
-        // Create an AudioNode from the stream.
-        mediaStreamSource = audioContext.createMediaStreamSource(stream);
-
-        // Create a new volume meter and connect it.
-        meter = createAudioMeter(audioContext, 1);
-        mediaStreamSource.connect(meter);
-
-        // kick off the visual updating
-        drawLoop();
-    }
-
-    function drawLoop( time ) {
-        // clear the background
-        $canvasContext.width('0');
-
-        // check if we're currently clipping
-        if (meter.checkClipping()) {
-            $canvasContext
-                .addClass('bg-danger')
-                .removeClass('bg-success');
-            window.audioIsClipping = true;
-        }
-        else if (meter.checkLowLevel()) {
-            $canvasContext
-                .addClass('bg-danger')
-                .removeClass('bg-success');
-            window.audioLevelIsLow = true;
-        }
-        else {
-            $canvasContext
-                .addClass('bg-success')
-                .removeClass('bg-danger');
-            window.audioIsClipping = false;
-            window.audioLevelIsLow = false;
-        }
-
-        // draw a bar based on the current volume
-        $canvasContext.width(meterWrapWidth * Math.min(meter.volume * 4, 1) + 'px');
-        //canvasContext.fillRect(0, 0, meter.volume*WIDTH*1.4, HEIGHT);
-
-        // set up the next visual callback
-        rafID = window.requestAnimationFrame(drawLoop);
-    }
-
-    // level check loop
-    var clippingReadings = [], lowLevelReadings = [],
-        showClippingMessage = false, showLowLevelmessage = false;
-    function levelCheckLoop() {
-        clippingReadings.push(meter.checkClipping());
-        lowLevelReadings.push(meter.checkLowLevel());
-
-        // save just the past x readings
-        clippingReadings = clippingReadings.slice(-5);
-        lowLevelReadings = lowLevelReadings.slice(-10);
-
-        if ((clippingReadings.length > 0) && clippingReadings.filter((isClipping) => {return isClipping;}).length / clippingReadings.length > .3) {
-            $('#clippingMessage,#audioLevelWrap').removeAttr('hidden');
-            meterWrapWidth = $('#meterWrap').width();
-            showClippingMessage = true;
-        }
-        else {
-            $('#clippingMessage').attr('hidden','true');
-            showClippingMessage = false;
-        }
-
-        if ((lowLevelReadings.length > 0) && lowLevelReadings.filter((isLowLevel) => {return isLowLevel;}).length / lowLevelReadings.length > .7) {
-            $('#lowLevelMessage,#audioLevelWrap').removeAttr('hidden');
-            meterWrapWidth = $('#meterWrap').width();
-            showLowLevelmessage = true;
-
-            // Don't show both messages at once
-            $('#clippingMessage').attr('hidden','true');
-        }
-        else {
-            $('#lowLevelMessage').attr('hidden','true');
-            showLowLevelmessage = false;
-        }
-
-        if (!showClippingMessage && !showLowLevelmessage) {
-            $('#audioLevelWrap').attr('hidden','true');
-        }
-
-    }
-
 });
