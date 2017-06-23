@@ -101,8 +101,8 @@ setInterval(function () {
 }, 3000);
 
 function upgrade() {
-
-    showInfo('info_upgrade');
+    $('#onboardingModal .modal-footer').hide();
+    $('#upgrade-alert').show();
 }
 
 var two_line = /\n\n/g;
