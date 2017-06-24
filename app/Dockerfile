@@ -10,5 +10,7 @@ RUN npm install
 # Bundle app source
 COPY . /usr/src/app
 
+ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/env/google-application-credentials.json
+
 EXPOSE 8101
 CMD [ "npm", "start" ]

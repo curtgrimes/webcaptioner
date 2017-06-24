@@ -7,15 +7,12 @@ var bodyParser = require('body-parser');
 var env = require('node-env-file');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var translate = require('./routes/translate');
 
 var app = express();
 
 // Get environment variables output by CI deploy script
-env(path.join(__dirname, '.env'));
-console.log(path.join(__dirname, '.env'));
-
-console.log(process.env);
+env(path.join(__dirname, 'env/.env'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,7 +27,7 @@ app.use('/build', express.static(path.join(__dirname, 'build')));
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/translate', translate);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

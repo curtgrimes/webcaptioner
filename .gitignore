@@ -2,3 +2,4 @@
 app/node_modules
 app/build/*
 !app/build/.gitkeep
+app/env/google-application-credentials.json
