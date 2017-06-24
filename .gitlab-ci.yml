@@ -12,7 +12,7 @@ Staging:
     - echo "$GOOGLE_APPLICATION_CREDENTIALS_STAGING" | sudo tee /opt/staging.webcaptioner.com/app/env/google-application.credentials.json
 #    - sudo export GOOGLE_APPLICATION_CREDENTIALS_STAGING="/opt/staging.webcaptioner.com/app/env/google-application.credentials.json"
     - sudo cp nginx/staging.webcaptioner.com.conf /etc/nginx/sites-enabled
-    - sudo rm /etc/nginx/sites-enabled/staging.webcaptioner.com-ssl.conf # because they may be referencing not-yet-created certs from an incomplete previous deployment
+    - sudo rm /etc/nginx/sites-enabled/staging.webcaptioner.com-ssl.conf || true # because they may be referencing not-yet-created certs from an incomplete previous deployment
     - sudo service nginx restart
     - sudo apt-get -yq install software-properties-common
     - sudo add-apt-repository ppa:certbot/certbot
@@ -43,7 +43,7 @@ Production:
 #    - sudo export GOOGLE_APPLICATION_CREDENTIALS="/opt/webcaptioner.com/app/env/google-application.credentials.json"
     - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
     - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled # old domain redirect
-    - sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled/webcaptioner.example.com-ssl.conf # because they may be referencing not-yet-created certs from an incomplete previous deployment
+    - sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled/webcaptioner.example.com-ssl.conf || true # because they may be referencing not-yet-created certs from an incomplete previous deployment
     - sudo service nginx restart
     - sudo apt-get -yq install software-properties-common
     - sudo add-apt-repository ppa:certbot/certbot
