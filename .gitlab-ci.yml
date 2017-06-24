@@ -49,6 +49,6 @@ Production:
   environment:
     name: production
     url: https://webcaptioner.com
-  #when: manual
+  when: manual
   only:
     - master

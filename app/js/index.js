@@ -13,6 +13,7 @@ var recognizing = false;
 var ignore_onend;
 var start_timestamp;
 var restartingDueToFailure = false;
+var lastStartTimestamp;
 if (!('webkitSpeechRecognition' in window)) {
     upgrade();
 } else {
@@ -46,11 +47,25 @@ if (!('webkitSpeechRecognition' in window)) {
     };
 
     recognition.onend = function () {
-        if (restartingDueToFailure) {
-            console.log("Restarting due to failure");
+        var now = (new Date()).getTime() / 1000;
+
+        if (restartingDueToFailure && now - lastStartTimestamp > 4) {
+            $('#startButton')
+                .removeClass('btn-primary')
+                .addClass('btn-secondary disabled')
+                .text('Please Wait...');
+
             ga('send', 'event', 'recognition', 'restartingDueToPossibleFailure');
+
             recognition.start();
             restartingDueToFailure = false;
+
+            setTimeout(function(){
+                $('#startButton')
+                    .removeClass('btn-secondary disabled')
+                    .addClass('btn-primary')
+                    .text('Stop');
+            },1500);
             return;
         }
 
@@ -78,7 +93,9 @@ if (!('webkitSpeechRecognition' in window)) {
         }
         for (var i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
-                final_transcript += event.results[i][0].transcript;
+                var shouldAppendSpace = final_transcript.slice(-1) !== ' ';
+
+                final_transcript += (shouldAppendSpace ? ' ' : '') + event.results[i][0].transcript;
             } else {
                 interim_transcript += event.results[i][0].transcript;
             }
@@ -92,13 +109,28 @@ if (!('webkitSpeechRecognition' in window)) {
     };
 }
 
+// Temp fix for issue where recognition stops when on another tab
+document.addEventListener('visibilitychange', function(){
+    if ($('#startButton').text() == 'Stop') {
+        // It should be running right now
+        try {
+            recognition.start();
+        }
+        catch (e) {
+            // If the service was already running it throws an error.
+            // Can't figure out a way to check if the service is running
+            // before calling start().
+        }
+    }
+})
+
 setInterval(function () {
     var now = (new Date()).getTime() / 1000;
-    if (recognizing && now - lastResultTime > 3) {
+    if (recognizing && now - lastResultTime >= 2 && now - lastStartTimestamp > 8 && !showLowLevelmessage) {
         restartingDueToFailure = true;
         recognition.stop();
     }
-}, 3000);
+}, 750);
 
 function upgrade() {
     $('#onboardingModal .modal-footer').hide();
@@ -136,6 +168,7 @@ function startButton(event) {
     interim_span.innerHTML = '';
     showInfo('info_allow');
     start_timestamp = event.timeStamp;
+    lastStartTimestamp = (new Date()).getTime() / 1000;
     initMediaLevelMonitoring();
 }
 
@@ -166,10 +199,12 @@ function initMediaLevelMonitoring() {
     $canvasContext = $('#meter');
     
     // monkeypatch Web Audio
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!audioContext) {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
     
-    // grab an audio context
-    audioContext = new AudioContext();
+        // grab an audio context
+        audioContext = new AudioContext();
+    }
 
     // Attempt to get audio input
     try {
@@ -196,6 +231,7 @@ function initMediaLevelMonitoring() {
         alert('getUserMedia threw exception :' + e);
     }
 
+    clearInterval(levelCheckLoopInterval);
     levelCheckLoopInterval = setInterval(levelCheckLoop, 700);
 }
 
