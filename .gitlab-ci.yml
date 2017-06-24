@@ -4,20 +4,29 @@ stages:
 Staging:
   stage: deploy
   script:
-    - sudo mkdir -p /opt/staging.webcaptioner.com /opt/staging.webcaptioner.com/public
-    - sudo rm -rf /opt/staging.webcaptioner.com/public/*
-    - sudo cp -r public/* /opt/staging.webcaptioner.com/public
+    - sudo mkdir -p /opt/staging.webcaptioner.com
+    - sudo rm -rf /opt/staging.webcaptioner.com/*
+    - sudo cp -r ./* /opt/staging.webcaptioner.com
+    - sudo truncate -s 0 /opt/staging.webcaptioner.com/app/env/.env # clear env file
+    - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append /opt/staging.webcaptioner.com/app/env/.env
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS_STAGING" | sudo tee /opt/staging.webcaptioner.com/app/env/google-application.credentials.json
+    - sudo export GOOGLE_APPLICATION_CREDENTIALS_STAGING="/opt/staging.webcaptioner.com/app/env/google-application.credentials.json"
     - sudo cp nginx/staging.webcaptioner.com.conf /etc/nginx/sites-enabled
-    - sudo rm /etc/nginx/sites-enabled/staging.webcaptioner.com-ssl.conf # because it may be referencing not-yet-created certs from an incomplete previous deployment
+    - sudo rm /etc/nginx/sites-enabled/staging.webcaptioner.com-ssl.conf # because they may be referencing not-yet-created certs from an incomplete previous deployment
     - sudo service nginx restart
     - sudo apt-get -yq install software-properties-common
     - sudo add-apt-repository ppa:certbot/certbot
     - sudo apt-get update
     - sudo apt-get -yq install python-certbot-nginx 
-    - sudo certbot certonly --cert-name staging.webcaptioner.com --non-interactive --webroot -w /opt/staging.webcaptioner.com/public --domains staging.webcaptioner.com,www.staging.webcaptioner.com -m curt@example.com --agree-tos
+    - sudo certbot certonly --cert-name staging.webcaptioner.com --non-interactive --webroot -w /opt/staging.webcaptioner.com --domains staging.webcaptioner.com,www.staging.webcaptioner.com,  -m curt@example.com --agree-tos
     - sudo cp nginx/staging.webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
-    - sudo service nginx restart 
-  when: manual
+    - sudo npm install pm2 -g
+    - cd /opt/staging.webcaptioner.com/app
+    - sudo npm install
+    - sudo gulp
+    - sudo pm2 delete webcaptioner-staging || true # ignore if nothing to delete
+    - sudo pm2 start bin/www -n webcaptioner-staging --update-env -f
+    - sudo service nginx restart
   environment:
     name: staging
     url: https://staging.webcaptioner.com
@@ -28,8 +37,10 @@ Production:
     - sudo mkdir -p /opt/webcaptioner.com
     - sudo rm -rf /opt/webcaptioner.com/*
     - sudo cp -r ./* /opt/webcaptioner.com
-    - sudo truncate -s 0 /opt/webcaptioner.com/app/.env # clear env file
-    - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append /opt/webcaptioner.com/app/.env
+    - sudo truncate -s 0 /opt/webcaptioner.com/app/env/.env # clear env file
+    - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append /opt/webcaptioner.com/app/env/.env
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS_PRODUCTION" | sudo tee /opt/webcaptioner.com/app/env/google-application.credentials.json
+    - sudo export GOOGLE_APPLICATION_CREDENTIALS="/opt/webcaptioner.com/app/env/google-application.credentials.json"
     - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
     - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled # old domain redirect
     - sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled/webcaptioner.example.com-ssl.conf # because they may be referencing not-yet-created certs from an incomplete previous deployment
