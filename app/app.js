@@ -4,16 +4,22 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var env = require('node-env-file');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
+// Get environment variables output by CI deploy script
+env(path.join(__dirname, '.env'));
+console.log(path.join(__dirname, '.env'));
+
+console.log(process.env);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

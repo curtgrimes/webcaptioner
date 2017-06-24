@@ -25,7 +25,7 @@
   <meta property="og:image:height" content="1200" />
   <meta property="fb:app_id" content="1339681726086659" />
 
-  <link href="/build/css/build.css" rel="stylesheet" />
+  <link href="/build/css/build.css?<?= process.env.COMMIT_ID ?>" rel="stylesheet" />
 </head>
 
 <body class="" id="grid">
@@ -129,7 +129,7 @@
 </nav>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
-  <script src="/build/js/build.js"></script>
+  <script src="/build/js/build.js?<?= process.env.COMMIT_ID ?>"></script>
   
   <script>
     (function (i, s, o, g, r, a, m) {

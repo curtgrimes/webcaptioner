@@ -28,6 +28,8 @@ Production:
     - sudo mkdir -p /opt/webcaptioner.com
     - sudo rm -rf /opt/webcaptioner.com/*
     - sudo cp -r ./* /opt/webcaptioner.com
+    - sudo truncate -s 0 /opt/webcaptioner.com/app/.env # clear env file
+    - sudo echo "COMMIT_ID=$CI_COMMIT_SHA" >> /opt/webcaptioner.com/app/.env
     - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
     - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled # old domain redirect
     - sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled/webcaptioner.example.com-ssl.conf # because they may be referencing not-yet-created certs from an incomplete previous deployment
