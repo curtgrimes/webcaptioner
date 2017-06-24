@@ -3,12 +3,13 @@ function clear_saved() {
     if (confirm('Clear saved transcript?')) {
         $('#final_span').text('');
         final_transcript = '';
-        window.localStorage.setItem("transcript", final_transcript);
+        //window.localStorage.setItem("transcript", final_transcript);
     }
 }
 
 var create_email = false;
-var final_transcript = window.localStorage.getItem("transcript") || '';
+//var final_transcript = window.localStorage.getItem("transcript") || '';
+var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
@@ -103,7 +104,7 @@ if (!('webkitSpeechRecognition' in window)) {
         final_transcript = capitalize(final_transcript);
         final_span.innerHTML = linebreak(final_transcript);
         interim_span.innerHTML = linebreak(interim_transcript);
-        window.localStorage.setItem("transcript", final_transcript);
+        //window.localStorage.setItem("transcript", final_transcript);
         window.scrollTo(0, document.body.scrollHeight);
         window.getSelection().removeAllRanges(); // remove any current text selection
     };
@@ -112,6 +113,7 @@ if (!('webkitSpeechRecognition' in window)) {
 // Temp fix for issue where recognition stops when on another tab
 document.addEventListener('visibilitychange', function(){
     if ($('#startButton').text() == 'Stop') {
+        $('#audioLevelWrap').attr('hidden','true');
         // It should be running right now
         try {
             recognition.start();
@@ -126,11 +128,11 @@ document.addEventListener('visibilitychange', function(){
 
 setInterval(function () {
     var now = (new Date()).getTime() / 1000;
-    if (recognizing && now - lastResultTime >= 2 && now - lastStartTimestamp > 8 && !showLowLevelmessage) {
+    if (recognizing && now - lastResultTime >= 5 && now - lastStartTimestamp > 8 && !showLowLevelmessage) {
         restartingDueToFailure = true;
         recognition.stop();
     }
-}, 750);
+}, 1000);
 
 function upgrade() {
     $('#onboardingModal .modal-footer').hide();
@@ -335,12 +337,17 @@ $(function () {
     showInfo('info_start');
 
 
-    document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
+    //document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
     window.scrollTo(0, document.body.scrollHeight);
 
 
     $('#final_span').on('keyup', function (event) {
         final_transcript = $('#final_span').text();
-        window.localStorage.setItem("transcript", final_transcript);
+        //window.localStorage.setItem("transcript", final_transcript);
     });
+
+    setInterval(function() {
+        // Clean up transcript, limit to 1000 characters
+        $('#final_span').text($('#final_span').text().slice(-1000));
+    },10000);
 });
