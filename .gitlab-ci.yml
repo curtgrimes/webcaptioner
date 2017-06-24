@@ -18,7 +18,7 @@ Staging:
     - sudo add-apt-repository ppa:certbot/certbot
     - sudo apt-get update
     - sudo apt-get -yq install python-certbot-nginx 
-    - sudo certbot certonly --cert-name staging.webcaptioner.com --non-interactive --webroot -w /opt/staging.webcaptioner.com --domains staging.webcaptioner.com,www.staging.webcaptioner.com -m curt@example.com --agree-tos
+#    - sudo certbot certonly --cert-name staging.webcaptioner.com --non-interactive --webroot -w /opt/staging.webcaptioner.com --domains staging.webcaptioner.com,www.staging.webcaptioner.com -m curt@example.com --agree-tos
     - sudo cp nginx/staging.webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
     - sudo npm install pm2 -g
     - cd /opt/staging.webcaptioner.com/app
