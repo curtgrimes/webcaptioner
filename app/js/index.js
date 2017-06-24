@@ -128,7 +128,7 @@ document.addEventListener('visibilitychange', function(){
 
 setInterval(function () {
     var now = (new Date()).getTime() / 1000;
-    if (recognizing && now - lastResultTime >= 5 && now - lastStartTimestamp > 8 && !showLowLevelmessage) {
+    if (recognizing && now - lastResultTime >= 5 && now - lastStartTimestamp > 8 && !showLowLevelmessage && !showClippingMessage) {
         restartingDueToFailure = true;
         recognition.stop();
     }
