@@ -97,6 +97,9 @@ if (!('webkitSpeechRecognition' in window)) {
                 var shouldAppendSpace = final_transcript.slice(-1) !== ' ';
 
                 final_transcript += (shouldAppendSpace ? ' ' : '') + event.results[i][0].transcript;
+
+                var wordCount = event.results[i][0].transcript.split(' ').length;
+                ga('send', 'event', 'recognition', 'recognizingSpeech', 'recognizeWordCount', wordCount);
             } else {
                 interim_transcript += event.results[i][0].transcript;
             }
