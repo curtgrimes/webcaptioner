@@ -42,32 +42,31 @@ Production:
   variables:
     PORT: "8101"
   script:
-    - sudo mkdir -p /opt/webcaptioner.com
-    - sudo rm -rf /opt/webcaptioner.com/*
-    - sudo cp -r ./* /opt/webcaptioner.com
-    - sudo truncate -s 0 /opt/webcaptioner.com/app/env/.env || true # clear env file
-    - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append /opt/webcaptioner.com/app/env/.env
-    - echo "PORT=$PORT" | sudo tee --append /opt/webcaptioner.com/app/env/.env
-    - echo "$GOOGLE_APPLICATION_CREDENTIALS_PRODUCTION" | sudo tee /opt/webcaptioner.com/app/env/google-application.credentials.json
-#    - sudo export GOOGLE_APPLICATION_CREDENTIALS="/opt/webcaptioner.com/app/env/google-application.credentials.json"
-    - sudo sed -i -- 's/${PORT}/'$PORT'/g' nginx/webcaptioner.com-ssl.conf
-    - sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
-    - sudo cp nginx/webcaptioner.example.com.conf /etc/nginx/sites-enabled # old domain redirect
-    - sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled/webcaptioner.example.com-ssl.conf || true # because they may be referencing not-yet-created certs from an incomplete previous deployment
-    - sudo service nginx restart
-    - sudo apt-get -yq install software-properties-common
-    - sudo add-apt-repository ppa:certbot/certbot
-    - sudo apt-get update
-    - sudo apt-get -yq install python-certbot-nginx 
-    - sudo certbot certonly --cert-name webcaptioner.com --non-interactive --webroot -w /opt/webcaptioner.com --domains webcaptioner.com,www.webcaptioner.com,webcaptioner.example.com,www.webcaptioner.example.com  -m curt@example.com --agree-tos
-    - sudo cp nginx/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
-    - sudo cp nginx/webcaptioner.example.com-ssl.conf /etc/nginx/sites-enabled # old domain redirect
+    - sudo mkdir -p /opt/webcaptioner.com /opt/webcaptioner.com.previous
+    - sudo rm -rf /opt/webcaptioner.com.previous/*
+    - sudo npm --prefix ./app install ./app
+    - sudo gulp --gulpfile ./app/Gulpfile.js
+    - sudo truncate -s 0 ./app/env/.env || true # clear env file
+    - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
+    - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS_STAGING" | sudo tee ./app/env/google-application.credentials.json
+    - sudo mv /opt/webcaptioner.com/* /opt/webcaptioner.com.previous
+    - sudo mv ./* /opt/webcaptioner.com
+    #- sudo cp -r ./* /opt/webcaptioner.com
+#    - sudo export GOOGLE_APPLICATION_CREDENTIALS_STAGING="/opt/webcaptioner.com/app/env/google-application.credentials.json"
+    #- sudo sed -i -- 's/${PORT}/'$PORT'/g' nginx/webcaptioner.com-ssl.conf
+    #- sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
+    #- sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf || true # because they may be referencing not-yet-created certs from an incomplete previous deployment
+    #- sudo service nginx restart
+    #- sudo apt-get -yq install software-properties-common
+    #- sudo add-apt-repository ppa:certbot/certbot
+    #- sudo apt-get update
+    #- sudo apt-get -yq install python-certbot-nginx 
+    #- sudo certbot certonly --cert-name webcaptioner.com --non-interactive --webroot -w /opt/webcaptioner.com --domains webcaptioner.com,www.webcaptioner.com -m curt@example.com --agree-tos
+    #- sudo cp nginx/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
     - sudo npm install pm2 -g
-    - cd /opt/webcaptioner.com/app
-    - sudo npm install
-    - sudo gulp
     - sudo pm2 delete webcaptioner-prod || true # ignore if nothing to delete
-    - sudo pm2 start bin/www -n webcaptioner-prod --update-env -f
+    - sudo pm2 start /opt/webcaptioner.com/app/bin/www -n webcaptioner-prod --update-env -f
     - sudo service nginx restart
   environment:
     name: production
