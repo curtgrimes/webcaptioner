@@ -4,6 +4,11 @@ $font-family-sans-serif: 'Roboto', sans-serif;
 $headings-font-family: 'Cousine', monopsace;
 $headings-font-weight: 700;
 
+$font-size-h3: 1.5rem;
+$font-size-h4: 1.25rem;
+$font-size-h5: 1rem;
+$font-size-h6: 0.75rem;
+
 $brand-primary: #f0e500;
 $brand-info: #18B1F2;
 $brand-danger: #A30821;
@@ -21,8 +26,15 @@ $modal-header-border-width: 0;
 $modal-content-border-width: 0;
 $modal-content-border-color: $brand-primary;
 
+$component-active-color: #000;
+
 $custom-control-indicator-bg: #fff;
 $custom-control-checked-indicator-bg: #000;
+
+$dropdown-bg: #555;
+$dropdown-link-color: #ccc;
+$dropdown-link-hover-color: #fff;
+$dropdown-link-hover-bg: #666;
 
 
 $fa-font-path: '/build/font-awesome';
@@ -44,18 +56,18 @@ $fa-font-path: '/build/font-awesome';
 //@import "../node_modules/bootstrap/scss/code";
 @import "../node_modules/bootstrap/scss/grid";
 //@import "../node_modules/bootstrap/scss/tables";
-//@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/forms";
 @import "../node_modules/bootstrap/scss/buttons";
 
 // Components
 @import "../node_modules/bootstrap/scss/transitions";
-//@import "../node_modules/bootstrap/scss/dropdown";
-//@import "../node_modules/bootstrap/scss/button-group";
-//@import "../node_modules/bootstrap/scss/input-group";
-//@import "../node_modules/bootstrap/scss/custom-forms";
+@import "../node_modules/bootstrap/scss/dropdown";
+@import "../node_modules/bootstrap/scss/button-group";
+@import "../node_modules/bootstrap/scss/input-group";
+@import "../node_modules/bootstrap/scss/custom-forms";
 @import "../node_modules/bootstrap/scss/nav";
 @import "../node_modules/bootstrap/scss/navbar";
-//@import "../node_modules/bootstrap/scss/card";
+@import "../node_modules/bootstrap/scss/card";
 //@import "../node_modules/bootstrap/scss/breadcrumb";
 //@import "../node_modules/bootstrap/scss/pagination";
 //@import "../node_modules/bootstrap/scss/badge";
@@ -77,9 +89,20 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/utilities";
     
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+h1, h2,
+.h1, .h2 {
   text-transform: uppercase;
+}
+
+h3, h4, h5, h6,
+.h3, .h4, .h5, .h6 {
+  font-family:$font-family-sans-serif;
+}
+
+
+input[type="color"] {
+  height: 2.3rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .btn {
@@ -90,6 +113,10 @@ h1, h2, h3, h4, h5, h6,
   padding:.575rem 1rem .425rem 1rem;
 }
 
+.btn-primary.dropdown-toggle-split {
+  border-left:1px solid $modal-header-border-color;
+}
+
 .navbar-brand {
   font-family: $headings-font-family;
   font-size:1.35rem;
@@ -98,6 +125,15 @@ h1, h2, h3, h4, h5, h6,
     
 .btn-info:focus, .btn-info.focus {
   box-shadow: 0 0 0 3px #fff;
+}
+
+.modal .btn-link {
+  color:$brand-inverse;
+}
+
+.appearance-preview {
+    max-height: 220px;
+    overflow-y: scroll;
 }
     
     html, body {

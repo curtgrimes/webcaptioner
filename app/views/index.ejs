@@ -58,6 +58,159 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="appearanceModal" tabindex="-1" role="dialog" aria-labelledby="appearanceModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="appearanceModalLabel">Appearance and Layout</h2>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <form>
+              <h3>Text and Background</h3>
+              <div class="form-group row">
+                <label for="typeface" class="col-4 col-form-label">Typeface</label>
+                <div class="col-8">
+                  <div class="dropdown">
+                    <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Dropdown button
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="text-color" class="col-4 col-form-label">Text Color</label>
+                <div class="col-8">
+                  <input class="form-control" name="text-color" type="color" value="#ffffff">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="text-size" class="col-4 col-form-label">Text Size</label>
+                <div class="col-8">
+                  <div class="input-group">
+                    <input class="form-control" name="text-size" type="number" value="4.25" min="0.1" step="0.25">
+                    <span class="input-group-addon">rem</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="background-color" class="col-4 col-form-label">Background Color</label>
+                <div class="col-8">
+                  <input class="form-control" name="background-color" type="color" value="#000000">
+                </div>
+              </div>
+              <h3>Shadow</h3>
+              <div class="form-group row">
+                <label for="shadow-color" class="col-4 col-form-label">Shadow Color</label>
+                <div class="col-8">
+                  <input class="form-control" name="shadow-color" type="color" value="#000000">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="shadow-opacity" class="col-4 col-form-label">Opacity</label>
+                <div class="col-8">
+                  <div class="input-group">
+                    <input class="form-control" name="shadow-opacity" type="number" value="0" min="0" max="100" step="5">
+                    <span class="input-group-addon">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="shadow-x-position" class="col-4 col-form-label">X Position</label>
+                <div class="col-8">
+                  <div class="input-group">
+                    <input class="form-control" name="shadow-x-position" type="number" value="0" step="0.25">
+                    <span class="input-group-addon">rem</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="shadow-y-position" class="col-4 col-form-label">Y Position</label>
+                <div class="col-8">
+                  <div class="input-group">
+                    <input class="form-control" name="shadow-y-position" type="number" value="0" step="0.25">
+                    <span class="input-group-addon">rem</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="shadow-blur" class="col-4 col-form-label">Blur</label>
+                <div class="col-8">
+                  <div class="input-group">
+                    <input class="form-control" name="shadow-blur" type="number" value="0" min="0" step="0.25">
+                    <span class="input-group-addon">rem</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="shadow-spread" class="col-4 col-form-label">Spread</label>
+                <div class="col-8">
+                  <div class="input-group">
+                    <input class="form-control" name="shadow-spread" type="number" value="0" step="0.25">
+                    <span class="input-group-addon">rem</span>
+                  </div>
+                </div>
+              </div>
+              <h3>Layout</h3>
+              <div class="form-group row">
+                <label for="shadow-color" class="col-4 col-form-label">Chroma Key Color</label>
+                <div class="col-8">
+                  <input class="form-control" name="chroma-key-color" type="color" value="#000000">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="shadow-color" class="col-4 col-form-label">Status Bar</label>
+                <div class="col-8">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" value="">
+                      Minimize status bar during captioning
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group row">
+                <label for="shadow-color" class="col-4 col-form-label">Text Layout</label>
+                <div class="col-8">
+                  <button class="btn btn-info"><i class="fa fa-expand" aria-hidden="true"></i> Edit Layout</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6">
+
+            <div class="card">
+              <div class="card-header">
+                Preview
+              </div>
+              <div class="card-block appearance-preview">
+                <p class="caption-wrap">Web Captioner lets you display open event captioning in your browser. Just bring a microphone.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+<!--
+        <label class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input">
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">Don't show this message next time</span>
+        </label>
+-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-info">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <div class="caption-wrap">
     <div id="info" style="visibility: visible;">
@@ -125,7 +278,15 @@
       </li>
       -->
       <li class="nav-item ml-3">
-        <a class="btn btn-primary" href="javascript:void(0)" onclick="startButton(event)" id="startButton">Start Captioning</a>
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-primary" onclick="startButton(event)" id="startButton">Start Captioning</button>
+          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal">Edit Appearance and Layout</a>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
