@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
 
+/* Alternate fonts */
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Oswald|Lato|Boogaloo|Bree+Serif');
+
 $font-family-sans-serif: 'Roboto', sans-serif;
 $headings-font-family: 'Cousine', monopsace;
 $headings-font-weight: 700;
@@ -22,7 +25,7 @@ $border-radius-lg: 0;
 $border-radius-sm: 0;
 $modal-content-bg: $brand-primary;
 $modal-header-border-color: darken($modal-content-bg, 10%);
-$modal-header-border-width: 0;
+$modal-header-border-width: 1px;
 $modal-content-border-width: 0;
 $modal-content-border-color: $brand-primary;
 
@@ -36,6 +39,12 @@ $dropdown-link-color: #ccc;
 $dropdown-link-hover-color: #fff;
 $dropdown-link-hover-bg: #666;
 
+$body-bg: $brand-primary;
+
+$nav-tabs-border-color: $modal-header-border-color;
+$nav-tabs-active-link-hover-border-color: $modal-header-border-color;
+$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%);
+$nav-tabs-active-link-hover-color: #000;
 
 $fa-font-path: '/build/font-awesome';
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
@@ -131,9 +140,30 @@ input[type="color"] {
   color:$brand-inverse;
 }
 
-.appearance-preview {
-    max-height: 220px;
+.caption-wrap-preview {
+    max-height: 280px;
     overflow-y: scroll;
+}
+
+.typeface-select {
+  text-transform:uppercase;
+}
+
+.typeface-select .dropdown-menu {
+  font-size:1.5rem;
+}
+
+.typeface-select .dropdown-item:not(.active) .fa-check {
+  display:none;
+}
+
+a.nav-link:not(.active) {
+  color: $gray;
+  opacity:.8;
+}
+
+a.nav-link.active {
+  font-weight:bold;
 }
     
     html, body {
@@ -159,13 +189,20 @@ input[type="color"] {
     .final {
       padding-right: 3px;
     }
+
     .caption-wrap {
-      line-height: 1.2em;
-      color: #fff;
+      background:#000;
+      display:flex;
+    }
+
+    .captions {
       max-width: 1200px;
+      width:100%;
+      line-height: 5rem;
+      color: #fff;
       margin: 0 auto 150px auto;
       text-transform: uppercase;
-      font-size: 4.2em;
+      font-size: 4em;
       font-family:'Cousine', monopsace;
     }
 
