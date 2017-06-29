@@ -32,10 +32,26 @@ if (!('webkitSpeechRecognition' in window)) {
         if (event.error == 'no-speech') {
             showInfo('info_no_speech');
             ignore_onend = true;
+
+            ga('send', 'event', 'recognition', 'errorNoSpeech');
+            $('#startButton').text('Start Captioning');
+            $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
+            clippingReadings = [];
+            lowLevelReadings = [];
+            clearInterval(levelCheckLoopInterval);
+            return;
         }
         if (event.error == 'audio-capture') {
             showInfo('info_no_microphone');
             ignore_onend = true;
+
+            ga('send', 'event', 'recognition', 'errorNoMicrophone');
+            $('#startButton').text('Start Captioning');
+            $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
+            clippingReadings = [];
+            lowLevelReadings = [];
+            clearInterval(levelCheckLoopInterval);
+            return;
         }
         if (event.error == 'not-allowed') {
             if (event.timeStamp - start_timestamp < 100) {
@@ -44,6 +60,13 @@ if (!('webkitSpeechRecognition' in window)) {
                 showInfo('info_denied');
             }
             ignore_onend = true;
+            ga('send', 'event', 'recognition', 'errorNotAllowed');
+            $('#startButton').text('Start Captioning');
+            $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
+            clippingReadings = [];
+            lowLevelReadings = [];
+            clearInterval(levelCheckLoopInterval);
+            return;
         }
     };
 
