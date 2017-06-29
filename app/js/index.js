@@ -51,6 +51,7 @@ if (!('webkitSpeechRecognition' in window)) {
         var now = (new Date()).getTime() / 1000;
 
         if (restartingDueToFailure && now - lastStartTimestamp > 4) {
+            lastStartTimestamp = (new Date()).getTime() / 1000;
             $('#startButton')
                 .removeClass('btn-primary')
                 .addClass('btn-secondary disabled')
