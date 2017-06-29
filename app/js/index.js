@@ -99,7 +99,7 @@ if (!('webkitSpeechRecognition' in window)) {
                 final_transcript += (shouldAppendSpace ? ' ' : '') + event.results[i][0].transcript;
 
                 var wordCount = event.results[i][0].transcript.split(' ').length;
-                ga('send', 'event', 'recognition', 'recognizingSpeech', 'recognizeWordCount', wordCount);
+                ga('send', 'event', 'recognition', 'recognizingSpeech', 'wordCount:'+wordCount);
             } else {
                 interim_transcript += event.results[i][0].transcript;
             }
