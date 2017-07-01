@@ -5,8 +5,6 @@ var uglify = require('gulp-uglify');
 var merge = require('gulp-merge');
 var cleanCSS = require('gulp-clean-css');
 var sass = require('gulp-sass');
-var watch = require('gulp-watch');
-var plumber = require('gulp-plumber');
 
 gulp.task('js:build', function() {
     return gulp
