@@ -29,6 +29,10 @@
 
   <link href="/build/css/build.css?<%= process.env.COMMIT_ID %>" rel="stylesheet" />
 
+  <link href="https://fonts.googleapis.com/css?family=<% 
+    for(var i = 0; i < captionTypefaceChoices.length; i++) { %><%= captionTypefaceChoices[i].googleFontName.replace(/ /g, '+') + '|' %><%
+  } %>" rel="stylesheet">
+
   <script>
     (function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
@@ -42,7 +46,7 @@
   </script>
 </head>
 
-<body>
+<body class="d-flex">
 <div class="modal" id="onboardingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -76,13 +80,48 @@
         <h2 class="modal-title" id="appearanceModalLabel">Appearance</h2>
       </div>
       <div class="modal-body">
-        <div class="card">
-          <div class="card-header">
-            Preview
+        <div class="card preview-card">
+          <div class="card-header card-header-caption-wrap-preview">
+            Text Preview
           </div>
-          <div class="card-block caption-wrap caption-wrap-preview" contenteditable="true">
-            <div class="captions">
-              <%= randomJuliaChildQuote %>
+          <div class="card-header card-header-screen-preview" hidden>
+            Screen Preview
+          </div>
+          <div class="caption-wrap-chroma-key-background">
+            <div class="card-block caption-wrap caption-wrap-preview" contenteditable="true">
+              <div class="captions" style="margin-bottom:0">
+                <span class="final"><%= randomJuliaChildQuote %></span> <span class="interim"></span>
+              </div>
+            </div>
+          </div>
+          <div class="card-block screen-preview" hidden>
+            <div class="screen card card-outline-primary mx-auto">
+              <div class="card-block p-0 h-100 d-flex">
+                <div class="row caption-wrap-row">
+                  <div class="col-12 caption-wrap-col" style="overflow-y:auto">
+                    <div class="card-block caption-wrap screen-caption-wrap-preview">
+                      <div class="captions mb-0" style="overflow:hidden">
+                        <span class="final">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce mi metus, hendrerit nec massa at, sagittis rutrum turpis. 
+                            Nullam ullamcorper elementum mauris non laoreet. Sed sit amet arcu quis diam fringilla tempor quis in ipsum. Nam nec 
+                            accumsan ex. Fusce at feugiat enim. Donec varius urna vel mi posuere porttitor. Nulla ac magna neque. Proin eu lacus 
+                            et urna mollis suscipit. Nullam mollis erat mauris, non placerat sapien hendrerit ac. Interdum et malesuada fames ac 
+                            ante ipsum primis in faucibus. Ut placerat bibendum turpis.
+                            Pellentesque nec ante pulvinar, congue nisl vitae, interdum est. Ut nec odio quis leo efficitur pharetra sed sed elit. 
+                            Fusce non arcu eget dolor posuere lobortis. In id accumsan velit, eu gravida tellus. Ut malesuada elit tristique magna 
+                            auctor sagittis. Etiam odio justo, pretium eget auctor at, varius sit amet nulla. Integer metus nibh, semper sit amet 
+                            augue sed, finibus scelerisque neque.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-8 mt-3">
+                <p class="small text-muted mb-0"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Text size and line height are only approximate in this preview. Save and start captioning to see how your text looks with this layout.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -95,201 +134,271 @@
             <a class="nav-link" data-toggle="tab" href="#appearance-shadow" role="tab">Shadow</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#appearance-background" role="tab">Background</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#appearance-layout" role="tab">Layout</a>
+            <a class="nav-link" data-toggle="tab" href="#appearance-layout" role="tab">Background & Layout</a>
           </li>
         </ul>
-
         <div class="tab-content mt-4">
           <div class="tab-pane fade show active" id="appearance-text" role="tabpanel">
-            <div class="form-group row">
-              <label for="typeface" class="col-sm-4 col-form-label">Typeface</label>
-              <div class="col-sm-8">
-                <div class="dropdown typeface-select">
-                  <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="typefaceDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span style="font-family:'Cousine'">Cousine</span>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="typefaceDropdownButton">
-                    <a class="dropdown-item" href="#"><span class="type-example" style="font-family:'Cousine'">Cousine</span> <span class="float-right pl-2"><i class="fa fa-check" aria-hidden="true"></i></span></a>
-                    <a class="dropdown-item" href="#"><span class="type-example" style="font-family:'Roboto'">Roboto</span> <span class="float-right pl-2"><i class="fa fa-check" aria-hidden="true"></i></span></a>
-                    <a class="dropdown-item" href="#"><span class="type-example" style="font-family:'Lato'">Lato</span> <span class="float-right pl-2"><i class="fa fa-check" aria-hidden="true"></i></span></a>
-                    <a class="dropdown-item" href="#"><span class="type-example" style="font-family:'Montserrat'">Montserrat</span> <span class="float-right pl-2"><i class="fa fa-check" aria-hidden="true"></i></span></a>
-                    <a class="dropdown-item" href="#"><span class="type-example" style="font-family:'Oswald'">Oswald</span> <span class="float-right pl-2"><i class="fa fa-check" aria-hidden="true"></i></span></a>
-                    <a class="dropdown-item" href="#"><span class="type-example" style="font-family:'Bree Serif'">Bree Serif</span> <span class="float-right pl-2"><i class="fa fa-check" aria-hidden="true"></i></span></a>
-                    <a class="dropdown-item" href="#"><span class="type-example" style="font-family:'Boogaloo'">Boogaloo</span> <span class="float-right pl-2"><i class="fa fa-check" aria-hidden="true"></i></span></a>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group row">
+                  <label for="typeface" class="col-sm-4 col-form-label">Typeface</label>
+                  <div class="col-sm-8">
+                    <div class="dropdown typeface-select">
+                      <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="typefaceDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span style="font-family:'<%= captionTypefaceChoices[0].fontFamily %>'" data-typeface-choice="<%= JSON.stringify(captionTypefaceChoices[0]) %>"><%= captionTypefaceChoices[0].displayName %></span>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="typefaceDropdownButton">
+                        <% for(var i = 0; i < captionTypefaceChoices.length; i++) { %>
+                          <a class="dropdown-item" href="#" data-font-family="<%= captionTypefaceChoices[i].fontFamily %>"><span class="type-example" data-typeface-choice="<%= JSON.stringify(captionTypefaceChoices[i]) %>" style="font-family:'<%= 
+                            captionTypefaceChoices[i].fontFamily
+                          %>';<%=
+                            (captionTypefaceChoices[i].cssFontWeight ? ('font-weight:'+ captionTypefaceChoices[i]['cssFontWeight']) : '')
+                          %>"><%= captionTypefaceChoices[i].displayName %></span></a>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" name="text-typeface" />
+                <input type="hidden" name="text-typeface-weight" />
+                <div class="form-group row">
+                  <label for="text-color" class="col-sm-4 col-form-label">Text Color</label>
+                  <div class="col-sm-8">
+                    <input class="form-control" name="text-color" id="text-color" type="color" value="#ffffff">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="text-color-interim-same" class="col-sm-4 col-form-label">Interim Text Color</label>
+                  <div class="col-sm-8">
+                    <p class="small mt-2 mb-2">During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.</p>
+                    <div class="form-check mt-1">
+                      <label class="form-check-label">
+                        <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-same" value="same-as-text-color" checked>
+                        Same as text color
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-custom" value="custom">
+                        Custom <a href="javascript:void(0)" id="previewInterimText" class="ml-1 small" style="white-space:nowrap" hidden>Preview<i class="fa fa-caret-right ml-1" aria-hidden="true"></i></a>
+                      </label>
+                    </div>
+                    <input class="form-control" hidden name="text-color-interim" type="color" value="#fffeaf">
+                    <span class="small"></span>
                   </div>
                 </div>
               </div>
-            </div>
-            <input type="hidden" name="text-typeface" />
-            <div class="form-group row">
-              <label for="text-color" class="col-sm-4 col-form-label">Text Color</label>
-              <div class="col-sm-8">
-                <input class="form-control" name="text-color" id="text-color" type="color" value="#ffffff">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="text-color-interim-1" class="col-sm-4 col-form-label">
-                Interim Words Color<br/>
-                <p class="small mb-0">During captioning, words may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.</p>
-              </label>
-              <div class="col-sm-8">
-                <div class="form-check mt-1">
-                  <label class="form-check-label">
-                    <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-1" value="same-as-text-color" checked>
-                    Same as text color
-                  </label>
+              <div class="col-lg-6">
+                <div class="form-group row">
+                  <label for="text-size" class="col-sm-4 col-form-label">Text Size</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="text-size" type="number" id="text-size" value="4" min="0.1" step="0.1">
+                      <span class="input-group-addon">em</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="form-check">
-                  <label class="form-check-label">
-                    <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-2" value="custom">
-                    Custom
-                  </label>
+                <div class="form-group row">
+                  <label for="line-height" class="col-sm-4 col-form-label">Line Height</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="line-height" id="line-height" type="number" value="5" min="0.1" step="0.1" max="10">
+                      <span class="input-group-addon">em</span>
+                    </div>
+                  </div>
                 </div>
-                <input class="form-control" hidden name="text-color-interim" type="color" value="#ffffff">
-                <span class="small"></span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="text-size" class="col-sm-4 col-form-label">Text Size</label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <input class="form-control" name="text-size" type="number" id="text-size" value="4" min="0.1" step="0.1">
-                  <span class="input-group-addon">em</span>
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="line-height" class="col-sm-4 col-form-label">Line Height</label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <input class="form-control" name="line-height" id="line-height" type="number" value="5" min="0.1" step="0.1" max="10">
-                  <span class="input-group-addon">em</span>
+                <div class="form-group row">
+                  <label for="letter-spacing" class="col-sm-4 col-form-label">Letter Spacing</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="letter-spacing" id="letter-spacing" type="number" value="0" min="-10" step="0.025" max="20">
+                      <span class="input-group-addon">em</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="tab-pane fade" id="appearance-shadow" role="tabpanel">
-            <div class="form-group row">
-              <label for="text-shadow-color" class="col-sm-4 col-form-label">Shadow Color</label>
-              <div class="col-sm-8">
-                <input class="form-control" name="text-shadow-color" type="color" value="#000000">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="text-shadow-opacity" class="col-sm-4 col-form-label">Opacity</label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <input class="form-control" name="text-shadow-opacity" type="number" value="100" min="0" max="100" step="5">
-                  <span class="input-group-addon">%</span>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group row">
+                  <label for="text-shadow-color" class="col-sm-4 col-form-label">Shadow Color</label>
+                  <div class="col-sm-8">
+                    <input class="form-control" name="text-shadow-color" type="color" value="#000000">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="text-shadow-opacity" class="col-sm-4 col-form-label">Opacity</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="text-shadow-opacity" type="number" value="100" min="0" max="100" step="5">
+                      <span class="input-group-addon">%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="text-shadow-blur" class="col-sm-4 col-form-label">Blur</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="text-shadow-blur" type="number" value="0" min="0" step="1">
+                      <span class="input-group-addon">px</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group row">
-              <label for="text-shadow-x-position" class="col-sm-4 col-form-label">X Position</label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <input class="form-control" name="text-shadow-x-position" type="number" value="0.25" step="0.25">
-                  <span class="input-group-addon">em</span>
+              <div class="col-lg-6">
+                <div class="form-group row">
+                  <label for="text-shadow-x-position" class="col-sm-4 col-form-label">X Position</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="text-shadow-x-position" type="number" value="0.25" step="0.25">
+                      <span class="input-group-addon">em</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="text-shadow-y-position" class="col-sm-4 col-form-label">Y Position</label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <input class="form-control" name="text-shadow-y-position" type="number" value="0.25" step="0.25">
-                  <span class="input-group-addon">em</span>
+                <div class="form-group row">
+                  <label for="text-shadow-y-position" class="col-sm-4 col-form-label">Y Position</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="text-shadow-y-position" type="number" value="0.25" step="0.25">
+                      <span class="input-group-addon">em</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="text-shadow-blur" class="col-sm-4 col-form-label">Blur</label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <input class="form-control" name="text-shadow-blur" type="number" value="0" min="0" step="0.25">
-                  <span class="input-group-addon">em</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="appearance-background" role="tabpanel">
-            <div class="form-group row">
-              <label for="background-color" class="col-sm-4 col-form-label">Background Color</label>
-              <div class="col-sm-8">
-                <input class="form-control" name="background-color" type="color" value="#000000">
               </div>
             </div>
           </div>
           <div class="tab-pane fade" id="appearance-layout" role="tabpanel">
-            <div class="form-group row">
-              <label for="chroma-key-color" class="col-sm-4 col-form-label">Chroma Key Color</label>
-              <div class="col-sm-8">
-                <input class="form-control" name="chroma-key-color" id="chroma-key-color" type="color" value="#000000">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group row">
+                  <label for="background-color" class="col-sm-4 col-form-label">Background Color</label>
+                  <div class="col-sm-8">
+                    <input class="form-control" name="background-color" type="color" value="#000000">
+                    <div class="form-check">
+                      <label class="form-check-label mt-2">
+                        <input class="form-check-input mr-1" id="text-background-transparent" name="text-background-transparent" type="checkbox" value="yes">
+                        Make transparent
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="chroma-key-color" class="col-sm-4 col-form-label">Chroma Key Color</label>
+                  <div class="col-sm-8">
+                    <input class="form-control" name="chroma-key-color" id="chroma-key-color" type="color" value="#00ff00">
+                    <div class="small pt-1 pt-lg-2 rgb-label">
+                      <strong>R:</strong> <span class="chroma-key-red">0</span> &nbsp;<strong>G:</strong> <span class="chroma-key-green">0</span> &nbsp;<strong>B:</strong> <span class="chroma-key-blue">0</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="padding" class="col-sm-4 col-form-label">Padding</label>
+                  <div class="col-sm-8">
+                    <div class="input-group">
+                      <input class="form-control" name="padding" id="padding" type="number" value="1.25" min="0" step="0.25" max="10">
+                      <span class="input-group-addon">em</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            
-            <div class="form-group row">
-              <label for="text-layout" class="col-sm-4 col-form-label">Text Layout</label>
-              <div class="col-sm-8">
-                <button class="btn btn-info" id="text-layout"><i class="fa fa-expand" aria-hidden="true"></i> Edit Layout</button>
+              <div class="col-lg-6">
+                <div class="form-group row">
+                  <label for="horizontal-alignment-full" class="col-12 col-form-label">Horizontal Alignment</label>
+                  <div class="col-12">
+                    <div class="btn-group d-inline-block" data-toggle="buttons">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="horizontal-alignment" id="horizontal-alignment-full" value="full" autocomplete="off" checked> Full
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="horizontal-alignment" id="horizontal-alignment-left" value="left" autocomplete="off"> Left
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="horizontal-alignment" id="horizontal-alignment-middle" value="middle" autocomplete="off"> Middle
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="horizontal-alignment" id="horizontal-alignment-right" value="right" autocomplete="off"> Right
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="vertical-alignment-full" class="col-12 col-form-label">Vertical Alignment</label>
+                  <div class="col-12">
+                    <div class="btn-group d-inline-block" data-toggle="buttons">
+                      <label class="btn btn-primary active">
+                        <input type="radio" name="vertical-alignment" id="vertical-alignment-full" value="full" autocomplete="off" checked> Full
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="vertical-alignment" id="vertical-alignment-top" value="top" autocomplete="off"> Top
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="vertical-alignment" id="vertical-alignment-middle" value="middle" autocomplete="off"> Middle
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="vertical-alignment" id="vertical-alignment-bottom" value="bottom" autocomplete="off"> Bottom
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="vertical-alignment" id="vertical-alignment-lower-third" value="lower-third" autocomplete="off"> Lower Third
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-<!--
-        <label class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input">
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">Don't show this message next time</span>
-        </label>
--->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-info">Save</button>
+        <button type="button" class="btn btn-link mr-auto" id="resetToDefaultAppearanceButton">Reset to Default</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" onclick="ga('send', 'event', 'settings', 'cancelAppearance');">Cancel</button>
+        <button type="button" class="btn btn-info" id="saveAppearanceButton">Save</button>
       </div>
     </div>
   </div>
 </div>
 
-  <div class="caption-wrap">
-    <div class="captions">
-      <div id="info" style="visibility: visible;">
-        <p id="info_speak_now" style="display:none">
-          Now listening...
-        </p>
-        <p id="info_no_speech" style="display:none">
-          No speech was detected. You may need to adjust your <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">microphone
-            settings</a>.
-        </p>
-        <p id="info_no_microphone" style="display:none">
-          No microphone was found. Ensure that a microphone is installed and that
-          <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
-            microphone settings</a> are configured correctly.
-        </p>
-        <p id="info_allow" style="display:none">
-          Click the "Allow" button above to enable your microphone.
-        </p>
-        <p id="info_denied" style="display:none">
-          Permission to use microphone was denied.
-        </p>
-        <p id="info_blocked" style="display:none">
-          Permission to use microphone is blocked. To change, go to chrome://settings/contentExceptions#media-stream
-        </p>
-        <p id="info_upgrade" style="display:none">
-          Web Speech API is not supported by this browser. Upgrade to <a href="https://www.google.com/chrome">Chrome</a>          version 25 or later.
-        </p>
-      </div>
-      <div id="results" style="color:#fff">
-        <span class="final" id="final_span" contenteditable="true"></span> <span class="interim" id="interim_span"></span>
+<div class="row w-100 caption-wrap-row">
+  <div class="caption-wrap-col col-12">
+    <div class="caption-wrap caption-wrap-real d-flex h-100">
+      <div class="captions">
+        <div id="info" style="visibility: visible;">
+          <p id="info_speak_now" style="display:none">
+            Now listening...
+          </p>
+          <p id="info_no_speech" style="display:none">
+            No speech was detected. You may need to adjust your <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">microphone
+              settings</a>.
+          </p>
+          <p id="info_no_microphone" style="display:none">
+            No microphone was found. Ensure that a microphone is installed and that
+            <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+              microphone settings</a> are configured correctly.
+          </p>
+          <p id="info_allow" style="display:none">
+            Click the "Allow" button above to enable your microphone.
+          </p>
+          <p id="info_denied" style="display:none">
+            Permission to use microphone was denied.
+          </p>
+          <p id="info_blocked" style="display:none">
+            Permission to use microphone is blocked. To change, go to chrome://settings/contentExceptions#media-stream
+          </p>
+          <p id="info_upgrade" style="display:none">
+            Web Speech API is not supported by this browser. Upgrade to <a href="https://www.google.com/chrome">Chrome</a>          version 25 or later.
+          </p>
+        </div>
+        <div id="results">
+          <span class="final" id="final_span" contenteditable="true"></span> <span class="interim" id="interim_span"></span>
+        </div>
       </div>
     </div>
   </div>
+</div>
 
-<nav class="navbar fixed-bottom navbar-toggleable-md navbar-inverse bg-inverse">
+<nav id="main-navbar" class="navbar fixed-bottom navbar-toggleable-md navbar-inverse bg-inverse">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -325,11 +434,11 @@
       <li class="nav-item ml-3">
         <div class="btn-group dropup">
           <button type="button" class="btn btn-primary" onclick="startButton(event)" id="startButton">Start Captioning</button>
-          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal">Edit Appearance</a>
+            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')">Edit Appearance</a>
           </div>
         </div>
       </li>

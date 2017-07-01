@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
 
-/* Alternate fonts */
-@import url('https://fonts.googleapis.com/css?family=Montserrat|Oswald|Lato|Boogaloo|Bree+Serif');
-
 $font-family-sans-serif: 'Roboto', sans-serif;
 $headings-font-family: 'Cousine', monopsace;
 $headings-font-weight: 700;
@@ -79,7 +76,7 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/card";
 //@import "../node_modules/bootstrap/scss/breadcrumb";
 //@import "../node_modules/bootstrap/scss/pagination";
-//@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/badge";
 //@import "../node_modules/bootstrap/scss/jumbotron";
 @import "../node_modules/bootstrap/scss/alert";
 @import "../node_modules/bootstrap/scss/progress";
@@ -140,8 +137,13 @@ input[type="color"] {
   color:$brand-inverse;
 }
 
-.caption-wrap-preview {
-    max-height: 280px;
+.modal a:not(.dropdown-item) {
+  color:$brand-inverse;
+  font-weight:bold;
+}
+
+.caption-wrap.caption-wrap-preview {
+    height: 280px;
     overflow-y: scroll;
 }
 
@@ -153,10 +155,6 @@ input[type="color"] {
   font-size:1.5rem;
 }
 
-.typeface-select .dropdown-item:not(.active) .fa-check {
-  display:none;
-}
-
 a.nav-link:not(.active) {
   color: $gray;
   opacity:.8;
@@ -164,6 +162,14 @@ a.nav-link:not(.active) {
 
 a.nav-link.active {
   font-weight:bold;
+}
+
+.rgb-label {
+  font-family:'Cousine';
+}
+
+.screen-preview .screen {
+  max-width:100%;
 }
     
     html, body {
@@ -183,24 +189,29 @@ a.nav-link.active {
     }
 
     .interim {
-      color: #fffeaf;
+      color: #fff;
     }
-
-    .final {
-      padding-right: 3px;
-    }
-
+    
     .caption-wrap {
       background:#000;
-      display:flex;
+      min-height:100%;
+    }
+
+    .caption-wrap-real {
+      overflow-y:auto;
+    }
+
+    .caption-wrap-real::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
     }
 
     .captions {
-      max-width: 1200px;
+      min-height:100%;
       width:100%;
       line-height: 5rem;
       color: #fff;
-      margin: 0 auto 150px auto;
+      margin: 0 auto;
       text-transform: uppercase;
       font-size: 4em;
       font-family:'Cousine', monopsace;

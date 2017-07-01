@@ -21,6 +21,55 @@ router.get('/', function(req, res, next) {
   res.render('index', {
     title: 'Web Captioner',
     randomJuliaChildQuote: randomJuliaChildQuote,
+    captionTypefaceChoices: [
+      { // This list must have at least one and the default must be first
+        'googleFontName': 'Cousine',
+        'fontFamily': 'Cousine',
+        'displayName': 'Cousine',
+      },
+      {
+        'googleFontName': 'Roboto',
+        'fontFamily': 'Roboto',
+        'displayName': 'Roboto',
+      },
+      {
+        'googleFontName': 'Oswald',
+        'fontFamily': 'Oswald',
+        'displayName': 'Oswald',
+      },
+      {
+        'googleFontName': 'Lato:700',
+        'fontFamily': 'Lato',
+        'displayName': 'Lato Bold',
+        'cssFontWeight': '700',
+      },
+      {
+        'googleFontName': 'Archivo Black',
+        'fontFamily': 'Archivo Black',
+        'displayName': 'Archivo Black',
+      },
+      {
+        'googleFontName': 'Bree Serif',
+        'fontFamily': 'Bree Serif',
+        'displayName': 'Bree Serif',
+      },
+      {
+        'googleFontName': 'Arvo',
+        'fontFamily': 'Arvo',
+        'displayName': 'Arvo',
+      },
+      {
+        'googleFontName': 'Concert One',
+        'fontFamily': 'Concert One',
+        'displayName': 'Concert One',
+      },
+      {
+        'googleFontName': 'Boogaloo',
+        'fontFamily': 'Boogaloo',
+        'displayName': 'Boogaloo',
+      },
+
+    ]
   });
 });
 

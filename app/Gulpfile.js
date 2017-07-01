@@ -12,6 +12,7 @@ gulp.task('js:build', function() {
     return gulp
         .src([
             'js/*',
+            'node_modules/bootstrap/js/dist/button.js',
             'node_modules/bootstrap/js/dist/collapse.js',
             'node_modules/bootstrap/js/dist/dropdown.js',
             'node_modules/bootstrap/js/dist/modal.js',
