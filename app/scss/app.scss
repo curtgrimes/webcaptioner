@@ -4,6 +4,11 @@ $font-family-sans-serif: 'Roboto', sans-serif;
 $headings-font-family: 'Cousine', monopsace;
 $headings-font-weight: 700;
 
+$font-size-h3: 1.5rem;
+$font-size-h4: 1.25rem;
+$font-size-h5: 1rem;
+$font-size-h6: 0.75rem;
+
 $brand-primary: #f0e500;
 $brand-info: #18B1F2;
 $brand-danger: #A30821;
@@ -17,13 +22,26 @@ $border-radius-lg: 0;
 $border-radius-sm: 0;
 $modal-content-bg: $brand-primary;
 $modal-header-border-color: darken($modal-content-bg, 10%);
-$modal-header-border-width: 0;
+$modal-header-border-width: 1px;
 $modal-content-border-width: 0;
 $modal-content-border-color: $brand-primary;
+
+$component-active-color: #000;
 
 $custom-control-indicator-bg: #fff;
 $custom-control-checked-indicator-bg: #000;
 
+$dropdown-bg: #555;
+$dropdown-link-color: #ccc;
+$dropdown-link-hover-color: #fff;
+$dropdown-link-hover-bg: #666;
+
+$body-bg: $brand-primary;
+
+$nav-tabs-border-color: $modal-header-border-color;
+$nav-tabs-active-link-hover-border-color: $modal-header-border-color;
+$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%);
+$nav-tabs-active-link-hover-color: #000;
 
 $fa-font-path: '/build/font-awesome';
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
@@ -44,21 +62,21 @@ $fa-font-path: '/build/font-awesome';
 //@import "../node_modules/bootstrap/scss/code";
 @import "../node_modules/bootstrap/scss/grid";
 //@import "../node_modules/bootstrap/scss/tables";
-//@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/forms";
 @import "../node_modules/bootstrap/scss/buttons";
 
 // Components
 @import "../node_modules/bootstrap/scss/transitions";
-//@import "../node_modules/bootstrap/scss/dropdown";
-//@import "../node_modules/bootstrap/scss/button-group";
-//@import "../node_modules/bootstrap/scss/input-group";
-//@import "../node_modules/bootstrap/scss/custom-forms";
+@import "../node_modules/bootstrap/scss/dropdown";
+@import "../node_modules/bootstrap/scss/button-group";
+@import "../node_modules/bootstrap/scss/input-group";
+@import "../node_modules/bootstrap/scss/custom-forms";
 @import "../node_modules/bootstrap/scss/nav";
 @import "../node_modules/bootstrap/scss/navbar";
-//@import "../node_modules/bootstrap/scss/card";
+@import "../node_modules/bootstrap/scss/card";
 //@import "../node_modules/bootstrap/scss/breadcrumb";
 //@import "../node_modules/bootstrap/scss/pagination";
-//@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/badge";
 //@import "../node_modules/bootstrap/scss/jumbotron";
 @import "../node_modules/bootstrap/scss/alert";
 @import "../node_modules/bootstrap/scss/progress";
@@ -77,9 +95,20 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/utilities";
     
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+h1, h2,
+.h1, .h2 {
   text-transform: uppercase;
+}
+
+h3, h4, h5, h6,
+.h3, .h4, .h5, .h6 {
+  font-family:$font-family-sans-serif;
+}
+
+
+input[type="color"] {
+  height: 2.3rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .btn {
@@ -90,6 +119,10 @@ h1, h2, h3, h4, h5, h6,
   padding:.575rem 1rem .425rem 1rem;
 }
 
+.btn-primary.dropdown-toggle-split {
+  border-left:1px solid $modal-header-border-color;
+}
+
 .navbar-brand {
   font-family: $headings-font-family;
   font-size:1.35rem;
@@ -98,6 +131,45 @@ h1, h2, h3, h4, h5, h6,
     
 .btn-info:focus, .btn-info.focus {
   box-shadow: 0 0 0 3px #fff;
+}
+
+.modal .btn-link {
+  color:$brand-inverse;
+}
+
+.modal a:not(.dropdown-item) {
+  color:$brand-inverse;
+  font-weight:bold;
+}
+
+.caption-wrap.caption-wrap-preview {
+    height: 280px;
+    overflow-y: scroll;
+}
+
+.typeface-select {
+  text-transform:uppercase;
+}
+
+.typeface-select .dropdown-menu {
+  font-size:1.5rem;
+}
+
+a.nav-link:not(.active) {
+  color: $gray;
+  opacity:.8;
+}
+
+a.nav-link.active {
+  font-weight:bold;
+}
+
+.rgb-label {
+  font-family:'Cousine';
+}
+
+.screen-preview .screen {
+  max-width:100%;
 }
     
     html, body {
@@ -117,19 +189,31 @@ h1, h2, h3, h4, h5, h6,
     }
 
     .interim {
-      color: #fffeaf;
+      color: #fff;
+    }
+    
+    .caption-wrap {
+      background:#000;
+      min-height:100%;
     }
 
-    .final {
-      padding-right: 3px;
+    .caption-wrap-real {
+      overflow-y:auto;
     }
-    .caption-wrap {
-      line-height: 1.2em;
+
+    .caption-wrap-real::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
+    }
+
+    .captions {
+      min-height:100%;
+      width:100%;
+      line-height: 5rem;
       color: #fff;
-      max-width: 1200px;
-      margin: 0 auto 150px auto;
+      margin: 0 auto;
       text-transform: uppercase;
-      font-size: 4.2em;
+      font-size: 4em;
       font-family:'Cousine', monopsace;
     }
 

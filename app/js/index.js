@@ -25,7 +25,7 @@ if (!('webkitSpeechRecognition' in window)) {
     recognition.onstart = function () {
         recognizing = true;
         showInfo('info_speak_now');
-        window.scrollTo(0, document.body.scrollHeight);
+        $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
     };
 
     recognition.onerror = function (event) {
@@ -132,7 +132,7 @@ if (!('webkitSpeechRecognition' in window)) {
         final_span.innerHTML = linebreak(final_transcript);
         interim_span.innerHTML = linebreak(interim_transcript);
         //window.localStorage.setItem("transcript", final_transcript);
-        window.scrollTo(0, document.body.scrollHeight);
+        $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
         window.getSelection().removeAllRanges(); // remove any current text selection
     };
 }
@@ -365,8 +365,9 @@ $(function () {
 
 
     //document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
-    window.scrollTo(0, document.body.scrollHeight);
+    $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
 
+    $('.caption-wrap-real').parents('.caption-wrap-row').css({'margin-bottom': $('#main-navbar').outerHeight()});
 
     $('#final_span').on('keyup', function (event) {
         final_transcript = $('#final_span').text();

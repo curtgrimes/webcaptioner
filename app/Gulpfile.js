@@ -5,26 +5,43 @@ var uglify = require('gulp-uglify');
 var merge = require('gulp-merge');
 var cleanCSS = require('gulp-clean-css');
 var sass = require('gulp-sass');
+var watch = require('gulp-watch');
+var plumber = require('gulp-plumber');
 
-gulp.task('default', function () {
-    var jsStream = gulp.src([
+gulp.task('js:build', function() {
+    return gulp
+        .src([
             'js/*',
+            'node_modules/bootstrap/js/dist/button.js',
             'node_modules/bootstrap/js/dist/collapse.js',
+            'node_modules/bootstrap/js/dist/dropdown.js',
             'node_modules/bootstrap/js/dist/modal.js',
+            'node_modules/bootstrap/js/dist/tab.js',
             'node_modules/bootstrap/js/dist/util.js',
         ])
         .pipe(concat('build.js'))
         .pipe(uglify())
         .pipe(gulp.dest('build/js'));
-    
-    var fontAwesome = gulp.src('node_modules/font-awesome/fonts/*')
-        .pipe(gulp.dest('build/font-awesome'));
-    
-    var cssStream = gulp.src('scss/*')
+});
+
+gulp.task('scss:build', function() {
+    return gulp
+        .src('scss/*')
         .pipe(concat('build.scss'))
         .pipe(sass().on('error', sass.logError))
         .pipe(cleanCSS())
         .pipe(gulp.dest('build/css'));
+});
 
-    return merge(jsStream, fontAwesome, cssStream);
+gulp.task('fontawesome:build', function() {
+    return gulp
+        .src('node_modules/font-awesome/fonts/*')
+        .pipe(gulp.dest('build/font-awesome'));
+});
+
+gulp.task('default', ['js:build', 'scss:build', 'fontawesome:build']);
+
+gulp.task('watch', function () {
+    gulp.watch(['js/*'], ['js:build']);
+    gulp.watch(['scss/*'], ['scss:build']);
 });
