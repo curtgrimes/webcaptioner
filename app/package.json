@@ -9,6 +9,7 @@
     "@google-cloud/translate": "^0.8.2",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-alpha.6",
+    "compression": "^1.6.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "ejs": "~2.5.6",
