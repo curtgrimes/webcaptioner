@@ -43,11 +43,13 @@ $nav-tabs-active-link-hover-border-color: $modal-header-border-color;
 $nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%);
 $nav-tabs-active-link-hover-color: #000;
 
-$navbar-inverse-color:                 rgba(#000,.5) !default;
-$navbar-inverse-hover-color:           rgba(#000,.75) !default;
-$navbar-inverse-active-color:          rgba(#000,1) !default;
-$navbar-inverse-disabled-color:        rgba(#000,.25) !default;
-$navbar-inverse-toggler-border:        rgba(#000,.1) !default;
+$navbar-inverse-color:                 rgba(#fff,.5) !default;
+$navbar-inverse-hover-color:           rgba(#fff,.75) !default;
+$navbar-inverse-active-color:          rgba(#fff,1) !default;
+$navbar-inverse-disabled-color:        rgba(#fff,.25) !default;
+$navbar-inverse-toggler-border:        rgba(#fff,.1) !default;
+
+$nav-tabs-active-link-hover-bg: $brand-primary;
 
 $container-max-widths: (
   sm: 540px,
