@@ -151,7 +151,7 @@ input[type="color"] {
   color:$brand-inverse;
 }
 
-.modal a:not(.dropdown-item) {
+.modal a:not(.dropdown-item):not(a.btn) {
   color:$brand-inverse;
   font-weight:bold;
 }
