@@ -58,6 +58,12 @@
           <p class="text-right mb-2">
             <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank" class="btn btn-danger">Download Google Chrome</a>
           </p>
+          <p class="text-right mb-2 hidden-sm-up">
+            <a href="/blog" target="_blank" class="btn btn-info btn-block">View the Web Captioner Blog</a>
+          </p>
+          <p class="text-right mb-2 hidden-xs-down">
+            <a href="/blog" target="_blank" class="btn btn-info">Web Captioner Blog</a>
+          </p>
         </div>
 <!--
         <label class="custom-control custom-checkbox">
@@ -398,14 +404,21 @@
   </div>
 </div>
 
-<nav id="main-navbar" class="navbar fixed-bottom navbar-toggleable-md navbar-inverse bg-inverse">
+<nav id="main-navbar" class="navbar fixed-bottom navbar-toggleable-xl navbar-inverse bg-inverse">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <span class="navbar-brand">
-    <img src="/static/img/logo.svg" width="30" height="30" class="d-inline-block align-top mr-2" alt="Web Captioner" />
-    Web Captioner
+    <a href="/">
+      <img src="/static/img/logo.svg" width="30" height="30" class="d-inline-block align-top mr-2" alt="Web Captioner" />
+      <span class="hidden-xs-down">Web Captioner</span>
+    </a>
   </span>
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="/blog">Blog</a>
+    </li>
+  </ul>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
@@ -433,13 +446,15 @@
       -->
       <li class="nav-item ml-3">
         <div class="btn-group dropup">
-          <button type="button" class="btn btn-primary" onclick="startButton(event)" id="startButton">Start Captioning</button>
+          <button type="button" class="btn btn-primary" onclick="startButton(event)" id="startButton">Start<span class="hidden-xs-down"> Captioning</span></button>
+          <%#
           <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')">Edit Appearance</a>
           </div>
+          %>
         </div>
       </li>
     </ul>

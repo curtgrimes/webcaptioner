@@ -27,6 +27,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static/favicon')));
 app.use(express.static(path.join(__dirname, 'static/sitemap')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
+app.use('/blog', express.static(path.join(__dirname, 'blog/public')));
+app.use('/community', express.static(path.join(__dirname, 'blog/public/community')));
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
 app.use('/', index);

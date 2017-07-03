@@ -1,4 +1,7 @@
 $(function(){
+    if (!$('#appearanceModal').length) {
+        return;
+    }
 
     function hexToRgb(hex) {
         var arrBuff = new ArrayBuffer(4);
@@ -128,6 +131,10 @@ $(function(){
     });
 
     function updateChromaKeyLabel() {
+        if (!$('[name="chroma-key-color"]').length) {
+            return;
+        }
+
         var rgb = hexToRgb($('[name="chroma-key-color"]').val().substring(1)).split(',');
         $('.chroma-key-red').text(rgb[0]);
         $('.chroma-key-green').text(rgb[1]);

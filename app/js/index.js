@@ -202,6 +202,10 @@ function startButton(event) {
 }
 
 function showInfo(s) {
+    if (typeof info === 'undefined') {
+        return;
+    }
+
     if (s) {
         for (var child = info.firstChild; child; child = child.nextSibling) {
             if (child.style) {
@@ -359,23 +363,29 @@ function levelCheckLoop() {
 
 
 $(function () {
-    $('#onboardingModal').modal();
+    if ($('#onboardingModal').length) {
+        $('#onboardingModal').modal();
+    }
 
     showInfo('info_start');
 
-
     //document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
-    $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
 
-    $('.caption-wrap-real').parents('.caption-wrap-row').css({'margin-bottom': $('#main-navbar').outerHeight()});
+    if ($('.caption-wrap-real').length) {
+        $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
 
-    $('#final_span').on('keyup', function (event) {
-        final_transcript = $('#final_span').text();
-        //window.localStorage.setItem("transcript", final_transcript);
-    });
+        $('.caption-wrap-real').parents('.caption-wrap-row').css({'margin-bottom': $('#main-navbar').outerHeight()});
+    }
 
-    setInterval(function() {
-        // Clean up transcript, limit to 1000 characters
-        $('#final_span').text($('#final_span').text().slice(-1000));
-    },10000);
+    if ($('#final_span').length) {
+        $('#final_span').on('keyup', function (event) {
+            final_transcript = $('#final_span').text();
+            //window.localStorage.setItem("transcript", final_transcript);
+        });
+
+        setInterval(function() {
+            // Clean up transcript, limit to 1000 characters
+            $('#final_span').text($('#final_span').text().slice(-1000));
+        },10000);
+    }
 });
