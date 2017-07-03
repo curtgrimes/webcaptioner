@@ -142,6 +142,11 @@ input[type="color"] {
   font-size:1.35rem;
   text-transform: uppercase;
 }
+
+.navbar-brand a {
+  text-decoration:none;
+  color:#fff;
+}
     
 .btn-info:focus, .btn-info.focus {
   box-shadow: 0 0 0 3px #fff;
