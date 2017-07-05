@@ -97,6 +97,9 @@ function initRecognition() {
         else {
             // Button was pressed and it really should stop
             recognition = null;
+            (mediaStream.getAudioTracks() || []).forEach(function(audioTrack) {
+                audioTrack.stop();
+            });
         }
         
         if (!ignore_onend) {
@@ -259,8 +262,10 @@ function didntGetStream() {
 }
 
 var mediaStreamSource = null;
+var mediaStream = null;
 
 function gotStream(stream) {
+    mediaStream =  stream;
     // Create an AudioNode from the stream.
     mediaStreamSource = audioContext.createMediaStreamSource(stream);
 
