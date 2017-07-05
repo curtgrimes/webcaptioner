@@ -146,7 +146,7 @@ $(function(){
 
     var gaLoggingTimeout;
     $('#appearanceModal input').on('change', function() {
-        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card', getAppearanceSettingsObject().appearance);
+        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card,.caption-wrap-chroma-key-background', getAppearanceSettingsObject().appearance);
         var inputName = $(this).attr('name');
         var inputValue = $(this).val();
 
@@ -179,13 +179,13 @@ $(function(){
         
         applyAppearanceSettingsToCaptionWrap('.caption-wrap.caption-wrap-real', 'body', settings.appearance);
         updateAppearanceFormWithSettings(settings.appearance);
-        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card', settings.appearance);
+        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card,.caption-wrap-chroma-key-background', settings.appearance);
     });
 
     $('#resetToDefaultAppearanceButton').on('click', function(){
         var settings = getDefaultSettings().appearance;
         updateAppearanceFormWithSettings(settings);
-        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card', settings);
+        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card,.caption-wrap-chroma-key-background', settings);
 
 
         settings['line-height'] -= 2;
@@ -435,7 +435,7 @@ $(function(){
         settings = JSON.parse(settings);
         updateAppearanceFormWithSettings(settings.appearance);
         applyAppearanceSettingsToCaptionWrap('.caption-wrap.caption-wrap-real', 'body', settings.appearance);
-        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card', settings.appearance);
+        applyAppearanceSettingsToCaptionWrap('.caption-wrap-preview', '.screen.card,.caption-wrap-chroma-key-background', settings.appearance);
     }
 
 });
