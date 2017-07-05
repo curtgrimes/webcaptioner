@@ -406,7 +406,7 @@
   </div>
 </div>
 
-<nav id="main-navbar" class="navbar fixed-bottom navbar-toggleable-xl navbar-inverse bg-inverse">
+<nav id="main-navbar" class="navbar fixed-bottom navbar-toggleable navbar-inverse bg-inverse">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -416,7 +416,7 @@
       <span class="hidden-xs-down">Web Captioner</span>
     </a>
   </span>
-  <ul class="navbar-nav mr-auto">
+  <ul class="navbar-nav mr-auto hidden-xs-down">
     <li class="nav-item">
       <a class="nav-link" href="/blog">Blog</a>
     </li>
@@ -425,13 +425,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
       <li id="audioLevelWrap" hidden>
-        <div class="row mr-3" style="width:450px">
-          <div class="col">
+        <div class="row mr-3" style="width:350px">
+          <div class="col text-right">
             <span id="clippingMessage" hidden class="navbar-text text-white bg-danger px-3">
-              <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Audio is too loud
+              <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Too loud
             </span>
-            <span id="lowLevelMessage" hidden class="navbar-text text-white bg-danger px-3">
-              <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Audio is too quiet
+            <span id="lowLevelMessage" hidden class="navbar-text text-white bg-danger px-2">
+              <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Too quiet
             </span>
           </div>
           <div class="col">
@@ -441,22 +441,18 @@
           </div>
         </div>
       </li>
-      <!--
-      <li class="nav-item">
-        <a class="nav-link" href="javascript:void(0)" onclick="clear_saved()">Clear</a>
+      <li class="nav-item hidden-sm-up">
+        <a class="nav-link" href="/blog">Blog</a>
       </li>
-      -->
-      <li class="nav-item ml-3">
+      <li class="nav-item">
         <div class="btn-group dropup">
-          <button type="button" class="btn btn-primary" onclick="startButton(event)" id="startButton">Start<span class="hidden-xs-down"> Captioning</span></button>
-          <%#
+          <button type="button" class="btn btn-primary" id="startButton">Start<span class="hidden-xs-down"> Captioning</span></button>
           <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')">Edit Appearance</a>
           </div>
-          %>
         </div>
       </li>
     </ul>
