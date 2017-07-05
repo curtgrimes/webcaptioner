@@ -31,7 +31,6 @@ function initRecognition() {
     recognition.lang = 'en-US';
 
     recognition.onstart = function () {
-        console.log('recognition.onstart');
         lastStartTimestamp = (new Date()).getTime() / 1000;
         recognizing = true;
         showInfo('info_speak_now');
@@ -46,8 +45,6 @@ function initRecognition() {
 
     recognition.onerror = function (event) {
         // And recognition has stopped
-        console.log(event);
-        console.log('recognition.onerror');
         if (event.error == 'no-speech') {
             shouldStartOnStop = true;
             // recognition.stop();
@@ -83,7 +80,6 @@ function initRecognition() {
 
     recognition.onend = function () {
         recognizing = false;
-        console.log('recognition.onend');
         
         if (restartingDueToFailure || !startStopButtonPressed) {
             ga('send', 'event', 'recognition', 'restartingDueToPossibleFailure');
@@ -113,7 +109,6 @@ function initRecognition() {
         var final_transcript = '';
 
         if (typeof (event.results) == 'undefined') {
-            console.log('event results was undefined');
             recognition.onend = null;
             recognition.stop();
             upgrade();
@@ -408,10 +403,8 @@ $('#startButton').on('click', function(){
         return;
     }
     else {
-        console.log('starting');
         // Start recognition
         if (!recognition) {
-            console.log('init recognition');
             recognition = initRecognition();
         }
 
