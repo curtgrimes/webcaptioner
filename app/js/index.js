@@ -307,6 +307,10 @@ var clippingReadings = [],
     audioLevelWrap = document.getElementById('audioLevelWrap');
 
 function levelCheckLoop() {
+    if (!meter) {
+        return;
+    }
+    
     clippingReadings.push(meter.checkClipping());
     lowLevelReadings.push(meter.checkLowLevel());
 
