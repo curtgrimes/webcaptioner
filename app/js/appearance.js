@@ -3,6 +3,8 @@ $(function(){
         return;
     }
 
+    $('#capitalization-popover').popover();
+
     function hexToRgb(hex) {
         var arrBuff = new ArrayBuffer(4);
         var vw = new DataView(arrBuff);
@@ -208,6 +210,7 @@ $(function(){
                 'text-size': $('[name="text-size"]').val(),
                 'line-height': $('[name="line-height"]').val(),
                 'letter-spacing': $('[name="letter-spacing"]').val(),
+                'capitalization': $('[name="capitalization"]:checked').val(),
                 'text-shadow-color': $('[name="text-shadow-color"]').val(),
                 'text-shadow-opacity': $('[name="text-shadow-opacity"]').val(),
                 'text-shadow-x-position': $('[name="text-shadow-x-position"]').val(),
@@ -234,6 +237,7 @@ $(function(){
                 'text-size': '4',
                 'line-height': '5',
                 'letter-spacing': '0',
+                'capitalization': 'uppercase',
                 'text-shadow-color': '#000000',
                 'text-shadow-opacity': '100',
                 'text-shadow-x-position': '0.25',
@@ -271,6 +275,10 @@ $(function(){
                         break;
                     case 'line-height':
                         $('[name="line-height"]').val(appearanceSettings[settingKey]);
+                        break;
+                    case 'capitalization':
+                        $('[name="capitalization"]').prop('checked', false);
+                        $('[name="capitalization"][value="'+ appearanceSettings[settingKey] +'"]').prop('checked', true).trigger('change');
                         break;
                     case 'letter-spacing':
                         $('[name="letter-spacing"]').val(appearanceSettings[settingKey]);
@@ -343,6 +351,9 @@ $(function(){
                         break;
                     case 'letter-spacing':
                         $captions.css('letter-spacing', appearanceSettings[settingKey] + 'rem');
+                        break;
+                    case 'capitalization':
+                        $captions.css('text-transform', appearanceSettings[settingKey]);
                         break;
                     case 'text-shadow-color':
                     case 'text-shadow-opacity':

@@ -14,6 +14,9 @@ gulp.task('js:build', function() {
             'node_modules/bootstrap/js/dist/collapse.js',
             'node_modules/bootstrap/js/dist/dropdown.js',
             'node_modules/bootstrap/js/dist/modal.js',
+            'node_modules/tether/dist/js/tether.min.js', // include this before BS tooltips
+            'node_modules/bootstrap/js/dist/tooltip.js',
+            'node_modules/bootstrap/js/dist/popover.js',
             'node_modules/bootstrap/js/dist/tab.js',
             'node_modules/bootstrap/js/dist/util.js',
         ])

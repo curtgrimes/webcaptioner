@@ -175,7 +175,7 @@
                 <div class="form-group row">
                   <label for="text-color-interim-same" class="col-sm-4 col-form-label">Interim Text Color</label>
                   <div class="col-sm-8">
-                    <p class="small mt-2 mb-2">During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.</p>
+                    <p class="small mt-sm-2 mb-2">During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.</p>
                     <div class="form-check mt-1">
                       <label class="form-check-label">
                         <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-same" value="same-as-text-color" checked>
@@ -218,6 +218,29 @@
                     <div class="input-group">
                       <input class="form-control" name="letter-spacing" id="letter-spacing" type="number" value="0" min="-10" step="0.025" max="20">
                       <span class="input-group-addon">em</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="capitalization-uppercase" class="col-sm-4 col-form-label">Capitalization</label>
+                  <div class="col-sm-8">
+                    <div class="form-check mt-1">
+                      <label class="form-check-label">
+                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-uppercase" value="uppercase" checked>
+                        UPPERCASE
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-first-letter-only" value="capitalize">
+                        First Letter Of Each Word
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-initial" value="initial">
+                        Proper nouns and starts of sentences <a id="capitalization-popover" tabindex="0" href="javascript:void(0)" aria-label="Info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="Proper nouns and starts of sentences" data-content="Separate sentences are detected only when a puncuation mark like &#34;period&#34; or &#34;question mark&#34; is literally said."><span class="fa fa-question-circle" aria-hidden="true"></span></a>
+                      </label>
                     </div>
                   </div>
                 </div>
