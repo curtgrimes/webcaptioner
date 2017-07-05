@@ -253,7 +253,7 @@ function initMediaLevelMonitoring() {
 
 
 function didntGetStream() {
-    alert('Stream generation failed.');
+    console.log('Stream generation failed.');
 }
 
 var mediaStreamSource = null;
