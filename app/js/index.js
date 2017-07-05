@@ -2,43 +2,54 @@ function clear_saved() {
     ga('send', 'event', 'user', 'clearButtonClick');
     if (confirm('Clear saved transcript?')) {
         $('#final_span').text('');
-        final_transcript = '';
+        // final_transcript = '';
         //window.localStorage.setItem("transcript", final_transcript);
     }
 }
 
 var create_email = false;
-//var final_transcript = window.localStorage.getItem("transcript") || '';
-var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
-var start_timestamp;
 var restartingDueToFailure = false;
 var lastStartTimestamp;
+var wordCount = 0;
+var shouldStartOnStop = false;
+var final_span = document.getElementById('final_span');
+var interim_span = document.getElementById('interim_span');
+var recognition;
+var lastResultTime = (new Date()).getTime() / 1000;
 if (!('webkitSpeechRecognition' in window)) {
     upgrade();
 } else {
-    var recognition = new webkitSpeechRecognition();
+    recognition = initRecognition();
+}
+
+function initRecognition() {
+    recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.lang = 'en-US';
 
     recognition.onstart = function () {
+        lastStartTimestamp = (new Date()).getTime() / 1000;
         recognizing = true;
         showInfo('info_speak_now');
         $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
+
+        // If the current final text doesn't end in a space, add one. Every time this starts we can't guarantee
+        // that the last transcription ended with a space.
+        if (final_span.innerHTML.slice(-1) !== ' ') {
+            final_span.insertAdjacentHTML('beforeend', ' ');
+        }
     };
 
     recognition.onerror = function (event) {
+        // And recognition has stopped
         if (event.error == 'no-speech') {
-            showInfo('info_no_speech');
-            ignore_onend = true;
-
+            shouldStartOnStop = true;
+            // recognition.stop();
+            // recognition.start();
             ga('send', 'event', 'recognition', 'errorNoSpeech');
-            $('#startButton').text('Start Captioning');
-            $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
-            clippingReadings = [];
-            lowLevelReadings = [];
-            clearInterval(levelCheckLoopInterval);
             return;
         }
         if (event.error == 'audio-capture') {
@@ -54,11 +65,8 @@ if (!('webkitSpeechRecognition' in window)) {
             return;
         }
         if (event.error == 'not-allowed') {
-            if (event.timeStamp - start_timestamp < 100) {
-                showInfo('info_blocked');
-            } else {
-                showInfo('info_denied');
-            }
+            showInfo('info_blocked');
+            
             ignore_onend = true;
             ga('send', 'event', 'recognition', 'errorNotAllowed');
             $('#startButton').text('Start Captioning');
@@ -71,45 +79,35 @@ if (!('webkitSpeechRecognition' in window)) {
     };
 
     recognition.onend = function () {
-        var now = (new Date()).getTime() / 1000;
-
-        if (restartingDueToFailure && now - lastStartTimestamp > 4) {
-            lastStartTimestamp = (new Date()).getTime() / 1000;
-            $('#startButton')
-                .removeClass('btn-primary')
-                .addClass('btn-secondary disabled')
-                .text('Please Wait...');
-
+        recognizing = false;
+        
+        if (restartingDueToFailure || !startStopButtonPressed) {
             ga('send', 'event', 'recognition', 'restartingDueToPossibleFailure');
 
             recognition.start();
             restartingDueToFailure = false;
+            startStopButtonPressed = false;
 
-            setTimeout(function(){
-                $('#startButton')
-                    .removeClass('btn-secondary disabled')
-                    .addClass('btn-primary')
-                    .text('Stop');
-            },1500);
             return;
         }
-
-        recognizing = false;
-        if (ignore_onend) {
-            return;
+        else {
+            // Button was pressed and it really should stop
+            recognition = null;
+            (mediaStream.getAudioTracks() || []).forEach(function(audioTrack) {
+                audioTrack.stop();
+            });
         }
-
-        if (!final_transcript) {
-            showInfo('info_start');
-            return;
+        
+        if (!ignore_onend) {
+            showInfo('');
         }
-        showInfo('');
     };
 
-    var lastResultTime = (new Date()).getTime() / 1000;
     recognition.onresult = function (event) {
         lastResultTime = (new Date()).getTime() / 1000;
         var interim_transcript = '';
+        var final_transcript = '';
+
         if (typeof (event.results) == 'undefined') {
             recognition.onend = null;
             recognition.stop();
@@ -118,23 +116,45 @@ if (!('webkitSpeechRecognition' in window)) {
         }
         for (var i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
-                var shouldAppendSpace = final_transcript.slice(-1) !== ' ';
-
-                final_transcript += (shouldAppendSpace ? ' ' : '') + event.results[i][0].transcript;
-
-                var wordCount = event.results[i][0].transcript.split(' ').length;
-                ga('send', 'event', 'recognition', 'recognizingSpeech', 'wordCount:'+wordCount);
+                final_transcript += event.results[i][0].transcript;
             } else {
                 interim_transcript += event.results[i][0].transcript;
             }
         }
-        final_transcript = capitalize(final_transcript);
-        final_span.innerHTML = linebreak(final_transcript);
-        interim_span.innerHTML = linebreak(interim_transcript);
-        //window.localStorage.setItem("transcript", final_transcript);
-        $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
-        window.getSelection().removeAllRanges(); // remove any current text selection
+
+        if (final_transcript) {
+            final_span.insertAdjacentHTML('beforeend', final_transcript);
+
+            ga(
+                'send',
+                'event',
+                'recognition',
+                'recognizingSpeech',
+                'wordCount:' + final_transcript.split(' ').length
+            );
+
+            // Clear interim span
+            while (interim_span.firstChild) {
+                interim_span.removeChild(interim_span.firstChild);
+            }
+            interim_transcript = '';
+        }
+
+        if (interim_transcript) {
+            interim_span.innerHTML = interim_transcript;
+        }
+
+        if (interim_transcript || final_transcript) {
+            // Scroll to the bottom of the div
+            var captionWrapReal = document.getElementsByClassName('caption-wrap-real')[0];
+            captionWrapReal.scrollTop = captionWrapReal.scrollHeight;
+
+            // remove any current text selection
+            window.getSelection().removeAllRanges();
+        }
     };
+
+    return recognition;
 }
 
 // Temp fix for issue where recognition stops when on another tab
@@ -154,51 +174,18 @@ document.addEventListener('visibilitychange', function(){
 })
 
 setInterval(function () {
-    var now = (new Date()).getTime() / 1000;
-    if (recognizing && now - lastResultTime >= 5 && now - lastStartTimestamp > 8 && !showLowLevelmessage && !showClippingMessage) {
-        restartingDueToFailure = true;
-        recognition.stop();
+    if (recognizing) {
+        var now = (new Date()).getTime() / 1000;
+        if (now - lastResultTime >= 5 && now - lastStartTimestamp > 8 && !showLowLevelmessage && !showClippingMessage) {
+            restartingDueToFailure = true;
+            recognition.stop();
+        }        
     }
 }, 1000);
 
 function upgrade() {
     $('#onboardingModal .modal-footer').hide();
     $('#upgrade-alert').show();
-}
-
-var two_line = /\n\n/g;
-var one_line = /\n/g;
-function linebreak(s) {
-    return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-}
-
-var first_char = /\S/;
-function capitalize(s) {
-    return s.replace(first_char, function (m) { return m.toUpperCase(); });
-}
-
-function startButton(event) {
-
-    if (recognizing) {
-        ga('send', 'event', 'user', 'stopButtonClick');
-        recognition.stop();
-        $('#startButton').text('Start Captioning');
-        $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
-        clippingReadings = [];
-        lowLevelReadings = [];
-        clearInterval(levelCheckLoopInterval);
-        return;
-    }
-    ga('send', 'event', 'user', 'startButtonClick');
-    $('#startButton').text('Stop');
-    recognition.lang = 'en-US';
-    recognition.start();
-    ignore_onend = false;
-    interim_span.innerHTML = '';
-    showInfo('info_allow');
-    start_timestamp = event.timeStamp;
-    lastStartTimestamp = (new Date()).getTime() / 1000;
-    initMediaLevelMonitoring();
 }
 
 function showInfo(s) {
@@ -220,16 +207,12 @@ function showInfo(s) {
 
 var audioContext = null;
 var meter = null;
-var canvasContext = null;
 var WIDTH=500;
 var HEIGHT=50;
 var rafID = null;
 var meterWrapWidth;
 var levelCheckLoopInterval;
 function initMediaLevelMonitoring() {
-
-    // grab our canvas
-    $canvasContext = $('#meter');
     
     // monkeypatch Web Audio
     if (!audioContext) {
@@ -270,12 +253,14 @@ function initMediaLevelMonitoring() {
 
 
 function didntGetStream() {
-    alert('Stream generation failed.');
+    console.log('Stream generation failed.');
 }
 
 var mediaStreamSource = null;
+var mediaStream = null;
 
 function gotStream(stream) {
+    mediaStream =  stream;
     // Create an AudioNode from the stream.
     mediaStreamSource = audioContext.createMediaStreamSource(stream);
 
@@ -288,42 +273,39 @@ function gotStream(stream) {
 }
 
 function drawLoop( time ) {
-    // clear the background
-    $canvasContext.width('0');
+    var canvas = document.getElementById('meter');
+
+    // draw a bar based on the current volume
+    canvas.style.width = meterWrapWidth * Math.min(meter.volume * 4, 1) + 'px';
 
     // check if we're currently clipping
-    if (meter.checkClipping()) {
-        $canvasContext
-            .addClass('bg-danger')
-            .removeClass('bg-success');
-        window.audioIsClipping = true;
-    }
-    else if (meter.checkLowLevel()) {
-        $canvasContext
-            .addClass('bg-danger')
-            .removeClass('bg-success');
-        window.audioLevelIsLow = true;
+    if (meter.checkClipping() || meter.checkLowLevel()) {
+        canvas.classList.add('bg-danger');
+        canvas.classList.remove('bg-success');
+
+        if (meter.checkClipping()) window.audioIsClipping = true;
+        if (meter.checkLowLevel()) window.audioLevelIsLow = true;
     }
     else {
-        $canvasContext
-            .addClass('bg-success')
-            .removeClass('bg-danger');
+        canvas.classList.add('bg-success');
+        canvas.classList.remove('bg-danger');
         window.audioIsClipping = false;
         window.audioLevelIsLow = false;
     }
-
-    // draw a bar based on the current volume
-    $canvasContext.width(meterWrapWidth * Math.min(meter.volume * 4, 1) + 'px');
-    //canvasContext.fillRect(0, 0, meter.volume*WIDTH*1.4, HEIGHT);
 
     // set up the next visual callback
     rafID = window.requestAnimationFrame(drawLoop);
 }
 
 // level check loop
-var clippingReadings = [], lowLevelReadings = [],
-    showClippingMessage = false, showLowLevelmessage = false;
-    
+var clippingReadings = [],
+    lowLevelReadings = [],
+    showClippingMessage = false,
+    showLowLevelmessage = false,
+    clippingMessage = document.getElementById('clippingMessage'),
+    lowLevelMessage = document.getElementById('lowLevelMessage'),
+    audioLevelWrap = document.getElementById('audioLevelWrap');
+
 function levelCheckLoop() {
     clippingReadings.push(meter.checkClipping());
     lowLevelReadings.push(meter.checkLowLevel());
@@ -332,31 +314,43 @@ function levelCheckLoop() {
     clippingReadings = clippingReadings.slice(-10);
     lowLevelReadings = lowLevelReadings.slice(-10);
 
-    if ((clippingReadings.length > 0) && clippingReadings.filter(function (isClipping) {return isClipping;}).length / clippingReadings.length > .7) {
-        $('#clippingMessage,#audioLevelWrap').removeAttr('hidden');
-        meterWrapWidth = $('#meterWrap').width();
+    if ((clippingReadings.length > 0) && clippingReadings.filter(function (isClipping) {return isClipping;}).length / clippingReadings.length > .6) {
+        [clippingMessage, audioLevelWrap].forEach(function(element) {
+            element.removeAttribute('hidden');
+        });
+
+        if (!meterWrapWidth) {
+            meterWrapWidth = document.getElementById('meterWrap').offsetWidth;
+        }
+        
         showClippingMessage = true;
     }
     else {
-        $('#clippingMessage').attr('hidden','true');
+        clippingMessage.setAttribute('hidden','true');
         showClippingMessage = false;
     }
 
-    if ((lowLevelReadings.length > 0) && lowLevelReadings.filter(function(isLowLevel){return isLowLevel;}).length / lowLevelReadings.length > .7) {
-        $('#lowLevelMessage,#audioLevelWrap').removeAttr('hidden');
-        meterWrapWidth = $('#meterWrap').width();
+    if ((lowLevelReadings.length > 0) && lowLevelReadings.filter(function(isLowLevel){return isLowLevel;}).length / lowLevelReadings.length > .6) {
+        [lowLevelMessage, audioLevelWrap].forEach(function(element) {
+            element.removeAttribute('hidden');
+        });
+
+        if (!meterWrapWidth) {
+            meterWrapWidth = document.getElementById('meterWrap').offsetWidth;
+        }
+
         showLowLevelmessage = true;
 
         // Don't show both messages at once
-        $('#clippingMessage').attr('hidden','true');
+        clippingMessage.setAttribute('hidden','true');
     }
     else {
-        $('#lowLevelMessage').attr('hidden','true');
+        lowLevelMessage.setAttribute('hidden','true');
         showLowLevelmessage = false;
     }
 
     if (!showClippingMessage && !showLowLevelmessage) {
-        $('#audioLevelWrap').attr('hidden','true');
+        audioLevelWrap.setAttribute('hidden','true');
     }
 
 }
@@ -378,10 +372,10 @@ $(function () {
     }
 
     if ($('#final_span').length) {
-        $('#final_span').on('keyup', function (event) {
-            final_transcript = $('#final_span').text();
+        // $('#final_span').on('keyup', function (event) {
+            // final_transcript = $('#final_span').text();
             //window.localStorage.setItem("transcript", final_transcript);
-        });
+        // });
 
         setInterval(function() {
             // Clean up transcript, limit to 1000 characters
@@ -389,3 +383,37 @@ $(function () {
         },10000);
     }
 });
+
+$('#startButton').on('click', function(){
+    
+    // if recognition ends for some unknown reason (it likes to just stop)
+    // and the button wasn't pressed, we will use this to check if that
+    // happened and start it again
+    startStopButtonPressed = true;
+
+    if (recognizing) {
+        // Currently recognizing, so stop it.
+        ga('send', 'event', 'user', 'stopButtonClick');
+        recognition.stop();
+        $('#startButton').text('Start Captioning');
+        $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
+        clippingReadings = [];
+        lowLevelReadings = [];
+        clearInterval(levelCheckLoopInterval);
+        return;
+    }
+    else {
+        // Start recognition
+        if (!recognition) {
+            recognition = initRecognition();
+        }
+
+        ga('send', 'event', 'user', 'startButtonClick');
+        $('#startButton').text('Stop');
+        recognition.start();
+        ignore_onend = false;
+        interim_span.innerHTML = '';
+        showInfo('info_allow');
+        initMediaLevelMonitoring();
+    }
+})
