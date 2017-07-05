@@ -4,3 +4,4 @@ app/build/*
 !app/build/.gitkeep
 app/env/google-application-credentials.json
 app/npm-debug.log
+npm-debug.log

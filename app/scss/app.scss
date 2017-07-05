@@ -295,6 +295,16 @@ html.blog h2 {
   margin:2rem 0 1.5rem 0;
 }
 
+.container-fluid.cover {
+  /* Define a background inline
+  /*background-image: url(/blog/2017/07/give-web-captioner-a-custom-look/cover.png);*/
+  background-color: #292b2c;
+  height: 310px;
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 @include media-breakpoint-down(sm) {
   .jumbotron .display-3 {
     font-size:4rem;
