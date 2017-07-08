@@ -77,6 +77,19 @@
     </div>
   </div>
 </div>
+<div class="modal" id="clearTranscriptModal" tabindex="-1" role="dialog" aria-labelledby="clearTranscriptModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2 class="modal-title" id="clearTranscriptModalLabel">Clear text?</h2>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+        <button id="clearTranscriptConfirmButton" type="button" class="btn btn-info" data-dismiss="modal">Clear Text</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="appearanceModal" tabindex="-1" role="dialog" aria-labelledby="appearanceModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -464,13 +477,16 @@
         <a class="nav-link" href="/blog">Blog</a>
       </li>
       <li class="nav-item">
-        <div class="btn-group dropup">
+        <div id="settingsDropdownContainer" class="btn-group dropup">
           <button type="button" class="btn btn-primary" id="startButton">Start<span class="hidden-xs-down"> Captioning</span></button>
           <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')">Edit Appearance</a>
+            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Edit Appearance</a>
+            <a class="dropdown-item" href="javascript:void(0)" id="saveTranscriptToFileButton" onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
+            <a class="dropdown-item disabled" hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
+            <a class="dropdown-item" href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</a>
           </div>
         </div>
       </li>

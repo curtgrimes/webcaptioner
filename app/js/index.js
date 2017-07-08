@@ -18,6 +18,7 @@ var final_span = document.getElementById('final_span');
 var interim_span = document.getElementById('interim_span');
 var recognition;
 var lastResultTime = (new Date()).getTime() / 1000;
+var startStopButtonLastPressedTime;
 if (!('webkitSpeechRecognition' in window)) {
     upgrade();
 } else {
@@ -34,7 +35,12 @@ function initRecognition() {
         lastStartTimestamp = (new Date()).getTime() / 1000;
         recognizing = true;
         showInfo('info_speak_now');
+        
+        // Warn before leaving
+        window.onbeforeunload = function() { return true; }
+
         $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
+        initMediaLevelMonitoring();
 
         // If the current final text doesn't end in a space, add one. Every time this starts we can't guarantee
         // that the last transcription ended with a space.
@@ -45,11 +51,13 @@ function initRecognition() {
 
     recognition.onerror = function (event) {
         // And recognition has stopped
+
         if (event.error == 'no-speech') {
             shouldStartOnStop = true;
             // recognition.stop();
             // recognition.start();
             ga('send', 'event', 'recognition', 'errorNoSpeech');
+            window.onbeforeunload = null; // Don't show warning on leave
             return;
         }
         if (event.error == 'audio-capture') {
@@ -62,6 +70,7 @@ function initRecognition() {
             clippingReadings = [];
             lowLevelReadings = [];
             clearInterval(levelCheckLoopInterval);
+            window.onbeforeunload = null; // Don't show warning on leave
             return;
         }
         if (event.error == 'not-allowed') {
@@ -74,14 +83,18 @@ function initRecognition() {
             clippingReadings = [];
             lowLevelReadings = [];
             clearInterval(levelCheckLoopInterval);
+            window.onbeforeunload = null; // Don't show warning on leave
             return;
         }
     };
 
     recognition.onend = function () {
         recognizing = false;
+        var now = (new Date()).getTime() / 1000;
         
-        if (restartingDueToFailure || !startStopButtonPressed) {
+        if (restartingDueToFailure || now - startStopButtonLastPressedTime > 1) {
+            // Button wasn't pressed in the last second, so recognition
+            // must have stopped on its own
             ga('send', 'event', 'recognition', 'restartingDueToPossibleFailure');
 
             recognition.start();
@@ -93,9 +106,15 @@ function initRecognition() {
         else {
             // Button was pressed and it really should stop
             recognition = null;
+            clearInterval(levelCheckLoopInterval);
             (mediaStream.getAudioTracks() || []).forEach(function(audioTrack) {
                 audioTrack.stop();
             });
+
+            if (final_span.innerHTML.length <= 1) {
+                // No transcription; don't show warning on leave
+                window.onbeforeunload = null;
+            }
         }
         
         if (!ignore_onend) {
@@ -215,7 +234,7 @@ document.addEventListener('visibilitychange', function(){
 setInterval(function () {
     if (recognizing) {
         var now = (new Date()).getTime() / 1000;
-        if (now - lastResultTime >= 5 && now - lastStartTimestamp > 8 && !showLowLevelmessage && !showClippingMessage) {
+        if (now - lastResultTime >= 2 && now - lastStartTimestamp > 3 && !showLowLevelmessage && !showClippingMessage) {
             restartingDueToFailure = true;
             recognition.stop();
         }        
@@ -287,7 +306,7 @@ function initMediaLevelMonitoring() {
     }
 
     clearInterval(levelCheckLoopInterval);
-    levelCheckLoopInterval = setInterval(levelCheckLoop, 700);
+    levelCheckLoopInterval = setInterval(levelCheckLoop, 400);
 }
 
 
@@ -423,11 +442,10 @@ $(function () {
 });
 
 $('#startButton').on('click', function(){
-    
     // if recognition ends for some unknown reason (it likes to just stop)
     // and the button wasn't pressed, we will use this to check if that
     // happened and start it again
-    startStopButtonPressed = true;
+    startStopButtonLastPressedTime = (new Date()).getTime() / 1000;
 
     if (recognizing) {
         // Currently recognizing, so stop it.
@@ -437,7 +455,6 @@ $('#startButton').on('click', function(){
         $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
         clippingReadings = [];
         lowLevelReadings = [];
-        clearInterval(levelCheckLoopInterval);
         return;
     }
     else {
@@ -452,6 +469,41 @@ $('#startButton').on('click', function(){
         ignore_onend = false;
         interim_span.innerHTML = '';
         showInfo('info_allow');
-        initMediaLevelMonitoring();
     }
-})
+});
+
+$('#saveTranscriptToFileButton').on('click', function() {
+    ga('send', 'event', 'settings', 'saveTranscriptToFile');
+
+    var a = document.createElement('a');
+    a.href = 'data:text/plain;base64,' + btoa(document.getElementById('results').innerText);
+    a.textContent = 'download';
+    a.download = 'web-captioner-'+ moment().format('YYYY-MM-DD-HH-mm-ss') +'.txt';
+    a.click();
+});
+
+// Init tooltip
+$('#saveTranscriptToFileDisabledButton').tooltip();
+
+$('#settingsDropdownContainer').on('show.bs.dropdown', function () {
+    if (document.getElementById('results').innerText.length > 0) {
+        // Transcription exists; show save option
+        $('#saveTranscriptToFileButton').removeAttr('hidden');
+        $('#saveTranscriptToFileDisabledButton').attr('hidden', true);
+    }
+    else {
+        // No transcription yet; hide save option
+        $('#saveTranscriptToFileButton').attr('hidden', true);
+        $('#saveTranscriptToFileDisabledButton').removeAttr('hidden');
+    }
+});
+
+$('#clearTranscriptButton').on('click', function() {
+    ga('send', 'event', 'settings', 'clearTranscriptStart');
+    $('#clearTranscriptModal').modal('show');
+});
+
+$('#clearTranscriptConfirmButton').on('click', function() {
+    ga('send', 'event', 'settings', 'clearTranscriptConfirm');
+    final_span.innerHTML = '';
+});

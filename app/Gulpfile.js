@@ -9,7 +9,6 @@ var sass = require('gulp-sass');
 gulp.task('js:build', function() {
     return gulp
         .src([
-            'js/*',
             'node_modules/bootstrap/js/dist/button.js',
             'node_modules/bootstrap/js/dist/collapse.js',
             'node_modules/bootstrap/js/dist/dropdown.js',
@@ -19,6 +18,8 @@ gulp.task('js:build', function() {
             'node_modules/bootstrap/js/dist/popover.js',
             'node_modules/bootstrap/js/dist/tab.js',
             'node_modules/bootstrap/js/dist/util.js',
+            'node_modules/moment/min/moment.min.js',
+            'js/*',
         ])
         .pipe(concat('build.js'))
         .pipe(uglify())
