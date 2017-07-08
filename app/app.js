@@ -4,11 +4,13 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var expressSanitizer = require('express-sanitizer');
 var bodyParser = require('body-parser');
 var env = require('node-env-file');
 
 var index = require('./routes/index');
 var translate = require('./routes/translate');
+var feedback = require('./routes/feedback');
 
 var app = express();
 
@@ -23,16 +25,20 @@ app.use(logger('dev'));
 app.use(compression())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressSanitizer()); // this line follows bodyParser() instantiations 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static/favicon')));
 app.use(express.static(path.join(__dirname, 'static/sitemap')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
 app.use('/blog', express.static(path.join(__dirname, 'blog/public')));
 app.use('/community', express.static(path.join(__dirname, 'blog/public/community')));
+app.use('/feedback', express.static(path.join(__dirname, 'blog/public/feedback')));
+app.use('/feedback/thanks', express.static(path.join(__dirname, 'blog/public/feedback-thanks')));
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
 app.use('/', index);
 app.use('/translate', translate);
+app.use('/feedback', feedback);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
