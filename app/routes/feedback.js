@@ -29,7 +29,7 @@ router.post('/', function(req, res, next) {
         json: {
           id: '2927716',
           title: 'Feedback submission',
-          description: req.body.feedback,
+          description: req.body.feedback + '\n\n@curtgrimes',
           labels: 'Feedback',
         },
       },
