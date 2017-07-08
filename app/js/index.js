@@ -107,9 +107,11 @@ function initRecognition() {
             // Button was pressed and it really should stop
             recognition = null;
             clearInterval(levelCheckLoopInterval);
-            (mediaStream.getAudioTracks() || []).forEach(function(audioTrack) {
-                audioTrack.stop();
-            });
+            if (mediaStream) {
+                (mediaStream.getAudioTracks() || []).forEach(function(audioTrack) {
+                    audioTrack.stop();
+                });
+            }
 
             if (final_span.innerHTML.length <= 1) {
                 // No transcription; don't show warning on leave
