@@ -122,6 +122,9 @@ function initRecognition() {
             }
         }
 
+        final_transcript = makeReplacements(final_transcript);
+        interim_transcript = makeReplacements(interim_transcript);
+
         if (final_transcript) {
             final_span.insertAdjacentHTML('beforeend', final_transcript);
 
@@ -155,6 +158,42 @@ function initRecognition() {
     };
 
     return recognition;
+}
+
+function makeReplacements(transcript) {
+
+    function escapeRegExp(str) {
+        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
+
+    [
+        {
+            find: ['Kurt Grimes', 'Kirk Grimes'],
+            replacement: 'Curt Grimes',
+        },
+        {
+            find: ['web captioner', 'web caption or'],
+            replacement: 'Web Captioner',
+        },
+        {
+            find: [':-)'],
+            replacement: '<i class="fa fa-smile-o" aria-hidden="true"></i>',
+        },
+        {
+            find: [':-('],
+            replacement: '<i class="fa fa-frown-o" aria-hidden="true"></i>',
+        },
+        {
+            find: ['Star Trek'],
+            replacement: '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> Star Trek',
+        },
+    ].forEach(function(rewritePair) {
+        rewritePair.find.forEach(function(findString) {
+            transcript = transcript.replace(new RegExp(escapeRegExp(findString), 'gi'), rewritePair.replacement);
+        })
+    });
+
+    return transcript;
 }
 
 // Temp fix for issue where recognition stops when on another tab
@@ -380,11 +419,6 @@ $(function () {
             // final_transcript = $('#final_span').text();
             //window.localStorage.setItem("transcript", final_transcript);
         // });
-
-        setInterval(function() {
-            // Clean up transcript, limit to 1000 characters
-            $('#final_span').text($('#final_span').text().slice(-1000));
-        },10000);
     }
 });
 
