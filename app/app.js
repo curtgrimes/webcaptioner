@@ -31,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'static/favicon')));
 app.use(express.static(path.join(__dirname, 'static/sitemap')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
 app.use('/blog', express.static(path.join(__dirname, 'blog/public')));
+app.use('/privacy-policy', express.static(path.join(__dirname, 'blog/public/privacy-policy')));
 app.use('/community', express.static(path.join(__dirname, 'blog/public/community')));
 app.use('/feedback', express.static(path.join(__dirname, 'blog/public/feedback')));
 app.use('/feedback/thanks', express.static(path.join(__dirname, 'blog/public/feedback-thanks')));
