@@ -484,8 +484,8 @@ $('#saveTranscriptToFileButton').on('click', function() {
     a.click();
 });
 
-// Init tooltip
-$('#saveTranscriptToFileDisabledButton').tooltip();
+// Init tooltips
+$('[data-toggle="tooltip"]').tooltip();
 
 $('#settingsDropdownContainer').on('show.bs.dropdown', function () {
     if (document.getElementById('results').innerText.length > 0) {

@@ -18,6 +18,7 @@ Staging:
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
     - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
     - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
+    - echo "GITLAB_API_KEY=$GITLAB_API_KEY" | sudo tee --append ./app/env/.env
     - echo "$GOOGLE_APPLICATION_CREDENTIALS_STAGING" | sudo tee ./app/env/google-application.credentials.json
     - sudo mv /opt/staging.webcaptioner.com/* /opt/staging.webcaptioner.com.previous
     - sudo mv ./* /opt/staging.webcaptioner.com
@@ -59,6 +60,7 @@ Production:
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
     - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
     - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
+    - echo "GITLAB_API_KEY=$GITLAB_API_KEY" | sudo tee --append ./app/env/.env
     - echo "$GOOGLE_APPLICATION_CREDENTIALS_STAGING" | sudo tee ./app/env/google-application.credentials.json
     - sudo mv /opt/webcaptioner.com/* /opt/webcaptioner.com.previous
     - sudo mv ./* /opt/webcaptioner.com
