@@ -51,6 +51,10 @@ $navbar-inverse-toggler-border:        rgba(#fff,.1) !default;
 
 $nav-tabs-active-link-hover-bg: $brand-primary;
 
+
+$thumbnail-bg:                $brand-primary;
+$thumbnail-border-color:      $modal-header-border-color;
+
 $container-max-widths: (
   sm: 540px,
   md: 720px,
@@ -72,7 +76,7 @@ $fa-font-path: '/build/font-awesome';
 // Core CSS
 @import "../node_modules/bootstrap/scss/reboot";
 @import "../node_modules/bootstrap/scss/type";
-//@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/images";
 //@import "../node_modules/bootstrap/scss/code";
 @import "../node_modules/bootstrap/scss/grid";
 //@import "../node_modules/bootstrap/scss/tables";
@@ -258,12 +262,18 @@ html.blog, html.blog body {
   box-shadow: -7px 0 0 0 #292b2c, 7px 0 0 0 #292b2c, 0 0 0 7px #292b2c;
 }
 
-.blog-article-list a:hover {
+a.block-partial-highlight-children:hover {
   text-decoration:none;
 }
 
-.blog-article-list a:hover h2 {
+a.block-partial-highlight-children:hover .inner-link-do-highlight {
   text-decoration:underline;
+}
+
+a.block-partial-highlight-children:hover .btn-primary {
+  color: $btn-primary-color;
+  background-color: darken($btn-primary-bg, 10%); /* Get this percentage from _buttons.scss mixin */
+  border-color: darken($btn-primary-border, 12%); /* Get this percentage from _buttons.scss mixin */
 }
 
 .blog-article-list h2 {
@@ -273,7 +283,7 @@ html.blog, html.blog body {
   font-weight: normal;
 }
 
-.blog-article-list p {
+.inner-link-no-highlight {
   color:#000;
 }
 
