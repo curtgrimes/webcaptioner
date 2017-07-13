@@ -34,6 +34,7 @@ $custom-control-indicator-bg: #fff;
 $custom-control-checked-indicator-bg: #000;
 
 $dropdown-bg: #555;
+$dropdown-divider-bg: darken($dropdown-bg, 5%);
 $dropdown-link-color: #ccc;
 $dropdown-link-hover-color: #fff;
 $dropdown-link-hover-bg: #666;
