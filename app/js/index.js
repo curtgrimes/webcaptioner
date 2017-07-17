@@ -236,7 +236,7 @@ document.addEventListener('visibilitychange', function(){
 setInterval(function () {
     if (recognizing) {
         var now = (new Date()).getTime() / 1000;
-        if (now - lastResultTime >= 2 && now - lastStartTimestamp > 3 && !showLowLevelmessage && !showClippingMessage) {
+        if (now - lastResultTime >= 1.5 && now - lastStartTimestamp > 3 && !showLowLevelmessage && !showClippingMessage) {
             restartingDueToFailure = true;
             recognition.stop();
         }        
