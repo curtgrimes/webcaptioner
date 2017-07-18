@@ -66,8 +66,10 @@ $(function(){
 
         var settings = JSON.parse(window.localStorage.getItem("webcaptioner-settings")) || {};
         settings.language = window._wc.language;
+
         window.localStorage.setItem("webcaptioner-settings", JSON.stringify(settings));
-        
+        window.recognition = null; // force it to reinit
+
         $('#languageModal').modal('hide');
         ga('send', 'event', 'settings', 'saveLanguage');
 

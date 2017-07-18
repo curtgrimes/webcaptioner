@@ -989,11 +989,27 @@ router.get('/', function(req, res, next) {
                               })
                           : null;
 
+  if (!defaultFromLanguage) {
+    defaultFromLanguage = {
+        name: 'English (United States)',
+        code: 'en-US',
+        nameEnglish: 'English (United States)',
+    };
+  }
+
   var defaultToLanguage = req.acceptsLanguages().length
                           ? toLanguages.find((language) => {
                                 return language.code.toUpperCase() == req.acceptsLanguages()[0].split('-')[0].toUpperCase()
                               })
                           : null;
+
+  if (!defaultToLanguage) {
+    defaultToLanguage = {
+      name: '',
+      code: 'en',
+      nameEnglish: 'English',
+    };
+  }
 
   res.render('index', {
     title: 'Web Captioner',

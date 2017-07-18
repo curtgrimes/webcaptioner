@@ -129,6 +129,7 @@ function initRecognition() {
             // Button was pressed and it really should stop
             recognition = null;
             clearInterval(levelCheckLoopInterval);
+            audioLevelWrap.setAttribute('hidden','true');
             if (mediaStream) {
                 (mediaStream.getAudioTracks() || []).forEach(function(audioTrack) {
                     audioTrack.stop();
