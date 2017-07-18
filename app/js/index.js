@@ -24,6 +24,7 @@ var interim_span = document.getElementById('interim_span');
 var recognition;
 var lastResultTime = (new Date()).getTime() / 1000;
 var startStopButtonLastPressedTime;
+
 var transcriptionSequenceNum = 0;
 var translatedTextBuffer = '';
 window._wc = { // set defaults
@@ -32,6 +33,38 @@ window._wc = { // set defaults
         to: null,
     },
 };
+
+var replacements = [
+    {
+        find: ['Kurt Grimes', 'Kirk Grimes'],
+        replacement: 'Curt Grimes',
+    },
+    {
+        find: ['Kurt'],
+        replacement: 'Curt',
+    },
+    {
+        find: ['web captioner', 'web caption or'],
+        replacement: 'Web Captioner',
+    },
+    {
+        find: [':-)'],
+        replacement: '<i class="fa fa-smile-o" aria-hidden="true"></i>',
+    },
+    {
+        find: [':-('],
+        replacement: '<i class="fa fa-frown-o" aria-hidden="true"></i>',
+    },
+    {
+        find: ['Star Trek'],
+        replacement: '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> Star Trek',
+    },
+];
+var customReplacements = window.localStorage.getItem("_wc_custom_replacements_experimental");
+if (customReplacements) {
+    replacements = replacements.concat(JSON.parse(customReplacements));
+}
+
 if (!('webkitSpeechRecognition' in window)) {
     upgrade();
 } else {
@@ -258,29 +291,8 @@ function makeReplacements(transcript) {
     function escapeRegExp(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
-
-    [
-        {
-            find: ['Kurt Grimes', 'Kirk Grimes'],
-            replacement: 'Curt Grimes',
-        },
-        {
-            find: ['web captioner', 'web caption or'],
-            replacement: 'Web Captioner',
-        },
-        {
-            find: [':-)'],
-            replacement: '<i class="fa fa-smile-o" aria-hidden="true"></i>',
-        },
-        {
-            find: [':-('],
-            replacement: '<i class="fa fa-frown-o" aria-hidden="true"></i>',
-        },
-        {
-            find: ['Star Trek'],
-            replacement: '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> Star Trek',
-        },
-    ].forEach(function(rewritePair) {
+    
+    replacements.forEach(function(rewritePair) {
         rewritePair.find.forEach(function(findString) {
             transcript = transcript.replace(new RegExp(escapeRegExp(findString), 'gi'), rewritePair.replacement);
         })
@@ -308,7 +320,7 @@ document.addEventListener('visibilitychange', function(){
 setInterval(function () {
     if (recognizing) {
         var now = (new Date()).getTime() / 1000;
-        if (now - lastResultTime >= 2 && now - lastStartTimestamp > 3 && !showLowLevelmessage && !showClippingMessage) {
+        if (now - lastResultTime >= 1.5 && now - lastStartTimestamp > 3 && !showLowLevelmessage && !showClippingMessage) {
             restartingDueToFailure = true;
             recognition.stop();
         }        
