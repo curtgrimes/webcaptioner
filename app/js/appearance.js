@@ -162,11 +162,20 @@ $(function(){
     });
 
     $('#saveAppearanceButton').on('click', function(){
+        var wcSettings = window.localStorage.getItem("webcaptioner-settings");
+        if (wcSettings) {
+            wcSettings = JSON.parse(wcSettings);
+        }
+        else {
+            wcSettings = {};
+        }
+
         var settings = getAppearanceSettingsObject();
         applyAppearanceSettingsToCaptionWrap('.caption-wrap.caption-wrap-real', 'body', settings.appearance);
         $('#appearanceModal').modal('hide');
-
-        window.localStorage.setItem("webcaptioner-settings", JSON.stringify(settings));
+        wcSettings.appearance = settings.appearance;
+        wcSettings.version = settings.version;
+        window.localStorage.setItem("webcaptioner-settings", JSON.stringify(wcSettings));
 
         ga('send', 'event', 'settings', 'saveAppearance');
     });
