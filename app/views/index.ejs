@@ -91,6 +91,58 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="languageModal" tabindex="-1" role="dialog" aria-labelledby="languageModalLabel" aria-hidden="true" data-backdrop="static" data-default-from-language-code="<%= defaultFromLanguage.code %>" data-default-to-language-code="<%= defaultToLanguage.code %>">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="languageModalLabel"><i class="fa fa-language" aria-hidden="true"></i> Language</h2>
+      </div>
+      <div class="modal-body">
+        <p>Recognize speech <% /* and display captions */ %>in another language.</p>
+        <div class="row">
+          <div class="col-lg-6 offset-lg-3" id="from-language-group">
+            <% /* <h3 class="text-center my-2">From Language</h3> */ %>
+            <p class="text-center mb-2 group-selected-language-name"><!-- --></p>
+            <div style="max-height:250px;overflow-y:auto" class="language-group-overflow">
+              <div class="list-group">
+                <a href="javascript:void(0)" class="list-group-item list-group-item-action active language-selection" data-language-code="<%= defaultFromLanguage.code %>" data-language-name="<%= defaultFromLanguage.nameEnglish %>">
+                  <span class="w-100"><i class="fa fa-check mr-1" aria-hidden="true"></i> Automatic</span>
+                  <p class="small mb-0"><%= defaultFromLanguage.nameEnglish %></p>
+                </a>
+                <% for(var i = 0; i < fromLanguages.length; i++) { %>
+                  <a href="javascript:void(0)" class="list-group-item list-group-item-action language-selection py-2" data-language-code="<%= fromLanguages[i].code %>" data-language-name="<%= fromLanguages[i].nameEnglish %>" data-toggle="tooltip" data-placement="left" data-animation="false" title="<%= fromLanguages[i].name %>"><i class="fa fa-check mr-1" aria-hidden="true"></i> <%= fromLanguages[i].nameEnglish %></a>
+                <% } %>
+              </div>
+            </div>
+            <% /* <p class="text-center mt-3">Select the language that is being spoken.</p> */ %>
+          </div>
+          <% /*
+          <div class="col-sm-6" id="to-language-group">
+            <h3 class="text-center my-2">To Language</h3>
+            <p class="text-center mb-2 group-selected-language-name"><!-- --></p>
+            <div style="max-height:250px;overflow-y:auto" class="language-group-overflow">
+              <div class="list-group">
+                <a href="javascript:void(0)" class="list-group-item list-group-item-action active language-selection" data-language-code="%= defaultToLanguage.code %" data-language-name="%= defaultToLanguage.nameEnglish %">
+                  <span class="w-100"><i class="fa fa-check mr-1" aria-hidden="true"></i> Automatic</span>
+                  <p class="small mb-0">%= defaultToLanguage.nameEnglish %</p>
+                </a>
+                % for(var i = 0; i < toLanguages.length; i++) { % 
+                  <a href="javascript:void(0)" class="list-group-item list-group-item-action language-selection py-2" data-language-code="%= toLanguages[i].code %" data-language-name="%= toLanguages[i].nameEnglish %" data-toggle="tooltip" data-placement="left" data-animation="false" title="%= toLanguages[i].name %"><i class="fa fa-check mr-1" aria-hidden="true"></i> %= toLanguages[i].nameEnglish %</a>
+                % } %
+              </div>
+            </div>
+            <p class="text-center mt-3">Captions will appear in this language.</p>
+          </div>
+          */ %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link ml-auto" id="cancelLanguageButton">Cancel</button>
+        <button type="button" class="btn btn-info" id="saveLanguageButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="appearanceModal" tabindex="-1" role="dialog" aria-labelledby="appearanceModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -433,6 +485,7 @@
         </div>
         <div id="results">
           <span class="final" id="final_span" contenteditable="true"></span> <span class="interim" id="interim_span"></span>
+          <div id="captioning-spinner" hidden class="lds-message" style="width:100%;height:100%"> <div></div><div></div><div></div> </div>
         </div>
       </div>
     </div>
@@ -490,7 +543,8 @@
             <a class="dropdown-item disabled" hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
             <a class="dropdown-item" href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Edit Appearance</a>
+            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#languageModal" onclick="ga('send', 'event', 'settings', 'editLanguageStart')"><i class="fa fa-language mr-1" aria-hidden="true"></i> Language</a>
+            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Appearance</a>
           </div>
         </div>
       </li>
