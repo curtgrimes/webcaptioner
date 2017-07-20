@@ -1,3 +1,8 @@
+$(function(){
+    // setTimeout(function(){ $('#onboardingModal [data-dismiss="modal"]').click(); }, 0);
+    // setTimeout(function(){ $('[data-target="#languageModal"]').click(); }, 0);
+});
+
 function clear_saved() {
     ga('send', 'event', 'user', 'clearButtonClick');
     if (confirm('Clear saved transcript?')) {
@@ -19,6 +24,15 @@ var lastResultTime = (new Date()).getTime() / 1000;
 var startStopButtonLastPressedTime;
 var microphoneAccessAllowed = false;
 var showMicrophonePermissionModalTimeout;
+var transcriptionSequenceNum = 0;
+var translatedTextBuffer = '';
+window._wc = { // set defaults
+    language: {
+        from: null,
+        to: null,
+    },
+};
+
 var replacements = [
     {
         find: ['Kurt Grimes', 'Kirk Grimes'],
@@ -49,27 +63,39 @@ var customReplacements = window.localStorage.getItem("_wc_custom_replacements_ex
 if (customReplacements) {
     replacements = replacements.concat(JSON.parse(customReplacements));
 }
+
 if (!('webkitSpeechRecognition' in window)) {
     upgrade();
 } else {
     recognition = initRecognition();
 }
 
+function shouldTranslateText() {
+    return false;
+    //return window._wc.language.from !== window._wc.language.to;
+}
+
 function initRecognition() {
     recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.lang = 'en-US';
+
+    loadLanguageSettings();
+    recognition.lang = window._wc.language.from;
 
     recognition.onstart = function () {
         lastStartTimestamp = (new Date()).getTime() / 1000;
         recognizing = true;
-
+        
         // If we are here, permission was granted
         if ($('#microphonePermissionModal').is(':visible')) {
             $('#microphonePermissionModal').modal('hide');
         }
         
+        if (shouldTranslateText()) {
+            printTranslatedTextBuffered();
+        }
+
         // Warn before leaving
         window.onbeforeunload = function() { return true; }
 
@@ -146,6 +172,7 @@ function initRecognition() {
             // Button was pressed and it really should stop
             recognition = null;
             clearInterval(levelCheckLoopInterval);
+            audioLevelWrap.setAttribute('hidden','true');
             if (mediaStream) {
                 (mediaStream.getAudioTracks() || []).forEach(function(audioTrack) {
                     audioTrack.stop();
@@ -183,7 +210,30 @@ function initRecognition() {
         interim_transcript = makeReplacements(interim_transcript);
 
         if (final_transcript) {
-            final_span.insertAdjacentHTML('beforeend', final_transcript);
+
+            if (shouldTranslateText()) {
+                // Translate
+                fetch('/translate', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        text: final_transcript,
+                        target: window._wc.language.to,
+                    }),
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(json) {
+                    translatedTextBuffer += json.translation + ' ';
+                });
+
+            }
+            else {
+                final_span.insertAdjacentHTML('beforeend', final_transcript);
+            }
 
             ga(
                 'send',
@@ -201,7 +251,18 @@ function initRecognition() {
         }
 
         if (interim_transcript) {
-            interim_span.innerHTML = interim_transcript;
+            if (shouldTranslateText()) {
+                // Instead of showing interim text, show spinner
+                // $('#captioning-spinner').removeAttr('hidden');
+            }
+            else {
+                // Not translating
+                interim_span.innerHTML = interim_transcript;
+                // $('#captioning-spinner').attr('hidden', true);
+            }
+        }
+        else {
+            $('#captioning-spinner').attr('hidden', true);
         }
 
         if (interim_transcript || final_transcript) {
@@ -215,6 +276,21 @@ function initRecognition() {
     };
 
     return recognition;
+}
+
+function printTranslatedTextBuffered() {
+    if ((translatedTextBuffer || '').length > 0) {
+        $('#captioning-spinner').attr('hidden', true);
+        console.log(translatedTextBuffer);
+        
+        var words = translatedTextBuffer.split(' ');
+        console.log(words);
+        final_span.insertAdjacentHTML('beforeend', words[0] + ' ');
+
+        words.shift(); // remove first word
+        translatedTextBuffer = words.join(' ').trim();   
+    }
+    setTimeout(printTranslatedTextBuffered, 500);
 }
 
 function makeReplacements(transcript) {

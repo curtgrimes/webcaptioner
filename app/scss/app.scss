@@ -53,6 +53,15 @@ $navbar-inverse-toggler-border:        rgba(#fff,.1) !default;
 
 $nav-tabs-active-link-hover-bg: $brand-primary;
 
+$component-active-color: #fff;
+$component-active-bg:    #000;
+
+$list-group-color: $dropdown-link-color;
+$list-group-bg: $modal-header-border-color;
+$list-group-hover-bg: lighten($modal-header-border-color, 5%);
+
+$list-group-link-active-color:   $list-group-color !default;
+$list-group-link-active-bg:      $dropdown-divider-bg;
 
 $thumbnail-bg:                $brand-primary;
 $thumbnail-border-color:      $modal-header-border-color;
@@ -101,7 +110,7 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/alert";
 @import "../node_modules/bootstrap/scss/progress";
 //@import "../node_modules/bootstrap/scss/media";
-//@import "../node_modules/bootstrap/scss/list-group";
+@import "../node_modules/bootstrap/scss/list-group";
 @import "../node_modules/bootstrap/scss/responsive-embed";
 //@import "../node_modules/bootstrap/scss/close";
 
@@ -251,6 +260,92 @@ a.nav-link.active {
     .final:focus {
       outline:0;
     }
+
+.language-selection .fa-check {
+  display:none;
+}
+
+.language-selection.active .fa-check {
+  display:inline-block;
+}
+
+/* Loading spinner */
+@keyframes lds-message {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+@-webkit-keyframes lds-message {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+.lds-message {
+  position: relative;
+  display:inline-block;
+}
+.lds-message > div {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  top: 20px;
+  -webkit-animation: lds-message 1s cubic-bezier(0.3, 0, 0.7, 1) infinite;
+  animation: lds-message 1s cubic-bezier(0.3, 0, 0.7, 1) infinite;
+}
+.lds-message > div:nth-of-type(4n + 1) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n + 2) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n + 3) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n + 1) {
+  left: 38px;
+  -webkit-animation-delay: -0.666666666666667s;
+  animation-delay: -0.666666666666667s;
+}
+.lds-message > div:nth-of-type(4n + 2) {
+  left: 88px;
+  -webkit-animation-delay: -0.333333333333333s;
+  animation-delay: -0.333333333333333s;
+}
+.lds-message > div:nth-of-type(4n + 3) {
+  left: 138px;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+.lds-message {
+  width: 200px !important;
+  height: 50px !important;
+  -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+}
+
+
 
 
 /* Blog specific */
