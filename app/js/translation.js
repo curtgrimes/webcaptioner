@@ -68,17 +68,22 @@ $(function(){
         settings.language = window._wc.language;
 
         window.localStorage.setItem("webcaptioner-settings", JSON.stringify(settings));
-        window.recognition = null; // force it to reinit
 
         $('#languageModal').modal('hide');
         ga('send', 'event', 'settings', 'saveLanguage');
 
         if (window.recognizing) {
             $('#startButton').click(); // stop it
-            recognition = initRecognition(); // reinit recognition with new language
+            setTimeout(function() {
+                recognition = initRecognition(); // reinit recognition with new language
+            },500);
+            
             setTimeout(function(){
                 $('#startButton').click(); // start it
-            }, 500);
+            }, 1000);
+        }
+        else {
+            recognition = initRecognition(); // reinit recognition with new language
         }
         
     });

@@ -151,7 +151,7 @@
             <div style="max-height:250px;overflow-y:auto" class="language-group-overflow">
               <div class="list-group">
                 <a href="javascript:void(0)" class="list-group-item list-group-item-action active language-selection" data-language-code="<%= defaultFromLanguage.code %>" data-language-name="<%= defaultFromLanguage.nameEnglish %>">
-                  <span class="w-100"><i class="fa fa-check mr-1" aria-hidden="true"></i> Automatic</span>
+                  <span class="w-100"><i class="fa fa-check mr-1" aria-hidden="true"></i> System Default</span>
                   <p class="small mb-0"><%= defaultFromLanguage.nameEnglish %></p>
                 </a>
                 <% for(var i = 0; i < fromLanguages.length; i++) { %>
@@ -168,7 +168,7 @@
             <div style="max-height:250px;overflow-y:auto" class="language-group-overflow">
               <div class="list-group">
                 <a href="javascript:void(0)" class="list-group-item list-group-item-action active language-selection" data-language-code="%= defaultToLanguage.code %" data-language-name="%= defaultToLanguage.nameEnglish %">
-                  <span class="w-100"><i class="fa fa-check mr-1" aria-hidden="true"></i> Automatic</span>
+                  <span class="w-100"><i class="fa fa-check mr-1" aria-hidden="true"></i> System Default</span>
                   <p class="small mb-0">%= defaultToLanguage.nameEnglish %</p>
                 </a>
                 % for(var i = 0; i < toLanguages.length; i++) { % 
