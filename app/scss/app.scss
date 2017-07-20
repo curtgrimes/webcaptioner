@@ -27,6 +27,7 @@ $modal-header-border-color: darken($modal-content-bg, 10%);
 $modal-header-border-width: 1px;
 $modal-content-border-width: 0;
 $modal-content-border-color: $brand-primary;
+$modal-title-line-height: 1.2;
 
 $component-active-color: #000;
 
@@ -112,7 +113,7 @@ $fa-font-path: '/build/font-awesome';
 
 // Utility classes
 @import "../node_modules/bootstrap/scss/utilities";
-    
+
 
 h1, h2,
 .h1, .h2 {
@@ -155,6 +156,10 @@ input[type="color"] {
     
 .btn-info:focus, .btn-info.focus {
   box-shadow: 0 0 0 3px #fff;
+}
+
+.modal-title {
+  margin:0.25rem 0;
 }
 
 .modal .btn-link {

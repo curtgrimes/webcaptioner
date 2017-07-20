@@ -7,9 +7,7 @@ function clear_saved() {
     }
 }
 
-var create_email = false;
 var recognizing = false;
-var ignore_onend;
 var restartingDueToFailure = false;
 var lastStartTimestamp;
 var wordCount = 0;
@@ -19,6 +17,8 @@ var interim_span = document.getElementById('interim_span');
 var recognition;
 var lastResultTime = (new Date()).getTime() / 1000;
 var startStopButtonLastPressedTime;
+var microphoneAccessAllowed = false;
+var showMicrophonePermissionModalTimeout;
 var replacements = [
     {
         find: ['Kurt Grimes', 'Kirk Grimes'],
@@ -64,13 +64,20 @@ function initRecognition() {
     recognition.onstart = function () {
         lastStartTimestamp = (new Date()).getTime() / 1000;
         recognizing = true;
-        showInfo('info_speak_now');
+
+        // If we are here, permission was granted
+        if ($('#microphonePermissionModal').is(':visible')) {
+            $('#microphonePermissionModal').modal('hide');
+        }
         
         // Warn before leaving
         window.onbeforeunload = function() { return true; }
 
         $('.caption-wrap-real').scrollTop($('.caption-wrap-real')[0].scrollHeight);
         initMediaLevelMonitoring();
+
+        // If onstart is running, then permission was granted. Don't show this modal.
+        clearTimeout(showMicrophonePermissionModalTimeout);
 
         // If the current final text doesn't end in a space, add one. Every time this starts we can't guarantee
         // that the last transcription ended with a space.
@@ -82,6 +89,11 @@ function initRecognition() {
     recognition.onerror = function (event) {
         // And recognition has stopped
 
+        // Don't show this modal if it was scheduled to show.
+        clearTimeout(showMicrophonePermissionModalTimeout);
+        
+        $('#now_listening').attr('hidden',true);
+        
         if (event.error == 'no-speech') {
             shouldStartOnStop = true;
             // recognition.stop();
@@ -91,34 +103,31 @@ function initRecognition() {
             return;
         }
         if (event.error == 'audio-capture') {
-            showInfo('info_no_microphone');
-            ignore_onend = true;
+            $('#noMicrophoneModal').modal('show');
 
             ga('send', 'event', 'recognition', 'errorNoMicrophone');
-            $('#startButton').text('Start Captioning');
-            $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
-            clippingReadings = [];
-            lowLevelReadings = [];
-            clearInterval(levelCheckLoopInterval);
-            window.onbeforeunload = null; // Don't show warning on leave
-            return;
         }
         if (event.error == 'not-allowed') {
-            showInfo('info_blocked');
-            
-            ignore_onend = true;
+            $('#microphonePermissionBlockedModal').modal('show');
+
             ga('send', 'event', 'recognition', 'errorNotAllowed');
-            $('#startButton').text('Start Captioning');
-            $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
-            clippingReadings = [];
-            lowLevelReadings = [];
-            clearInterval(levelCheckLoopInterval);
-            window.onbeforeunload = null; // Don't show warning on leave
-            return;
         }
+
+        $('#startButton').text('Start Captioning');
+        $('#audioLevelWrap').attr('hidden','true'); // hide any error messages
+        clippingReadings = [];
+        lowLevelReadings = [];
+        clearInterval(levelCheckLoopInterval);
+        window.onbeforeunload = null; // Don't show warning on leave
+        return;
     };
 
     recognition.onend = function () {
+        if ($('#microphonePermissionModal').is(':visible')) {
+            $('#microphonePermissionModal').modal('hide');
+        }
+        $('#now_listening').attr('hidden',true);
+
         recognizing = false;
         var now = (new Date()).getTime() / 1000;
         
@@ -148,14 +157,11 @@ function initRecognition() {
                 window.onbeforeunload = null;
             }
         }
-        
-        if (!ignore_onend) {
-            showInfo('');
-        }
     };
 
     recognition.onresult = function (event) {
         lastResultTime = (new Date()).getTime() / 1000;
+        $('#now_listening').attr('hidden',true);
         var interim_transcript = '';
         var final_transcript = '';
 
@@ -257,23 +263,6 @@ function upgrade() {
     $('#upgrade-alert').show();
 }
 
-function showInfo(s) {
-    if (typeof info === 'undefined') {
-        return;
-    }
-
-    if (s) {
-        for (var child = info.firstChild; child; child = child.nextSibling) {
-            if (child.style) {
-                child.style.display = child.id == s ? 'inline' : 'none';
-            }
-        }
-        info.style.visibility = 'visible';
-    } else {
-        info.style.visibility = 'hidden';
-    }
-}
-
 var audioContext = null;
 var meter = null;
 var WIDTH=500;
@@ -332,6 +321,8 @@ function gotStream(stream) {
     mediaStream =  stream;
     // Create an AudioNode from the stream.
     mediaStreamSource = audioContext.createMediaStreamSource(stream);
+
+    // Hide the "give us permission to use your microphone" dialog (if it's showing)
 
     // Create a new volume meter and connect it.
     meter = createAudioMeter(audioContext, 1);
@@ -434,7 +425,6 @@ $(function () {
         $('#onboardingModal').modal();
     }
 
-    showInfo('info_start');
 
     //document.getElementById('final_span').innerHTML = window.localStorage.getItem("transcript");
 
@@ -476,10 +466,16 @@ $('#startButton').on('click', function(){
 
         ga('send', 'event', 'user', 'startButtonClick');
         $('#startButton').text('Stop');
+        $('#now_listening').removeAttr('hidden');
         recognition.start();
-        ignore_onend = false;
         interim_span.innerHTML = '';
-        showInfo('info_allow');
+        
+        // Schedule the "allow the microphone" modal to appear. This scheduling gets
+        // canceled if the recognition service starts - this means that we did indeed
+        // have permission.
+        showMicrophonePermissionModalTimeout = setTimeout(function(){
+            $('#microphonePermissionModal').modal('show');
+        }, 500);
     }
 });
 
