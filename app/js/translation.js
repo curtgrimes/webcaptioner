@@ -70,6 +70,8 @@ $(function(){
         window.localStorage.setItem("webcaptioner-settings", JSON.stringify(settings));
 
         $('#languageModal').modal('hide');
+        
+        ga('send', 'event', 'settings', 'selectLanguageFrom', window._wc.language.from);
         ga('send', 'event', 'settings', 'saveLanguage');
 
         if (window.recognizing) {
