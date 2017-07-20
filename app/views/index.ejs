@@ -78,6 +78,51 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="microphonePermissionModal" tabindex="-1" role="dialog" aria-labelledby="microphonePermissionModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" style="margin-top:100px" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2 class="modal-title" id="microphonePermissionModalLabel"><i class="fa fa-microphone" aria-hidden="true"></i> Microphone Permission</h2>
+        <p>Web Captioner needs permission to use your microphone or another audio input. It will only listen while this page is open and you are captioning.</p>
+        <p>You will see a red circle in the tab bar whenever Web Captioner is listening to your microphone or other audio input:</p>
+        <img src="/static/img/tab-microphone-example.png" class="w-100 img-thumbnail bg-info" />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="noMicrophoneModal" tabindex="-1" role="dialog" aria-labelledby="noMicrophoneModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <div>
+          <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true"></i>
+        </div>
+        <h2 class="modal-title" id="noMicrophoneModalLabel">No Microphone or Input Device Found</h2>
+        <p>Connect a microphone or other input device to start using Web Captioner.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="microphonePermissionBlockedModal" tabindex="-1" role="dialog" aria-labelledby="microphonePermissionBlockedModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <div>
+          <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true"></i>
+        </div>
+        <h2 class="modal-title" id="microphonePermissionBlockedModalLabel">Web Captioner doesn't have permission to use your microphone</h2>
+        <p>Allow Web Captioner to use the microphone in order to start captioning. If you don't see an Allow button near the top of the page right now, you might need to change an option in Chrome settings.</p>
+        <p>Copy <strong>chrome://settings/content/microphone</strong> into the location bar, hit enter, and remove webcaptioner.com if it got added to the block list. Then <a href="javascript:location.reload()">reload this page</a> and try again.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal" id="clearTranscriptModal" tabindex="-1" role="dialog" aria-labelledby="clearTranscriptModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -456,33 +501,7 @@
 <div class="row w-100 caption-wrap-row">
   <div class="caption-wrap-col col-12">
     <div class="caption-wrap caption-wrap-real d-flex h-100">
-      <div class="captions">
-        <div id="info" style="visibility: visible;">
-          <p id="info_speak_now" style="display:none">
-            Now listening...
-          </p>
-          <p id="info_no_speech" style="display:none">
-            No speech was detected. You may need to adjust your <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">microphone
-              settings</a>.
-          </p>
-          <p id="info_no_microphone" style="display:none">
-            No microphone was found. Ensure that a microphone is installed and that
-            <a href="https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
-              microphone settings</a> are configured correctly.
-          </p>
-          <p id="info_allow" style="display:none">
-            Click the "Allow" button above to enable your microphone.
-          </p>
-          <p id="info_denied" style="display:none">
-            Permission to use microphone was denied.
-          </p>
-          <p id="info_blocked" style="display:none">
-            Permission to use microphone is blocked. To change, go to chrome://settings/contentExceptions#media-stream
-          </p>
-          <p id="info_upgrade" style="display:none">
-            Web Speech API is not supported by this browser. Upgrade to <a href="https://www.google.com/chrome">Chrome</a>          version 25 or later.
-          </p>
-        </div>
+      <div class="captions d-flex align-items-end">
         <div id="results">
           <span class="final" id="final_span" contenteditable="true"></span> <span class="interim" id="interim_span"></span>
           <div id="captioning-spinner" hidden class="lds-message" style="width:100%;height:100%"> <div></div><div></div><div></div> </div>
@@ -526,6 +545,9 @@
             </div>
           </div>
         </div>
+      </li>
+      <li id="now_listening" class="navbar-text text-white px-3" hidden>
+        Now listening...
       </li>
       <li class="nav-item hidden-sm-up">
         <a class="nav-link" href="/blog">Blog</a>
