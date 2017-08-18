@@ -136,6 +136,57 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="vmixModal" tabindex="-1" role="dialog" aria-labelledby="vmixModalLabel" aria-hidden="true" data-backdrop="static" data-default-from-language-code="<%= defaultFromLanguage.code %>" data-default-to-language-code="<%= defaultToLanguage.code %>">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="vmixModalLabel"><i class="fa fa-video-camera" aria-hidden="true"></i> Send to vMix</h2>
+      </div>
+      <div class="modal-body">
+        <p><a href="https://vmix.com" target="_blank">vMix</a> is a popular software video mixer and switcher. As an alternative to using desktop capture and capturing the whole browser window, you can send just text content directly to vMix and display it in a title input. This would allow you to use vMix's font controls to style captioned text and run Web Captioner in the background. Read the <a href="#">blog post about sending captions to vMix</a> for more information.</p>
+        <p>
+          <a class="btn btn-link btn-sm px-0" data-toggle="collapse" href="#vmixSetupInstructions" aria-expanded="false" aria-controls="vmixSetupInstructions">
+            <i class="fa fa-info-circle mr-2" aria-hidden="true"></i>Setup Instructions
+          </a>
+        </p>
+        <div class="collapse" id="vmixSetupInstructions">
+          <div class="card card-block">
+            <h3>Step 1: Import the Web Captioner title template into vMix</h3>
+            <ol>
+              <li>Download the Web Captioner vMix title template:<br/> <a href="/web-captioner-title.xaml" class="btn btn-primary mt-1 mb-2">Web Captioner vMix Title Template <i class="fa fa-external-link ml-1" aria-hidden="true"></i></a></li>
+              <li>In vMix, go to <strong>Add Input > Title/XAML</strong>. In the upper right of the Input Select window, click <strong>Browse...</strong> and open the Web Captioner title template.</li>
+              <li>The title should now appear in the <strong>Recent</strong> tab in the Input Select window. Double-click it.</li>
+              <li>The Title Editor appears. Optionally customize font and text size. Close the Title Editor when done.</li>
+            </ol>
+            <h3>Step 2: Enable vMix Web Controller</h3>
+            <ol class="mb-0">
+              <li>In vMix, go to <strong>Settings > Web Controller</strong>.</li>
+              <li>Check the box to enable <a href="http://www.vmix.com/knowledgebase/article.aspx/69/how-to-control-vmix-from-a-web-browser-using-vmix-web-controller" target="_blank">Web Controller</a>. This allows Web Captioner to communicate with an instance of vMix running on the same network. Specify a port number or accept the default.</li>
+              <li>Copy the website address that appears in vMix and paste into <strong>vMix Web Controller Address</strong> above.</li>
+            </ol>
+          </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+          <label for="vmixWebControllerAddress">vMix <a href="http://www.vmix.com/knowledgebase/article.aspx/69/how-to-control-vmix-from-a-web-browser-using-vmix-web-controller" target="_blank">Web Controller</a> Address (Required)</label>
+          <input type="url" id="vmixWebControllerAddress" class="form-control" placeholder="vMix Web Controller Address" required="true" />
+          <p><small class="form-text text-muted">Example: http://192.168.1.1:8080</small></p>
+        </div>
+        <div class="form-group">
+          <label for="sendToVmixSettingToggle">Send to vMix</label><br/>
+          <button id="sendToVmixSettingToggle" type="button" class="btn btn-secondary" disabled autocomplete="off">
+            <i class="fa fa-times mr-2" aira-hidden="true"></i><span id="send-to-vmix-status-text">off</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="textVmixButton" onclick="alert('Curt needs to implement this.');">Test Connection</button>
+        <button type="button" class="btn btn-link ml-auto" id="cancelVmixButton">Cancel</button>
+        <button type="button" class="btn btn-info" id="saveVmixButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="languageModal" tabindex="-1" role="dialog" aria-labelledby="languageModalLabel" aria-hidden="true" data-backdrop="static" data-default-from-language-code="<%= defaultFromLanguage.code %>" data-default-to-language-code="<%= defaultToLanguage.code %>">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -565,6 +616,7 @@
             <a class="dropdown-item disabled" hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
             <a class="dropdown-item" href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</a>
             <div class="dropdown-divider"></div>
+            <a class="dropdown-item fade" id="sendToVmixOptionExperimental" hidden href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')"><i class="fa fa-video-camera mr-1" aria-hidden="true"></i> Send to vMix</a>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#languageModal" onclick="ga('send', 'event', 'settings', 'editLanguageStart')"><i class="fa fa-language mr-1" aria-hidden="true"></i> Language</a>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Appearance</a>
           </div>
