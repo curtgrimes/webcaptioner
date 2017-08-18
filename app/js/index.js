@@ -75,6 +75,55 @@ function shouldTranslateText() {
     //return window._wc.language.from !== window._wc.language.to;
 }
 
+function throttle(fn, wait) {
+  var time = Date.now();
+  return function() {
+    if ((time + wait - Date.now()) < 0) {
+      fn();
+      time = Date.now();
+    }
+  }
+}
+
+var vmixInputGUID;
+function getVmixInputGUID() {
+    if (window.vmixInputGUID) {
+        // Already cached
+        return Promise.resolve(window.vmixInputGUID);
+    }
+
+    // Fetch it from /API the first time
+    return fetch(window._wc.vmix.address+'/API')
+        .then(function(response) {
+            return response.text();
+        })
+        .then(function(text) {
+            var $xml = $(text);
+            /*
+                Looks like
+                <inputs>
+                    <input key="e5e760c3-36df-48b5-93ce-0d6e14616fa2" number="1" type="Xaml" title="web-captioner-title.xaml" state="Paused" position="0" duration="0" loop="False" selectedIndex="0">
+                        web-captioner-title.xaml
+                        <text index="0" name="WebCaptionerCaptions">...</text>
+                    </input>
+                    <input key="83047dd8-c2c7-4e38-8085-0f85ab3de925" number="2" type="Blank" title="Blank" state="Paused" position="0" duration="0" loop="False">Blank</input>
+                </inputs>
+
+                The parent() or parents() methods both go to <inputs> and not <input> for some reason.
+            */
+            window.vmixInputGUID = $xml.find('text[name="WebCaptionerCaptions"]').parents('inputs').find('input').attr('key');
+            return window.vmixInputGUID;
+        });
+}
+
+var sendToVmixThrottled = throttle(function(){
+    var text = document.getElementsByClassName('caption-wrap-real')[0].innerText;
+    getVmixInputGUID()
+        .then(function(inputGUID) {
+            fetch(window._wc.vmix.address + '/API/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000)));
+        });
+}, 200);
+
 function initRecognition() {
     recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
@@ -272,11 +321,17 @@ function initRecognition() {
 
             // remove any current text selection
             window.getSelection().removeAllRanges();
+
+            if (window._wc && window._wc.vmix && window._wc.vmix.on && window._wc.vmix.address) {
+                sendToVmixThrottled();
+            }
         }
     };
 
     return recognition;
 }
+
+
 
 function printTranslatedTextBuffered() {
     if ((translatedTextBuffer || '').length > 0) {

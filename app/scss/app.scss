@@ -164,7 +164,8 @@ input[type="color"] {
 }
     
 .btn-info:focus, .btn-info.focus {
-  box-shadow: 0 0 0 3px #fff;
+  box-shadow: 0 0 0 3px $link-color;
+  color:#fff;
 }
 
 .modal-title {

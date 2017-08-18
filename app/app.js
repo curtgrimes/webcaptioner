@@ -29,6 +29,7 @@ app.use(expressSanitizer()); // this line follows bodyParser() instantiations
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static/favicon')));
 app.use(express.static(path.join(__dirname, 'static/sitemap')));
+app.use('/web-captioner-title.xaml', express.static(path.join(__dirname, 'static/web-captioner-title.xaml')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
 app.use('/blog', express.static(path.join(__dirname, 'blog/public')));
 app.use('/privacy-policy', express.static(path.join(__dirname, 'blog/public/privacy-policy')));
