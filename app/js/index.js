@@ -120,7 +120,17 @@ var sendToVmixThrottled = throttle(function(){
     var text = document.getElementsByClassName('caption-wrap-real')[0].innerText;
     getVmixInputGUID()
         .then(function(inputGUID) {
-            fetch(window._wc.vmix.address + '/API/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000)));
+            chrome.runtime.sendMessage(
+                'fckappdcgnijafmmjkcmicdidflhelfe',
+                {
+                    path: window._wc.vmix.address + '/API/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000)),
+                },
+                function(response) {
+                    // console.log(response);
+                }
+            );
+
+            // fetch(window._wc.vmix.address + '/API/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000)));
         });
 }, 200);
 
