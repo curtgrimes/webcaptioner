@@ -17,6 +17,8 @@ $(function(){
             },0);
 
         },300);
+
+        return "You're a superstar! ⭐ Report any issues with this to webcaptioner.com/feedback or facebook.com/webcaptioner. Thanks. ~ Curt";
     };
 
     if (window._wc.vmix.on) {
