@@ -93,27 +93,31 @@ function getVmixInputGUID() {
     }
 
     // Fetch it from /API the first time
-    return fetch(window._wc.vmix.address+'/API')
-        .then(function(response) {
-            return response.text();
-        })
-        .then(function(text) {
-            var $xml = $(text);
-            /*
-                Looks like
-                <inputs>
-                    <input key="e5e760c3-36df-48b5-93ce-0d6e14616fa2" number="1" type="Xaml" title="web-captioner-title.xaml" state="Paused" position="0" duration="0" loop="False" selectedIndex="0">
-                        web-captioner-title.xaml
-                        <text index="0" name="WebCaptionerCaptions">...</text>
-                    </input>
-                    <input key="83047dd8-c2c7-4e38-8085-0f85ab3de925" number="2" type="Blank" title="Blank" state="Paused" position="0" duration="0" loop="False">Blank</input>
-                </inputs>
+    return new Promise(function(resolve, reject) {
+        chrome.runtime.sendMessage(
+            'fckappdcgnijafmmjkcmicdidflhelfe',
+            {
+                path: window._wc.vmix.address + '/API',
+            },
+            function(response) {
+                var $xml = $(response.text);
+                /*
+                    Looks like
+                    <inputs>
+                        <input key="e5e760c3-36df-48b5-93ce-0d6e14616fa2" number="1" type="Xaml" title="web-captioner-title.xaml" state="Paused" position="0" duration="0" loop="False" selectedIndex="0">
+                            web-captioner-title.xaml
+                            <text index="0" name="WebCaptionerCaptions">...</text>
+                        </input>
+                        <input key="83047dd8-c2c7-4e38-8085-0f85ab3de925" number="2" type="Blank" title="Blank" state="Paused" position="0" duration="0" loop="False">Blank</input>
+                    </inputs>
 
-                The parent() or parents() methods both go to <inputs> and not <input> for some reason.
-            */
-            window.vmixInputGUID = $xml.find('text[name="WebCaptionerCaptions"]').parents('inputs').find('input').attr('key');
-            return window.vmixInputGUID;
-        });
+                    The parent() or parents() methods both go to <inputs> and not <input> for some reason.
+                */
+                window.vmixInputGUID = $xml.find('text[name="WebCaptionerCaptions"]').parents('inputs').find('input').attr('key');
+                resolve(window.vmixInputGUID);
+            }
+        );
+    });
 }
 
 var sendToVmixThrottled = throttle(function(){
