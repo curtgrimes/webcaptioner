@@ -92,7 +92,7 @@ $(function(){
 
 function updateVmixSteps() { 
     // Step 1
-    if (chrome.app.isInstalled || true) {
+    if (chrome.app.isInstalled) {
         // Show "Extension added" button
         $('#addExtensionToChromeButton').attr('hidden', true);
         $('#extensionIsAddedToChromeButton').removeAttr('hidden');
