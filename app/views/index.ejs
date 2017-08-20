@@ -13,6 +13,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/manifest.json">
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f0e500">
+  <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/fckappdcgnijafmmjkcmicdidflhelfe">
   <meta name="theme-color" content="#f0e500">
 
   <meta property="og:url" content="https://webcaptioner.com" />
@@ -136,6 +137,7 @@
     </div>
   </div>
 </div>
+
 <div class="modal fade" id="vmixModal" tabindex="-1" role="dialog" aria-labelledby="vmixModalLabel" aria-hidden="true" data-backdrop="static" data-default-from-language-code="<%= defaultFromLanguage.code %>" data-default-to-language-code="<%= defaultToLanguage.code %>">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -144,43 +146,83 @@
       </div>
       <div class="modal-body">
         <p><a href="https://vmix.com" target="_blank">vMix</a> is a popular software video mixer and switcher. As an alternative to using desktop capture and capturing the whole browser window, you can send just text content directly to vMix and display it in a title input. This would allow you to use vMix's font controls to style captioned text and run Web Captioner in the background. Read the <a href="#" onclick="alert('no blog post yet')">blog post about sending captions to vMix</a> for more information.</p>
-        <p>
-          <a class="btn btn-link btn-sm px-0" data-toggle="collapse" href="#vmixSetupInstructions" aria-expanded="false" aria-controls="vmixSetupInstructions">
-            <i class="fa fa-info-circle mr-2" aria-hidden="true"></i>Setup Instructions
-          </a>
-        </p>
-        <div class="collapse" id="vmixSetupInstructions">
-          <div class="card card-block">
-            <h3>Step 1: Import the Web Captioner title template into vMix</h3>
-            <ol>
-              <li>Download the Web Captioner vMix title template:<br/> <a href="/web-captioner-title.xaml" class="btn btn-primary mt-1 mb-2">Web Captioner vMix Title Template <i class="fa fa-external-link ml-1" aria-hidden="true"></i></a></li>
-              <li>In vMix, go to <strong>Add Input > Title/XAML</strong>. In the upper right of the Input Select window, click <strong>Browse...</strong> and open the Web Captioner title template.</li>
-              <li>The title should now appear in the <strong>Recent</strong> tab in the Input Select window. Double-click it.</li>
-              <li>The Title Editor appears. Optionally customize font and text size. Close the Title Editor when done.</li>
-            </ol>
-            <h3>Step 2: Enable vMix Web Controller</h3>
-            <ol class="mb-0">
-              <li>In vMix, go to <strong>Settings > Web Controller</strong>.</li>
-              <li>Check the box to enable <a href="http://www.vmix.com/knowledgebase/article.aspx/69/how-to-control-vmix-from-a-web-browser-using-vmix-web-controller" target="_blank">Web Controller</a>. This allows Web Captioner to communicate with an instance of vMix running on the same network. Specify a port number or accept the default.</li>
-              <li>Copy the website address that appears in vMix and paste into <strong>vMix Web Controller Address</strong> above.</li>
-            </ol>
+        <div class="card">
+          <div class="card-block text-center">
+            <div class="row">
+              <div class="col-lg-8 offset-lg-2">
+                <span id="vmixStepHasErrorStateIndicator" class="badge badge-danger mb-2 pb-1"><i class="fa fa-exclamation-triangle mr-2 pt-1"></i>Configuration needed below</span>
+                <button id="sendToVmixSettingToggle" type="button" class="btn btn-secondary btn-block" disabled autocomplete="off">
+                  <i class="fa fa-times mr-2" aira-hidden="true"></i>Send to vMix is <span id="send-to-vmix-status-text">off</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <hr/>
-        <div class="form-group">
-          <label for="vmixWebControllerAddress">vMix <a href="http://www.vmix.com/knowledgebase/article.aspx/69/how-to-control-vmix-from-a-web-browser-using-vmix-web-controller" target="_blank">Web Controller</a> Address (Required)</label>
-          <input type="url" id="vmixWebControllerAddress" class="form-control" placeholder="vMix Web Controller Address" required="true" />
-          <p><small class="form-text text-muted">Example: http://192.168.1.1:8080</small></p>
+        <div class="vmixStep" data-vmix-step="1" data-error-state="false">
+          <h3>
+            <span class="badge badge-danger pt-2 mr-2" data-toggle="tooltip" data-placement="top" title="Not complete"><i class="fa fa-exclamation-triangle"></i></span>
+            <span class="badge badge-success pt-2 mr-2" hidden><i class="fa fa-check"></i> Done</span>
+            <a href="#vmixStep1" data-toggle="collapse" aria-expanded="false" aria-controls="vmixStep1">Step 1: Install the Chrome Extension</a>
+          </h3>
+          <div id="vmixStep1" class="collapse show ml-4">
+            <p class="mb-2">
+              The Web Captioner Connector extension enables your browser to send commands to vMix running on your computer or somewhere else on the network.
+            </p>
+            <button id="addExtensionToChromeButton" type="button" class="btn btn-info"><i class="fa fa-chrome mr-2"></i>Add to Chrome</button>
+            <button id="extensionIsAddedToChromeButton" type="button" class="btn btn-success" hidden disabled><i class="fa fa-check mr-2"></i>Added to Chrome</button>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="sendToVmixSettingToggle">Send to vMix</label><br/>
-          <button id="sendToVmixSettingToggle" type="button" class="btn btn-secondary" disabled autocomplete="off">
-            <i class="fa fa-times mr-2" aira-hidden="true"></i><span id="send-to-vmix-status-text">off</span>
-          </button>
+        <hr/>
+        <div class="vmixStep" data-vmix-step="2" data-error-state="false">
+          <h3>
+              <span class="badge badge-danger pt-2 mr-2" data-toggle="tooltip" data-placement="top" title="Not complete"><i class="fa fa-exclamation-triangle"></i></span>
+              <span class="badge badge-success pt-2 mr-2" hidden><i class="fa fa-check"></i> Done</span>
+              <a href="#vmixStep2" data-toggle="collapse" aria-expanded="false" aria-controls="vmixStep2">Step 2: Enable vMix Web Controller</a>
+          </h3>
+          <div id="vmixStep2" class="collapse show">
+            <ol class="ml-0 mb-2">
+                <li>In vMix, go to <strong>Settings > Web Controller</strong>.</li>
+                <li>Check the box to enable <a href="http://www.vmix.com/knowledgebase/article.aspx/69/how-to-control-vmix-from-a-web-browser-using-vmix-web-controller" target="_blank">Web Controller</a>. Specify a port number or accept the default.</li>
+                <li>Copy and paste the website address that appears in vMix here:</li>
+            </ol>
+            <div class="form-group ml-4 mb-2">
+                <input type="url" id="vmixWebControllerAddress" class="form-control" placeholder="vMix Web Controller Address" required="true" />
+                <p class="mb-2"><small class="form-text text-muted">Example: http://192.168.1.1:8080</small></p>
+            </div>
+            <p class="ml-4">
+              <button class="btn btn-info" id="testConnectionButton"><i class="fa fa-check mr-2" hidden aria-hidden="true"></i>Test Connection</button>
+              <i id="testConnectionSpinner" hidden class="fa fa-circle-o-notch fa-spin fa-fw"></i>
+              <strong id="connectionSuccessMessage" hidden class="text-success ml-2">Success!</strong>
+              <p id="couldNotConnectMessage" hidden class="text-danger ml-4"><strong>Could not connect. Check to make sure that vMix is running, Web Controller is enabled, and that the Web Controller address above is correct.</strong></p>
+            </p>
+          </div>
+        </div>
+        <hr/>
+        <div class="vmixStep" data-vmix-step="3" data-error-state="false">
+          <h3>
+            <span class="badge badge-danger pt-2 mr-2" data-toggle="tooltip" data-placement="top" title="Not complete"><i class="fa fa-exclamation-triangle"></i></span>
+            <span class="badge badge-success pt-2 mr-2" hidden><i class="fa fa-check"></i> Done</span>
+            <a href="#vmixStep3" data-toggle="collapse" aria-expanded="false" aria-controls="vmixStep3">Step 3: Import the Web Captioner title template into vMix</a>
+          </h3>
+          <div id="vmixStep3" class="collapse show">
+            <ol class="ml-0 mb-2">
+              <li>Download the Web Captioner vMix title template:<br/> <a href="/web-captioner-title.xaml" class="btn btn-secondary mt-1 mb-2">Web Captioner vMix Title Template <i class="fa fa-external-link ml-1" aria-hidden="true"></i></a></li>
+              <li>In vMix, go to <strong>Add Input > Title/XAML</strong>. In the upper right of the Input Select window, click <strong>Browse...</strong> and open the Web Captioner title template.</li>
+              <li>The title will appear in the <strong>Recent</strong> tab. Double-click it.</li>
+              <li>In the Title Editor that appears, optionally customize font and text size. Close it when you are finished.</li>
+              <li>Test your imported title:</li>
+            </ol>
+            <p class="ml-4">
+                <button class="btn btn-info" id="testVmixTitleButton"><i class="fa fa-check mr-2" hidden aria-hidden="true"></i>Send Test Message to vMix</button>
+                <i id="testVmixTitleSpinner" hidden class="fa fa-circle-o-notch fa-spin fa-fw"></i>
+                <p id="testVmixTitleSuccessMessage" style="font-weight:bold" hidden class="text-success ml-4">Success!</p>
+                <p id="testVmixTitleErrorMessage" style="font-weight:bold" hidden class="text-danger ml-4">Error</p>
+              </p>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="textVmixButton" onclick="alert('Curt needs to implement this.');">Test Connection</button>
         <button type="button" class="btn btn-link ml-auto" id="cancelVmixButton">Cancel</button>
         <button type="button" class="btn btn-info" id="saveVmixButton">Save</button>
       </div>
@@ -629,6 +671,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
   <script src="/build/js/build.js?<%= process.env.COMMIT_ID %>"></script>
 
+  <script>$(function(){
+      setTimeout(function(){
+        $('#onboardingModal [data-dismiss="modal"],#sendToVmixOptionExperimental').click();
+      
+      },0);
+      });
+        </script>
 </body>
 
 </html>

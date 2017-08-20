@@ -12,6 +12,7 @@ function clear_saved() {
     }
 }
 
+var chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe';
 var recognizing = false;
 var restartingDueToFailure = false;
 var lastStartTimestamp;
@@ -95,7 +96,7 @@ function getVmixInputGUID() {
     // Fetch it from /API the first time
     return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage(
-            'fckappdcgnijafmmjkcmicdidflhelfe',
+            chromeExtensionId,
             {
                 path: window._wc.vmix.address + '/API',
             },
@@ -125,7 +126,7 @@ var sendToVmixThrottled = throttle(function(){
     getVmixInputGUID()
         .then(function(inputGUID) {
             chrome.runtime.sendMessage(
-                'fckappdcgnijafmmjkcmicdidflhelfe',
+                chromeExtensionId,
                 {
                     path: window._wc.vmix.address + '/API/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000)),
                 },
