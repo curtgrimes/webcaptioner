@@ -118,7 +118,6 @@ function checkIfExtensionInstalled() {
             getExtensionVersion: true,
         },
         function(version) {
-            console.log(version);
             if (version) {
                 // Show "Extension added" button
                 $('#addExtensionToChromeButton').attr('hidden', true);
