@@ -101,7 +101,7 @@ function getVmixInputGUID() {
                 path: window._wc.vmix.address + '/API',
             },
             function(response) {
-                var $xml = $(response.text);
+                var $xml = $(response.text.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>'));
                 /*
                     Looks like
                     <inputs>
@@ -114,7 +114,7 @@ function getVmixInputGUID() {
 
                     The parent() or parents() methods both go to <inputs> and not <input> for some reason.
                 */
-                window.vmixInputGUID = $xml.find('text[name="WebCaptionerCaptions"]').parents('inputs').find('input').attr('key');
+                window.vmixInputGUID = $xml.find('text[name="WebCaptionerCaptions"]').parent('webcaptioner-vmix-input').first().attr('key');
                 resolve(window.vmixInputGUID);
             }
         );

@@ -214,10 +214,14 @@ function testVmixTitleExists(initialCheck) {
         function(response) {
             if (response && response.code && response.code == 200) {
                 wasAbleToConnect = true;
-                var $xml = $(response.text);
-                var $inputs = $xml.find('text[name="WebCaptionerCaptions"]').parents('inputs').find('input');
-                if ($inputs.length > 0) {
-                    var guid = $inputs.attr('key');
+
+                // There is an <input></input> element but the browser automatically interprets it as a self-closing <input> tag.
+                // We need to rename it to something unique so we can get its children.
+                var $xml = $(response.text.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>'));
+
+                var $input = $xml.find('text[name="WebCaptionerCaptions"]').parent('webcaptioner-vmix-input').first();
+                if ($input.length > 0) {
+                    var guid = $input.attr('key');
                     // Now that we have the GUID, make a request to update the title
                     chrome.runtime.sendMessage(
                         chromeExtensionId,
