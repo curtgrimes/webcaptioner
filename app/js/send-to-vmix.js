@@ -33,6 +33,13 @@ $(function(){
     $('#vmixModal').on('show.bs.modal', function() {
         checkIfVmixToggleShouldBeEnabled(window._wc.vmix.on);
         updateVmixSteps();
+        clearInterval(checkIfExtensionInstalledTimeout);
+        
+        checkIfExtensionInstalledTimeout = setInterval(checkIfExtensionInstalled, 1000);
+    });
+
+    $('#vmixModal').on('hidden.bs.modal', function() {
+        clearInterval(checkIfExtensionInstalledTimeout);
     });
 
     $('#vmixWebControllerAddress').val(window._wc.vmix.address);
@@ -91,19 +98,8 @@ $(function(){
 });
 
 function updateVmixSteps() { 
-    // Step 1
-    if (chrome.app.isInstalled || true) {
-        // Show "Extension added" button
-        $('#addExtensionToChromeButton').attr('hidden', true);
-        $('#extensionIsAddedToChromeButton').removeAttr('hidden');
-        updateVmixStepHeading(1, true, true);
-    }
-    else {
-        $('#addExtensionToChromeButton').removeAttr('hidden');
-        $('#extensionIsAddedToChromeButton').attr('hidden', true);
-        updateVmixStepHeading(1, false, true);
-    }
-
+    // Step 1 - Check if extension is installed
+    checkIfExtensionInstalled();
 
     // Step 2
     updateVmixStepHeading(2, false, true);
@@ -112,6 +108,30 @@ function updateVmixSteps() {
     // Step 3
     updateVmixStepHeading(3, false, true);
     testVmixTitleExists(true);
+}
+
+var checkIfExtensionInstalledTimeout;
+function checkIfExtensionInstalled() {
+    chrome.runtime.sendMessage(
+        chromeExtensionId,
+        {
+            getExtensionVersion: true,
+        },
+        function(version) {
+            console.log(version);
+            if (version) {
+                // Show "Extension added" button
+                $('#addExtensionToChromeButton').attr('hidden', true);
+                $('#extensionIsAddedToChromeButton').removeAttr('hidden');
+                updateVmixStepHeading(1, true, true);
+            }
+            else {
+                $('#addExtensionToChromeButton').removeAttr('hidden');
+                $('#extensionIsAddedToChromeButton').attr('hidden', true);
+                updateVmixStepHeading(1, false, true);
+            }
+        }
+    );
 }
 
 function updateVmixStepHeading(stepNumber, complete, initialCheck) {
