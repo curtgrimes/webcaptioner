@@ -33,6 +33,13 @@ $(function(){
     $('#vmixModal').on('show.bs.modal', function() {
         checkIfVmixToggleShouldBeEnabled(window._wc.vmix.on);
         updateVmixSteps();
+        clearInterval(checkIfExtensionInstalledTimeout);
+        
+        checkIfExtensionInstalledTimeout = setInterval(checkIfExtensionInstalled, 1000);
+    });
+
+    $('#vmixModal').on('hidden.bs.modal', function() {
+        clearInterval(checkIfExtensionInstalledTimeout);
     });
 
     $('#vmixWebControllerAddress').val(window._wc.vmix.address);
@@ -91,19 +98,8 @@ $(function(){
 });
 
 function updateVmixSteps() { 
-    // Step 1
-    if (chrome.app.isInstalled || true) {
-        // Show "Extension added" button
-        $('#addExtensionToChromeButton').attr('hidden', true);
-        $('#extensionIsAddedToChromeButton').removeAttr('hidden');
-        updateVmixStepHeading(1, true, true);
-    }
-    else {
-        $('#addExtensionToChromeButton').removeAttr('hidden');
-        $('#extensionIsAddedToChromeButton').attr('hidden', true);
-        updateVmixStepHeading(1, false, true);
-    }
-
+    // Step 1 - Check if extension is installed
+    checkIfExtensionInstalled();
 
     // Step 2
     updateVmixStepHeading(2, false, true);
@@ -112,6 +108,29 @@ function updateVmixSteps() {
     // Step 3
     updateVmixStepHeading(3, false, true);
     testVmixTitleExists(true);
+}
+
+var checkIfExtensionInstalledTimeout;
+function checkIfExtensionInstalled() {
+    chrome.runtime.sendMessage(
+        chromeExtensionId,
+        {
+            getExtensionVersion: true,
+        },
+        function(version) {
+            if (version) {
+                // Show "Extension added" button
+                $('#addExtensionToChromeButton').attr('hidden', true);
+                $('#extensionIsAddedToChromeButton').removeAttr('hidden');
+                updateVmixStepHeading(1, true, true);
+            }
+            else {
+                $('#addExtensionToChromeButton').removeAttr('hidden');
+                $('#extensionIsAddedToChromeButton').attr('hidden', true);
+                updateVmixStepHeading(1, false, true);
+            }
+        }
+    );
 }
 
 function updateVmixStepHeading(stepNumber, complete, initialCheck) {
@@ -214,10 +233,14 @@ function testVmixTitleExists(initialCheck) {
         function(response) {
             if (response && response.code && response.code == 200) {
                 wasAbleToConnect = true;
-                var $xml = $(response.text);
-                var $inputs = $xml.find('text[name="WebCaptionerCaptions"]').parents('inputs').find('input');
-                if ($inputs.length > 0) {
-                    var guid = $inputs.attr('key');
+
+                // There is an <input></input> element but the browser automatically interprets it as a self-closing <input> tag.
+                // We need to rename it to something unique so we can get its children.
+                var $xml = $(response.text.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>'));
+
+                var $input = $xml.find('text[name="WebCaptionerCaptions"]').parent('webcaptioner-vmix-input').first();
+                if ($input.length > 0) {
+                    var guid = $input.attr('key');
                     // Now that we have the GUID, make a request to update the title
                     chrome.runtime.sendMessage(
                         chromeExtensionId,
