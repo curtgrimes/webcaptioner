@@ -10,7 +10,9 @@ Staging:
     - sudo rm -rf /opt/staging.webcaptioner.com.previous/*
     - sudo npm --prefix ./app install ./app
     - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo npm install -g hugo-cli
+    - sudo wget https://github.com/gohugoio/hugo/releases/download/v0.29/hugo_0.29_Linux-64bit.deb
+    - sudo dpkg -i hugo*.deb # install Hugo
+    - hugo version
     - sudo gulp --gulpfile ./app/Gulpfile.js
     - cd ./static-site
     - sudo hugo
@@ -52,7 +54,9 @@ Production:
     - sudo rm -rf /opt/webcaptioner.com.previous/*
     - sudo npm --prefix ./app install ./app
     - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo npm install -g hugo-cli
+    - sudo wget https://github.com/gohugoio/hugo/releases/download/v0.29/hugo_0.29_Linux-64bit.deb
+    - sudo dpkg -i hugo*.deb # install Hugo
+    - hugo version
     - sudo gulp --gulpfile ./app/Gulpfile.js
     - cd ./static-site
     - sudo hugo
