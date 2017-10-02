@@ -10,11 +10,11 @@ Staging:
     - sudo rm -rf /opt/staging.webcaptioner.com.previous/*
     - sudo npm --prefix ./app install ./app
     - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo npm install -g hexo-cli
+    - sudo npm install -g hugo-cli
     - sudo gulp --gulpfile ./app/Gulpfile.js
-    - cd ./app/blog
-    - sudo hexo generate
-    - cd ../.. # back to repo root
+    - cd ./static-site
+    - sudo hugo
+    - cd .. # back to repo root
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
     - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
     - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
@@ -52,11 +52,11 @@ Production:
     - sudo rm -rf /opt/webcaptioner.com.previous/*
     - sudo npm --prefix ./app install ./app
     - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo npm install -g hexo-cli
+    - sudo npm install -g hugo-cli
     - sudo gulp --gulpfile ./app/Gulpfile.js
-    - cd ./app/blog
-    - sudo hexo generate
-    - cd ../.. # back to repo root
+    - cd ./static-site
+    - sudo hugo
+    - cd .. # back to repo root
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
     - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
     - echo "PORT=$PORT" | sudo tee --append ./app/env/.env

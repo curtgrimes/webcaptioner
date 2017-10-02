@@ -103,7 +103,7 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/nav";
 @import "../node_modules/bootstrap/scss/navbar";
 @import "../node_modules/bootstrap/scss/card";
-//@import "../node_modules/bootstrap/scss/breadcrumb";
+@import "../node_modules/bootstrap/scss/breadcrumb";
 //@import "../node_modules/bootstrap/scss/pagination";
 @import "../node_modules/bootstrap/scss/badge";
 //@import "../node_modules/bootstrap/scss/jumbotron";
@@ -364,6 +364,14 @@ html.blog, html.blog body {
   box-shadow: -7px 0 0 0 #292b2c, 7px 0 0 0 #292b2c, 0 0 0 7px #292b2c;
 }
 
+a.hidden-link {
+  color:inherit;
+}
+
+a.hidden-link:hover, a.hidden-link:active, a.hidden-link:focus {
+  color:$link-color;
+}
+
 a.block-partial-highlight-children:hover {
   text-decoration:none;
 }
@@ -387,6 +395,10 @@ a.block-partial-highlight-children:hover .btn-primary {
 
 .inner-link-no-highlight {
   color:#000;
+}
+
+.blog-article-list .inner-link-no-highlight p {
+  margin:0;
 }
 
 .blog-article-date {
@@ -415,6 +427,10 @@ html.blog h2 {
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.bg-breadcrumb {
+  background:$breadcrumb-bg;
 }
 
 @include media-breakpoint-down(sm) {
