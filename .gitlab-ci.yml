@@ -44,7 +44,7 @@ Staging:
   environment:
     name: staging
     url: https://staging.webcaptioner.com
-  when: manual
+  when: always
 
 Production:
   stage: deploy
