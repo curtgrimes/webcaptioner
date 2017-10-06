@@ -15,7 +15,7 @@ Staging:
     - hugo version
     - sudo gulp --gulpfile ./app/Gulpfile.js
     - cd ./static-site
-    - sed -i ".original" "s/baseURL.*/baseURL=\"https:\/\/staging.webcaptioner.com\"/g" config.toml # set the baseURL according to this server
+    - sed -i.original "s/baseURL.*/baseURL=\"https:\/\/staging.webcaptioner.com\"/g" config.toml # set the baseURL according to this server
     - sudo hugo
     - cd .. # back to repo root
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
@@ -60,7 +60,7 @@ Production:
     - hugo version
     - sudo gulp --gulpfile ./app/Gulpfile.js
     - cd ./static-site
-    - sed -i ".original" "s/baseURL.*/baseURL=\"https:\/\/webcaptioner.com\"/g" config.toml # set the baseURL according to this server
+    - sed -i.original "s/baseURL.*/baseURL=\"https:\/\/webcaptioner.com\"/g" config.toml # set the baseURL according to this server
     - sudo hugo
     - cd .. # back to repo root
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
