@@ -31,10 +31,13 @@ app.use(express.static(path.join(__dirname, 'static/favicon')));
 app.use(express.static(path.join(__dirname, 'static/sitemap')));
 app.use('/web-captioner-title.xaml', express.static(path.join(__dirname, 'static/web-captioner-title.xaml')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
+
 app.use('/blog', express.static(path.join(__dirname, '../static-site/public/blog')));
 app.use('/help', express.static(path.join(__dirname, '../static-site/public/help')));
-app.use('/privacy-policy', express.static(path.join(__dirname, 'blog/public/privacy-policy')));
-app.use('/community', express.static(path.join(__dirname, 'blog/public/community')));
+app.use('/donate', express.static(path.join(__dirname, '../static-site/public/donate')));
+app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/public/privacy-policy')));
+app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
+
 app.use('/feedback', express.static(path.join(__dirname, 'blog/public/feedback')));
 app.use('/feedback/thanks', express.static(path.join(__dirname, 'blog/public/feedback-thanks')));
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));

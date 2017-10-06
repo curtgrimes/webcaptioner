@@ -9,15 +9,14 @@ $font-size-h4: 1.25rem;
 $font-size-h5: 1rem;
 $font-size-h6: 0.75rem;
 
-$brand-primary: #f0e500;
-$brand-info: #18B1F2;
-$brand-danger: #A30821;
-$btn-primary-color: #000;
-$btn-primary-border: $brand-primary;
-
 $link-color: #274de6;
 
+$brand-primary: #f0e500;
 $brand-info: #000;
+$brand-danger: #e83f6f;
+$brand-success: $link-color;
+$btn-primary-color: #000;
+$btn-primary-border: $brand-primary;
 
 $border-radius: 0;
 $border-radius-lg: 0;
@@ -74,6 +73,10 @@ $container-max-widths: (
   lg: 960px
 );
 
+$pagination-active-bg: $link-color;
+$pagination-active-border: $link-color;
+$pagination-disabled-color: #999;
+
 $fa-font-path: '/build/font-awesome';
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 
@@ -106,7 +109,7 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/navbar";
 @import "../node_modules/bootstrap/scss/card";
 @import "../node_modules/bootstrap/scss/breadcrumb";
-//@import "../node_modules/bootstrap/scss/pagination";
+@import "../node_modules/bootstrap/scss/pagination";
 @import "../node_modules/bootstrap/scss/badge";
 //@import "../node_modules/bootstrap/scss/jumbotron";
 @import "../node_modules/bootstrap/scss/alert";
@@ -438,6 +441,10 @@ html.blog h6 {
 
 html.blog h2 {
   margin:2rem 0 1.5rem 0;
+}
+
+a.hover-no-underline:hover, a.hover-no-underline:focus {
+  text-decoration:none;
 }
 
 .container-fluid.cover {

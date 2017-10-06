@@ -74,7 +74,8 @@
 -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-info" data-dismiss="modal">Get Started</button>
+        <a href="/help/general/what-is-web-captioner/" class="btn btn-primary">Learn More</a>
+        <button type="button" class="btn btn-success" data-dismiss="modal">Get Started</button>
       </div>
     </div>
   </div>
@@ -610,15 +611,15 @@
   </button>
   <span class="navbar-brand">
     <a href="/">
-      <img src="/static/img/logo.svg" width="30" height="30" class="d-inline-block align-top mr-2" alt="Web Captioner" />
+      <img src="/static/img/logo.svg" width="20" height="20" class="d-inline-block align-top mr-2" alt="Web Captioner" />
       <span class="hidden-sm-down">Web Captioner</span>
     </a>
-  </span>
+  </span><%# <!--
   <ul class="navbar-nav mr-auto hidden-xs-down">
     <li class="nav-item">
       <a class="nav-link" href="/blog">Blog</a>
     </li>
-  </ul>
+  </ul>--> %>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
@@ -641,10 +642,10 @@
       </li>
       <li id="now_listening" class="navbar-text text-white px-3" hidden>
         Now listening...
-      </li>
+      </li><%# <!--
       <li class="nav-item hidden-sm-up">
         <a class="nav-link" href="/blog">Blog</a>
-      </li>
+      </li> --> %>
       <li class="nav-item">
         <div id="settingsDropdownContainer" class="btn-group dropup">
           <button type="button" class="btn btn-primary" id="startButton">Start<span class="hidden-xs-down"> Captioning</span></button>
@@ -652,7 +653,9 @@
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')"><i class="fa fa-exclamation-triangle mr-1" aria-hidden="true"></i> Report a Problem</a>
+              <a class="dropdown-item" href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center <span class="badge badge-success small">New</span></a>
+            <a class="dropdown-item" href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</a>
+            <a class="dropdown-item" href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate <span class="badge badge-success small">New</span></a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:void(0)" id="saveTranscriptToFileButton" onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
             <a class="dropdown-item disabled" hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
