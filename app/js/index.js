@@ -1,7 +1,7 @@
-$(function(){
-    // setTimeout(function(){ $('#onboardingModal [data-dismiss="modal"]').click(); }, 0);
-    // setTimeout(function(){ $('[data-target="#languageModal"]').click(); }, 0);
-});
+// $(function(){
+//     setTimeout(function(){ $('#onboardingModal [data-dismiss="modal"]').click(); }, 0);
+//     setTimeout(function(){ $('[data-target="#wordReplacementModal"]').click(); }, 0);
+// });
 
 function clear_saved() {
     ga('send', 'event', 'user', 'clearButtonClick');
@@ -34,36 +34,7 @@ window._wc = { // set defaults
     },
 };
 
-var replacements = [
-    {
-        find: ['Kurt Grimes', 'Kirk Grimes'],
-        replacement: 'Curt Grimes',
-    },
-    {
-        find: ['Kurt'],
-        replacement: 'Curt',
-    },
-    {
-        find: ['web captioner', 'web caption or'],
-        replacement: 'Web Captioner',
-    },
-    {
-        find: [':-)'],
-        replacement: '<i class="fa fa-smile-o" aria-hidden="true"></i>',
-    },
-    {
-        find: [':-('],
-        replacement: '<i class="fa fa-frown-o" aria-hidden="true"></i>',
-    },
-    {
-        find: ['Star Trek'],
-        replacement: '<i class="fa fa-hand-spock-o" aria-hidden="true"></i> Star Trek',
-    },
-];
-var customReplacements = window.localStorage.getItem("_wc_custom_replacements_experimental");
-if (customReplacements) {
-    replacements = replacements.concat(JSON.parse(customReplacements));
-}
+loadWordReplacementSettings();
 
 if (!('webkitSpeechRecognition' in window)) {
     upgrade();
@@ -101,6 +72,7 @@ function getVmixInputGUID() {
                 path: window._wc.vmix.address + '/API',
             },
             function(response) {
+                if (!response) return;
                 var $xml = $(response.text.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>'));
                 /*
                     Looks like
@@ -369,8 +341,8 @@ function makeReplacements(transcript) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
     
-    replacements.forEach(function(rewritePair) {
-        rewritePair.find.forEach(function(findString) {
+    window._wc.wordReplacements.forEach(function(rewritePair) {
+        rewritePair.find.split(',').forEach(function(findString) {
             transcript = transcript.replace(new RegExp(escapeRegExp(findString), 'gi'), rewritePair.replacement);
         })
     });
