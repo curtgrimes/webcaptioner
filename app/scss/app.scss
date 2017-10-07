@@ -9,15 +9,14 @@ $font-size-h4: 1.25rem;
 $font-size-h5: 1rem;
 $font-size-h6: 0.75rem;
 
-$brand-primary: #f0e500;
-$brand-info: #18B1F2;
-$brand-danger: #A30821;
-$btn-primary-color: #000;
-$btn-primary-border: $brand-primary;
-
 $link-color: #274de6;
 
+$brand-primary: #f0e500;
 $brand-info: #000;
+$brand-danger: #e83f6f;
+$brand-success: $link-color;
+$btn-primary-color: #000;
+$btn-primary-border: $brand-primary;
 
 $border-radius: 0;
 $border-radius-lg: 0;
@@ -50,6 +49,8 @@ $navbar-inverse-hover-color:           rgba(#fff,.75) !default;
 $navbar-inverse-active-color:          rgba(#fff,1) !default;
 $navbar-inverse-disabled-color:        rgba(#fff,.25) !default;
 $navbar-inverse-toggler-border:        rgba(#fff,.1) !default;
+$navbar-light-color: #000;
+$navbar-light-hover-color: inherit;
 
 $nav-tabs-active-link-hover-bg: $brand-primary;
 
@@ -71,6 +72,10 @@ $container-max-widths: (
   md: 720px,
   lg: 960px
 );
+
+$pagination-active-bg: $link-color;
+$pagination-active-border: $link-color;
+$pagination-disabled-color: #999;
 
 $fa-font-path: '/build/font-awesome';
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
@@ -103,8 +108,8 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/nav";
 @import "../node_modules/bootstrap/scss/navbar";
 @import "../node_modules/bootstrap/scss/card";
-//@import "../node_modules/bootstrap/scss/breadcrumb";
-//@import "../node_modules/bootstrap/scss/pagination";
+@import "../node_modules/bootstrap/scss/breadcrumb";
+@import "../node_modules/bootstrap/scss/pagination";
 @import "../node_modules/bootstrap/scss/badge";
 //@import "../node_modules/bootstrap/scss/jumbotron";
 @import "../node_modules/bootstrap/scss/alert";
@@ -152,17 +157,30 @@ input[type="color"] {
   border-left:1px solid $modal-header-border-color;
 }
 
+.navbar {
+  padding:.5rem 1.1rem;
+}
+
 .navbar-brand {
   font-family: $headings-font-family;
-  font-size:1.35rem;
+  font-size:1.1rem;
+  line-height:1.45rem;
   text-transform: uppercase;
+  padding: 9px 9px 8px 9px;
+  margin-left: -9px;
+  margin-right: -9px;
+  z-index:10;
 }
 
 .navbar-brand a {
   text-decoration:none;
   color:#fff;
 }
-    
+
+.navbar-toggler {
+  z-index:15;
+}
+
 .btn-info:focus, .btn-info.focus {
   box-shadow: 0 0 0 3px $link-color;
   color:#fff;
@@ -196,7 +214,13 @@ input[type="color"] {
 
 a.nav-link:not(.active) {
   color: $gray;
-  opacity:.8;
+}
+
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover,
+a.navbar-brand:hover {
+  background: rgba(0,0,0,.08);
+  border-radius: 2px;
 }
 
 a.nav-link.active {
@@ -364,6 +388,14 @@ html.blog, html.blog body {
   box-shadow: -7px 0 0 0 #292b2c, 7px 0 0 0 #292b2c, 0 0 0 7px #292b2c;
 }
 
+a.hidden-link {
+  color:inherit;
+}
+
+a.hidden-link:hover, a.hidden-link:active, a.hidden-link:focus {
+  color:$link-color;
+}
+
 a.block-partial-highlight-children:hover {
   text-decoration:none;
 }
@@ -389,6 +421,10 @@ a.block-partial-highlight-children:hover .btn-primary {
   color:#000;
 }
 
+.blog-article-list .inner-link-no-highlight p {
+  margin:0;
+}
+
 .blog-article-date {
   text-transform: uppercase;
   font-family: $headings-font-family;
@@ -407,6 +443,10 @@ html.blog h2 {
   margin:2rem 0 1.5rem 0;
 }
 
+a.hover-no-underline:hover, a.hover-no-underline:focus {
+  text-decoration:none;
+}
+
 .container-fluid.cover {
   /* Define a background inline
   /*background-image: url(/blog/2017/07/give-web-captioner-a-custom-look/cover.png);*/
@@ -415,6 +455,10 @@ html.blog h2 {
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.bg-breadcrumb {
+  background:$breadcrumb-bg;
 }
 
 @include media-breakpoint-down(sm) {
@@ -431,5 +475,15 @@ html.blog h2 {
   .h2.bg-caption {
     font-size:1.5rem;
     line-height:2.5rem;
+  }
+
+  .navbar-light .navbar-nav .nav-link:focus,
+  .navbar-light .navbar-nav .nav-link:hover,
+  a.navbar-brand:hover {
+    background:none;
+  }
+
+  h1.display-4 {
+    font-size:2.4rem;
   }
 }

@@ -5,3 +5,4 @@ app/build/*
 app/env/google-application-credentials.json
 app/npm-debug.log
 npm-debug.log
+static-site/public

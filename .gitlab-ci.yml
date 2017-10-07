@@ -10,11 +10,14 @@ Staging:
     - sudo rm -rf /opt/staging.webcaptioner.com.previous/*
     - sudo npm --prefix ./app install ./app
     - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo npm install -g hexo-cli
+    - sudo wget https://github.com/gohugoio/hugo/releases/download/v0.29/hugo_0.29_Linux-64bit.deb
+    - sudo dpkg -i hugo*.deb # install Hugo
+    - hugo version
     - sudo gulp --gulpfile ./app/Gulpfile.js
-    - cd ./app/blog
-    - sudo hexo generate
-    - cd ../.. # back to repo root
+    - cd ./static-site
+    - sed -i.original "s/baseURL.*/baseURL=\"https:\/\/staging.webcaptioner.com\"/g" config.toml # set the baseURL according to this server
+    - sudo hugo
+    - cd .. # back to repo root
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
     - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
     - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
@@ -41,7 +44,7 @@ Staging:
   environment:
     name: staging
     url: https://staging.webcaptioner.com
-  when: manual
+  when: always
 
 Production:
   stage: deploy
@@ -52,11 +55,14 @@ Production:
     - sudo rm -rf /opt/webcaptioner.com.previous/*
     - sudo npm --prefix ./app install ./app
     - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo npm install -g hexo-cli
+    - sudo wget https://github.com/gohugoio/hugo/releases/download/v0.29/hugo_0.29_Linux-64bit.deb
+    - sudo dpkg -i hugo*.deb # install Hugo
+    - hugo version
     - sudo gulp --gulpfile ./app/Gulpfile.js
-    - cd ./app/blog
-    - sudo hexo generate
-    - cd ../.. # back to repo root
+    - cd ./static-site
+    - sed -i.original "s/baseURL.*/baseURL=\"https:\/\/webcaptioner.com\"/g" config.toml # set the baseURL according to this server
+    - sudo hugo
+    - cd .. # back to repo root
     - sudo truncate -s 0 ./app/env/.env || true # clear env file
     - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
     - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
