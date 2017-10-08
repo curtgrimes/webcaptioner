@@ -11,9 +11,9 @@ $(function(){
         window.localStorage.setItem("webcaptioner-settings-show-vmix",true);
 
         setTimeout(function(){
-            $('#sendToVmixOptionExperimental').removeAttr('hidden');
+            $('#sendToVmixSettings,#sendToVmixToggle').removeAttr('hidden');
             setTimeout(function(){
-                $('#sendToVmixOptionExperimental').addClass('show');
+                $('#sendToVmixSettings,#sendToVmixToggle').addClass('show');
             },0);
 
         },300);
@@ -27,7 +27,7 @@ $(function(){
 
     if (window.localStorage.getItem("webcaptioner-settings-show-vmix")) {
         // If this option was ever on, this object exists, so show it in the menu
-        $('#sendToVmixOptionExperimental').removeAttr('hidden').addClass('show');
+        $('#sendToVmixSettings,#sendToVmixToggle').removeAttr('hidden').addClass('show');
     }
     
     $('#vmixModal').on('show.bs.modal', function() {

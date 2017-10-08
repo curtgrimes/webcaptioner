@@ -658,7 +658,10 @@
             <a class="dropdown-item disabled" hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
             <a class="dropdown-item" href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item fade" id="sendToVmixOptionExperimental" hidden href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')"><i class="fa fa-video-camera mr-1" aria-hidden="true"></i> Send to vMix</a>
+            <h6 class="dropdown-header">vMix</h6>
+            <a class="dropdown-item fade" id="sendToVmixToggle" hidden href="javascript:void(0)" onclick="ga('send', 'event', 'settings', 'vmixToggle')"><i class="fa fa-check mr-1" aria-hidden="true"></i> Send to vMix <span class="vmix-status-on-or-off">(On)</span></a>
+            <a class="dropdown-item fade" id="sendToVmixSettings" hidden href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Configure</a>
+            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#languageModal" onclick="ga('send', 'event', 'settings', 'editLanguageStart')"><i class="fa fa-language mr-1" aria-hidden="true"></i> Language</a>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Appearance</a>
           </div>
