@@ -470,7 +470,8 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
 
 @include media-breakpoint-down(xs) {
   .jumbotron .display-3 {
-    font-size:3rem;
+    font-size:2.5rem;
+    letter-spacing: -2px;
   }
 
   .h2.bg-caption {
