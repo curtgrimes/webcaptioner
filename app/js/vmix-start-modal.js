@@ -38,11 +38,13 @@ $(function(){
                     },2000);
                 })
                 .catch(function(){
-                    $('#loadingModal').modal('hide');
-                    $('#vmixStartModal').modal('show');
-                    $('#vmixStartModalNotConnected').attr('hidden',false);
-                    $('#vmixStartModalConnected').attr('hidden',true);
-                    saveVmixOnOrOff(false);
+                    setTimeout(function(){
+                        $('#loadingModal').modal('hide');
+                        $('#vmixStartModal').modal('show');
+                        $('#vmixStartModalNotConnected').attr('hidden',false);
+                        $('#vmixStartModalConnected').attr('hidden',true);
+                        saveVmixOnOrOff(false);
+                    },750);
                 });
         }
     });
