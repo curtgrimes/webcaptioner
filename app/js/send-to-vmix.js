@@ -4,67 +4,28 @@ $(function(){
     }
 
     loadVmixSettings();
-
-    window.showVmixOption = function() {
-        // Expand the dropdown
-        $('#settingsDropdownContainer .dropdown-toggle[aria-expanded="false"]').click();
-        window.localStorage.setItem("webcaptioner-settings-show-vmix",true);
-
-        setTimeout(function(){
-            $('#sendToVmixSettings,#sendToVmixToggle').removeAttr('hidden');
-            setTimeout(function(){
-                $('#sendToVmixSettings,#sendToVmixToggle').addClass('show');
-            },0);
-
-        },300);
-
-        return "You're a superstar! ⭐ Report any issues with this to webcaptioner.com/feedback or facebook.com/webcaptioner. Thanks. ~ Curt";
-    };
-
-    if (window._wc.vmix.on) {
-        $('#sendToVmixSettingToggle').click().removeAttr('disabled');
-    }
-
-    if (window.localStorage.getItem("webcaptioner-settings-show-vmix")) {
-        // If this option was ever on, this object exists, so show it in the menu
-        $('#sendToVmixSettings,#sendToVmixToggle').removeAttr('hidden').addClass('show');
-    }
+    updateVmixOnOffBadge();
     
     $('#vmixModal').on('show.bs.modal', function() {
-        checkIfVmixToggleShouldBeEnabled(window._wc.vmix.on);
         updateVmixSteps();
-        clearInterval(checkIfExtensionInstalledTimeout);
-        
-        checkIfExtensionInstalledTimeout = setInterval(checkIfExtensionInstalled, 1000);
     });
 
-    $('#vmixModal').on('hidden.bs.modal', function() {
-        clearInterval(checkIfExtensionInstalledTimeout);
+    $('#vmixModal').on('hide.bs.modal', function() {
+        // Check if vMix is setup properly on exit;
+        // if not, turn off the vMix toggle
+        checkIfExtensionInstalled()
+            .then(function() {
+                return sendVmixMessage('');
+            })
+            .catch(function(){
+                saveVmixOnOrOff(false);
+            });
+        
     });
 
     $('#vmixWebControllerAddress').val(window._wc.vmix.address);
 
-    $('#sendToVmixSettingToggle').on('click', function() {
-        if ($(this).hasClass('active')) {
-            // active to inactive
-            $(this).removeClass('btn-success active').addClass('btn-secondary');
-            $(this).find('i').removeClass('fa-check').addClass('fa-times');
-            $(this).find('#send-to-vmix-status-text').text('off');
-        }
-        else {
-            // inactive to active
-            $(this).removeClass('btn-secondary').addClass('btn-success active');
-            $(this).find('i').removeClass('fa-times').addClass('fa-check');
-            $(this).find('#send-to-vmix-status-text').text('on');
-        }
-    });
-
-    $('#vmixWebControllerAddress').on('change keyup', function() {
-        checkIfVmixToggleShouldBeEnabled($('#sendToVmixSettingToggle').hasClass('active'));
-    });
-
     $('#saveVmixButton').on('click', function() {
-        window._wc.vmix.on = $('#sendToVmixSettingToggle').hasClass('active');
         window._wc.vmix.address = $('#vmixWebControllerAddress').val().trim();
 
         var settings = JSON.parse(window.localStorage.getItem("webcaptioner-settings")) || {};
@@ -79,7 +40,6 @@ $(function(){
 
     $('#cancelVmixButton').on('click', function() {
         $('#vmixWebControllerAddress').val(window._wc.vmix.address);
-        checkIfVmixToggleShouldBeEnabled(window._wc.vmix.on);
 
         $('#vmixModal').modal('hide');
         ga('send', 'event', 'settings', 'cancelVmix');
@@ -89,48 +49,53 @@ $(function(){
         chrome.webstore.install();
     });
 
-    $('#testConnectionButton').on('click', function() {
-        testVmixConnection();
+    $('#testConnectionButton').on('click', function(){
+        testVmixConnectionAndUpdateDialogUI(false);
     });
-    $('#testVmixTitleButton').on('click', function() {
-        testVmixTitleExists();
+    $('#testVmixTitleButton').on('click', function(){
+        testVmixTitleExistsAndUpdateDialogUI(false);
     });
 });
 
 function updateVmixSteps() { 
     // Step 1 - Check if extension is installed
-    checkIfExtensionInstalled();
+    checkIfExtensionInstalled()
+        .then(function() {
+            // Success. Show "Extension added" button
+            $('#addExtensionToChromeButton').attr('hidden', true);
+            $('#extensionIsAddedToChromeButton').removeAttr('hidden');
+            updateVmixStepHeading(1, true, true);
+        })
+        .catch(function() { // Error
+            $('#addExtensionToChromeButton').removeAttr('hidden');
+            $('#extensionIsAddedToChromeButton').attr('hidden', true);
+            updateVmixStepHeading(1, false, true);
+        });
 
     // Step 2
-    updateVmixStepHeading(2, false, true);
-    testVmixConnection(true);
+    testVmixConnectionAndUpdateDialogUI(true);
 
     // Step 3
-    updateVmixStepHeading(3, false, true);
-    testVmixTitleExists(true);
+    testVmixTitleExistsAndUpdateDialogUI(true);
 }
 
-var checkIfExtensionInstalledTimeout;
 function checkIfExtensionInstalled() {
-    chrome.runtime.sendMessage(
-        chromeExtensionId,
-        {
-            getExtensionVersion: true,
-        },
-        function(version) {
-            if (version) {
-                // Show "Extension added" button
-                $('#addExtensionToChromeButton').attr('hidden', true);
-                $('#extensionIsAddedToChromeButton').removeAttr('hidden');
-                updateVmixStepHeading(1, true, true);
+    return new Promise(function(resolve, reject) {
+        chrome.runtime.sendMessage(
+            chromeExtensionId,
+            {
+                getExtensionVersion: true,
+            },
+            function(version) {
+                if (version) {
+                    resolve();
+                }
+                else {
+                    reject();
+                }
             }
-            else {
-                $('#addExtensionToChromeButton').removeAttr('hidden');
-                $('#extensionIsAddedToChromeButton').attr('hidden', true);
-                updateVmixStepHeading(1, false, true);
-            }
-        }
-    );
+        );
+    });
 }
 
 function updateVmixStepHeading(stepNumber, complete, initialCheck) {
@@ -155,17 +120,33 @@ function updateVmixStepHeading(stepNumber, complete, initialCheck) {
         // There are errors
         $('#vmixStepHasErrorStateIndicator').removeAttr('hidden');
         window._wc.vmix.on = false;
-        checkIfVmixToggleShouldBeEnabled(window._wc.vmix.on);
-        $('#sendToVmixSettingToggle').attr('disabled',true);
     }
     else {
         $('#vmixStepHasErrorStateIndicator').attr('hidden', true);
-        $('#sendToVmixSettingToggle').removeAttr('disabled');
     }
 }
 
-var showDidNotConnectMessage;
 function testVmixConnection(initialCheck) {
+    return new Promise(function(resolve, reject) {
+        chrome.runtime.sendMessage(
+            chromeExtensionId,
+            {
+                path: $('#vmixWebControllerAddress').val().trim() + '/API',
+            },
+            function(response) {
+                if (response && response.success && response.code && response.code == 200) {
+                    // Success!
+                    resolve(response);
+                }
+                else {
+                    reject('Cannot connect to vMix. Make sure Web Controller is enabled in vMix and that you\'ve copied over the website address correctly.');
+                }
+            }
+        );
+    });
+}
+
+function testVmixConnectionAndUpdateDialogUI(initialCheck) {
     $('#testConnectionButton')
         .attr('disabled', true)
         .removeClass('btn-success')
@@ -174,47 +155,53 @@ function testVmixConnection(initialCheck) {
     $('#vmixWebControllerAddress').attr('disabled', true);
     $('#testConnectionSpinner').removeAttr('hidden');
     $('#couldNotConnectMessage, #connectionSuccessMessage').attr('hidden', true);
-
-    chrome.runtime.sendMessage(
-        chromeExtensionId,
-        {
-            path: $('#vmixWebControllerAddress').val().trim() + '/API',
-        },
-        function(response) {
-            if (response && response.code && response.code == 200) {
-                // Success!
-                clearTimeout(showDidNotConnectMessage);
-                setTimeout(function(){
-                    // Add a short artificial delay so that it looks like
-                    // we were actually checking. If it's running on localhost
-                    // it will respond instantly.
-                    updateVmixStepHeading(2, true, initialCheck);
-                    $('#testConnectionButton')
-                        .removeAttr('disabled')
-                        .addClass('btn-success')
-                        .removeClass('btn-info')
-                        .find('i').removeAttr('hidden');
-                    $('#testConnectionSpinner, #couldNotConnectMessage').attr('hidden',true);
-                    $('#connectionSuccessMessage').removeAttr('hidden');
-                    $('#vmixWebControllerAddress').removeAttr('disabled');
-                },500);
+    
+    testVmixConnection(initialCheck)
+        .then(function(){
+            // Success
+            updateVmixStepHeading(2, true, initialCheck);
+            $('#testConnectionButton')
+                .removeAttr('disabled')
+                .addClass('btn-success')
+                .removeClass('btn-info')
+                .find('i').removeAttr('hidden');
+            $('#testConnectionSpinner, #couldNotConnectMessage').attr('hidden',true);
+            $('#connectionSuccessMessage').removeAttr('hidden');
+            $('#vmixWebControllerAddress').removeAttr('disabled');
+        })
+        .catch(function(error){
+            // Failure
+            updateVmixStepHeading(2, false, true);
+            $('#testConnectionButton').removeAttr('disabled');
+            $('#testConnectionSpinner, #connectionSuccessMessage').attr('hidden',true);
+            if (!initialCheck) {
+                // Don't show an error message on the iniital check
+                $('#couldNotConnectMessage').removeAttr('hidden');
             }
-        }
-    );
-    showDidNotConnectMessage = setTimeout(function(){
-        updateVmixStepHeading(2, false);
-        $('#testConnectionButton').removeAttr('disabled');
-        $('#testConnectionSpinner, #connectionSuccessMessage').attr('hidden',true);
-        if (!initialCheck) {
-            // Don't show an error message on the iniital check
-            $('#couldNotConnectMessage').removeAttr('hidden');
-        }
-        $('#vmixWebControllerAddress').removeAttr('disabled');
-    },5000);
+            $('#vmixWebControllerAddress').removeAttr('disabled');
+        });
 }
 
-var testTitleDateString, showDidNotFinishTestMessage, wasAbleToConnect;
-function testVmixTitleExists(initialCheck) {
+function sendVmixMessage(message, initialCheckTest) {
+    return new Promise(function(resolve, reject) {
+        chrome.runtime.sendMessage(
+            chromeExtensionId,
+            {
+                path: $('#vmixWebControllerAddress').val().trim() + '/API/?Function=SetText&Input='+ window._wc_cached_vmix_guid +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(message),
+            },
+            function(response) {
+                if (response && response.success) {
+                    resolve();
+                }
+                else {
+                    reject();
+                }
+            }
+        );
+    });
+}
+
+function testVmixTitleExistsAndUpdateDialogUI(initialCheck) {
     $('#testVmixTitleButton')
         .attr('disabled', true)
         .removeClass('btn-success')
@@ -223,80 +210,60 @@ function testVmixTitleExists(initialCheck) {
     $('#testVmixTitleSpinner').removeAttr('hidden');
     $('#testVmixTitleErrorMessage, #testVmixTitleSuccessMessage').attr('hidden', true);
 
-    wasAbleToConnect = false;
-    testTitleDateString = 'Successful test from Web Captioner. The date is ' + new Date().toISOString() + '.';
-    chrome.runtime.sendMessage(
-        chromeExtensionId,
-        {
-            path: $('#vmixWebControllerAddress').val().trim() + '/API',
-        },
-        function(response) {
-            if (response && response.code && response.code == 200) {
-                wasAbleToConnect = true;
+    var testTitleDateString = 'Successful test from Web Captioner. The date is ' + new Date().toISOString() + '.';
 
-                // There is an <input></input> element but the browser automatically interprets it as a self-closing <input> tag.
-                // We need to rename it to something unique so we can get its children.
-                var $xml = $(response.text.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>'));
+    testVmixConnection(initialCheck)
+        .then(function(response){
+            // Success
+            // There is an <input></input> element but the browser automatically interprets it as a self-closing <input> tag.
+            // We need to rename it to something unique so we can get its children.
+            var $xml = $(response.text.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>'));
 
-                var $input = $xml.find('text[name="WebCaptionerCaptions"]').parent('webcaptioner-vmix-input').first();
-                if ($input.length > 0) {
-                    var guid = $input.attr('key');
-                    // Now that we have the GUID, make a request to update the title
-                    chrome.runtime.sendMessage(
-                        chromeExtensionId,
-                        {
-                            path: $('#vmixWebControllerAddress').val().trim() + '/API/?Function=SetText&Input='+ guid +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(testTitleDateString),
-                        },
-                        function(response) {
-                            // Success!
-                            clearTimeout(showDidNotFinishTestMessage);
-                            updateVmixStepHeading(3, true, initialCheck);
-                            $('#testVmixTitleButton')
-                                .removeAttr('disabled')
-                                .addClass('btn-success')
-                                .removeClass('btn-info')
-                                .find('i').removeAttr('hidden');
-                            $('#testVmixTitleSpinner, #testVmixTitleErrorMessage').attr('hidden',true);
-                            $('#testVmixTitleSuccessMessage').removeAttr('hidden').text("Success! The title should now be set to \""+ testTitleDateString + "\"");
-                            $('#vmixWebControllerAddress').removeAttr('disabled');
-                        }
-                    );
-                }
-            }
-        }
-    );
+            var $input = $xml.find('text[name="WebCaptionerCaptions"]').parent('webcaptioner-vmix-input').first();
+            if ($input.length > 0) {
+                window._wc_cached_vmix_guid = $input.attr('key');
 
-    showDidNotFinishTestMessage = setTimeout(function() {
-        updateVmixStepHeading(3, false);
-        $('#testVmixTitleButton').removeAttr('disabled');
-        $('#testVmixTitleSpinner, #testVmixTitleSuccessMessage').attr('hidden',true);
-        if (!initialCheck) { // Don't show an error message on the iniital check
-            $('#testVmixTitleErrorMessage').removeAttr('hidden');
-            if (wasAbleToConnect) {
-                $('#testVmixTitleErrorMessage').text('Web Captioner can connect to vMix, but it can\'t find the Web Captioner title template in an input.');
+                // Now that we have the GUID, make a request to update the title
+                return sendVmixMessage(testTitleDateString);
             }
             else {
-                $('#testVmixTitleErrorMessage').text('Unable to connect to vMix. Go back to step 2.');
+                return Promise.reject('Web Captioner can connect to vMix, but it can\'t find the Web Captioner title template in an input.')
             }
-        }
-    }, 5000);
+        })
+        .then(function() {
+            // Success updating title
+            updateVmixStepHeading(3, true, initialCheck);
+            $('#testVmixTitleButton')
+                .removeAttr('disabled')
+                .addClass('btn-success')
+                .removeClass('btn-info')
+                .find('i').removeAttr('hidden');
+            $('#testVmixTitleSpinner, #testVmixTitleErrorMessage').attr('hidden',true);
+            $('#testVmixTitleSuccessMessage').removeAttr('hidden').text("Success! The title should now be set to \""+ testTitleDateString + "\"");
+            $('#vmixWebControllerAddress').removeAttr('disabled');
+        })
+        .catch(function(message){
+            // Error - can't connect
+            updateVmixStepHeading(3, false);
+            $('#testVmixTitleButton').removeAttr('disabled');
+            $('#testVmixTitleSpinner, #testVmixTitleSuccessMessage').attr('hidden',true);
+            if (!initialCheck) { // Don't show an error message on the iniital check
+                $('#testVmixTitleErrorMessage').removeAttr('hidden');
+                $('#testVmixTitleErrorMessage').text(message);
+                // $('#testVmixTitleErrorMessage').text('Unable to connect to vMix. Go back to step 2.');
+                // $('#testVmixTitleErrorMessage').text('Web Captioner can connect to vMix, but it can\'t find the Web Captioner title template in an input.');
+            }
+        });
 }
 
-
-function checkIfVmixToggleShouldBeEnabled(vmixOnOrOff) {
-    if ($('#vmixWebControllerAddress').val().length > 0) {
-        $('#sendToVmixSettingToggle').removeAttr('disabled');
-
-        if (vmixOnOrOff === true && !$('#sendToVmixSettingToggle').hasClass('active')) {
-            $('#sendToVmixSettingToggle').click(); // make it inactive
-        }
+function updateVmixOnOffBadge() {
+    if (window._wc.vmix.on) {
+        $('.badge-vmix-status-on').attr('hidden', false);
+        $('.badge-vmix-status-off').attr('hidden', true);
     }
     else {
-        $('#sendToVmixSettingToggle').attr('disabled', 'disabled');
-
-        if ($('#sendToVmixSettingToggle').hasClass('active')) {
-            $('#sendToVmixSettingToggle').click(); // Turn it off
-        }
+        $('.badge-vmix-status-off').attr('hidden', false);
+        $('.badge-vmix-status-on').attr('hidden', true);
     }
 }
 
@@ -316,4 +283,12 @@ function loadVmixSettings() {
     // Set defaults if none loaded from settings
     window._wc.vmix.on = window._wc.vmix.on || false;
     window._wc.vmix.address = window._wc.vmix.address || null;
+}
+
+function saveVmixOnOrOff(onOrOff) {
+    var settings = JSON.parse(window.localStorage.getItem("webcaptioner-settings")) || {};
+    settings.vmix = window._wc.vmix;
+    settings.vmix.on = onOrOff;
+    window.localStorage.setItem("webcaptioner-settings", JSON.stringify(settings));
+    updateVmixOnOffBadge();
 }
