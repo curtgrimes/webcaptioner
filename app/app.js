@@ -37,9 +37,8 @@ app.use('/help', express.static(path.join(__dirname, '../static-site/public/help
 app.use('/donate', express.static(path.join(__dirname, '../static-site/public/donate')));
 app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/public/privacy-policy')));
 app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
+app.use('/feedback', express.static(path.join(__dirname, '../static-site/public/feedback')));
 
-app.use('/feedback', express.static(path.join(__dirname, 'blog/public/feedback')));
-app.use('/feedback/thanks', express.static(path.join(__dirname, 'blog/public/feedback-thanks')));
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
 app.use('/', index);

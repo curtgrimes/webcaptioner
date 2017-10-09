@@ -1,7 +1,11 @@
 $(function(){
     if ($('#webcaptioner-donation-form').length) {
-        $('[name="recurrence"]').on('change', function(){
-            switch ($(this).val()) {
+        $('#webcaptioner-donation-form input, #webcaptioner-donation-form select').on('change keyup', function(){
+
+            // a3 is used for subscriptions; amount is used for regular one-time donations
+            $('[name="amount"]').val($('[name="a3"]').val());
+
+            switch ($('[name="recurrence"]').val()) {
                 case "oneTime":
                     /* Also change default HTML on /donate match this */
                     $('[name="cmd"]').val('_donations');
