@@ -26,25 +26,27 @@ $(function(){
                     return sendVmixMessage('');
                 })
                 .then(function(){
-                    $('#loadingModal').modal('hide');
-                    $('#vmixStartModalConnected').attr('hidden',false);
-                    $('#vmixStartModalNotConnected').attr('hidden',true);
+                    setTimeout(function(){ // Hack to prevent "modal is transition" error
+                        $('#loadingModal').modal('hide');
+                        $('#vmixStartModalConnected').attr('hidden',false);
+                        $('#vmixStartModalNotConnected').attr('hidden',true);
 
-                    saveVmixOnOrOff(true);
+                        saveVmixOnOrOff(true);
 
-                    $('#vmixStartModal').modal('show');
-                    setTimeout(function(){
-                        $('#vmixStartModal').modal('hide');
-                    },2000);
+                        $('#vmixStartModal').modal('show');
+                        setTimeout(function(){
+                            $('#vmixStartModal').modal('hide');
+                        },2000);
+                    },1000);
                 })
-                .catch(function(){
-                    setTimeout(function(){
+                .catch(function(err){
+                    setTimeout(function(){ // Hack to prevent "modal is transition" error
                         $('#loadingModal').modal('hide');
                         $('#vmixStartModal').modal('show');
                         $('#vmixStartModalNotConnected').attr('hidden',false);
                         $('#vmixStartModalConnected').attr('hidden',true);
                         saveVmixOnOrOff(false);
-                    },750);
+                    },1000);
                 });
         }
     });
