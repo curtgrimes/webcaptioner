@@ -38,6 +38,7 @@ app.use('/donate', express.static(path.join(__dirname, '../static-site/public/do
 app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/public/privacy-policy')));
 app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
 app.use('/feedback', express.static(path.join(__dirname, '../static-site/public/feedback')));
+app.use('/connector', express.static(path.join(__dirname, '../static-site/public/connector')));
 
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
