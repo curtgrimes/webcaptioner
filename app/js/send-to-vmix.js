@@ -15,7 +15,7 @@ $(function(){
         // if not, turn off the vMix toggle
         checkIfExtensionInstalled()
             .then(function() {
-                return sendVmixMessage('');
+                return sendVmixMessage('').catch(function(){});
             })
             .catch(function(){
                 saveVmixOnOrOff(false);
@@ -56,6 +56,15 @@ $(function(){
         testVmixTitleExistsAndUpdateDialogUI(false);
     });
 });
+
+function vmixTimeout() {
+    return new Promise(function(resolve, reject) {
+        var id = setTimeout(function() {
+            clearTimeout(id);
+            reject('Could not connect to vMix in time.')
+        }, 3000);
+    })
+};
 
 function updateVmixSteps() { 
     // Step 1 - Check if extension is installed
@@ -127,23 +136,26 @@ function updateVmixStepHeading(stepNumber, complete, initialCheck) {
 }
 
 function testVmixConnection(initialCheck) {
-    return new Promise(function(resolve, reject) {
-        chrome.runtime.sendMessage(
-            chromeExtensionId,
-            {
-                path: $('#vmixWebControllerAddress').val().trim() + '/API',
-            },
-            function(response) {
-                if (response && response.success && response.code && response.code == 200) {
-                    // Success!
-                    resolve(response);
+    return Promise.race([
+        vmixTimeout(),
+        new Promise(function(resolve, reject) {
+            chrome.runtime.sendMessage(
+                chromeExtensionId,
+                {
+                    path: $('#vmixWebControllerAddress').val().trim() + '/API',
+                },
+                function(response) {
+                    if (response && response.success && response.code && response.code == 200) {
+                        // Success!
+                        resolve(response);
+                    }
+                    else {
+                        reject('Cannot connect to vMix. Make sure Web Controller is enabled in vMix and that you\'ve copied over the website address correctly.');
+                    }
                 }
-                else {
-                    reject('Cannot connect to vMix. Make sure Web Controller is enabled in vMix and that you\'ve copied over the website address correctly.');
-                }
-            }
-        );
-    });
+            );
+        })
+    ]);
 }
 
 function testVmixConnectionAndUpdateDialogUI(initialCheck) {
@@ -183,22 +195,25 @@ function testVmixConnectionAndUpdateDialogUI(initialCheck) {
 }
 
 function sendVmixMessage(message, initialCheckTest) {
-    return new Promise(function(resolve, reject) {
-        chrome.runtime.sendMessage(
-            chromeExtensionId,
-            {
-                path: $('#vmixWebControllerAddress').val().trim() + '/API/?Function=SetText&Input='+ window._wc_cached_vmix_guid +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(message),
-            },
-            function(response) {
-                if (response && response.success) {
-                    resolve();
+    return Promise.race([
+        vmixTimeout(),
+        new Promise(function(resolve, reject) {
+            chrome.runtime.sendMessage(
+                chromeExtensionId,
+                {
+                    path: $('#vmixWebControllerAddress').val().trim() + '/API/?Function=SetText&Input='+ window._wc_cached_vmix_guid +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(message),
+                },
+                function(response) {
+                    if (response && response.success) {
+                        resolve();
+                    }
+                    else {
+                        reject();
+                    }
                 }
-                else {
-                    reject();
-                }
-            }
-        );
-    });
+            );
+        })
+    ]);
 }
 
 function testVmixTitleExistsAndUpdateDialogUI(initialCheck) {
@@ -224,7 +239,7 @@ function testVmixTitleExistsAndUpdateDialogUI(initialCheck) {
                 window._wc_cached_vmix_guid = $input.attr('key');
 
                 // Now that we have the GUID, make a request to update the title
-                return sendVmixMessage(testTitleDateString);
+                return sendVmixMessage(testTitleDateString).catch(function(){});
             }
             else {
                 return Promise.reject('Web Captioner can connect to vMix, but it can\'t find the Web Captioner title template in an input.')

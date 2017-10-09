@@ -20,11 +20,13 @@ $(function(){
         }
         else {
             // It's not on yet; turn it on
+            $('#loadingModal').modal('show');
             checkIfExtensionInstalled()
                 .then(function() {
                     return sendVmixMessage('');
                 })
                 .then(function(){
+                    $('#loadingModal').modal('hide');
                     $('#vmixStartModalConnected').attr('hidden',false);
                     $('#vmixStartModalNotConnected').attr('hidden',true);
 
@@ -36,6 +38,7 @@ $(function(){
                     },2000);
                 })
                 .catch(function(){
+                    $('#loadingModal').modal('hide');
                     $('#vmixStartModal').modal('show');
                     $('#vmixStartModalNotConnected').attr('hidden',false);
                     $('#vmixStartModalConnected').attr('hidden',true);

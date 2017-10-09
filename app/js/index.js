@@ -12,8 +12,8 @@ function clear_saved() {
     }
 }
 
-var chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe';
-// var chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd';
+var chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe'; // production
+// var chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd'; // local
 var recognizing = false;
 var restartingDueToFailure = false;
 var lastStartTimestamp;
