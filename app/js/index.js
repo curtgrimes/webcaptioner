@@ -1,6 +1,6 @@
 // $(function(){
 //     setTimeout(function(){ $('#onboardingModal [data-dismiss="modal"]').click(); }, 0);
-//     setTimeout(function(){ $('[data-target="#wordReplacementModal"]').click(); }, 0);
+//     setTimeout(function(){ $('#sendToVmixSettings').click(); }, 0);
 // });
 
 function clear_saved() {
@@ -12,7 +12,8 @@ function clear_saved() {
     }
 }
 
-var chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe';
+var chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe'; // production
+// var chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd'; // local
 var recognizing = false;
 var restartingDueToFailure = false;
 var lastStartTimestamp;
@@ -33,6 +34,12 @@ window._wc = { // set defaults
         to: null,
     },
 };
+
+// Load from local storage
+var settings = window.localStorage.getItem("webcaptioner-settings");
+if (settings) {
+    window._wc = JSON.parse(settings);
+}
 
 loadWordReplacementSettings();
 
