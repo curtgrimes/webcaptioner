@@ -39,6 +39,7 @@ app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/p
 app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
 app.use('/feedback', express.static(path.join(__dirname, '../static-site/public/feedback')));
 app.use('/connector', express.static(path.join(__dirname, '../static-site/public/connector')));
+app.use('/vmix', express.static(path.join(__dirname, '../static-site/public/vmix')));
 
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
