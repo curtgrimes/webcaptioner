@@ -46,7 +46,7 @@ $(function(){
     });
 
     $('#addExtensionToChromeButton').on('click', function() {
-        chrome.webstore.install();
+        chrome.webstore.install(null, updateVmixSteps);
     });
 
     $('#testConnectionButton').on('click', function(){
