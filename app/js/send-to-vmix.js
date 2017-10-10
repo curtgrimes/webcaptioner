@@ -26,7 +26,7 @@ $(function(){
     $('#vmixWebControllerAddress').val(window._wc.vmix.address);
 
     $('#saveVmixButton').on('click', function() {
-        window._wc.vmix.address = $('#vmixWebControllerAddress').val().trim().trim('/');
+        window._wc.vmix.address = $('#vmixWebControllerAddress').val().trim().replace(/\/$/, "");
 
         var settings = JSON.parse(window.localStorage.getItem("webcaptioner-settings")) || {};
         settings.vmix = window._wc.vmix;
@@ -142,7 +142,7 @@ function testVmixConnection(initialCheck) {
             chrome.runtime.sendMessage(
                 chromeExtensionId,
                 {
-                    path: $('#vmixWebControllerAddress').val().trim().trim('/') + '/API',
+                    path: $('#vmixWebControllerAddress').val().trim().replace(/\/$/, "") + '/API',
                 },
                 function(response) {
                     if (response && response.success && response.code && response.code == 200) {
@@ -201,7 +201,7 @@ function sendVmixMessage(message, initialCheckTest) {
             chrome.runtime.sendMessage(
                 chromeExtensionId,
                 {
-                    path: $('#vmixWebControllerAddress').val().trim().trim('/') + '/API/?Function=SetText&Input='+ window._wc_cached_vmix_guid +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(message),
+                    path: $('#vmixWebControllerAddress').val().trim().replace(/\/$/, "") + '/API/?Function=SetText&Input='+ window._wc_cached_vmix_guid +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(message),
                 },
                 function(response) {
                     if (response && response.success) {
