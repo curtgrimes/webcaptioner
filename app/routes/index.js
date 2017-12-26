@@ -1013,6 +1013,7 @@ router.get('/', function(req, res, next) {
 
   res.render('index', {
     title: 'Web Captioner',
+    viewOnlyMode: false,
     randomJuliaChildQuote: randomJuliaChildQuote,
     fromLanguages: fromLanguages.sort((langA, langB) => {
       var nameA = langA.nameEnglish.toUpperCase();

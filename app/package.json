@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "start-dev": "NODE_ENV=dev node ./bin/www",
+    "gulp": "gulp"
   },
   "dependencies": {
     "@google-cloud/translate": "^0.8.2",
@@ -29,6 +31,8 @@
     "morgan": "~1.8.1",
     "node-env-file": "^0.1.8",
     "request": "^2.81.0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "socket.io": "^2.0.4",
+    "ws": "^3.3.1"
   }
 }

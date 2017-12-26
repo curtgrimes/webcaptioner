@@ -1,0 +1,36 @@
+{
+  "volumes": [],
+  "family": "webcaptioner",
+  "executionRoleArn": "REMOVED",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/webcaptioner",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "containerPort": 8080
+        }
+      ],
+      "cpu": 0,
+      "memoryReservation": 300,
+      "volumesFrom": [],
+      "image": "REMOVED:production",
+      "name": "webcaptioner",
+      "environment": [
+        {
+          "name": "HUGO_BASE_URL",
+          "value": "https://webcaptioner.tv"
+        }
+      ]
+    }
+  ]
+}

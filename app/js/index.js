@@ -12,6 +12,16 @@ function clear_saved() {
     }
 }
 
+var webSocketPath;
+if (window.location.protocol === "https:") {
+    webSocketPath = "wss:";
+} else {
+    webSocketPath = "ws:";
+}
+webSocketPath += "//" + window.location.host;
+
+var socket = new WebSocket(webSocketPath);
+
 var chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe'; // production
 // var chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd'; // local
 var recognizing = false;
@@ -320,6 +330,14 @@ function initRecognition() {
                 sendToVmixThrottled();
             }
         }
+
+        // Send to socket
+        if (socket) {
+            socket.send(JSON.stringify({
+                interim: interim_transcript,
+                final: final_transcript
+            }));
+        }
     };
 
     return recognition;
@@ -546,7 +564,7 @@ function levelCheckLoop() {
 
 
 $(function () {
-    if ($('#onboardingModal').length) {
+    if ($('#onboardingModal').length && !$('body[data-view-only-mode]').length) {
         $('#onboardingModal').modal();
     }
 
