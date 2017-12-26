@@ -46,7 +46,7 @@
   <script async src='https://www.google-analytics.com/analytics.js'></script>
 </head>
 
-<body class="d-flex">
+<body class="d-flex" <%- viewOnlyMode ? 'data-view-only-mode="wlbc"' : '' %>>
 <div class="modal" id="onboardingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -314,6 +314,23 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="shareLiveModal" tabindex="-1" role="dialog" aria-labelledby="shareLiveModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="shareLiveModalLabel"><i class="fa fa-bullhorn" aria-hidden="true"></i> Share Live</h2>
+      </div>
+      <div class="modal-body">
+        <p>Share captions live with anyone that visits your URL.</p>
+        <h3 class="text-center mb-3">Your URL</h3>
+        <p class="text-center h4">webcaptioner.com/wlbc</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="wordReplacementModal" tabindex="-1" role="dialog" aria-labelledby="wordReplacementModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -385,7 +402,7 @@
             Screen Preview
           </div>
           <div class="caption-wrap-chroma-key-background">
-            <div class="card-block caption-wrap caption-wrap-preview" contenteditable="true">
+            <div class="card-block caption-wrap caption-wrap-preview" contenteditable="<%= viewOnlyMode ? 'false' : 'true' %>">
               <div class="captions" style="margin-bottom:0">
                 <span class="final"><%= randomJuliaChildQuote %></span> <span class="interim"></span>
               </div>
@@ -735,7 +752,14 @@
         <a class="nav-link" href="/blog">Blog</a>
       </li> --> %>
       <li class="nav-item">
-        <div id="settingsDropdownContainer" class="btn-group dropup">
+        <div  <%= viewOnlyMode ? '' : 'hidden' %>>
+            <span class="pr-2">
+                <i class="fa fa-font text-primary fa-2x" style="font-size: 1.3rem;position: relative;top: 4px;" aria-hidden="true"></i>
+            </span>
+            <button class="btn btn-primary" id="viewOnlyShrink"><i class="fa fa-minus" aria-hidden="true" style="position:relative;top:2px"></i></button>
+            <button class="btn btn-primary" id="viewOnlyZoom"><i class="fa fa-plus" aria-hidden="true" style="position:relative;top:2px"></i></button>
+        </div>
+        <div id="settingsDropdownContainer" class="btn-group dropup" <%= viewOnlyMode ? 'hidden' : '' %>>
           <button type="button" class="btn btn-primary" id="startButton">Start<span class="hidden-xs-down"> Captioning</span></button>
           <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
             <span class="sr-only">Toggle Dropdown</span>
@@ -754,6 +778,7 @@
             <a class="dropdown-item" id="startStopVmixToggle" href="javascript:void(0)" data-toggle="modal" onclick="ga('send', 'event', 'settings', 'vmixToggle')">Send to vMix <span class="badge-vmix-status-on badge badge-primary text-muted text-uppercase ml-1" hidden style="position:relative;top:-1px">On</span> <span class="badge-vmix-status-off badge badge-default text-uppercase ml-1" hidden style="position:relative;top:-1px">Off</span></a>
             <a class="dropdown-item" id="sendToVmixSettings" href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')">Configure</a>
             <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#shareLiveModal" onclick="ga('send', 'event', 'settings', 'editShareLiveStart')"><i class="fa fa-bullhorn mr-1" aria-hidden="true"></i> Share Live</a>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#languageModal" onclick="ga('send', 'event', 'settings', 'editLanguageStart')"><i class="fa fa-language mr-1" aria-hidden="true"></i> Language</a>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#wordReplacementModal" onclick="ga('send', 'event', 'settings', 'editWordReplacementsStart')"><i class="fa fa-refresh mr-1" aria-hidden="true"></i> Word Replacements</a>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Appearance</a>

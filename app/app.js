@@ -11,8 +11,26 @@ var env = require('node-env-file');
 var index = require('./routes/index');
 var translate = require('./routes/translate');
 var feedback = require('./routes/feedback');
+var wlbc = require('./routes/wlbc');
+var healthCheck = require('./routes/healthCheck');
 
 var app = express();
+app.use('/health-check', healthCheck);
+
+
+if (process.env.NODE_ENV !== 'dev') {
+  // Redirect http to https
+  app.use(function(req, res, next) {
+    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+      // We're not on HTTPS. AWS sets the X-Forwarded-Proto header from the load balancer.
+      res.redirect('https://' + req.get('Host') + req.url);
+    }
+    else {
+      // No redirect necessary; already on HTTPS
+      next();
+    }
+  });
+}
 
 // Get environment variables output by CI deploy script
 env(path.join(__dirname, 'env/.env'));
@@ -46,6 +64,7 @@ app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 app.use('/', index);
 app.use('/translate', translate);
 app.use('/feedback', feedback);
+app.use('/wlbc', wlbc);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

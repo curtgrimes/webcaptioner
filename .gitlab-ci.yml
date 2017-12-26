@@ -1,94 +1,55 @@
+image: docker:latest
+services:
+- docker:dind
+
 stages:
-  - deploy
+- build
+# - test
+- deploy
+
+variables:
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+
+Build:
+  stage: build
+  script:
+    - docker build --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+
+# test1:
+#   stage: test
+#   script:
+#     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+#     - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME /script/to/run/tests
+
+# test2:
+#   stage: test
+#   script:
+#     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+#     - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME /script/to/run/another/test
 
 Staging:
   stage: deploy
-  variables:
-    PORT: "8102"
-  script:
-    - sudo mkdir -p /opt/staging.webcaptioner.com /opt/staging.webcaptioner.com.previous
-    - sudo rm -rf /opt/staging.webcaptioner.com.previous/*
-    - sudo npm --prefix ./app install ./app
-    - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo wget https://github.com/gohugoio/hugo/releases/download/v0.29/hugo_0.29_Linux-64bit.deb
-    - sudo dpkg -i hugo*.deb # install Hugo
-    - hugo version
-    - sudo gulp --gulpfile ./app/Gulpfile.js
-    - cd ./static-site
-    - sed -i.original "s/baseURL.*/baseURL=\"https:\/\/staging.webcaptioner.com\"/g" config.toml # set the baseURL according to this server
-    - sudo hugo
-    - cd .. # back to repo root
-    - sudo truncate -s 0 ./app/env/.env || true # clear env file
-    - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
-    - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
-    - echo "GITLAB_API_KEY=$GITLAB_API_KEY" | sudo tee --append ./app/env/.env
-    - echo "$GOOGLE_APPLICATION_CREDENTIALS_STAGING" | sudo tee ./app/env/google-application.credentials.json
-    - sudo mv /opt/staging.webcaptioner.com/* /opt/staging.webcaptioner.com.previous
-    - sudo mv ./* /opt/staging.webcaptioner.com
-    #- sudo cp -r ./* /opt/staging.webcaptioner.com
-#    - sudo export GOOGLE_APPLICATION_CREDENTIALS_STAGING="/opt/staging.webcaptioner.com/app/env/google-application.credentials.json"
-    #- sudo sed -i -- 's/${PORT}/'$PORT'/g' nginx/staging.webcaptioner.com-ssl.conf
-    #- sudo cp nginx/staging.webcaptioner.com.conf /etc/nginx/sites-enabled
-    #- sudo rm /etc/nginx/sites-enabled/staging.webcaptioner.com-ssl.conf || true # because they may be referencing not-yet-created certs from an incomplete previous deployment
-    #- sudo service nginx restart
-    #- sudo apt-get -yq install software-properties-common
-    #- sudo add-apt-repository ppa:certbot/certbot
-    #- sudo apt-get update
-    #- sudo apt-get -yq install python-certbot-nginx 
-    #- sudo certbot certonly --cert-name staging.webcaptioner.com --non-interactive --webroot -w /opt/staging.webcaptioner.com --domains staging.webcaptioner.com,www.staging.webcaptioner.com -m curt@example.com --agree-tos
-    #- sudo cp nginx/staging.webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
-    - sudo npm install pm2 -g
-    - sudo pm2 delete webcaptioner-staging || true # ignore if nothing to delete
-    - sudo pm2 start /opt/staging.webcaptioner.com/app/bin/www -n webcaptioner-staging --update-env -f
-    - sudo service nginx restart
+  services:
+    - docker:dind
   environment:
     name: staging
-    url: https://staging.webcaptioner.com
-  when: always
+    url: https://staging.webcaptioner.tv
+  script:
+    - source scripts/deploy.sh
+#  when: manual
+  except:
+    - master
 
 Production:
   stage: deploy
-  variables:
-    PORT: "8101"
-  script:
-    - sudo mkdir -p /opt/webcaptioner.com /opt/webcaptioner.com.previous
-    - sudo rm -rf /opt/webcaptioner.com.previous/*
-    - sudo npm --prefix ./app install ./app
-    - sudo npm --prefix ./app/blog install ./app/blog
-    - sudo wget https://github.com/gohugoio/hugo/releases/download/v0.29/hugo_0.29_Linux-64bit.deb
-    - sudo dpkg -i hugo*.deb # install Hugo
-    - hugo version
-    - sudo gulp --gulpfile ./app/Gulpfile.js
-    - cd ./static-site
-    - sed -i.original "s/baseURL.*/baseURL=\"https:\/\/webcaptioner.com\"/g" config.toml # set the baseURL according to this server
-    - sudo hugo
-    - cd .. # back to repo root
-    - sudo truncate -s 0 ./app/env/.env || true # clear env file
-    - echo "COMMIT_ID=$CI_COMMIT_SHA" | sudo tee --append ./app/env/.env
-    - echo "PORT=$PORT" | sudo tee --append ./app/env/.env
-    - echo "GITLAB_API_KEY=$GITLAB_API_KEY" | sudo tee --append ./app/env/.env
-    - echo "$GOOGLE_APPLICATION_CREDENTIALS_STAGING" | sudo tee ./app/env/google-application.credentials.json
-    - sudo mv /opt/webcaptioner.com/* /opt/webcaptioner.com.previous
-    - sudo mv ./* /opt/webcaptioner.com
-    #- sudo cp -r ./* /opt/webcaptioner.com
-#    - sudo export GOOGLE_APPLICATION_CREDENTIALS_STAGING="/opt/webcaptioner.com/app/env/google-application.credentials.json"
-    #- sudo sed -i -- 's/${PORT}/'$PORT'/g' nginx/webcaptioner.com-ssl.conf
-    #- sudo cp nginx/webcaptioner.com.conf /etc/nginx/sites-enabled
-    #- sudo rm /etc/nginx/sites-enabled/webcaptioner.com-ssl.conf || true # because they may be referencing not-yet-created certs from an incomplete previous deployment
-    #- sudo service nginx restart
-    #- sudo apt-get -yq install software-properties-common
-    #- sudo add-apt-repository ppa:certbot/certbot
-    #- sudo apt-get update
-    #- sudo apt-get -yq install python-certbot-nginx 
-    #- sudo certbot certonly --cert-name webcaptioner.com --non-interactive --webroot -w /opt/webcaptioner.com --domains webcaptioner.com,www.webcaptioner.com -m curt@example.com --agree-tos
-    #- sudo cp nginx/webcaptioner.com-ssl.conf /etc/nginx/sites-enabled # now that certs are in place, add SSL config
-    - sudo npm install pm2 -g
-    - sudo pm2 delete webcaptioner-prod || true # ignore if nothing to delete
-    - sudo pm2 start /opt/webcaptioner.com/app/bin/www -n webcaptioner-prod --update-env -f
-    - sudo service nginx restart
+  services:
+    - docker:dind
   environment:
     name: production
     url: https://webcaptioner.com
+  script:
+    - source scripts/deploy.sh
   when: manual
-  only:
-    - master
