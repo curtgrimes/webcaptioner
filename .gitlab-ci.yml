@@ -39,9 +39,6 @@ Staging:
     url: https://staging.webcaptioner.com
   script:
     - source scripts/deploy.sh
-#  when: manual
-  except:
-    - master
 
 Production:
   stage: deploy
