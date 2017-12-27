@@ -36,7 +36,7 @@ Staging:
     - docker:dind
   environment:
     name: staging
-    url: https://staging.webcaptioner.tv
+    url: https://staging.webcaptioner.com
   script:
     - source scripts/deploy.sh
 #  when: manual

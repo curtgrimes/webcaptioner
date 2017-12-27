@@ -28,7 +28,7 @@
       "environment": [
         {
           "name": "HUGO_BASE_URL",
-          "value": "https://staging.webcaptioner.tv"
+          "value": "https://staging.webcaptioner.com"
         }
       ]
     }
