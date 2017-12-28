@@ -4,7 +4,6 @@ services:
 
 stages:
 - build
-# - test
 - deploy
 
 variables:
@@ -18,18 +17,6 @@ Build:
     - docker build --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
-# test1:
-#   stage: test
-#   script:
-#     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-#     - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME /script/to/run/tests
-
-# test2:
-#   stage: test
-#   script:
-#     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-#     - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME /script/to/run/another/test
-
 Staging:
   stage: deploy
   services:
@@ -39,7 +26,6 @@ Staging:
     url: https://staging.webcaptioner.com
   script:
     - source scripts/deploy.sh
-#  when: manual
   except:
     - master
 
