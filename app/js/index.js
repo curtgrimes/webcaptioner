@@ -12,15 +12,15 @@ function clear_saved() {
     }
 }
 
-var webSocketPath;
-if (window.location.protocol === "https:") {
-    webSocketPath = "wss:";
-} else {
-    webSocketPath = "ws:";
-}
-webSocketPath += "//" + window.location.host;
+// var webSocketPath;
+// if (window.location.protocol === "https:") {
+//     webSocketPath = "wss:";
+// } else {
+//     webSocketPath = "ws:";
+// }
+// webSocketPath += "//" + window.location.host;
 
-var socket = new WebSocket(webSocketPath);
+// var socket = new WebSocket(webSocketPath);
 
 var chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe'; // production
 // var chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd'; // local
@@ -332,12 +332,12 @@ function initRecognition() {
         }
 
         // Send to socket
-        if (socket) {
-            socket.send(JSON.stringify({
-                interim: interim_transcript,
-                final: final_transcript
-            }));
-        }
+        // if (socket) {
+        //     socket.send(JSON.stringify({
+        //         interim: interim_transcript,
+        //         final: final_transcript
+        //     }));
+        // }
     };
 
     return recognition;

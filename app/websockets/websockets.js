@@ -8,6 +8,7 @@ module.exports = function(server) {
     });
 
     wss.on('connection', (ws, req) => {
+        return;
             // console.log(ws);
             // console.log(req);
             // You might use location.query.access_token to authenticate or share sessions
