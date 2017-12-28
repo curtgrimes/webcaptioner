@@ -26,8 +26,6 @@ Staging:
     url: https://staging.webcaptioner.com
   script:
     - source scripts/deploy.sh
-  except:
-    - master
 
 Production:
   stage: deploy
