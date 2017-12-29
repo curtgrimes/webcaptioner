@@ -58,10 +58,10 @@
           <p class="text-right mb-2">
             <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank" class="btn btn-danger">Download Google Chrome</a>
           </p>
-          <p class="text-right mb-2 hidden-sm-up">
+          <p class="text-right mb-2 d-sm-none">
             <a href="/blog" target="_blank" class="btn btn-info btn-block">View the Web Captioner Blog</a>
           </p>
-          <p class="text-right mb-2 hidden-xs-down">
+          <p class="text-right mb-2 d-none d-sm-block">
             <a href="/blog" target="_blank" class="btn btn-info">Web Captioner Blog</a>
           </p>
         </div>
@@ -281,7 +281,7 @@
                   <p class="small mb-0"><%= defaultFromLanguage.nameEnglish %></p>
                 </a>
                 <% for(var i = 0; i < fromLanguages.length; i++) { %>
-                  <a href="javascript:void(0)" class="list-group-item list-group-item-action language-selection py-2" data-language-code="<%= fromLanguages[i].code %>" data-language-name="<%= fromLanguages[i].nameEnglish %>" data-toggle="tooltip" data-placement="left" data-animation="false" title="<%= fromLanguages[i].name %>"><i class="fa fa-check mr-1" aria-hidden="true"></i> <%= fromLanguages[i].nameEnglish %></a>
+                  <a href="javascript:void(0)" class="list-group-item list-group-item-action language-selection py-2" data-language-code="<%= fromLanguages[i].code %>" data-language-name="<%= fromLanguages[i].nameEnglish %>"><i class="fa fa-check mr-1" aria-hidden="true"></i> <%= fromLanguages[i].nameEnglish %><br/> <span class="small"><%= fromLanguages[i].name %></span></a>
                 <% } %>
               </div>
             </div>
@@ -339,7 +339,6 @@
       </div>
       <div class="modal-body">
         <p>Replace or hide specific words or phrases during captioning.</p>
-        <h3 class="mb-3">Custom Replacements</h3>
         <div class="container">
           <div class="row mx-1 h5">
             <div class="col-5">
@@ -373,11 +372,9 @@
           </li>
         </ul>
         <h3 class="mb-1">Profanity</h3>
-        <div class="form-check">
-          <label class="form-check-label mt-2">
-            <input class="form-check-input mr-1" name="word-replacements-censor-profanity" type="checkbox" checked="checked" value="yes">
-            Censor profane language (US English only).
-          </label>
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" name="word-replacements-censor-profanity" type="checkbox" checked="checked" value="yes" id="word-replacements-censor-profanity">
+          <label class="custom-control-label" for="word-replacements-censor-profanity">Censor profane language (US English only).</label>
         </div>
       </div>
       <div class="modal-footer">
@@ -402,18 +399,18 @@
             Screen Preview
           </div>
           <div class="caption-wrap-chroma-key-background">
-            <div class="card-block caption-wrap caption-wrap-preview" contenteditable="<%= viewOnlyMode ? 'false' : 'true' %>">
+            <div class="card-body caption-wrap caption-wrap-preview" contenteditable="<%= viewOnlyMode ? 'false' : 'true' %>">
               <div class="captions" style="margin-bottom:0">
                 <span class="final"><%= randomJuliaChildQuote %></span> <span class="interim"></span>
               </div>
             </div>
           </div>
-          <div class="card-block screen-preview" hidden>
-            <div class="screen card card-outline-primary mx-auto">
-              <div class="card-block p-0 h-100 d-flex">
+          <div class="card-body screen-preview" hidden>
+            <div class="screen card border-primary mx-auto">
+              <div class="card-body p-0 h-100 d-flex">
                 <div class="row caption-wrap-row">
                   <div class="col-12 caption-wrap-col" style="overflow-y:auto">
-                    <div class="card-block caption-wrap screen-caption-wrap-preview">
+                    <div class="card-body caption-wrap screen-caption-wrap-preview">
                       <div class="captions mb-0" style="overflow:hidden">
                         <span class="final">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce mi metus, hendrerit nec massa at, sagittis rutrum turpis. 
@@ -486,15 +483,13 @@
                   <label for="text-color-interim-same" class="col-sm-4 col-form-label">Interim Text Color</label>
                   <div class="col-sm-8">
                     <p class="small mt-sm-2 mb-2">During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.</p>
-                    <div class="form-check mt-1">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-same" value="same-as-text-color" checked>
-                        Same as text color
-                      </label>
+                    <div class="custom-control custom-radio mt-1">
+                      <input class="custom-control-input" type="radio" name="text-color-interim-choice" id="text-color-interim-same" value="same-as-text-color" checked>
+                      <label class="custom-control-label" for="text-color-interim-same">Same as text color</label>
                     </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-custom" value="custom">
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" name="text-color-interim-choice" id="text-color-interim-custom" value="custom">
+                      <label class="custom-control-label" for="text-color-interim-custom">
                         Custom <a href="javascript:void(0)" id="previewInterimText" class="ml-1 small" style="white-space:nowrap" hidden>Preview<i class="fa fa-caret-right ml-1" aria-hidden="true"></i></a>
                       </label>
                     </div>
@@ -509,7 +504,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-size" type="number" id="text-size" value="4" min="0.1" step="0.1">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -518,7 +515,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="line-height" id="line-height" type="number" value="5" min="0.1" step="0.1" max="10">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -527,28 +526,26 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="letter-spacing" id="letter-spacing" type="number" value="0" min="-10" step="0.025" max="20">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="capitalization-uppercase" class="col-sm-4 col-form-label">Capitalization</label>
                   <div class="col-sm-8">
-                    <div class="form-check mt-1">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-uppercase" value="uppercase" checked>
-                        UPPERCASE
-                      </label>
+                    <div class="custom-control custom-radio mt-1">
+                      <input class="custom-control-input" type="radio" name="capitalization" id="capitalization-uppercase" value="uppercase" checked>
+                      <label class="custom-control-label" for="capitalization-uppercase">UPPERCASE</label>
                     </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-first-letter-only" value="capitalize">
-                        First Letter Of Each Word
-                      </label>
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" name="capitalization" id="capitalization-first-letter-only" value="capitalize">
+                      <label class="custom-control-label" for="capitalization-first-letter-only">First Letter Of Each Word</label>
                     </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-initial" value="initial">
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" name="capitalization" id="capitalization-initial" value="initial">
+                      <label class="custom-control-label" for="capitalization-initial">
                         Proper nouns and the start of sentences <a id="capitalization-popover" tabindex="0" href="javascript:void(0)" aria-label="Info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="Proper nouns and the start of sentences" data-content="Separate sentences are detected only when a puncuation mark like &#34;period&#34; or &#34;question mark&#34; is literally said."><span class="fa fa-question-circle" aria-hidden="true"></span></a>
                       </label>
                     </div>
@@ -571,7 +568,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-opacity" type="number" value="100" min="0" max="100" step="5">
-                      <span class="input-group-addon">%</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">%</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -580,7 +579,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-blur" type="number" value="0" min="0" step="1">
-                      <span class="input-group-addon">px</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">px</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -591,7 +592,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-x-position" type="number" value="0.25" step="0.25">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -600,7 +603,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-y-position" type="number" value="0.25" step="0.25">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -614,11 +619,9 @@
                   <label for="background-color" class="col-sm-4 col-form-label">Background Color</label>
                   <div class="col-sm-8">
                     <input class="form-control" name="background-color" type="color" value="#000000">
-                    <div class="form-check">
-                      <label class="form-check-label mt-2">
-                        <input class="form-check-input mr-1" id="text-background-transparent" name="text-background-transparent" type="checkbox" value="yes">
-                        Make transparent
-                      </label>
+                    <div class="custom-control custom-checkbox mt-2">
+                      <input class="custom-control-input" id="text-background-transparent" name="text-background-transparent" type="checkbox" value="yes">
+                      <label class="custom-control-label" for="text-background-transparent">Make transparent</label>
                     </div>
                   </div>
                 </div>
@@ -636,7 +639,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="padding" id="padding" type="number" value="1.25" min="0" step="0.25" max="10">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -710,17 +715,17 @@
   </div>
 </div>
 
-<nav id="main-navbar" class="navbar fixed-bottom navbar-toggleable navbar-inverse bg-inverse">
+<nav id="main-navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <span class="navbar-brand">
     <a href="/">
       <img src="/static/img/logo.svg" width="20" height="20" class="d-inline-block align-top mr-2" alt="Web Captioner" />
-      <span class="hidden-sm-down">Web Captioner</span>
+      <span class="d-none d-md-inline">Web Captioner</span>
     </a>
   </span><%# <!--
-  <ul class="navbar-nav mr-auto hidden-xs-down">
+  <ul class="navbar-nav mr-auto d-none d-sm-block">
     <li class="nav-item">
       <a class="nav-link" href="/blog">Blog</a>
     </li>
@@ -748,7 +753,7 @@
       <li id="now_listening" class="navbar-text text-white px-3" hidden>
         Now listening...
       </li><%# <!--
-      <li class="nav-item hidden-sm-up">
+      <li class="nav-item d-sm-none">
         <a class="nav-link" href="/blog">Blog</a>
       </li> --> %>
       <li class="nav-item">
@@ -759,8 +764,8 @@
             <button class="btn btn-primary" id="viewOnlyShrink"><i class="fa fa-minus" aria-hidden="true" style="position:relative;top:2px"></i></button>
             <button class="btn btn-primary" id="viewOnlyZoom"><i class="fa fa-plus" aria-hidden="true" style="position:relative;top:2px"></i></button>
         </div>
-        <div id="settingsDropdownContainer" class="btn-group dropup" <%= viewOnlyMode ? 'hidden' : '' %>>
-          <button type="button" class="btn btn-primary" id="startButton">Start<span class="hidden-xs-down"> Captioning</span></button>
+        <div id="settingsDropdownContainer" class="btn-group dropup" <%= viewOnlyMode ? 'hidden' : '' %> aria-haspopup="true">
+          <button type="button" class="btn btn-primary" id="startButton">Start<span class="d-none d-sm-inline"> Captioning</span></button>
           <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
             <span class="sr-only">Toggle Dropdown</span>
           </button>
@@ -775,7 +780,7 @@
             <a class="dropdown-item" href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">vMix</h6>
-            <a class="dropdown-item" id="startStopVmixToggle" href="javascript:void(0)" data-toggle="modal" onclick="ga('send', 'event', 'settings', 'vmixToggle')">Send to vMix <span class="badge-vmix-status-on badge badge-primary text-muted text-uppercase ml-1" hidden style="position:relative;top:-1px">On</span> <span class="badge-vmix-status-off badge badge-default text-uppercase ml-1" hidden style="position:relative;top:-1px">Off</span></a>
+            <a class="dropdown-item" id="startStopVmixToggle" href="javascript:void(0)" data-toggle="modal" onclick="ga('send', 'event', 'settings', 'vmixToggle')">Send to vMix <span class="badge-vmix-status-on badge badge-primary text-muted text-uppercase ml-1" hidden style="position:relative;top:-1px">On</span> <span class="badge-vmix-status-off badge badge-dark text-uppercase ml-1" hidden style="position:relative;top:-1px">Off</span></a>
             <a class="dropdown-item" id="sendToVmixSettings" href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')">Configure</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#languageModal" onclick="ga('send', 'event', 'settings', 'editLanguageStart')"><i class="fa fa-language mr-1" aria-hidden="true"></i> Language</a>

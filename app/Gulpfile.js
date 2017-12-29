@@ -9,11 +9,11 @@ var sass = require('gulp-sass');
 gulp.task('js:build', function() {
     return gulp
         .src([
+            'node_modules/popper.js/dist/umd/popper.js', // include this before BS
             'node_modules/bootstrap/js/dist/button.js',
             'node_modules/bootstrap/js/dist/collapse.js',
             'node_modules/bootstrap/js/dist/dropdown.js',
             'node_modules/bootstrap/js/dist/modal.js',
-            'node_modules/tether/dist/js/tether.min.js', // include this before BS tooltips
             'node_modules/bootstrap/js/dist/tooltip.js',
             'node_modules/bootstrap/js/dist/popover.js',
             'node_modules/bootstrap/js/dist/tab.js',
