@@ -404,10 +404,10 @@ $(function(){
                                 $captionWrap.parents('.caption-wrap-col').removeClass().addClass('caption-wrap-col col-5 px-0');
                                 break;
                             case 'middle':
-                                $captionWrap.parents('.caption-wrap-col').removeClass().addClass('caption-wrap-col col-8 px-0 offset-2');
+                                $captionWrap.parents('.caption-wrap-col').removeClass().addClass('caption-wrap-col col-8 px-0 mx-auto');
                                 break;
                             case 'right':
-                                $captionWrap.parents('.caption-wrap-col').removeClass().addClass('caption-wrap-col col-5 px-0 offset-7');
+                                $captionWrap.parents('.caption-wrap-col').removeClass().addClass('caption-wrap-col col-5 px-0 ml-auto');
                                 break;
                         }
                         break;
