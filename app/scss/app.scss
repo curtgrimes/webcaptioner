@@ -54,8 +54,8 @@ $navbar-light-color: #000;
 $navbar-light-hover-color: inherit;
 
 $nav-tabs-border-color: $modal-header-border-color;
-$nav-tabs-link-active-border-color: $modal-header-border-color;
-$nav-tabs-link-hover-border-color: $modal-header-border-color;
+$nav-tabs-link-active-border-color: $modal-header-border-color $modal-header-border-color rgba(0,0,0,0);
+$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%) lighten($modal-header-border-color, 5%) rgba(0,0,0,0);
 $nav-tabs-link-active-color: #000;
 $nav-tabs-link-active-bg: theme-color("primary");
 $nav-tabs-active-link-hover-bg: theme-color("primary");
@@ -82,6 +82,9 @@ $container-max-widths: (
 $pagination-active-bg: theme-color("secondary");
 $pagination-active-border: theme-color("secondary");
 $pagination-disabled-color: #999;
+
+$custom-control-indicator-checked-bg: theme-color("secondary");
+$custom-control-indicator-bg: theme-color("light");
 
 $fa-font-path: '/build/font-awesome';
 @import "../node_modules/font-awesome/scss/font-awesome.scss";

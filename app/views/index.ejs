@@ -281,7 +281,7 @@
                   <p class="small mb-0"><%= defaultFromLanguage.nameEnglish %></p>
                 </a>
                 <% for(var i = 0; i < fromLanguages.length; i++) { %>
-                  <a href="javascript:void(0)" class="list-group-item list-group-item-action language-selection py-2" data-language-code="<%= fromLanguages[i].code %>" data-language-name="<%= fromLanguages[i].nameEnglish %>" data-toggle="tooltip" data-placement="left" data-animation="false" title="<%= fromLanguages[i].name %>"><i class="fa fa-check mr-1" aria-hidden="true"></i> <%= fromLanguages[i].nameEnglish %></a>
+                  <a href="javascript:void(0)" class="list-group-item list-group-item-action language-selection py-2" data-language-code="<%= fromLanguages[i].code %>" data-language-name="<%= fromLanguages[i].nameEnglish %>"><i class="fa fa-check mr-1" aria-hidden="true"></i> <%= fromLanguages[i].nameEnglish %><br/> <span class="small"><%= fromLanguages[i].name %></span></a>
                 <% } %>
               </div>
             </div>
@@ -372,11 +372,9 @@
           </li>
         </ul>
         <h3 class="mb-1">Profanity</h3>
-        <div class="form-check">
-          <label class="form-check-label mt-2">
-            <input class="form-check-input mr-1" name="word-replacements-censor-profanity" type="checkbox" checked="checked" value="yes">
-            Censor profane language (US English only).
-          </label>
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" name="word-replacements-censor-profanity" type="checkbox" checked="checked" value="yes" id="word-replacements-censor-profanity">
+          <label class="custom-control-label" for="word-replacements-censor-profanity">Censor profane language (US English only).</label>
         </div>
       </div>
       <div class="modal-footer">
@@ -485,15 +483,13 @@
                   <label for="text-color-interim-same" class="col-sm-4 col-form-label">Interim Text Color</label>
                   <div class="col-sm-8">
                     <p class="small mt-sm-2 mb-2">During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.</p>
-                    <div class="form-check mt-1">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-same" value="same-as-text-color" checked>
-                        Same as text color
-                      </label>
+                    <div class="custom-control custom-radio mt-1">
+                      <input class="custom-control-input" type="radio" name="text-color-interim-choice" id="text-color-interim-same" value="same-as-text-color" checked>
+                      <label class="custom-control-label" for="text-color-interim-same">Same as text color</label>
                     </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="text-color-interim-choice" id="text-color-interim-custom" value="custom">
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" name="text-color-interim-choice" id="text-color-interim-custom" value="custom">
+                      <label class="custom-control-label" for="text-color-interim-custom">
                         Custom <a href="javascript:void(0)" id="previewInterimText" class="ml-1 small" style="white-space:nowrap" hidden>Preview<i class="fa fa-caret-right ml-1" aria-hidden="true"></i></a>
                       </label>
                     </div>
@@ -508,7 +504,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-size" type="number" id="text-size" value="4" min="0.1" step="0.1">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -517,7 +515,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="line-height" id="line-height" type="number" value="5" min="0.1" step="0.1" max="10">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -526,28 +526,26 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="letter-spacing" id="letter-spacing" type="number" value="0" min="-10" step="0.025" max="20">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="capitalization-uppercase" class="col-sm-4 col-form-label">Capitalization</label>
                   <div class="col-sm-8">
-                    <div class="form-check mt-1">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-uppercase" value="uppercase" checked>
-                        UPPERCASE
-                      </label>
+                    <div class="custom-control custom-radio mt-1">
+                      <input class="custom-control-input" type="radio" name="capitalization" id="capitalization-uppercase" value="uppercase" checked>
+                      <label class="custom-control-label" for="capitalization-uppercase">UPPERCASE</label>
                     </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-first-letter-only" value="capitalize">
-                        First Letter Of Each Word
-                      </label>
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" name="capitalization" id="capitalization-first-letter-only" value="capitalize">
+                      <label class="custom-control-label" for="capitalization-first-letter-only">First Letter Of Each Word</label>
                     </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input mr-1" type="radio" name="capitalization" id="capitalization-initial" value="initial">
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" name="capitalization" id="capitalization-initial" value="initial">
+                      <label class="custom-control-label" for="capitalization-initial">
                         Proper nouns and the start of sentences <a id="capitalization-popover" tabindex="0" href="javascript:void(0)" aria-label="Info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="Proper nouns and the start of sentences" data-content="Separate sentences are detected only when a puncuation mark like &#34;period&#34; or &#34;question mark&#34; is literally said."><span class="fa fa-question-circle" aria-hidden="true"></span></a>
                       </label>
                     </div>
@@ -570,7 +568,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-opacity" type="number" value="100" min="0" max="100" step="5">
-                      <span class="input-group-addon">%</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">%</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -579,7 +579,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-blur" type="number" value="0" min="0" step="1">
-                      <span class="input-group-addon">px</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">px</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -590,7 +592,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-x-position" type="number" value="0.25" step="0.25">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -599,7 +603,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="text-shadow-y-position" type="number" value="0.25" step="0.25">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -613,11 +619,9 @@
                   <label for="background-color" class="col-sm-4 col-form-label">Background Color</label>
                   <div class="col-sm-8">
                     <input class="form-control" name="background-color" type="color" value="#000000">
-                    <div class="form-check">
-                      <label class="form-check-label mt-2">
-                        <input class="form-check-input mr-1" id="text-background-transparent" name="text-background-transparent" type="checkbox" value="yes">
-                        Make transparent
-                      </label>
+                    <div class="custom-control custom-checkbox mt-2">
+                      <input class="custom-control-input" id="text-background-transparent" name="text-background-transparent" type="checkbox" value="yes">
+                      <label class="custom-control-label" for="text-background-transparent">Make transparent</label>
                     </div>
                   </div>
                 </div>
@@ -635,7 +639,9 @@
                   <div class="col-sm-8">
                     <div class="input-group">
                       <input class="form-control" name="padding" id="padding" type="number" value="1.25" min="0" step="0.25" max="10">
-                      <span class="input-group-addon">em</span>
+                      <span class="input-group-append">
+                          <span class="input-group-text">em</span>
+                      </span>
                     </div>
                   </div>
                 </div>

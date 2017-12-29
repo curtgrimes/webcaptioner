@@ -10,7 +10,7 @@
   "dependencies": {
     "@google-cloud/translate": "^0.8.2",
     "body-parser": "^1.17.2",
-    "bootstrap": "4.0.0-beta",
+    "bootstrap": "4.0.0-beta.3",
     "compression": "^1.6.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
