@@ -18,7 +18,7 @@ $theme-colors: (
   warning: #ffc107, // $yellow
   danger: #e83f6f,
   light: #f8f9fa,
-  dark: #343a40
+  dark: #292b2c
 ) !default;
 
 $link-color: theme-color("secondary");
@@ -45,11 +45,6 @@ $dropdown-link-hover-color: #fff;
 $dropdown-link-hover-bg: #666;
 $dropdown-header-color: #aaa;
 
-$nav-tabs-border-color: $modal-header-border-color;
-$nav-tabs-active-link-hover-border-color: $modal-header-border-color;
-$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%);
-$nav-tabs-active-link-hover-color: #000;
-
 $navbar-inverse-color:                 rgba(#fff,.5) !default;
 $navbar-inverse-hover-color:           rgba(#fff,.75) !default;
 $navbar-inverse-active-color:          rgba(#fff,1) !default;
@@ -58,6 +53,11 @@ $navbar-inverse-toggler-border:        rgba(#fff,.1) !default;
 $navbar-light-color: #000;
 $navbar-light-hover-color: inherit;
 
+$nav-tabs-border-color: $modal-header-border-color;
+$nav-tabs-link-active-border-color: $modal-header-border-color;
+$nav-tabs-link-hover-border-color: $modal-header-border-color;
+$nav-tabs-link-active-color: #000;
+$nav-tabs-link-active-bg: theme-color("primary");
 $nav-tabs-active-link-hover-bg: theme-color("primary");
 
 $component-active-color: #fff;
@@ -208,7 +208,7 @@ input[type="color"] {
 }
 
 a.nav-link:not(.active) {
-  color: theme-color("light");
+  color: theme-color("dark");
 }
 
 .navbar-light .navbar-nav .nav-link:focus,
@@ -380,7 +380,7 @@ html.blog, html.blog body {
   line-height:3rem;
   color:#fff;
   display:inline;
-  box-shadow: -7px 0 0 0 #292b2c, 7px 0 0 0 #292b2c, 0 0 0 7px #292b2c;
+  box-shadow: -7px 0 0 0 theme-color("dark"), 7px 0 0 0 theme-color("dark"), 0 0 0 7px theme-color("dark");
 }
 
 a.hidden-link {
