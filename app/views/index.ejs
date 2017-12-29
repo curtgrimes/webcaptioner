@@ -30,7 +30,7 @@
 
   <meta name="description" content="Open event captioning in your browser. Just bring a microphone.">
 
-  <link href="/build/css/build.css?<%= process.env.COMMIT_ID %>" rel="stylesheet" />
+  <link href="/build/css/build.css?20171229" rel="stylesheet" />
 
   <link href="https://fonts.googleapis.com/css?family=<% 
     for(var i = 0; i < captionTypefaceChoices.length; i++) { %><%= captionTypefaceChoices[i].googleFontName.replace(/ /g, '+') + '|' %><%
@@ -770,7 +770,7 @@
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center <span class="badge badge-success small">New</span></a>
+            <a class="dropdown-item" href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</a>
             <a class="dropdown-item" href="/blog" target="_blank" onclick="ga('send', 'event', 'settings', 'blogButton')">Blog</a>
             <a class="dropdown-item" href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</a>
             <a class="dropdown-item" href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</a>
