@@ -22,7 +22,7 @@ gulp.task('js:build', function() {
             'js/*',
         ])
         .pipe(concat('build.js'))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest('build/js'));
 });
 
@@ -46,4 +46,27 @@ gulp.task('default', ['js:build', 'scss:build', 'fontawesome:build']);
 gulp.task('watch', function () {
     gulp.watch(['js/*'], ['js:build']);
     gulp.watch(['scss/*'], ['scss:build']);
+});
+
+
+/* Homepage */
+
+
+
+gulp.task('js:build-home', function() {
+    return gulp
+        .src([
+            'node_modules/jquery/dist/jquery.slim.min.js',
+            'node_modules/bootstrap/js/dist/tab.js',
+            'node_modules/bootstrap/js/dist/carousel.js',
+            'node_modules/bootstrap/js/dist/util.js',
+            'js/home/*',
+        ])
+        .pipe(concat('build-home.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('watch-home', function() {
+    gulp.watch(['js/home/*'], ['js:build-home']);
 });
