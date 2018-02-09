@@ -11,11 +11,17 @@ router.post('/', function(req, res, next) {
 
   function sendSomethingWentWrongResponse() {
     fs.readFile(path.join(__dirname, '../blog/public/feedback/index.html'), 'utf8', (error, data) => {
+      if (data) {
         res.send(
           data
             .replace(/\<\!--PREVIOUS_SUBMISSION_INSERT_POINT--\>/, req.sanitize(req.body.feedback))
             .replace(/\<\!-- WARNING_INSERT_POINT --\>/, '<div class="alert alert-danger">There was a problem submitting that. Please try again.</div>')
         );
+      }
+      else {
+        // Couldn't get the error message; send them somewhere
+        res.redirect('/feedback');
+      }
     });
   }
 
@@ -34,8 +40,6 @@ router.post('/', function(req, res, next) {
         },
       },
       function (error, response, body) {
-        console.log(response.statusCode);
-        console.log(response);
         if (response && response.statusCode == 201) {
           sendSuccessResponse();
         }
