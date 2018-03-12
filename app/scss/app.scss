@@ -78,7 +78,7 @@ $thumbnail-border-color:      $modal-header-border-color;
 
 $container-max-widths: (
   sm: 540px,
-  md: 720px,
+  md: 860px,
   lg: 960px
 );
 
@@ -493,9 +493,22 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
   margin-top:1rem;
 }
 
+.main-page-headline {
+  font-size: 3.2rem;
+  letter-spacing: -1px;
+}
+
 @include media-breakpoint-up(lg) {
   .featureScreenshot {
     margin-bottom:-110px !important;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .main-page-headline {
+    font-size:2.6rem;
+    letter-spacing:-1px;
+    line-height:2.8rem;
   }
 }
 
