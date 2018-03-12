@@ -402,6 +402,10 @@ html.blog, html.blog body {
   box-shadow: -7px 0 0 0 theme-color("dark"), 7px 0 0 0 theme-color("dark"), 0 0 0 7px theme-color("dark");
 }
 
+.bg-zigzag {
+  background-image: url("data:image/svg+xml,%3Csvg width='420' height='60' viewBox='0 0 70 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,5.1L10.8,0h9.9L0,9.9V5.1L0,5.1z M70,9.9L49.3,0h9.9L70,5.1V9.9L70,9.9z M10.8,10l21-10h6.4l21,10h-9.9L35,3.2L20.7,10H10.8L10.8,10z M31.8,10L35,8.5l3.2,1.5H31.8L31.8,10z' fill='#{darken(theme-color('primary'),5%)}' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
 a.hidden-link {
   color:inherit;
 }
@@ -496,6 +500,10 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
 .main-page-headline {
   font-size: 3.2rem;
   letter-spacing: -1px;
+}
+
+.navbar-border-bottom {
+  border-bottom:1px solid darken(theme-color("primary"), 4%);
 }
 
 @include media-breakpoint-up(lg) {
