@@ -79,7 +79,7 @@ $thumbnail-border-color:      $modal-header-border-color;
 $container-max-widths: (
   sm: 540px,
   md: 860px,
-  lg: 960px
+  lg: 910px
 );
 
 $pagination-active-bg: theme-color("secondary");
@@ -507,9 +507,15 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
   border-bottom:1px solid darken(theme-color("primary"), 4%);
 }
 
+
+
 @include media-breakpoint-up(lg) {
   .featureScreenshot {
     margin-bottom:-110px !important;
+  }
+
+  .container-main-page {
+    max-width:1200px;
   }
 }
 
