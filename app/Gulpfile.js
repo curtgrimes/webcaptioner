@@ -6,6 +6,13 @@ var merge = require('gulp-merge');
 var cleanCSS = require('gulp-clean-css');
 var sass = require('gulp-sass');
 
+gulp.task('default', ['js:build', 'scss:build', 'fontawesome:build', 'js:build-home']);
+
+gulp.task('watch', function () {
+    gulp.watch(['js/*'], ['js:build']);
+    gulp.watch(['scss/*'], ['scss:build']);
+});
+
 gulp.task('js:build', function() {
     return gulp
         .src([
@@ -41,18 +48,7 @@ gulp.task('fontawesome:build', function() {
         .pipe(gulp.dest('build/font-awesome'));
 });
 
-gulp.task('default', ['js:build', 'scss:build', 'fontawesome:build']);
-
-gulp.task('watch', function () {
-    gulp.watch(['js/*'], ['js:build']);
-    gulp.watch(['scss/*'], ['scss:build']);
-});
-
-
 /* Homepage */
-
-
-
 gulp.task('js:build-home', function() {
     return gulp
         .src([
