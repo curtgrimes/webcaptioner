@@ -250,10 +250,11 @@ a.nav-link.active {
 }
     html,body {
       background: #000;
+      height:100%;
     }
 
-    html, body {
-      height:100%;
+    html.static-site, html.static-site body {
+      background:theme-color("primary");
     }
 
     #info {
