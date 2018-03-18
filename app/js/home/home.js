@@ -1,6 +1,6 @@
 var playbackTimingsInterval;
 (function(){
-    var heroAudioPlaybackOffsetSeconds = 0.5;
+    var heroAudioPlaybackOffsetSeconds = 0.7;
     function hide(element) {
         element.setAttribute('hidden', true);
     }
@@ -133,9 +133,12 @@ var playbackTimingsInterval;
         })
         .then(function(json) {
             timings = json;
-            playbackTimingsInterval = setInterval(playbackTimings, 100);
+            if (!waitingForAudioToLoad) {
+                playbackTimingsInterval = setInterval(playbackTimings, 100);
+            }
             heroAudio.src = '/static/hero-demo-audio-1.mp3';
             heroAudio.type = 'audio/mp3';
+            heroAudio.preload = 'auto';
         });;
 
     var heroInterimCaptionPlaceholder = document.getElementById('hero-interim');
@@ -204,26 +207,22 @@ var playbackTimingsInterval;
         show(document.getElementById('stop-hero-demo-button-wrap'));
     });
 
+    var waitingForAudioToLoad = false;
     document.getElementById('expand-hero-demo-controls-wrap').addEventListener('click', function() {
         document.getElementById('hero-caption-demo').classList.add('expanded');
+        waitingForAudioToLoad = true;
+
+        clearInterval(playbackTimingsInterval); // Stop text temporarily until audio is loaded at the correct position
         heroAudio.volume = 0.5; // default also set in HTML on range element
+        heroAudio.currentTime = window.currentPlaybackTimeSeconds + heroAudioPlaybackOffsetSeconds;
+        heroAudio.play();
 
-        var startAudioAtCorrectPosition = function() {
-            heroAudio.currentTime = window.currentPlaybackTimeSeconds + heroAudioPlaybackOffsetSeconds;    
-            heroAudio.play();
-
-            // Unregister self if set
-            heroAudio.removeEventListener('canplaythrough', startAudioAtCorrectPosition);
-        };
-        console.log('readyState '+ heroAudio.readyState);
-        if (heroAudio.readyState < 4) {
-            // Audio is not loaded
-            heroAudio.addEventListener('canplaythrough', startAudioAtCorrectPosition);
-        }
-        else {
-            // Audio is loaded
-            startAudioAtCorrectPosition();
-        }
+        heroAudio.addEventListener('playing', function() {
+            // Resync text with current playback position in audio
+            clearInterval(playbackTimingsInterval);
+            startPlaybackTime = Date.now() - (heroAudio.currentTime * 1000) + (1000 * heroAudioPlaybackOffsetSeconds);
+            playbackTimingsInterval = setInterval(playbackTimings, 100);
+        });
 
         show(document.getElementById('hero-demo-controls'));
         hide(document.getElementById('expand-hero-demo-controls-wrap'));
