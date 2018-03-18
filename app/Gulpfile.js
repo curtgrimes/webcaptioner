@@ -29,7 +29,7 @@ gulp.task('js:build', function() {
             'js/*',
         ])
         .pipe(concat('build.js'))
-        // .pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest('build/js'));
 });
 
