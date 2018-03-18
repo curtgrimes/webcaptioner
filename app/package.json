@@ -27,14 +27,17 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
+    "intersection-observer": "^0.5.0",
     "jquery": "^3.2.1",
     "moment": "^2.18.1",
     "morgan": "~1.8.1",
     "node-env-file": "^0.1.8",
     "popper.js": "^1.12.9",
+    "promise-polyfill": "7.1.0",
     "request": "^2.81.0",
     "serve-favicon": "~2.4.2",
     "socket.io": "^2.0.4",
+    "whatwg-fetch": "^2.0.3",
     "ws": "^4.0.0"
   }
 }

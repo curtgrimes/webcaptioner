@@ -1,14 +1,14 @@
 FROM node:8.1.2
 
 # Install Hugo
-ADD https://github.com/gohugoio/hugo/releases/download/v0.31.1/hugo_0.31.1_Linux-64bit.tar.gz /tmp
+ADD https://github.com/gohugoio/hugo/releases/download/v0.37.1/hugo_0.37.1_Linux-64bit.tar.gz /tmp
 
 RUN mkdir -p /usr/src/app \
     && mkdir -p /usr/src/static-site \
-    && tar -xf /tmp/hugo_0.31.1_Linux-64bit.tar.gz -C /tmp \
+    && tar -xf /tmp/hugo_0.37.1_Linux-64bit.tar.gz -C /tmp \
     && mkdir -p /usr/local/sbin \
     && mv /tmp/hugo /usr/local/sbin/hugo \
-    && rm -rf /tmp/hugo_0.31.1_linux_amd64
+    && rm -rf /tmp/hugo_0.37.1_linux_amd64
 
 # Install app dependencies
 COPY app/package.json /usr/src/app/

@@ -12,6 +12,8 @@ function clear_saved() {
     }
 }
 
+window.timings = [];
+
 // var webSocketPath;
 // if (window.location.protocol === "https:") {
 //     webSocketPath = "wss:";
@@ -286,6 +288,10 @@ function initRecognition() {
             }
             else {
                 final_span.insertAdjacentHTML('beforeend', final_transcript);
+                window.timings.push({
+                    timestamp: Date.now(),
+                    finalText: final_transcript,
+                });
             }
 
             ga(
@@ -312,6 +318,25 @@ function initRecognition() {
                 // Not translating
                 interim_span.innerHTML = interim_transcript;
                 // $('#captioning-spinner').attr('hidden', true);
+                
+                if ((
+                        window.timings.length
+                        && window.timings[window.timings.length-1].interimText
+                        && window.timings[window.timings.length-1].interimText !== interim_transcript
+                    )
+                    || !window.timings.length
+                    || !window.timings[window.timings.length-1].interimText
+                ) {
+                    var interim_transcript_to_save = interim_transcript;
+                    // if (interim_transcript_to_save.length > 170) {
+                        // interim_transcript_to_save = interim_transcript_to_save.substring(interim_transcript_to_save.length - 170);
+                    // }
+
+                    window.timings.push({
+                        timestamp: Date.now(),
+                        interimText: interim_transcript_to_save,
+                    });
+                }
             }
         }
         else {
@@ -339,6 +364,7 @@ function initRecognition() {
         //     }));
         // }
     };
+console.log(window.timings);
 
     return recognition;
 }
@@ -657,3 +683,28 @@ $('#clearTranscriptConfirmButton').on('click', function() {
     ga('send', 'event', 'settings', 'clearTranscriptConfirm');
     final_span.innerHTML = '';
 });
+
+function getTimings() {
+    if (!window.timings.length) {
+        return [];
+    }
+
+
+    var startTiming = window.timings[0].timestamp;
+    var newTimings = [];
+    window.timings.forEach(function (timing) {
+        if (timing.interimText) {
+            newTimings.push({
+                "t": timing.timestamp - startTiming,
+                "iText": timing.interimText,
+            })
+        }
+        else if (timing.finalText) {
+            newTimings.push({
+                "t": timing.timestamp - startTiming,
+                "fText":timing.finalText,
+            });
+        }
+    });
+    return JSON.stringify(newTimings);
+}

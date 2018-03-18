@@ -6,6 +6,13 @@ var merge = require('gulp-merge');
 var cleanCSS = require('gulp-clean-css');
 var sass = require('gulp-sass');
 
+gulp.task('default', ['js:build', 'scss:build', 'fontawesome:build', 'js:build-home']);
+
+gulp.task('watch', function () {
+    gulp.watch(['js/*'], ['js:build']);
+    gulp.watch(['scss/*'], ['scss:build']);
+});
+
 gulp.task('js:build', function() {
     return gulp
         .src([
@@ -41,9 +48,25 @@ gulp.task('fontawesome:build', function() {
         .pipe(gulp.dest('build/font-awesome'));
 });
 
-gulp.task('default', ['js:build', 'scss:build', 'fontawesome:build']);
+/* Homepage */
+gulp.task('js:build-home', function() {
+    return gulp
+        .src([
+            'node_modules/jquery/dist/jquery.slim.min.js',
+            'node_modules/bootstrap/js/dist/collapse.js',
+            'node_modules/bootstrap/js/dist/tab.js',
+            'node_modules/bootstrap/js/dist/carousel.js',
+            'node_modules/bootstrap/js/dist/util.js',
+            'node_modules/promise-polyfill/dist/polyfill.min.js', /* polyfill */
+            'node_modules/intersection-observer/intersection-observer.js', /* polyfill */
+            'node_modules/whatwg-fetch/fetch.js', /* polyfill */
+            'js/home/*',
+        ])
+        .pipe(concat('build-home.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('build/js'));
+});
 
-gulp.task('watch', function () {
-    gulp.watch(['js/*'], ['js:build']);
-    gulp.watch(['scss/*'], ['scss:build']);
+gulp.task('watch-home', function() {
+    gulp.watch(['js/home/*'], ['js:build-home']);
 });

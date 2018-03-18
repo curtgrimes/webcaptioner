@@ -8,7 +8,7 @@ var expressSanitizer = require('express-sanitizer');
 var bodyParser = require('body-parser');
 var env = require('node-env-file');
 
-var index = require('./routes/index');
+var captioner = require('./routes/captioner');
 var translate = require('./routes/translate');
 var feedback = require('./routes/feedback');
 var wlbc = require('./routes/wlbc');
@@ -50,6 +50,7 @@ app.use(express.static(path.join(__dirname, 'static/sitemap')));
 app.use('/web-captioner-title.xaml', express.static(path.join(__dirname, 'static/web-captioner-title.xaml')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
 
+app.use('/', express.static(path.join(__dirname, '../static-site/public/home')));
 app.use('/blog', express.static(path.join(__dirname, '../static-site/public/blog')));
 app.use('/help', express.static(path.join(__dirname, '../static-site/public/help')));
 app.use('/donate', express.static(path.join(__dirname, '../static-site/public/donate')));
@@ -61,10 +62,10 @@ app.use('/vmix', express.static(path.join(__dirname, '../static-site/public/vmix
 
 app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
-app.use('/', index);
+app.use('/captioner', captioner);
 app.use('/translate', translate);
 app.use('/feedback', feedback);
-app.use('/wlbc', wlbc);
+// app.use('/wlbc', wlbc);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1011,7 +1011,7 @@ router.get('/', function(req, res, next) {
     };
   }
 
-  res.render('index', {
+  res.render('captioner', {
     title: 'Web Captioner',
     viewOnlyMode: false,
     randomJuliaChildQuote: randomJuliaChildQuote,

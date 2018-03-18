@@ -6,7 +6,7 @@
   <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
   <title>Web Captioner - Open event captioning in your browser</title>
   
-  <link rel="canonical" href="https://webcaptioner.com" />
+  <link rel="canonical" href="https://webcaptioner.com/captioner" />
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -16,7 +16,7 @@
   <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/fckappdcgnijafmmjkcmicdidflhelfe">
   <meta name="theme-color" content="#f0e500">
 
-  <meta property="og:url" content="https://webcaptioner.com" />
+  <meta property="og:url" content="https://webcaptioner.com/captioner" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:title" content="Web Captioner" />
@@ -74,7 +74,7 @@
 -->
       </div>
       <div class="modal-footer">
-        <a href="/help/general/what-is-web-captioner/" class="btn btn-primary">Learn More</a>
+        <a href="/" class="btn btn-primary">Learn More</a>
         <button type="button" class="btn btn-success" data-dismiss="modal">Get Started</button>
       </div>
     </div>
@@ -770,6 +770,7 @@
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</a>
             <a class="dropdown-item" href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</a>
             <a class="dropdown-item" href="/blog" target="_blank" onclick="ga('send', 'event', 'settings', 'blogButton')">Blog</a>
             <a class="dropdown-item" href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</a>
