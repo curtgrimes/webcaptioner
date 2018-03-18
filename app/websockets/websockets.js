@@ -30,6 +30,10 @@ module.exports = function(server) {
                 }
             });
         
-            // setInterval(()=>{ws.send('something')},2000);
+            ws.on('error', (error) => {
+                console.log('Websocket error');
+                console.log(error);
+            });
+
         });
 };
