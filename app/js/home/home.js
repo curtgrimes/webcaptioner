@@ -206,6 +206,7 @@ var playbackTimingsInterval;
     var waitingForAudioToLoad = false;
     var initialExpand = false;
     document.getElementById('expand-hero-demo-controls-wrap').addEventListener('click', function() {
+        ga('send', 'event', 'main-page-hero-demo', 'start');
         document.getElementById('hero-caption-demo').classList.add('expanded');
         waitingForAudioToLoad = true;
         initialExpand = true;
