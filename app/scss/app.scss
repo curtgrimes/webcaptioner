@@ -581,6 +581,10 @@ input[type=range]:focus {
 }
 
 input[type=range]::-ms-track {
+  display:none; /* Hide progress bar until MS can figure out how to follow the standard */
+
+
+  
   width: 100%;
   cursor: pointer;
 
