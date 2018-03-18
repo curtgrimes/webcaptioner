@@ -208,20 +208,26 @@ var playbackTimingsInterval;
     });
 
     var waitingForAudioToLoad = false;
+    var initialExpand = false;
     document.getElementById('expand-hero-demo-controls-wrap').addEventListener('click', function() {
         document.getElementById('hero-caption-demo').classList.add('expanded');
         waitingForAudioToLoad = true;
-
+        initialExpand = true;
         clearInterval(playbackTimingsInterval); // Stop text temporarily until audio is loaded at the correct position
         heroAudio.volume = 0.5; // default also set in HTML on range element
-        heroAudio.currentTime = window.currentPlaybackTimeSeconds + heroAudioPlaybackOffsetSeconds;
         heroAudio.play();
 
         heroAudio.addEventListener('playing', function() {
-            // Resync text with current playback position in audio
-            clearInterval(playbackTimingsInterval);
-            startPlaybackTime = Date.now() - (heroAudio.currentTime * 1000) + (1000 * heroAudioPlaybackOffsetSeconds);
-            playbackTimingsInterval = setInterval(playbackTimings, 100);
+            if (initialExpand) {
+                clearInterval(playbackTimingsInterval);
+                heroInterimCaptionPlaceholder.innerText = '';
+                heroFinalCaptionPlaceholder.innerText = '';
+                startPlaybackTime = Date.now() + (1000 * heroAudioPlaybackOffsetSeconds);
+                lastPlayedIndex = 0;
+                window.currentPlaybackTimeSeconds = 0;
+                playbackTimingsInterval = setInterval(playbackTimings, 100);
+                initialExpand = false;
+            }
         });
 
         show(document.getElementById('hero-demo-controls'));
