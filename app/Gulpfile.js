@@ -57,7 +57,8 @@ gulp.task('js:build-home', function() {
             'node_modules/bootstrap/js/dist/tab.js',
             'node_modules/bootstrap/js/dist/carousel.js',
             'node_modules/bootstrap/js/dist/util.js',
-            'node_modules/intersection-observer/intersection-observer.js',
+            'node_modules/intersection-observer/intersection-observer.js', /* polyfill */
+            'node_modules/whatwg-fetch/fetch.js', /* polyfill */
             'js/home/*',
         ])
         .pipe(concat('build-home.js'))
