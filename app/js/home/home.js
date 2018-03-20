@@ -123,7 +123,7 @@ var playbackTimingsInterval;
     var timings;
     var heroAudio = document.createElement('audio');
     // Hero example timings
-    fetch('/static/hero-transcript-price-is-right.json')
+    fetch('/home/static/hero-transcript-price-is-right.json')
         .then(function(response) {
             return response.json();
         })
@@ -132,7 +132,7 @@ var playbackTimingsInterval;
             if (!waitingForAudioToLoad) {
                 playbackTimingsInterval = setInterval(playbackTimings, 100);
             }
-            heroAudio.src = '/static/hero-demo-audio-1.mp3';
+            heroAudio.src = '/home/static/hero-demo-audio-1.mp3';
             heroAudio.type = 'audio/mp3';
             heroAudio.preload = 'auto';
         });;
