@@ -50,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'static/sitemap')));
 app.use('/web-captioner-title.xaml', express.static(path.join(__dirname, 'static/web-captioner-title.xaml')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
 
-app.use('/', express.static(path.join(__dirname, '../static-site/public/home')));
+app.use('/', express.static(path.join(__dirname, '../static-site/public')));
 app.use('/blog', express.static(path.join(__dirname, '../static-site/public/blog')));
 app.use('/help', express.static(path.join(__dirname, '../static-site/public/help')));
 app.use('/donate', express.static(path.join(__dirname, '../static-site/public/donate')));
