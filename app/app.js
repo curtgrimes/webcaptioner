@@ -46,7 +46,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSanitizer()); // this line follows bodyParser() instantiations 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static/favicon')));
-app.use(express.static(path.join(__dirname, 'static/sitemap')));
 app.use('/web-captioner-title.xaml', express.static(path.join(__dirname, 'static/web-captioner-title.xaml')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
 
