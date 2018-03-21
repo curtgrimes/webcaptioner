@@ -650,12 +650,27 @@ $('#startButton').on('click', function(){
 
 $('#saveTranscriptToFileButton').on('click', function() {
     ga('send', 'event', 'settings', 'saveTranscriptToFile');
+    $('#saveTranscriptModal').modal('show');
 
-    var a = document.createElement('a');
-    a.href = 'data:text/plain;base64,' + btoa(document.getElementById('results').innerText);
-    a.textContent = 'download';
-    a.download = 'web-captioner-'+ moment().format('YYYY-MM-DD-HH-mm-ss') +'.txt';
-    a.click();
+    $('#saveTranscriptConfirmButtonText').on('click', function() {
+        var a = document.createElement('a');
+        a.href = 'data:text/plain;base64,' + btoa(document.getElementById('results').innerText);
+        a.textContent = 'download';
+        a.download = 'web-captioner-'+ moment().format('YYYY-MM-DD-HH-mm-ss') +'.txt';
+        a.click();
+    })
+
+    $('#saveTranscriptConfirmButtonWordDocument').on('click', function() {
+        console.log(moment().format('YYYY-MM-DD-HH-mm-ss'));
+        var a = document.createElement('a');
+        a.href = 'data:text/html;base64,' + btoa('<html><body>' + document.getElementById('results').innerText + '</body></html>');
+        a.textContent = 'download';
+        a.textContent = 'download';
+        a.download = 'web-captioner-'+ moment().format('YYYY-MM-DD-HH-mm-ss') +'.doc';
+        a.click();
+    })
+
+
 });
 
 // Init tooltips
