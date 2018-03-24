@@ -56,6 +56,7 @@ app.use('/donate', express.static(path.join(__dirname, '../static-site/public/do
 app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/public/privacy-policy')));
 app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
 app.use('/press', express.static(path.join(__dirname, '../static-site/public/press')));
+app.use('/testimonials', express.static(path.join(__dirname, '../static-site/public/testimonials')));
 app.use('/feedback', express.static(path.join(__dirname, '../static-site/public/feedback')));
 app.use('/connector', express.static(path.join(__dirname, '../static-site/public/connector')));
 app.use('/vmix', express.static(path.join(__dirname, '../static-site/public/vmix')));
