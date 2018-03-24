@@ -514,7 +514,10 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
   border-bottom:1px solid darken(theme-color("primary"), 4%);
 }
 
-
+.two-column-text {
+	column-count: 2;
+	column-gap: 2em;
+}
 
 @include media-breakpoint-up(lg) {
   .featureScreenshot {
@@ -537,6 +540,10 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
 @include media-breakpoint-down(sm) {
   .jumbotron .display-3 {
     font-size:4rem;
+  }
+
+  .two-column-text {
+    column-count: 1;
   }
 }
 
