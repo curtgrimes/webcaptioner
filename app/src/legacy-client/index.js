@@ -3,6 +3,11 @@
 //     setTimeout(function(){ $('#sendToVmixSettings').click(); }, 0);
 // });
 
+import $ from 'jquery';
+import 'bootstrap';
+import loadWordReplacementSettings from './word-replacement'
+import loadLanguageSettings from './translation'
+
 function clear_saved() {
     ga('send', 'event', 'user', 'clearButtonClick');
     if (confirm('Clear saved transcript?')) {

@@ -514,6 +514,13 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
   border-bottom:1px solid darken(theme-color("primary"), 4%);
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: all .1s ease;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+}
 
 
 @include media-breakpoint-up(lg) {

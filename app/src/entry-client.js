@@ -3,6 +3,17 @@ import 'es6-promise/auto'
 import { createApp } from './app'
 import ProgressBar from './components/ProgressBar.vue'
 
+
+// Legacy stuff
+import './legacy-client/index'
+import './legacy-client/appearance'
+import './legacy-client/send-to-vmix'
+import './legacy-client/translation'
+import './legacy-client/viewOnlyMode'
+import './legacy-client/vmix-start-modal'
+import './legacy-client/volume-meter'
+import './legacy-client/word-replacement'
+
 // global progress bar
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)

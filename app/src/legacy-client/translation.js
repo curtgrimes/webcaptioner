@@ -94,7 +94,7 @@ $(function(){
 
 });
 
-function loadLanguageSettings() {
+var loadLanguageSettings = function () {
     // Load settings
     var settings = window.localStorage.getItem("webcaptioner-settings");
     var defaultFromLanguageCode = $('#languageModal').attr('data-default-from-language-code');
@@ -113,3 +113,5 @@ function loadLanguageSettings() {
     window._wc.language.from = window._wc.language.from || defaultFromLanguageCode;
     window._wc.language.to = window._wc.language.to || defaultToLanguageCode;
 }
+
+module.exports = loadLanguageSettings;

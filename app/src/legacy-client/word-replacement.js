@@ -1,3 +1,6 @@
+import $ from 'jquery';
+window.$ = $;
+
 $(function(){
     if (!$('#wordReplacementModal').length) {
         return;
@@ -171,7 +174,7 @@ $(function(){
     });
 });
 
-function loadWordReplacementSettings() {
+var loadWordReplacementSettings = function () {
     var settings = window.localStorage.getItem("webcaptioner-settings");
 
     window._wc = window._wc || {};
@@ -184,4 +187,6 @@ function loadWordReplacementSettings() {
             window._wc.censorProfanity = settings.censorProfanity;
         }
     }
-}
+};
+
+export default loadWordReplacementSettings;

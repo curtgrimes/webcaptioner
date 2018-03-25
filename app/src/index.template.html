@@ -1,23 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>{{ title }}</title>
-    <meta charset="utf-8">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="apple-touch-icon" sizes="120x120" href="/public/logo-120.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-    <link rel="shortcut icon" sizes="48x48" href="/public/logo-48.png">
-    <meta name="theme-color" content="#f60">
-    <link rel="manifest" href="/manifest.json">
-    <style>
-      #skip a {  position:absolute;  left:-10000px;  top:auto;  width:1px;  height:1px;  overflow:hidden;  }
-      #skip a:focus {  position:static;  width:auto;  height:auto;  }
-    </style>
-  </head>
-  <body>
-  <div id="skip"><a href="#app">skip to content</a></div>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+  <title>{{ title }}</title>
+  
+  <link rel="canonical" href="https://webcaptioner.com/captioner" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f0e500">
+  <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/fckappdcgnijafmmjkcmicdidflhelfe">
+  <meta name="theme-color" content="#f0e500">
+
+  <meta property="og:url" content="https://webcaptioner.com/captioner" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Web Captioner" />
+  <meta property="og:description" content="Open event captioning in your browser. Just bring a microphone." />
+  <meta property="og:image" content="https://webcaptioner.com/static/img/og-logo.png" />
+  <meta property="og:image:secure_url" content="https://webcaptioner.com/static/img/og-logo.png" />
+  <meta property="og:image:type" content="https://webcaptioner.com/static/img/og-logo.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="1200" />
+  <meta property="fb:app_id" content="1339681726086659" />
+
+  <meta name="description" content="Open event captioning in your browser. Just bring a microphone.">
+
+  <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('set', 'anonymizeIp', true);
+    ga('create', 'REMOVED', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+</head>
+
+<body class="d-flex">
   <!--vue-ssr-outlet-->
-  </body>
+</body>
 </html>

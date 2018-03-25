@@ -1,102 +1,78 @@
 <template>
-  <div id="app">
-    <header class="header">
-      <nav class="inner">
-        <router-link to="/" exact>
-          <img class="logo" src="~public/logo-48.png" alt="logo">
-        </router-link>
-        <router-link to="/top">Top</router-link>
-        <router-link to="/new">New</router-link>
-        <router-link to="/show">Show</router-link>
-        <router-link to="/ask">Ask</router-link>
-        <router-link to="/job">Jobs</router-link>
-        <a class="github" href="https://github.com/vuejs/vue-hackernews-2.0" target="_blank" rel="noopener">
-          Built with Vue.js
+  <div id="app" class="w-100">
+    <router-view class="view"></router-view>
+
+    <nav id="main-navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <span class="navbar-brand">
+        <a href="/">
+          <img src="/public/logo.svg" width="20" height="20" class="d-inline-block align-top mr-2" alt="Web Captioner" />
+          <span class="d-none d-md-inline">Web Captioner</span>
         </a>
-      </nav>
-    </header>
-    <transition name="fade" mode="out-in">
-      <router-view class="view"></router-view>
-    </transition>
+      </span>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li id="audioLevelWrap" hidden>
+            <div class="row mr-3" style="width:350px">
+              <div class="col text-right">
+                <span id="clippingMessage" hidden class="navbar-text text-white bg-danger px-3">
+                  <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Too loud
+                </span>
+                <span id="lowLevelMessage" hidden class="navbar-text text-white bg-danger px-2">
+                  <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Too quiet
+                </span>
+              </div>
+              <div class="col">
+                <div id="meterWrap" class="progress" style="margin-top:.7rem">
+                  <div id="meter" class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li id="now_listening" class="navbar-text text-white px-3" hidden>
+            Now listening...
+          </li>
+          <li class="nav-item">
+            <div id="settingsDropdownContainer" class="btn-group dropup">
+              <button type="button" class="btn btn-primary" id="startButton">Start<span class="d-none d-sm-inline"> Captioning</span></button>
+              <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</a>
+                <a class="dropdown-item" href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</a>
+                <a class="dropdown-item" href="/blog" target="_blank" onclick="ga('send', 'event', 'settings', 'blogButton')">Blog</a>
+                <a class="dropdown-item" href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</a>
+                <a class="dropdown-item" href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0)" id="saveTranscriptToFileButton" onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
+                <a class="dropdown-item disabled" hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
+                <a class="dropdown-item" href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">vMix</h6>
+                <a class="dropdown-item" id="startStopVmixToggle" href="javascript:void(0)" data-toggle="modal" onclick="ga('send', 'event', 'settings', 'vmixToggle')">Send to vMix <span class="badge-vmix-status-on badge badge-primary text-muted text-uppercase ml-1" hidden style="position:relative;top:-1px">On</span> <span class="badge-vmix-status-off badge badge-dark text-uppercase ml-1" hidden style="position:relative;top:-1px">Off</span></a>
+                <a class="dropdown-item" id="sendToVmixSettings" href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')">Configure</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#languageModal" onclick="ga('send', 'event', 'settings', 'editLanguageStart')"><i class="fa fa-language mr-1" aria-hidden="true"></i> Language</a>
+                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#wordReplacementModal" onclick="ga('send', 'event', 'settings', 'editWordReplacementsStart')"><i class="fa fa-refresh mr-1" aria-hidden="true"></i> Word Replacements</a>
+                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Appearance</a>
+                <router-link to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</router-link>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
 </template>
 
-<style lang="stylus">
-body
-  font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  font-size 15px
-  background-color lighten(#eceef1, 30%)
-  margin 0
-  padding-top 55px
-  color #34495e
-  overflow-y scroll
+<style lang="scss">
+  @import 'scss/app.scss';
+</style>
 
-a
-  color #34495e
-  text-decoration none
-
-.header
-  background-color #ff6600
-  position fixed
-  z-index 999
-  height 55px
-  top 0
-  left 0
-  right 0
-  .inner
-    max-width 800px
-    box-sizing border-box
-    margin 0px auto
-    padding 15px 5px
-  a
-    color rgba(255, 255, 255, .8)
-    line-height 24px
-    transition color .15s ease
-    display inline-block
-    vertical-align middle
-    font-weight 300
-    letter-spacing .075em
-    margin-right 1.8em
-    &:hover
-      color #fff
-    &.router-link-active
-      color #fff
-      font-weight 400
-    &:nth-child(6)
-      margin-right 0
-  .github
-    color #fff
-    font-size .9em
-    margin 0
-    float right
-
-.logo
-  width 24px
-  margin-right 10px
-  display inline-block
-  vertical-align middle
-
-.view
-  max-width 800px
-  margin 0 auto
-  position relative
-
-.fade-enter-active, .fade-leave-active
-  transition all .2s ease
-
-.fade-enter, .fade-leave-active
-  opacity 0
-
-@media (max-width 860px)
-  .header .inner
-    padding 15px 30px
-
-@media (max-width 600px)
-  .header
-    .inner
-      padding 15px
-    a
-      margin-right 1em
-    .github
-      display none
+<style lang="css">
+  @import '../node_modules/font-awesome/css/font-awesome.css';
 </style>
