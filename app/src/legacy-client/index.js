@@ -667,16 +667,17 @@ $('#saveTranscriptToFileButton').on('click', function() {
 $('[data-toggle="tooltip"]').tooltip();
 
 $('#settingsDropdownContainer').on('show.bs.dropdown', function () {
-    if (document.getElementById('results').innerText.length > 0) {
-        // Transcription exists; show save option
-        $('#saveTranscriptToFileButton').removeAttr('hidden');
-        $('#saveTranscriptToFileDisabledButton').attr('hidden', true);
-    }
-    else {
-        // No transcription yet; hide save option
-        $('#saveTranscriptToFileButton').attr('hidden', true);
-        $('#saveTranscriptToFileDisabledButton').removeAttr('hidden');
-    }
+    console.log("TODO!");
+    // if (document.getElementById('results').innerText.length > 0) {
+    //     // Transcription exists; show save option
+    //     $('#saveTranscriptToFileButton').removeAttr('hidden');
+    //     $('#saveTranscriptToFileDisabledButton').attr('hidden', true);
+    // }
+    // else {
+    //     // No transcription yet; hide save option
+    //     $('#saveTranscriptToFileButton').attr('hidden', true);
+    //     $('#saveTranscriptToFileDisabledButton').removeAttr('hidden');
+    // }
 });
 
 $('#clearTranscriptButton').on('click', function() {

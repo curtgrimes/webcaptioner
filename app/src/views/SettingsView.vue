@@ -1,16 +1,10 @@
 <template>
   <div class="settings-view h-100 bg-primary">
+    <router-link to="/captioner" class="btn btn-primary position-absolute py-md-4 px-4 px-md-5" style="right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
     <div class="container py-5 h-100">
-      <div class="row">
-        <div class="col-6">
-          <h2 class="mr-auto">Settings</h2>
-        </div>
-        <div class="col-6 text-right">
-          <router-link to="/captioner" class="btn btn-primary" role="tab" active-class="">Close</router-link>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
+      <div class="row h-100">
+        <div class="col-md-3" style="border-right:1px solid rgba(0,0,0,.1)">
+          <h2 class="lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
           <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <router-link to="appearance" class="nav-link" role="tab" active-class="active">Appearance</router-link>
             <router-link to="word-replacements" class="nav-link" role="tab" active-class="active">Word Replacements</router-link>

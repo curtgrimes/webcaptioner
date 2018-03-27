@@ -1,6 +1,6 @@
 <template>
   <div class="settings-vmix-view">
-    vMix
+    <h2>vMix</h2>
   </div>
 </template>
 

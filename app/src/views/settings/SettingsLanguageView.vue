@@ -1,6 +1,6 @@
 <template>
   <div class="settings-language-view">
-    Language
+    <h2>Language</h2>
   </div>
 </template>
 

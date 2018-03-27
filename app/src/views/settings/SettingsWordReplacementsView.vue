@@ -1,6 +1,6 @@
 <template>
   <div class="settings-word-replacements-view">
-    Word replacements
+    <h2>Word Replacements</h2>
   </div>
 </template>
 

@@ -55,7 +55,7 @@ export function createRouter () {
       { path: '/job/:page(\\d+)?', component: createListView('job') },
       { path: '/item/:id(\\d+)', component: ItemView },
       { path: '/user/:id', component: UserView },
-      { path: '/', redirect: '/top' }
+      { path: '/', redirect: '/captioner' }
     ]
   })
 }

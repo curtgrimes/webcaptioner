@@ -11,7 +11,7 @@ const serverTitleMixin = {
   created () {
     const title = getTitle(this)
     if (title) {
-      this.$ssrContext.title = `Vue HN 2.0 | ${title}`
+      this.$ssrContext.title = `Web Captioner | ${title}`
     }
   }
 }
@@ -20,7 +20,7 @@ const clientTitleMixin = {
   mounted () {
     const title = getTitle(this)
     if (title) {
-      document.title = `Vue HN 2.0 | ${title}`
+      document.title = `Web Captioner | ${title}`
     }
   }
 }
