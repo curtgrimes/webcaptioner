@@ -10,6 +10,7 @@ const UserView = () => import('../views/UserView.vue')
 
 
 const SettingsView = () => import('../views/SettingsView.vue')
+const SettingsAboutView = () => import('../views/settings/SettingsAboutView.vue')
 const SettingsAppearanceView = () => import('../views/settings/SettingsAppearanceView.vue')
 const SettingsLanguageView = () => import('../views/settings/SettingsLanguageView.vue')
 const SettingsWordReplacementsView = () => import('../views/settings/SettingsWordReplacementsView.vue')
@@ -26,8 +27,12 @@ export function createRouter () {
       { path: '/captioner', component: CaptionerView,
         children: [
           { path: '', component: CaptionerCaptionView },
-          { path: 'settings', component: SettingsView, redirect: '/captioner/settings/appearance',
+          { path: 'settings', component: SettingsView, redirect: '/captioner/settings/about',
             children: [
+              {
+                path: 'about',
+                component: SettingsAboutView
+              },
               {
                 path: 'appearance',
                 component: SettingsAppearanceView
