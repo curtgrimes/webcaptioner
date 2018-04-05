@@ -9,6 +9,7 @@
             <router-link to="about" class="nav-link" role="tab" active-class="active">About</router-link>
             <router-link to="appearance" class="nav-link" role="tab" active-class="active">Appearance</router-link>
             <router-link to="word-replacements" class="nav-link" role="tab" active-class="active">Word Replacements</router-link>
+            <router-link to="censor" class="nav-link" role="tab" active-class="active">Censor</router-link>
             <router-link to="language" class="nav-link" role="tab" active-class="active">Language</router-link>
             <router-link to="vmix" class="nav-link" role="tab" active-class="active">vMix</router-link>
           </div>

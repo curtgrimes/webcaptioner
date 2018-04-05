@@ -11,7 +11,7 @@ export default {
   props: [],
   computed: {
     textColor () {
-      return this.$store.state.appearance.textColor;
+      return this.$store.state.settings.appearance.text.textColor;
     },
     finalTranscript () {
       return this.$store.state.captioner.transcript.final;

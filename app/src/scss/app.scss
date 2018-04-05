@@ -23,9 +23,9 @@ $theme-colors: (
 
 $link-color: theme-color("secondary");
 
-$border-radius: 0;
-$border-radius-lg: 0;
-$border-radius-sm: 0;
+$border-radius: .2rem;
+$border-radius-lg: .3rem;
+$border-radius-sm: .2rem;
 $modal-content-bg: theme-color("primary");
 $modal-header-border-color: darken(theme-color("primary"), 10%);
 $modal-header-border-width: 1px;
@@ -66,12 +66,10 @@ $nav-pills-link-active-bg: #fff;
 $component-active-color: #fff;
 $component-active-bg:    #000;
 
-$list-group-color: $dropdown-link-color;
-$list-group-bg: $modal-header-border-color;
+$list-group-bg: lighten(theme-color("primary"), 5%);
 $list-group-hover-bg: lighten($modal-header-border-color, 5%);
 
-$list-group-link-active-color:   $list-group-color !default;
-$list-group-link-active-bg:      $dropdown-divider-bg;
+$list-group-active-bg: theme-color("secondary");
 
 $thumbnail-bg:                theme-color("primary");
 $thumbnail-border-color:      $modal-header-border-color;

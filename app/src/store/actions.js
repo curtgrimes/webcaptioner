@@ -4,7 +4,26 @@ import {
   fetchIdsByType
 } from '../api'
 
+import userLocale from 'locale2'
+import supportedLocales from '../data/locales'
+
 export default {
+  SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
+    commit('SET_LOCALE_USER_DEFAULT', { locale: userLocale });
+
+    // Find closest match for locale from supported locales
+    const matchingSupportedLocale = supportedLocales.find((l) => {
+      return l.code.toUpperCase() == userLocale.toUpperCase();
+    });
+    
+    commit('SET_LOCALE_FROM', {
+      locale: (matchingSupportedLocale ? matchingSupportedLocale.code : 'en-US')
+    });
+
+    return Promise.resolve();
+  },
+
+
   // ensure data for rendering given list type
   FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {
     commit('SET_ACTIVE_TYPE', { type })

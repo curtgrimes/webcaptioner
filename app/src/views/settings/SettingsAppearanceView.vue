@@ -287,32 +287,32 @@ export default {
   computed: {
     textColor: {
       get () {
-        return this.$store.state.appearance.text.textColor;
+        return this.$store.state.settings.appearance.text.textColor;
       },
       set: debounce(function(textColor) {
         // If the interim text color is currently the same, keep it matching.
-        if (this.$store.state.appearance.text.textColor === this.$store.state.appearance.text.textColorInterim) {
+        if (this.$store.state.settings.appearance.text.textColor === this.$store.state.settings.appearance.text.textColorInterim) {
           this.$store.commit('SET_TEXT_COLOR_INTERIM', {textColorInterim: textColor})
         }
 
-        if (this.$store.state.appearance.text.textColor != textColor) {
+        if (this.$store.state.settings.appearance.text.textColor != textColor) {
           this.$store.commit('SET_TEXT_COLOR', {textColor})
         }
       }, 500, {leading: true})
     },
     textColorInterim: {
       get () {
-        return this.$store.state.appearance.text.textColorInterim;
+        return this.$store.state.settings.appearance.text.textColorInterim;
       },
       set: debounce(function(textColorInterim) {
-        if (this.$store.state.appearance.text.textColorInterim != textColorInterim) {
+        if (this.$store.state.settings.appearance.text.textColorInterim != textColorInterim) {
           this.$store.commit('SET_TEXT_COLOR_INTERIM', {textColorInterim})
         }
       }, 500, {leading: true})
     },
     fontFamily: { // get/set the key from the store
       get () {
-        return this.$store.state.appearance.text.fontFamily;
+        return this.$store.state.settings.appearance.text.fontFamily;
       },
       set (fontFamily) {
         this.$store.commit('SET_FONT_FAMILY', {fontFamily});
@@ -321,13 +321,13 @@ export default {
     fontFamilyDisplayName: { // get the displayName according to the store key
       get () {
         return fontChoices.find((choice) => {
-          return choice.googleFontNameKey === this.$store.state.appearance.text.fontFamily
+          return choice.googleFontNameKey === this.$store.state.settings.appearance.text.fontFamily
         }).displayName;
       },
     },
     textSize: {
       get () {
-        return this.$store.state.appearance.text.textSize;
+        return this.$store.state.settings.appearance.text.textSize;
       },
       set (textSize) {
         this.$store.commit('SET_TEXT_SIZE', {textSize});
@@ -335,7 +335,7 @@ export default {
     },
     lineHeight: {
       get () {
-        return this.$store.state.appearance.text.lineHeight;
+        return this.$store.state.settings.appearance.text.lineHeight;
       },
       set (lineHeight) {
         this.$store.commit('SET_LINE_HEIGHT', {lineHeight});
@@ -343,7 +343,7 @@ export default {
     },
     letterSpacing: {
       get () {
-        return this.$store.state.appearance.text.letterSpacing;
+        return this.$store.state.settings.appearance.text.letterSpacing;
       },
       set (letterSpacing) {
         this.$store.commit('SET_LETTER_SPACING', {letterSpacing});
@@ -351,7 +351,7 @@ export default {
     },
     textTransform: {
       get () {
-        return this.$store.state.appearance.text.textTransform;
+        return this.$store.state.settings.appearance.text.textTransform;
       },
       set (textTransform) {
         this.$store.commit('SET_TEXT_TRANSFORM', {textTransform});
@@ -359,17 +359,17 @@ export default {
     },
     shadowColor: {
       get () {
-        return this.$store.state.appearance.shadow.color;
+        return this.$store.state.settings.appearance.shadow.color;
       },
       set: debounce(function(shadowColor) {
-        if (this.$store.state.appearance.shadow.color != shadowColor) {
+        if (this.$store.state.settings.appearance.shadow.color != shadowColor) {
           this.$store.commit('SET_SHADOW_COLOR', {shadowColor});
         }
       }, 500, {leading: true}),
     },
     shadowOpacity: {
       get () {
-        return this.$store.state.appearance.shadow.opacity;
+        return this.$store.state.settings.appearance.shadow.opacity;
       },
       set (shadowOpacity) {
         this.$store.commit('SET_SHADOW_OPACITY', {shadowOpacity});
@@ -377,7 +377,7 @@ export default {
     },
     shadowBlur: {
       get () {
-        return this.$store.state.appearance.shadow.blur;
+        return this.$store.state.settings.appearance.shadow.blur;
       },
       set (shadowBlur) {
         this.$store.commit('SET_SHADOW_BLUR', {shadowBlur});
@@ -385,7 +385,7 @@ export default {
     },
     shadowXPosition: {
       get () {
-        return this.$store.state.appearance.shadow.xPosition;
+        return this.$store.state.settings.appearance.shadow.xPosition;
       },
       set (shadowXPosition) {
         this.$store.commit('SET_SHADOW_X_POSITION', {shadowXPosition});
@@ -393,7 +393,7 @@ export default {
     },
     shadowYPosition: {
       get () {
-        return this.$store.state.appearance.shadow.yPosition;
+        return this.$store.state.settings.appearance.shadow.yPosition;
       },
       set (shadowYPosition) {
         this.$store.commit('SET_SHADOW_Y_POSITION', {shadowYPosition});
@@ -401,17 +401,17 @@ export default {
     },
     backgroundColor: {
       get () {
-        return this.$store.state.appearance.background.color;
+        return this.$store.state.settings.appearance.background.color;
       },
       set: debounce(function(backgroundColor) {
-        if (this.$store.state.appearance.background.color != backgroundColor) {
+        if (this.$store.state.settings.appearance.background.color != backgroundColor) {
           this.$store.commit('SET_BACKGROUND_COLOR', {backgroundColor});
         }
       }, 200, {leading: true}),
     },
     alignmentHorizontal: {
       get () {
-        return this.$store.state.appearance.text.alignment.horizontal;
+        return this.$store.state.settings.appearance.text.alignment.horizontal;
       },
       set (alignmentHorizontal) {
         this.$store.commit('SET_ALIGNMENT_HORIZONTAL', {alignmentHorizontal});
@@ -419,7 +419,7 @@ export default {
     },
     alignmentVertical: {
       get () {
-        return this.$store.state.appearance.text.alignment.vertical;
+        return this.$store.state.settings.appearance.text.alignment.vertical;
       },
       set (alignmentVertical) {
         this.$store.commit('SET_ALIGNMENT_VERTICAL', {alignmentVertical});

@@ -14,6 +14,7 @@ const SettingsAboutView = () => import('../views/settings/SettingsAboutView.vue'
 const SettingsAppearanceView = () => import('../views/settings/SettingsAppearanceView.vue')
 const SettingsLanguageView = () => import('../views/settings/SettingsLanguageView.vue')
 const SettingsWordReplacementsView = () => import('../views/settings/SettingsWordReplacementsView.vue')
+const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vue')
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
 const CaptionerView = () => import('../views/CaptionerView.vue')
 const CaptionerCaptionView = () => import('../views/CaptionerCaptionView.vue')
@@ -40,6 +41,10 @@ export function createRouter () {
               {
                 path: 'word-replacements',
                 component: SettingsWordReplacementsView
+              },
+              {
+                path: 'censor',
+                component: SettingsCensorView
               },
               {
                 path: 'language',
