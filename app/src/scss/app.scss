@@ -60,8 +60,8 @@ $nav-tabs-link-active-color: #000;
 $nav-tabs-link-active-bg: theme-color("primary");
 $nav-tabs-active-link-hover-bg: theme-color("primary");
 
-$nav-pills-link-active-color: theme-color("danger");
-$nav-pills-link-active-bg: #fff;
+$nav-pills-link-active-color: #fff;
+$nav-pills-link-active-bg: theme-color("secondary");
 
 $component-active-color: #fff;
 $component-active-bg:    #000;
@@ -197,6 +197,11 @@ input[type="color"] {
   font-weight:bold;
 }
 
+.nav-link {
+  /* Adjust for Cousine baseline issue */
+  padding:0.65rem 1rem 0.5rem 1rem;
+}
+
 .btn-info:focus, .btn-info.focus {
   box-shadow: 0 0 0 3px theme-color("secondary");
   color:#fff;
@@ -252,7 +257,7 @@ a.nav-link.active {
 }
     html,body {
       background: #000;
-      height:100%;
+      min-height: 100vh;
     }
 
     html.static-site, html.static-site body {
