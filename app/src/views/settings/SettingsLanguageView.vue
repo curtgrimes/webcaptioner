@@ -1,26 +1,14 @@
 <template>
   <div class="settings-language-view">
     <h2>Language</h2>
-    <p>Recognize speech in another language.</p>
-    <div class="list-group">
-      <button v-if="selectedLocale" class="list-group-item list-group-item-action active">
-        <span class="row">
-          <span class="col-1 pr-1 text-center"><i class="fa fa-check-circle fa-2x mt-2" aria-hidden="true"></i></span>
-          <span class="col-11">
-            {{selectedLocale.nameEnglish}}<br/>
-            <span class="small">{{selectedLocale.name}}</span>
-          </span>
-        </span>
-      </button>
-    </div>
-
-    <hr class="my-4" />
-
-    <h3>Other Languages</h3>
-    <p class="small">Learn more about <a href="https://webcaptioner.com/help/general/supported-languages/" target="_blank">supported languages and dialects</a>.</p>
+    <p>Web Captioner will recognize speech in this language. Learn more about <a href="https://webcaptioner.com/help/general/supported-languages/" target="_blank">supported languages and dialects</a>.</p>
+    <h3>Select a Language</h3>
     <div class="row mb-3">
-      <div class="col-sm-6">
-        <input type="text" v-model="searchQuery" placeholder="Search..." class="form-control" />
+      <div class="col-sm-7">
+        <input ref="search" type="text" v-model="searchQuery" placeholder="Search..." class="form-control" />
+      </div>
+      <div class="col-sm-2 pl-0">
+        <button v-bind:class="{'show' : searchQuery !== '', 'invisible' : searchQuery == ''}" class="btn btn-sm btn-outline-dark fade" type="button" @click="clearSearch()">Clear</button>
       </div>
     </div>
     <div class="list-group">
@@ -58,6 +46,12 @@ export default {
     return {
       searchQuery: '',
     }
+  },
+  methods: {
+    clearSearch: function () {
+      this.searchQuery = '';
+      this.$refs.search.focus();
+    },
   },
   computed: {
     selectedLocale: function() {

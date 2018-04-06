@@ -178,6 +178,7 @@
       <label for="background-color" class="col-sm-6 col-form-label">Background Color</label>
       <div class="col-sm-6">
         <input class="form-control" name="background-color" type="color" v-model="backgroundColor">
+        <p class="small mb-0 mt-1">RGB ({{backgroundColorRGBValues.r}}, {{backgroundColorRGBValues.g}}, {{backgroundColorRGBValues.b}})</p>
       </div>
     </div>
     <div class="form-group row">
@@ -408,6 +409,24 @@ export default {
           this.$store.commit('SET_BACKGROUND_COLOR', {backgroundColor});
         }
       }, 200, {leading: true}),
+    },
+    backgroundColorRGBValues: function() {
+      function hexToRgb(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+      }
+
+      return hexToRgb(this.$store.state.settings.appearance.background.color);
     },
     alignmentHorizontal: {
       get () {
