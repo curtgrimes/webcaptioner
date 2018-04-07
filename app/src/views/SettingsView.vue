@@ -12,6 +12,9 @@
               <router-link to="word-replacements" class="nav-link" role="tab" active-class="active">Word Replacements</router-link>
               <router-link to="censor" class="nav-link" role="tab" active-class="active">Censor</router-link>
               <router-link to="language" class="nav-link" role="tab" active-class="active">Language</router-link>
+            </div>
+            <hr/>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
               <router-link to="vmix" class="nav-link" role="tab" active-class="active">vMix</router-link>
             </div>
           </div>

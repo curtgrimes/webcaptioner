@@ -369,7 +369,6 @@ function initRecognition() {
         //     }));
         // }
     };
-console.log(window.timings);
 
     return recognition;
 }

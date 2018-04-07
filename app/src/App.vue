@@ -2,7 +2,7 @@
   <div id="app" class="w-100">
     <router-view class="view"></router-view>
 
-    <nav id="main-navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark">
+    <nav id="main-navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark pr-2">
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -37,14 +37,14 @@
           </li>
           <li class="nav-item">
             <div id="settingsDropdownContainer" class="btn-group dropup">
-              <button type="button" class="btn btn-primary" id="startButton">Start<span class="d-none d-sm-inline"> Captioning</span></button>
+              <button v-if="!captioningOn" @click="startCaptioning()" type="button" class="btn btn-primary">Start<span class="d-none d-sm-inline"> Captioning</span></button>
+              <button v-if="captioningOn" @click="stopCaptioning()" type="button" class="btn btn-primary">Stop</button>
               <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ga('send', 'event', 'settings', 'expandDropdown')">
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
               <div class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item" href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</a>
                 <a class="dropdown-item" href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</a>
-                <a class="dropdown-item" href="/blog" target="_blank" onclick="ga('send', 'event', 'settings', 'blogButton')">Blog</a>
                 <a class="dropdown-item" href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</a>
                 <a class="dropdown-item" href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</a>
                 <div class="dropdown-divider"></div>
@@ -56,9 +56,6 @@
                 <a class="dropdown-item" id="startStopVmixToggle" href="javascript:void(0)" data-toggle="modal" onclick="ga('send', 'event', 'settings', 'vmixToggle')">Send to vMix <span class="badge-vmix-status-on badge badge-primary text-muted text-uppercase ml-1" hidden style="position:relative;top:-1px">On</span> <span class="badge-vmix-status-off badge badge-dark text-uppercase ml-1" hidden style="position:relative;top:-1px">Off</span></a>
                 <a class="dropdown-item" id="sendToVmixSettings" href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')">Configure</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#languageModal" onclick="ga('send', 'event', 'settings', 'editLanguageStart')"><i class="fa fa-language mr-1" aria-hidden="true"></i> Language</a>
-                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#wordReplacementModal" onclick="ga('send', 'event', 'settings', 'editWordReplacementsStart')"><i class="fa fa-refresh mr-1" aria-hidden="true"></i> Word Replacements</a>
-                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#appearanceModal" onclick="ga('send', 'event', 'settings', 'editAppearanceStart')"><i class="fa fa-paint-brush mr-1" aria-hidden="true"></i> Appearance</a>
                 <router-link to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</router-link>
               </div>
             </div>
@@ -76,3 +73,22 @@
 <style lang="css">
   @import '../node_modules/font-awesome/css/font-awesome.css';
 </style>
+
+<script>
+export default {
+  name: 'settings-view',
+  computed: {
+    captioningOn: function() {
+      return this.$store.state.captioner.on; 
+    },
+  },
+  methods: {
+    startCaptioning: function() {
+      this.$store.dispatch('captioner/start');
+    },
+    stopCaptioning: function() {
+      this.$store.dispatch('captioner/stop');
+    },
+  }
+}
+</script>

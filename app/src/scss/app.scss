@@ -97,6 +97,8 @@ $carousel-control-opacity: .8;
   cursor: pointer;
 }
 
+$hr-margin-y: 0.5rem;
+
 $fa-font-path: '/build/font-awesome';
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 
@@ -297,7 +299,8 @@ a.nav-link.active {
     }
 
     .transcript {
-      min-height:100%;
+      overflow: hidden;
+      height: 100vh;
       width:100%;
       line-height: 5rem;
       color: #fff;
@@ -305,6 +308,7 @@ a.nav-link.active {
       text-transform: uppercase;
       font-size: 4em;
       font-family:'Cousine', monopsace;
+      padding-bottom:4rem;
     }
 
     .final:focus {
