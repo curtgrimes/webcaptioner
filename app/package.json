@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@google-cloud/translate": "^0.8.2",
+    "audio-stream-meter": "^1.0.4",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0",
     "compression": "^1.7.2",

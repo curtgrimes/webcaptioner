@@ -5,6 +5,7 @@ import mutations from './mutations'
 import getters from './getters'
 import captioner from './modules/captioner'
 import fontChocies from '../util/fontChoices'
+import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
 
@@ -53,6 +54,7 @@ export function createStore () {
     },
     actions,
     mutations,
-    getters
+    getters,
+    plugins: [(new VuexPersistence({})).plugin],
   })
 }

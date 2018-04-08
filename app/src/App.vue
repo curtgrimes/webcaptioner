@@ -15,22 +15,8 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-          <li id="audioLevelWrap" hidden>
-            <div class="row mr-3" style="width:350px">
-              <div class="col text-right">
-                <span id="clippingMessage" hidden class="navbar-text text-white bg-danger px-3">
-                  <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Too loud
-                </span>
-                <span id="lowLevelMessage" hidden class="navbar-text text-white bg-danger px-2">
-                  <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i> Too quiet
-                </span>
-              </div>
-              <div class="col">
-                <div id="meterWrap" class="progress" style="margin-top:.7rem">
-                  <div id="meter" class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              </div>
-            </div>
+          <li>
+            <volume-meter></volume-meter>
           </li>
           <li id="now_listening" class="navbar-text text-white px-3" hidden>
             Now listening...
@@ -52,10 +38,6 @@
                 <a class="dropdown-item disabled" hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</a>
                 <a class="dropdown-item" href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</a>
                 <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header">vMix</h6>
-                <a class="dropdown-item" id="startStopVmixToggle" href="javascript:void(0)" data-toggle="modal" onclick="ga('send', 'event', 'settings', 'vmixToggle')">Send to vMix <span class="badge-vmix-status-on badge badge-primary text-muted text-uppercase ml-1" hidden style="position:relative;top:-1px">On</span> <span class="badge-vmix-status-off badge badge-dark text-uppercase ml-1" hidden style="position:relative;top:-1px">Off</span></a>
-                <a class="dropdown-item" id="sendToVmixSettings" href="javascript:void(0)" data-toggle="modal" data-target="#vmixModal" onclick="ga('send', 'event', 'settings', 'editVmixStart')">Configure</a>
-                <div class="dropdown-divider"></div>
                 <router-link to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</router-link>
               </div>
             </div>
@@ -75,8 +57,13 @@
 </style>
 
 <script>
+import VolumeMeter from './components/VolumeMeter.vue'
+
 export default {
   name: 'settings-view',
+  components: {
+    VolumeMeter,
+  },
   computed: {
     captioningOn: function() {
       return this.$store.state.captioner.on; 

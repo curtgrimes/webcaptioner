@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-about-view">
+  <div class="settings-about-view" v-once>
     <h2>About</h2>
     <p>Version {{changelogSortedByVersionNumber[changelogSortedByVersionNumber.length - 1].version}}</p>
 

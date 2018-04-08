@@ -9,6 +9,10 @@ const state = {
         interim: '',
         final: '',
     },
+    volume: {
+        tooLow: false,
+        tooHigh: false,
+    },
 }
 
 const actions = {
@@ -97,6 +101,13 @@ const mutations = {
             transcriptFinal = ' ' + transcriptFinal;
         }
         state.transcript.final += transcriptFinal;
+    },
+
+    VOLUME_TOO_LOW (state, { volumeTooLow }) {
+        state.volume.tooLow = volumeTooLow;
+    },
+    VOLUME_TOO_HIGH (state, { volumeTooHigh }) {
+        state.volume.tooHigh = volumeTooHigh;
     },
 
 //   add_to_cart (state, productId) {

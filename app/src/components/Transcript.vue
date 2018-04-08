@@ -1,6 +1,10 @@
 <template>
-  <div ref="transcript" class="transcript d-flex align-items-end" v-bind:style="{color: textColor}">
-    <span>{{finalTranscript}} <span>{{interimTranscript}}</span></span>
+  <div
+    ref="transcript"
+    class="transcript d-flex align-items-end"
+    v-bind:style="{color, backgroundColor}"
+  >
+    {{finalTranscript}} <span>{{interimTranscript}}</span>
   </div>
 </template>
 
@@ -19,8 +23,11 @@ export default {
     },
   },
   computed: {
-    textColor () {
+    color () {
       return this.$store.state.settings.appearance.text.textColor;
+    },
+    backgroundColor () {
+      return this.$store.state.settings.appearance.background.color;
     },
     finalTranscript () {
       this.scrollToBottom();
