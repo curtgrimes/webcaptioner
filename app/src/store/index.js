@@ -5,7 +5,7 @@ import mutations from './mutations'
 import getters from './getters'
 import captioner from './modules/captioner'
 import fontChocies from '../util/fontChoices'
-import VuexPersistence from 'vuex-persist'
+import vuexPersist from 'vuex-persist'
 
 Vue.use(Vuex)
 
@@ -15,6 +15,7 @@ export function createStore () {
       captioner,
     },
     state: {
+      version: '2.0.0',
       settings: {
         appearance: {
           text: {
@@ -55,6 +56,14 @@ export function createStore () {
     actions,
     mutations,
     getters,
-    plugins: [(new VuexPersistence({})).plugin],
+    plugins: [new vuexPersist({
+      key: 'webcaptioner:settings',
+      reducer: (state) => {
+        return {
+          settings: state.settings,
+          version: state.version,
+        };
+      },
+    }).plugin],
   })
 }

@@ -58,9 +58,38 @@
 
 <script>
 import VolumeMeter from './components/VolumeMeter.vue'
+import Combokeys from 'combokeys'
 
 export default {
-  name: 'settings-view',
+  name: 'app-view',
+  data: function() {
+    return {
+      combokeysDocument: null,
+    };
+  },
+  mounted: function() {
+    let self = this;
+    this.combokeysDocument = new Combokeys(document.documentElement);
+    this.combokeysDocument
+      .bind('w s', function() {
+        self.$router.push('/captioner/settings');
+      })
+      .bind('?', function() {
+        self.$router.push('/captioner/settings/keyboard-shortcuts');
+      })
+      .bind('w c', function() {
+        self.$router.push('/captioner');
+        if (!self.captioningOn) {
+          self.startCaptioning();
+        }
+        else {
+          self.stopCaptioning();
+        }
+      });
+  },
+  beforeDestroy: function() {
+    this.combokeysDocument.detach();
+  },
   components: {
     VolumeMeter,
   },

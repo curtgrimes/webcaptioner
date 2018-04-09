@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-view h-100 bg-primary">
+  <div class="settings-view h-100 bg-primary" v-on:keyup.enter="alert('hi')">
     <router-link to="/captioner" class="btn btn-primary position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
     <div class="container pb-5 h-100">
       <div class="row h-100">
@@ -17,6 +17,10 @@
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
               <router-link to="vmix" class="nav-link" role="tab" active-class="active">vMix</router-link>
             </div>
+            <hr/>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <router-link to="keyboard-shortcuts" class="nav-link" role="tab" active-class="active">Keyboard Shortcuts</router-link>
+            </div>
           </div>
         </div>
         <div class="col-md-9 mb-2 py-5">
@@ -30,9 +34,25 @@
 </template>
 
 <script>
+import Combokeys from 'combokeys'
 
 export default {
   name: 'settings-view',
+  data: function() {
+    return {
+      escShortcut: null,
+    };
+  },
+  mounted: function() {
+    let self = this;
+    this.escShortcut = new Combokeys(document.documentElement);
+    this.escShortcut.bind('esc', function() {
+      self.$router.push('/captioner');
+    });
+  },
+  beforeDestroy: function() {
+    this.escShortcut.detach();
+  },
 }
 </script>
 
@@ -41,5 +61,9 @@ export default {
     text-transform:uppercase;
     font-size:1.3rem;
     margin:1rem 0;
+  }
+
+  .settings-view .nav-pills {
+    font-size:0.92rem;
   }
 </style>

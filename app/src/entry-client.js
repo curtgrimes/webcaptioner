@@ -40,6 +40,15 @@ if (window.__INITIAL_STATE__) {
   store.replaceState(window.__INITIAL_STATE__)
 }
 
+// Restore locally saved settings
+const localSettings = JSON.parse(localStorage.getItem('webcaptioner:settings'));
+if (localSettings) {
+  store.commit('RESTORE_SETTINGS', {
+    settings: localSettings.settings,
+    version: localSettings.version,
+  });
+}
+
 store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
 
 

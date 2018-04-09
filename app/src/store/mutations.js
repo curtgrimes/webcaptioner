@@ -1,6 +1,9 @@
 import Vue from 'vue'
 
 export default {
+  RESTORE_SETTINGS: (state, { settings, version }) => {
+    state.settings = settings;
+  },
   SET_TEXT_COLOR: (state, { textColor }) => {
     state.settings.appearance.text.textColor = textColor
   },

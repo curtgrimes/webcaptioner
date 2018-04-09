@@ -299,7 +299,7 @@ a.nav-link.active {
     }
 
     .transcript {
-      overflow: hidden;
+      overflow-y:scroll;
       height: 100vh;
       width:100%;
       line-height: 5rem;
@@ -309,6 +309,11 @@ a.nav-link.active {
       font-size: 4em;
       font-family:'Cousine', monopsace;
       padding-bottom:4rem;
+    }
+
+    .transcript-child {
+      overflow-y:scroll;
+      max-height:100%;
     }
 
     .final:focus {

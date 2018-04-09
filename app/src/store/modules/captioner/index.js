@@ -6,8 +6,8 @@ let speechRecognizer;
 const state = {
     on: false,
     transcript: {
-        interim: '',
-        final: '',
+        interim: 'hello',
+        final: 'hello2',
     },
     volume: {
         tooLow: false,

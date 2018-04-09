@@ -16,6 +16,7 @@ const SettingsLanguageView = () => import('../views/settings/SettingsLanguageVie
 const SettingsWordReplacementsView = () => import('../views/settings/SettingsWordReplacementsView.vue')
 const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vue')
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
+const SettingsKeyboardShortcutsView = () => import('../views/settings/SettingsKeyboardShortcutsView.vue')
 const CaptionerView = () => import('../views/CaptionerView.vue')
 const CaptionerCaptionView = () => import('../views/CaptionerCaptionView.vue')
 
@@ -53,6 +54,10 @@ export function createRouter () {
               {
                 path: 'vmix',
                 component: SettingsVmixView
+              },
+              {
+                path: 'keyboard-shortcuts',
+                component: SettingsKeyboardShortcutsView
               },
             ]
           },
