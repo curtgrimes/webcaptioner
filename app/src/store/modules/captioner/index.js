@@ -63,16 +63,20 @@ const actions = {
     },
 
     stop ({commit, state, rootState}) {
-        speechRecognizer.stop();
+        if (speechRecognizer) {
+            speechRecognizer.stop();
+        }
     },
 
     restart ({commit, state, rootState}) {
-        const restartSpeechRecognizer = function(event) {
-            speechRecognizer.removeEventListener('end', restartSpeechRecognizer, false); // only do it once
-            speechRecognizer.start();
-        };
-        speechRecognizer.addEventListener('end', restartSpeechRecognizer, false);
-        speechRecognizer.abort();
+        if (speechRecognizer) {
+            const restartSpeechRecognizer = function(event) {
+                speechRecognizer.removeEventListener('end', restartSpeechRecognizer, false); // only do it once
+                speechRecognizer.start();
+            };
+            speechRecognizer.addEventListener('end', restartSpeechRecognizer, false);
+            speechRecognizer.abort();
+        }
     },
 
   // The first argument is the vuex store, but we're using only the

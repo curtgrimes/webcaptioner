@@ -61,6 +61,7 @@ export default {
       .bind('w s', function() {
         self.$router.push('/captioner/settings');
         self.$refs.saveToFileModal.hideModal();
+        self.$refs.clearTranscriptModal.hideModal(); // if visible
       })
       .bind('w f', function() {
         self.$router.push('/captioner');
@@ -73,6 +74,8 @@ export default {
       })
       .bind('?', function() {
         self.$router.push('/captioner/settings/keyboard-shortcuts');
+        self.$refs.saveToFileModal.hideModal(); // if visible
+        self.$refs.clearTranscriptModal.hideModal(); // if visible
       })
       .bind('w c', function() {
         self.$router.push('/captioner');
