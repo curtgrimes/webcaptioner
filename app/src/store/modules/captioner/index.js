@@ -57,7 +57,6 @@ const actions = {
                 // Clear the interim transcript because its content is now
                 // returned in the final transcript
                 commit('CLEAR_TRANSCRIPT_INTERIM');
-
                 commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal });
             }
         };
@@ -65,6 +64,15 @@ const actions = {
 
     stop ({commit, state, rootState}) {
         speechRecognizer.stop();
+    },
+
+    restart ({commit, state, rootState}) {
+        const restartSpeechRecognizer = function(event) {
+            speechRecognizer.removeEventListener('end', restartSpeechRecognizer, false); // only do it once
+            speechRecognizer.start();
+        };
+        speechRecognizer.addEventListener('end', restartSpeechRecognizer, false);
+        speechRecognizer.abort();
     },
 
   // The first argument is the vuex store, but we're using only the
@@ -90,6 +98,10 @@ const mutations = {
     },
     SET_TRANSCRIPT_INTERIM (state, { transcriptInterim }) {
         state.transcript.interim = transcriptInterim;
+    },
+    CLEAR_TRANSCRIPT (state) {
+        state.transcript.interim = '';
+        state.transcript.final = '';
     },
     CLEAR_TRANSCRIPT_INTERIM (state) {
         state.transcript.interim = '';

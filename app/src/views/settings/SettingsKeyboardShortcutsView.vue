@@ -11,14 +11,20 @@
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-6">Settings</div>
+          <div class="col-6">Open Settings</div>
           <div class="col-6 text-right"><kbd>w</kbd> then <kbd>s</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-6">"Save as File" dialog</div>
+          <div class="col-6">Open "Save as File" dialog</div>
           <div class="col-6 text-right"><kbd>w</kbd> then <kbd>f</kbd></div>
+        </div>
+      </div>
+      <div class="list-group-item">
+        <div class="row">
+          <div class="col-6">Clear transcript</div>
+          <div class="col-6 text-right"><kbd>w</kbd> then <kbd>p</kbd> then <kbd>p</kbd></div>
         </div>
       </div>
       <div class="list-group-item">

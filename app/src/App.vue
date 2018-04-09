@@ -2,6 +2,7 @@
   <div id="app" class="w-100">
     <router-view class="view"></router-view>
     <save-to-file-modal ref="saveToFileModal"></save-to-file-modal>
+    <clear-transcript-modal ref="clearTranscriptModal"></clear-transcript-modal>
 
     <nav id="main-navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark pr-2">
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,9 +24,8 @@
         <b-dropdown-item href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</b-dropdown-item>
         <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
         <div class="dropdown-divider"></div>
-        <b-dropdown-item @click="startSaveToFileModal()" href="javascript:void(0)" id="saveTranscriptToFileButton" onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
-        <b-dropdown-item disabled hidden href="javascript:void(0)" id="saveTranscriptToFileDisabledButton" data-toggle="tooltip" data-trigger="hover" data-placement="left" title="Nothing to save right now"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
-        <b-dropdown-item href="javascript:void(0)" id="clearTranscriptButton"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
+        <b-dropdown-item @click="startSaveToFileModal()" id="saveTranscriptToFileButton" onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
+        <b-dropdown-item @click="startClearTranscriptModal()"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
         <div class="dropdown-divider"></div>
         <b-dropdown-item to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</b-dropdown-item>
       </b-dropdown>
@@ -44,6 +44,7 @@
 <script>
 import VolumeMeter from './components/VolumeMeter.vue'
 import SaveToFileModal from './components/SaveToFileModal.vue'
+import ClearTranscriptModal from './components/ClearTranscriptModal.vue'
 import Combokeys from 'combokeys'
 
 export default {
@@ -65,6 +66,11 @@ export default {
         self.$router.push('/captioner');
         self.startSaveToFileModal();
       })
+      .bind('w p p', function() {
+        self.$store.dispatch('captioner/restart');
+        self.$store.commit('captioner/CLEAR_TRANSCRIPT');
+        self.$refs.clearTranscriptModal.hideModal(); // if it was visible; just for clarity
+      })
       .bind('?', function() {
         self.$router.push('/captioner/settings/keyboard-shortcuts');
       })
@@ -84,6 +90,7 @@ export default {
   components: {
     VolumeMeter,
     SaveToFileModal,
+    ClearTranscriptModal,
   },
   computed: {
     captioningOn: function() {
@@ -102,6 +109,9 @@ export default {
     },
     startSaveToFileModal: function() {
       this.$refs.saveToFileModal.showModal();
+    },
+    startClearTranscriptModal: function() {
+      this.$refs.clearTranscriptModal.showModal();
     },
   }
 }
