@@ -1,26 +1,28 @@
 <template>
-  <div class="settings-view h-100 bg-primary" v-on:keyup.enter="alert('hi')">
+  <div class="settings-view h-100 bg-primary">
     <router-link to="/captioner" class="btn btn-primary position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
     <div class="container pb-5 h-100">
       <div class="row h-100">
         <div class="col-md-3 pt-5" style="border-right:1px solid rgba(0,0,0,.1)">
           <div class="position-sticky" style="top:20px">
             <h2 class="lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <router-link to="about" class="nav-link" role="tab" active-class="active">About</router-link>
-              <router-link to="appearance" class="nav-link" role="tab" active-class="active">Appearance</router-link>
-              <router-link to="word-replacements" class="nav-link" role="tab" active-class="active">Word Replacements</router-link>
-              <router-link to="censor" class="nav-link" role="tab" active-class="active">Censor</router-link>
-              <router-link to="language" class="nav-link" role="tab" active-class="active">Language</router-link>
-            </div>
-            <hr/>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <router-link to="vmix" class="nav-link" role="tab" active-class="active">vMix</router-link>
-            </div>
-            <hr/>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <router-link to="keyboard-shortcuts" class="nav-link" role="tab" active-class="active">Keyboard Shortcuts</router-link>
-            </div>
+            <nav>
+              <b-nav vertical pills>
+                <b-nav-item to="about">About</b-nav-item>
+                <b-nav-item to="appearance">Appearance</b-nav-item>
+                <b-nav-item to="word-replacements">Word Replacements</b-nav-item>
+                <b-nav-item to="censor">Censor</b-nav-item>
+                <b-nav-item to="Language">Language</b-nav-item>
+              </b-nav>
+              <hr/>
+              <b-nav vertical pills>
+                <b-nav-item to="vmix">vMix</b-nav-item>
+              </b-nav>
+              <hr/>
+              <b-nav vertical pills>
+                <b-nav-item to="keyboard-shortcuts">Keyboard Shortcuts</b-nav-item>
+              </b-nav>
+            </nav>
           </div>
         </div>
         <div class="col-md-9 mb-2 py-5">

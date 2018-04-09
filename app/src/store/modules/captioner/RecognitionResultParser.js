@@ -1,8 +1,8 @@
 import {escapeRegExp} from 'lodash/lodash.js'
 
 export default class {
-    constructor ({wordReplacements = []}) {
-        this.wordReplacements = wordReplacements;
+    constructor ({wordReplacements}) {
+        this.wordReplacements = wordReplacements || [];
     }
 
     getTranscript(recognitionResultEvent) {
