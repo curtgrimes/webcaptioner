@@ -18,7 +18,9 @@ const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vu
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
 const SettingsKeyboardShortcutsView = () => import('../views/settings/SettingsKeyboardShortcutsView.vue')
 const CaptionerView = () => import('../views/CaptionerView.vue')
-const CaptionerCaptionView = () => import('../views/CaptionerCaptionView.vue')
+const Transcript = () => import('../components/Transcript.vue')
+const SaveToFileModal = () => import('../components/SaveToFileModal.vue')
+const ClearTranscriptModal = () => import('../components/ClearTranscriptModal.vue')
 
 export function createRouter () {
   return new Router({
@@ -28,7 +30,9 @@ export function createRouter () {
     routes: [
       { path: '/captioner', component: CaptionerView,
         children: [
-          { path: '', component: CaptionerCaptionView },
+          { path: '', component: Transcript },
+          { path: 'save-to-file', component: Transcript, name: 'save-to-file' },
+          { path: 'clear', component: Transcript, name: 'clear-transcript' },
           { path: 'settings', component: SettingsView, redirect: '/captioner/settings/about',
             children: [
               {
@@ -63,6 +67,7 @@ export function createRouter () {
           },
         ]
       },
+      { path: '/receiver', component: CaptionerView},
       { path: '/top/:page(\\d+)?', component: createListView('top') },
       { path: '/new/:page(\\d+)?', component: createListView('new') },
       { path: '/show/:page(\\d+)?', component: createListView('show') },

@@ -303,7 +303,6 @@ a.nav-link.active {
     }
 
     .transcript {
-      overflow-y:scroll;
       height: 100vh;
       width:100%;
       line-height: 5rem;
@@ -315,8 +314,14 @@ a.nav-link.active {
       padding-bottom:4rem;
     }
 
-    .transcript-child {
+    .transcript-scroller {
       overflow-y:scroll;
+      position:relative;
+    }
+
+    .transcript-scroller-child {
+      position:absolute;
+      bottom:0; // make transcription start from the bottom
       max-height:100%;
     }
 

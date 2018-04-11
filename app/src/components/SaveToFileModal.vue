@@ -1,5 +1,5 @@
 <template>
-    <b-modal lazy ref="modal" hide-footer title="Save to File" @shown="autofocusElement()">
+    <b-modal lazy ref="modal" hide-footer title="Save to File" @shown="autofocusElement()" @hide="replaceRouteToParent">
       <p>Save your current transcript to file.</p>
       <b-alert v-if="transcriptEmpty" show variant="info" class="small text-center">
         Psst... you know you don't have anything to save yet, right?
@@ -18,12 +18,14 @@
           </b-button>
         </div>
       </div>
-      <b-btn class="mt-3" variant="outline-info" block @click="hideModal">Close</b-btn>
+      <b-btn class="mt-3" variant="outline-info" block to="/captioner" replace>Close</b-btn>
     </b-modal>
 </template>
 
 <script>
 import { format } from 'date-fns'
+
+const routeName = 'save-to-file';
 
 export default {
   name: 'save-as-file-modal',
@@ -33,12 +35,30 @@ export default {
         && !this.$store.state.captioner.transcript.final;
     },
   },
-  methods: {
-    showModal () {
+  mounted: function() {
+    if (this.$route.name == routeName) {
       this.$refs.modal.show();
-    },
-    hideModal () {
-      this.$refs.modal.hide();
+    }
+  },
+  watch: {
+    '$route.name': function (routeTo, routeFrom) {
+      if (routeTo == routeName) {
+        this.$refs.modal.show();
+      }
+      else if (routeFrom == routeName) {
+        this.$refs.modal.hide();
+      }
+    }
+  },
+  methods: {
+    replaceRouteToParent(e) {
+      // e.trigger is set if the user interacted with the dialog UI directly
+      // to cause it to close. Only replace the state when this happens. Otherwise,
+      // if e.trigger isn't set, the dialog closing is due to a route change already
+      // in progress, (keyboard shortcuts, etc.) so we don't want to change the route.
+      if (e.trigger) {
+        this.$router.replace('/captioner');
+      }
     },
     autofocusElement () {
       this.$refs.textFileButton.focus();
@@ -49,6 +69,9 @@ export default {
       a.textContent = 'download';
       a.download = 'web-captioner-'+ format(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.txt';
       a.click();
+
+      // Close dialog
+      this.$router.replace('/captioner');
     },
     saveAsWord () {
       var a = document.createElement('a');
@@ -56,6 +79,9 @@ export default {
       a.textContent = 'download';
       a.download = 'web-captioner-'+ format(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.doc';
       a.click();
+
+      // Close dialog
+      this.$router.replace('/captioner');
     },
   },
 }

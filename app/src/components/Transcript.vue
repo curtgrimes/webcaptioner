@@ -1,13 +1,8 @@
 <template>
-  <div
-    class="transcript d-flex align-items-end" v-bind:class="wrapTextPositionClass"
-    v-bind:style="{color, backgroundColor}"
-  >
-    <span class="" v-bind:class="textPositionClass">
-      <span class="transcript-child d-flex align-items-end" ref="transcriptScroller">
-        <span>
-          {{finalTranscript}} <span v-bind:style="{color: interimColor}">{{interimTranscript}}</span>
-        </span>
+  <div class="transcript d-flex" v-bind:class="wrapTextPositionClass" v-bind:style="{color, backgroundColor}">
+    <span v-bind:class="textPositionClass" class="transcript-scroller" ref="scroller">
+      <span class="transcript-scroller-child">
+        {{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span>
       </span>
     </span>
   </div>
@@ -21,11 +16,14 @@ export default {
   methods: {
     scrollToBottom: function () {
       this.$nextTick(function () {
-        if (this.$refs.transcriptScroller) {
-          this.$refs.transcriptScroller.scrollTop = this.$refs.transcriptScroller.scrollHeight;
+        if (this.$refs.scroller) {
+          this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight;
         }
       });
     },
+  },
+  mounted: function() {
+    this.scrollToBottom();
   },
   computed: {
     color () {
@@ -43,7 +41,10 @@ export default {
     },
     interimTranscript () {
       this.scrollToBottom();
-      return ' ' + this.$store.state.captioner.transcript.interim;
+
+      // Prepend a space if string is not empty
+      return (this.$store.state.captioner.transcript.interim.length ? ' ' : '')
+        + this.$store.state.captioner.transcript.interim;
     },
 
     textPositionClass: function () {
@@ -55,7 +56,7 @@ export default {
         'w-50 ml-auto': this.$store.state.settings.appearance.text.alignment.horizontal == 'right',
 
         /* Vertical alignments */
-        // 'h-100': this.$store.state.settings.appearance.text.alignment.vertical == 'full',
+        'h-100': this.$store.state.settings.appearance.text.alignment.vertical == 'full',
         'h-50': ['top','middle','bottom'].includes(this.$store.state.settings.appearance.text.alignment.vertical),
         'h-25': this.$store.state.settings.appearance.text.alignment.vertical == 'lowerThird',
       }

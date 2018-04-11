@@ -1,35 +1,6 @@
 <template>
   <div id="app" class="w-100">
-    <router-view class="view"></router-view>
-    <save-to-file-modal ref="saveToFileModal"></save-to-file-modal>
-    <clear-transcript-modal ref="clearTranscriptModal"></clear-transcript-modal>
-
-    <nav id="main-navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark pr-2">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <span class="navbar-brand mr-auto">
-        <a href="/">
-          <img src="/public/logo.svg" width="20" height="20" class="d-inline-block align-top mr-2" alt="Web Captioner" />
-          <span class="d-none d-md-inline">Web Captioner</span>
-        </a>
-      </span>
-      <volume-meter></volume-meter>
-      <li id="now_listening" class="navbar-text text-white px-3" hidden>
-        Now listening...
-      </li>
-      <b-dropdown variant="primary" dropup right split :text="!captioningOn ? 'Start Captioning' : 'Stop'" @click="!captioningOn ? startCaptioning() : stopCaptioning()">
-        <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
-        <b-dropdown-item href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</b-dropdown-item>
-        <b-dropdown-item href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</b-dropdown-item>
-        <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
-        <div class="dropdown-divider"></div>
-        <b-dropdown-item @click="startSaveToFileModal()" id="saveTranscriptToFileButton" onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
-        <b-dropdown-item @click="startClearTranscriptModal()"><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
-        <div class="dropdown-divider"></div>
-        <b-dropdown-item to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</b-dropdown-item>
-      </b-dropdown>
-    </nav>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -42,16 +13,15 @@
 </style>
 
 <script>
-import VolumeMeter from './components/VolumeMeter.vue'
-import SaveToFileModal from './components/SaveToFileModal.vue'
-import ClearTranscriptModal from './components/ClearTranscriptModal.vue'
 import Combokeys from 'combokeys'
+import loadScript from 'load-script'
 
 export default {
   name: 'app-view',
   data: function() {
     return {
       combokeysDocument: null,
+      sendCastMessage: null,
     };
   },
   mounted: function() {
@@ -60,22 +30,19 @@ export default {
     this.combokeysDocument
       .bind('w s', function() {
         self.$router.push('/captioner/settings');
-        self.$refs.saveToFileModal.hideModal();
-        self.$refs.clearTranscriptModal.hideModal(); // if visible
       })
       .bind('w f', function() {
         self.$router.push('/captioner');
-        self.startSaveToFileModal();
+        self.$router.replace('/captioner/save-to-file');
       })
       .bind('w p p', function() {
         self.$store.dispatch('captioner/restart');
         self.$store.commit('captioner/CLEAR_TRANSCRIPT');
-        self.$refs.clearTranscriptModal.hideModal(); // if it was visible; just for clarity
+
+        self.$router.replace('/captioner');
       })
       .bind('?', function() {
         self.$router.push('/captioner/settings/keyboard-shortcuts');
-        self.$refs.saveToFileModal.hideModal(); // if visible
-        self.$refs.clearTranscriptModal.hideModal(); // if visible
       })
       .bind('w c', function() {
         self.$router.push('/captioner');
@@ -86,35 +53,205 @@ export default {
           self.stopCaptioning();
         }
       });
+    
+    window['__onGCastApiAvailable'] = function(isAvailable) {
+      if (isAvailable) {
+        initializeCastApi();
+      }
+    };
+    
+    loadScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1', {async:false}, function (err, script) {
+      if (err) {
+        // print useful message 
+      }
+      else {
+        // console.log(cast);
+        console.log(script.src);// Prints 'foo'.js' 
+        // use script 
+        // note that in IE8 and below loading error wouldn't be reported 
+      }
+    });
+
+      var applicationID = 'C97D0419';
+      var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
+      var session = null;
+
+      /**
+       * Call initialization for Cast
+       */
+      if (!chrome.cast || !chrome.cast.isAvailable) {
+        setTimeout(initializeCastApi, 1000);
+      }
+
+      /**
+       * initialization
+       */
+      function initializeCastApi() {
+        var sessionRequest = new chrome.cast.SessionRequest(applicationID);
+        var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
+          sessionListener,
+          receiverListener);
+
+        chrome.cast.initialize(apiConfig, onInitSuccess, onError);
+      }
+
+      /**
+       * initialization success callback
+       */
+      function onInitSuccess() {
+        appendMessage('onInitSuccess');
+      }
+
+      /**
+       * initialization error callback
+       */
+      function onError(message) {
+        appendMessage('onError: ' + JSON.stringify(message));
+      }
+
+      /**
+       * generic success callback
+       */
+      function onSuccess(message) {
+        appendMessage('onSuccess: ' + message);
+      }
+
+      /**
+       * callback on success for stopping app
+       */
+      function onStopAppSuccess() {
+        appendMessage('onStopAppSuccess');
+      }
+
+      /**
+       * session listener during initialization
+       */
+      function sessionListener(e) {
+        appendMessage('New session ID:' + e.sessionId);
+        session = e;
+        session.addUpdateListener(sessionUpdateListener);
+        session.addMessageListener(namespace, receiverMessage);
+      }
+
+      /**
+       * listener for session updates
+       */
+      function sessionUpdateListener(isAlive) {
+        var message = isAlive ? 'Session Updated' : 'Session Removed';
+        message += ': ' + session.sessionId;
+        appendMessage(message);
+        if (!isAlive) {
+          session = null;
+        }
+      }
+
+      /**
+       * utility function to log messages from the receiver
+       * @param {string} namespace The namespace of the message
+       * @param {string} message A message string
+       */
+      function receiverMessage(namespace, message) {
+        appendMessage('receiverMessage: ' + namespace + ', ' + message);
+      }
+
+      /**
+       * receiver listener during initialization
+       */
+      function receiverListener(e) {
+        if(e === 'available') {
+          appendMessage('receiver found');
+        }
+        else {
+          appendMessage('receiver list empty');
+        }
+      }
+
+      /**
+       * stop app/session
+       */
+      function stopApp() {
+        session.stop(onStopAppSuccess, onError);
+      }
+
+      /**
+       * send a message to the receiver using the custom namespace
+       * receiver CastMessageBus message handler will be invoked
+       * @param {string} message A message string
+       */
+      this.sendCastMessage = function(message) {
+        if (session != null) {
+          session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' + message),
+            onError);
+        }
+        else {
+          chrome.cast.requestSession(function(e) {
+              session = e;
+              session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' +
+                message), onError);
+            }, onError);
+        }
+      }
+
+      /**
+       * append message to debug message window
+       * @param {string} message A message string
+       */
+      function appendMessage(message) {
+        console.log(message);
+      }
+
+      /**
+       * utility function to handle text typed in by user in the input field
+       */
+      function update() {
+        this.sendCastMessage(document.getElementById('input').value);
+      }
+
+      /**
+       * handler for the transcribed text from the speech input
+       * @param {string} words A transcibed speech string
+       */
+      function transcribe(words) {
+        this.sendCastMessage(words);
+      }
+      
+
+
+
+
+
+
+
+
+
+  },
+  watch: {
+    transcript: function(transcript) {
+      console.log(transcript);
+      this.sendCastMessage(transcript);
+    },
   },
   beforeDestroy: function() {
     this.combokeysDocument.detach();
-  },
-  components: {
-    VolumeMeter,
-    SaveToFileModal,
-    ClearTranscriptModal,
   },
   computed: {
     captioningOn: function() {
       return this.$store.state.captioner.on; 
     },
-    transcriptExists () {
-      return this.$store.state.captioner.transcript.interim || this.$store.state.captioner.transcript.final;
-    },
   },
   methods: {
+    requestSessionTest: function() {
+          chrome.cast.requestSession(function(e) {
+              session = e;
+              session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' +
+                message), function(e){ console.log(e) });
+            }, function(e){ console.log(e) });
+    },
     startCaptioning: function() {
       this.$store.dispatch('captioner/start');
     },
     stopCaptioning: function() {
       this.$store.dispatch('captioner/stop');
-    },
-    startSaveToFileModal: function() {
-      this.$refs.saveToFileModal.showModal();
-    },
-    startClearTranscriptModal: function() {
-      this.$refs.clearTranscriptModal.showModal();
     },
   }
 }
