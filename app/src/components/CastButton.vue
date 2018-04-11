@@ -1,50 +1,123 @@
 <template>
-  <b-button variant="link" @click="requestSessionTest()"><img src="/public/cast-icon.svg"/></b-button>
+  <div>
+    <b-button variant="link" @click="sendInitMessage"><img src="/public/cast-icon.svg"/></b-button>
+    <button @click="sendInitMessage">Send message</button>
+  </div>
 </template>
 
 <script>
 import loadScript from 'load-script'
 
-var applicationID = 'C97D0419';
-var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
-var session = null;
+const applicationID = 'C97D0419';
+const namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
 
 export default {
   name: 'castButton',
   data: function() {
     return {
       sendCastMessage: null,
+
+      session: null,
     };
   },
+  // mounted: function() {
+  //   this.initializeCastApi();
+
+  //   this.$watch("captioningOn", function(captioningOn) {
+  // },
   methods: {
-    requestSessionTest: function() {
-      chrome.cast.requestSession(function(e) {
-            let session = e;
-            session.sendMessage(namespace, {
-              mutationType: 'RESTORE_SETTINGS',
-              payload: {
-                settings: this.$store.state.settings,
-                verstion: this.$store.state.version,
-              },
-            },
-              function () {
-                console.log('Message sent: ');
-              },
-              function(e){
-                console.log(e)
-              }
-            );
-          },
-          function(e){
-            console.log(e)
-          }
-        );
+    initializeCastApi: function() {
+      console.log(this);
+      let self = this;
+      let sessionRequest = new chrome.cast.SessionRequest(applicationID);
+      const onReceivedMessage = function(namespace, message) {
+        console.log('Received message:');
+        console.log(namespace, message);
+      }
+
+      const sessionListener = function (e) {
+        console.log('New session ID:' + e.sessionId);
+        self.session = e;
+        self.session.addUpdateListener(sessionUpdateListener);
+        self.session.addMessageListener(namespace, onReceivedMessage);
+      };
+
+      const sessionUpdateListener = function sessionUpdateListener(isAlive) {
+        var message = isAlive ? 'Session Updated' : 'Session Removed';
+        message += ': ' + self.session.sessionId;
+        console.log(message);
+        if (!isAlive) {
+          self.session = null;
+        }
+      }
+
+      const receiverListener = function receiverListener(e) {
+        if(e === 'available') {
+          console.log('receiver found');
+        }
+        else {
+          console.log('receiver list empty');
+        }
+      };
+
+      let apiConfig = new chrome.cast.ApiConfig(
+        sessionRequest,
+        sessionListener,
+        receiverListener);
+
+      chrome.cast.initialize(apiConfig, () => { console.log('init success')}, (e) => { console.log(e); });
+    },
+    sendInitMessage: function() {
+      this.sendMessage({
+        mutationType: 'RESTORE_SETTINGS',
+        payload: {
+          settings: this.$store.state.settings,
+          verstion: this.$store.state.version,
+        }
+      });
+    },
+    sendMessage: function (message) {
+      if (this.session != null) {
+        this.session.sendMessage(namespace, message, function() {
+          console.log("success: "+ JSON.stringify(message));
+        },
+          function(e) {
+          console.log("error: ");
+          console.log(e);
+        });
+      }
+      else {
+        let self = this;
+        chrome.cast.requestSession(function(e) {
+            self.session = e;
+            self.session.sendMessage(namespace, message, 
+            
+            function() {
+          console.log("success: "+ message);
+        }, function(e) {
+          console.log("error: ");
+          console.log(e);
+        })
+          }, function(e) {
+          console.log("error: ");
+          console.log(e);
+        });
+      }
+    },
+  },
+  computed: {
+    transcriptFinal () {
+      return this.$store.state.captioner.transcript.final;
+    },
+    transcriptInterim () {
+      return this.$store.state.captioner.transcript.interim;
     },
   },
   mounted: function() {
+    let self = this;
     window['__onGCastApiAvailable'] = function(isAvailable) {
       if (isAvailable) {
-        initializeCastApi();
+        self.initializeCastApi();
       }
     };
     
@@ -60,144 +133,42 @@ export default {
       }
     });
 
+    this.$watch("transcriptInterim", function(transcriptInterim) {
+      if (this.session) {
+        this.sendMessage({
+          mutationType: 'captioner/SET_TRANSCRIPT_INTERIM',
+          payload: {
+            transcriptInterim,
+          }
+        });
+      }
+    });
+
+    this.$watch("transcriptFinal", function(transcriptFinal) {
+      if (this.session) {
+        this.sendMessage({
+          mutationType: 'captioner/APPEND_TRANSCRIPT_FINAL',
+          payload: {
+            transcriptFinal,
+          }
+        });
+      }
+    });
+
     /**
      * Call initialization for Cast
      */
-    if (!chrome.cast || !chrome.cast.isAvailable) {
-      setTimeout(initializeCastApi, 1000);
-    }
+    // if (!chrome.cast || !chrome.cast.isAvailable) {
+    //   setTimeout(initializeCastApi, 1000);
+    // }
 
-    /**
-     * initialization
-     */
-    function initializeCastApi() {
-      var sessionRequest = new chrome.cast.SessionRequest(applicationID);
-      var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
-        sessionListener,
-        receiverListener);
-
-      chrome.cast.initialize(apiConfig, onInitSuccess, onError);
-    }
-
-    /**
-     * initialization success callback
-     */
-    function onInitSuccess() {
-      appendMessage('onInitSuccess');
-    }
-
-    /**
-     * initialization error callback
-     */
-    function onError(message) {
-      appendMessage('onError: ' + JSON.stringify(message));
-    }
-
-    /**
-     * generic success callback
-     */
-    function onSuccess(message) {
-      appendMessage('onSuccess: ' + message);
-    }
-
-    /**
-     * callback on success for stopping app
-     */
-    function onStopAppSuccess() {
-      appendMessage('onStopAppSuccess');
-    }
-
-    /**
-     * session listener during initialization
-     */
-    function sessionListener(e) {
-      appendMessage('New session ID:' + e.sessionId);
-      session = e;
-      session.addUpdateListener(sessionUpdateListener);
-      session.addMessageListener(namespace, receiverMessage);
-    }
-
-    /**
-     * listener for session updates
-     */
-    function sessionUpdateListener(isAlive) {
-      var message = isAlive ? 'Session Updated' : 'Session Removed';
-      message += ': ' + session.sessionId;
-      appendMessage(message);
-      if (!isAlive) {
-        session = null;
-      }
-    }
-
-    /**
-     * utility function to log messages from the receiver
-     * @param {string} namespace The namespace of the message
-     * @param {string} message A message string
-     */
-    function receiverMessage(namespace, message) {
-      appendMessage('receiverMessage: ' + namespace + ', ' + message);
-    }
-
-    /**
-     * receiver listener during initialization
-     */
-    function receiverListener(e) {
-      if(e === 'available') {
-        appendMessage('receiver found');
-      }
-      else {
-        appendMessage('receiver list empty');
-      }
-    }
 
     /**
      * stop app/session
      */
-    function stopApp() {
-      session.stop(onStopAppSuccess, onError);
-    }
-
-    /**
-     * send a message to the receiver using the custom namespace
-     * receiver CastMessageBus message handler will be invoked
-     * @param {string} message A message string
-     */
-    this.sendCastMessage = function(message) {
-      if (session != null) {
-        session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' + message),
-          onError);
-      }
-      else {
-        chrome.cast.requestSession(function(e) {
-            let session = e;
-            session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' +
-              message), onError);
-          }, onError);
-      }
-    }
-
-    /**
-     * append message to debug message window
-     * @param {string} message A message string
-     */
-    function appendMessage(message) {
-      console.log(message);
-    }
-
-    /**
-     * utility function to handle text typed in by user in the input field
-     */
-    function update() {
-      this.sendCastMessage(document.getElementById('input').value);
-    }
-
-    /**
-     * handler for the transcribed text from the speech input
-     * @param {string} words A transcibed speech string
-     */
-    function transcribe(words) {
-      this.sendCastMessage(words);
-    }
+    // function stopApp() {
+    //   session.stop((e) => { console.log('App successfully stopped');}, (e) => { console.log(e); });
+    // }
   },
 }
 </script>

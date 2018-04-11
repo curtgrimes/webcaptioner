@@ -7,7 +7,9 @@ export default {
   name: "data-receiver",
   data: function() {
     return {
-      castReceiverManager: null
+        message: null,
+      castReceiverManager: null,
+      messageBus: null,
     };
   },
   mounted: function() {
@@ -24,14 +26,20 @@ export default {
       }
     );
   },
+  computed: {
+      message: function() {
+          return this.message;
+      }
+  },
   methods: {
     initCastReceiver: function() {
-        cast.receiver.logger.setLevelValue(0);
+        let self = this;
+      cast.receiver.logger.setLevelValue(0);
       this.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 
       // handler for the 'ready' event
       this.castReceiverManager.onReady = function(event) {
-        console.log("Received Ready event: " + JSON.stringify(event.data));
+        self.message = "Received Ready event: " + JSON.stringify(event.data);
         this.castReceiverManager.setApplicationState(
           "Application status is ready..."
         );
@@ -39,13 +47,13 @@ export default {
 
       // handler for 'senderconnected' event
       this.castReceiverManager.onSenderConnected = function(event) {
-        console.log("Received Sender Connected event: " + event.data);
+        self.message = "Received Sender Connected event: " + event.data;
         console.log(window.castReceiverManager.getSender(event.data).userAgent);
       };
 
       // handler for 'senderdisconnected' event
       this.castReceiverManager.onSenderDisconnected = function(event) {
-        console.log("Received Sender Disconnected event: " + event.data);
+        self.message = "Received Sender Disconnected event: " + event.data;
         if (this.castReceiverManager.getSenders().length == 0) {
           window.close();
         }
@@ -62,29 +70,36 @@ export default {
       };
 
       // create a CastMessageBus to handle messages for a custom namespace
-      window.messageBus = this.castReceiverManager.getCastMessageBus(
+      this.messageBus = this.castReceiverManager.getCastMessageBus(
         "urn:x-cast:com.google.cast.sample.helloworld"
       );
 
       // handler for the CastMessageBus message event
-      window.messageBus.onMessage = function(event) {
-        console.log("Message [" + event.senderId + "]: " + event.data);
-        // display the message from the sender
-        this.processMessage(event);
-        // inform all senders on the CastMessageBus of the incoming message event
-        // sender message listener will be invoked
-        window.messageBus.send(event.senderId, event.data);
-      };
+      this.messageBus.onMessage = this.processMessage;
 
       // initialize the CastReceiverManager with an application status message
       this.castReceiverManager.start({
-        statusText: "Application is starting"
+        statusText: "Application is starting2"
       });
       console.log("Receiver Manager started");
-    },
+      this.message = "Receiver Manager started";
 
-    processMessage: function({ mutationType, payload }) {
-      this.$store.commit(mutationType, payload);
+      window.onerror = function(error, url, line) {
+    this.message = {acc:'error', data:'ERR:'+error+' URL:'+url+' L:'+line};
+};
+    },
+    
+    processMessage: function({ type, senderId, data }) {
+
+        let {mutationType, payload} = JSON.parse(data);
+// this.message = typeof payload;
+        // this.message({mutationType,payload});
+        this.$store.commit(mutationType, payload);
+        let self = this;
+setTimeout(function() { self.message = self.$store.state.captioner;},1000);
+        // inform all senders on the CastMessageBus of the incoming message event
+        // sender message listener will be invoked
+        this.messageBus.send(senderId, data);
     }
   }
 };
