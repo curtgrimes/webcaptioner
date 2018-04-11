@@ -1,15 +1,12 @@
 <template>
   <div class="h-100">
-    <div v-if="!transcriptExists" class="h-100 bg-primary bg-zigzag d-flex align-items-center">
-        <div class="h-50 w-100 bg-primary">
-            <div class="container h-100 fade show">
-                <div class="row d-flex align-items-center h-100 mb-5">
-                    <div class="col-5 mx-auto text-center">
-                        <img src="/public/logo-inverse.svg" class="w-50" />
-                        <h1 class="mt-4">Web Captioner</h1>
-                    </div>
-                </div>
-            </div>
+    <div v-if="!transcriptExists" class="bg-primary h-100" style="position:relative">
+        <div class="text-left ml-5 mt-5 pl-2" style="position:absolute;left:0;right:50%;top:0;">
+            <span class="mt-4 w-50 display-4">Captioning will begin shortly.</span>
+        </div>
+        <div class="text-right mr-5 mb-4" style="position:absolute;left:0;right:0;bottom:0;">
+            <img src="/public/logo-inverse.svg" style="max-width:15vw" />
+            <h1 class="mt-4">Web Captioner</h1>
         </div>
     </div>
     <transcript></transcript>
