@@ -21,6 +21,7 @@ const CaptionerView = () => import('../views/CaptionerView.vue')
 const Transcript = () => import('../components/Transcript.vue')
 const SaveToFileModal = () => import('../components/SaveToFileModal.vue')
 const ClearTranscriptModal = () => import('../components/ClearTranscriptModal.vue')
+const ReceiverView = () => import('../views/ReceiverView.vue')
 
 export function createRouter () {
   return new Router({
@@ -67,7 +68,7 @@ export function createRouter () {
           },
         ]
       },
-      { path: '/receiver', component: CaptionerView},
+      { path: '/receiver', component: ReceiverView},
       { path: '/top/:page(\\d+)?', component: createListView('top') },
       { path: '/new/:page(\\d+)?', component: createListView('new') },
       { path: '/show/:page(\\d+)?', component: createListView('show') },

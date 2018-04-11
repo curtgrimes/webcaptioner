@@ -1,9 +1,7 @@
 <template>
   <div class="transcript d-flex" v-bind:class="wrapTextPositionClass" v-bind:style="{color, backgroundColor}">
     <span v-bind:class="textPositionClass" class="transcript-scroller" ref="scroller">
-      <span class="transcript-scroller-child">
-        {{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span>
-      </span>
+      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span></span>
     </span>
   </div>
 </template>

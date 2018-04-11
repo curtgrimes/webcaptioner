@@ -13,7 +13,7 @@
         <li id="now_listening" class="navbar-text text-white px-3" hidden>
         Now listening...
         </li>
-        <b-button variant="link" @click="requestSessionTest()"><img src="/public/cast-icon.svg"/></b-button>
+        <cast-button></cast-button>
         <!--
         <b-dropdown variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
         <template slot="button-content">
@@ -38,11 +38,13 @@
 
 <script>
 import VolumeMeter from './VolumeMeter.vue'
+import CastButton from '../components/CastButton.vue'
 
 export default {
   name: 'navbar',
   components: {
     VolumeMeter,
+    CastButton,
   },
   computed: {
     captioningOn: function() {

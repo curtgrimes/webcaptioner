@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-view h-100 bg-primary">
+  <div class="settings-view bg-primary">
     <router-link to="/captioner" class="btn btn-primary position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
     <div class="container pb-5 h-100">
       <div class="row h-100">
