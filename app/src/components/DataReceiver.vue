@@ -7,9 +7,9 @@ export default {
   name: "data-receiver",
   data: function() {
     return {
-        message: null,
+      message: null,
       castReceiverManager: null,
-      messageBus: null,
+      messageBus: null
     };
   },
   mounted: function() {
@@ -26,21 +26,16 @@ export default {
       }
     );
   },
-  computed: {
-      message: function() {
-          return this.message;
-      }
-  },
   methods: {
     initCastReceiver: function() {
-        let self = this;
+      let self = this;
       cast.receiver.logger.setLevelValue(0);
       this.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 
       // handler for the 'ready' event
       this.castReceiverManager.onReady = function(event) {
         self.message = "Received Ready event: " + JSON.stringify(event.data);
-        this.castReceiverManager.setApplicationState(
+        self.castReceiverManager.setApplicationState(
           "Application status is ready..."
         );
       };
@@ -48,13 +43,13 @@ export default {
       // handler for 'senderconnected' event
       this.castReceiverManager.onSenderConnected = function(event) {
         self.message = "Received Sender Connected event: " + event.data;
-        console.log(window.castReceiverManager.getSender(event.data).userAgent);
+        console.log(self.castReceiverManager.getSender(event.data).userAgent);
       };
 
       // handler for 'senderdisconnected' event
       this.castReceiverManager.onSenderDisconnected = function(event) {
         self.message = "Received Sender Disconnected event: " + event.data;
-        if (this.castReceiverManager.getSenders().length == 0) {
+        if (self.castReceiverManager.getSenders().length == 0) {
           window.close();
         }
       };
@@ -85,21 +80,25 @@ export default {
       this.message = "Receiver Manager started";
 
       window.onerror = function(error, url, line) {
-    this.message = {acc:'error', data:'ERR:'+error+' URL:'+url+' L:'+line};
-};
+        this.message = {
+          acc: "error",
+          data: "ERR:" + error + " URL:" + url + " L:" + line
+        };
+      };
     },
-    
-    processMessage: function({ type, senderId, data }) {
 
-        let {mutationType, payload} = JSON.parse(data);
-// this.message = typeof payload;
-        // this.message({mutationType,payload});
-        this.$store.commit(mutationType, payload);
-        let self = this;
-setTimeout(function() { self.message = self.$store.state.captioner;},1000);
-        // inform all senders on the CastMessageBus of the incoming message event
-        // sender message listener will be invoked
-        this.messageBus.send(senderId, data);
+    processMessage: function({ type, senderId, data }) {
+      let { mutationType, payload } = JSON.parse(data);
+      // this.message = typeof payload;
+      // this.message({mutationType,payload});
+      this.$store.commit(mutationType, payload);
+      let self = this;
+      setTimeout(function() {
+        self.message = self.$store.state.captioner;
+      }, 1000);
+      // inform all senders on the CastMessageBus of the incoming message event
+      // sender message listener will be invoked
+      this.messageBus.send(senderId, data);
     }
   }
 };

@@ -52,6 +52,13 @@ export function createStore () {
           userDefault: null,
         }
       },
+      receivers: {
+        chromecast: {
+          connected: false,
+          connecting: false,
+          receiverName: null,
+        },
+      },
     },
     actions,
     mutations,

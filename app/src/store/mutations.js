@@ -81,6 +81,17 @@ export default {
   },
 
 
+  SET_CHROMECAST_CONNECTED: (state, { chromecastConnected }) => {
+    state.receivers.chromecast.connected = chromecastConnected;
+  },
+  SET_CHROMECAST_CONNECTING: (state, { chromecastConnecting }) => {
+    state.receivers.chromecast.connecting = chromecastConnecting;
+  },
+  SET_CHROMECAST_RECEIVER_NAME: (state, { receiverName }) => {
+    state.receivers.chromecast.receiverName = receiverName;
+  },
+
+
 
   SET_ACTIVE_TYPE: (state, { type }) => {
     state.activeType = type
