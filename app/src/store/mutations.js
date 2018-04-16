@@ -31,14 +31,14 @@ export default {
   SET_SHADOW_OPACITY: (state, { shadowOpacity }) => {
     state.settings.appearance.shadow.opacity = shadowOpacity
   },
-  SET_SHADOW_BLUR: (state, { shadowBlur }) => {
-    state.settings.appearance.shadow.blur = shadowBlur
+  SET_SHADOW_BLUR_RADIUS: (state, { shadowBlurRadius }) => {
+    state.settings.appearance.shadow.blurRadius = shadowBlurRadius
   },
-  SET_SHADOW_X_POSITION: (state, { shadowXPosition }) => {
-    state.settings.appearance.shadow.xPosition = shadowXPosition
+  SET_SHADOW_OFFSET_X: (state, { shadowOffsetX }) => {
+    state.settings.appearance.shadow.offsetX = shadowOffsetX
   },
-  SET_SHADOW_Y_POSITION: (state, { shadowYPosition }) => {
-    state.settings.appearance.shadow.yPosition = shadowYPosition
+  SET_SHADOW_OFFSET_Y: (state, { shadowOffsetY }) => {
+    state.settings.appearance.shadow.offsetY = shadowOffsetY
   },
   SET_BACKGROUND_COLOR: (state, { backgroundColor }) => {
     state.settings.appearance.background.color = backgroundColor
@@ -48,6 +48,9 @@ export default {
   },
   SET_ALIGNMENT_VERTICAL: (state, { alignmentVertical }) => {
     state.settings.appearance.text.alignment.vertical = alignmentVertical
+  },
+  SET_ALIGNMENT_PADDING: (state, { alignmentPadding }) => {
+    state.settings.appearance.text.alignment.padding = alignmentPadding
   },
 
 

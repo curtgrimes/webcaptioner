@@ -1,12 +1,19 @@
 <template>
-  <div class="transcript d-flex" v-bind:class="wrapTextPositionClass" v-bind:style="{color, backgroundColor}">
-    <span v-bind:class="textPositionClass" class="transcript-scroller" ref="scroller">
+  <div
+    class="transcript d-flex"
+    v-bind:class="wrapTextPositionClass"
+    v-bind:style="{color, backgroundColor, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow}">
+    <span
+      v-bind:class="textPositionClass"
+      class="transcript-scroller"
+      ref="scroller">
       <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span></span>
     </span>
   </div>
 </template>
 
 <script>
+import hexToRgb from '../util/hexToRGB'
 
 export default {
   name: 'transcript',
@@ -24,6 +31,8 @@ export default {
     this.scrollToBottom();
   },
   computed: {
+
+    // Appearance
     color () {
       return this.$store.state.settings.appearance.text.textColor;
     },
@@ -33,6 +42,35 @@ export default {
     backgroundColor () {
       return this.$store.state.settings.appearance.background.color;
     },
+    fontSize () {
+      return this.$store.state.settings.appearance.text.textSize + 'em';
+    },
+    lineHeight () {
+      return this.$store.state.settings.appearance.text.lineHeight + 'em';
+    },
+    letterSpacing () {
+      return this.$store.state.settings.appearance.text.letterSpacing + 'em';
+    },
+    textTransform () {
+      return this.$store.state.settings.appearance.text.textTransform;
+    },
+    padding () {
+      // Add extra padding bottom to make space for nav bar
+      return this.$store.state.settings.appearance.text.alignment.padding + 'em '
+        + this.$store.state.settings.appearance.text.alignment.padding + 'em '
+        + (parseFloat(this.$store.state.settings.appearance.text.alignment.padding) + 0.75) + 'em '
+        + this.$store.state.settings.appearance.text.alignment.padding + 'em ';
+    },
+    textShadow () {
+      const {r, g, b} = hexToRgb(this.$store.state.settings.appearance.shadow.color);
+      const blurRadius = this.$store.state.settings.appearance.shadow.blurRadius + 'px';
+      const opacity = this.$store.state.settings.appearance.shadow.opacity;
+      const offsetX = this.$store.state.settings.appearance.shadow.offsetX + 'em';
+      const offsetY = this.$store.state.settings.appearance.shadow.offsetY + 'em';
+
+      return offsetX + ' ' + offsetY + ' ' + blurRadius + ' rgba('+ r +',' + g + ',' + b + ',' + parseInt(opacity)/100 + ')';
+    },
+
     finalTranscript () {
       this.scrollToBottom();
       return this.$store.state.captioner.transcript.final;

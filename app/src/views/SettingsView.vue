@@ -1,9 +1,9 @@
 <template>
-  <div class="settings-view bg-primary">
+  <div class="settings-view bg-primary" style="min-height:100%">
     <router-link to="/captioner" class="btn btn-primary position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
     <div class="container pb-5 h-100">
       <div class="row h-100">
-        <div class="col-md-3 pt-5" style="border-right:1px solid rgba(0,0,0,.1)">
+        <div class="col-md-3 pt-5" style="border-right:1px solid rgba(0,0,0,.1);min-height:100%">
           <div class="position-sticky" style="top:20px">
             <h2 class="lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
             <nav>

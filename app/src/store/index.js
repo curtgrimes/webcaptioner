@@ -23,20 +23,21 @@ export function createStore () {
             textColorInterim: '#ffffff',
             fontFamily: fontChocies[0].displayName, // first is default
             textSize: "4", // em
-            lineHeight: "5", // em
+            lineHeight: "1.2", // em
             letterSpacing: "0", // em
             textTransform: "uppercase", // or "capitalize" or "initial"
             alignment: {
               horizontal: 'full', // left, middle, right
               vertical: 'full', // top, middle, bottom, lowerThird
+              padding: "0.25", // em
             }
           },
           shadow: {
             color: '#000000',
             opacity: '100',
-            blur: '0',
-            xPosition: '0.25',
-            yPosition: '0.25',
+            blurRadius: '0',
+            offsetX: '0.25',
+            offsetY: '0.25',
           },
           background: {
             color: '#000000',

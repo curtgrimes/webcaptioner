@@ -102,8 +102,8 @@
           <div class="card-header bg-dark text-white small px-2 py-1">
             Preview
           </div>
-          <div class="text-preview-mockup-wrap main-preview w-100 d-flex" v-bind:style="{backgroundColor: backgroundColor}" v-bind:class="previewWrapTextPositionClass">
-            <div class="text-preview-mockup p-2 d-flex" style="cursor:default" v-bind:style="{color: textColor}" v-bind:class="previewTextPositionClass">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligdiam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauriula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
+          <div class="text-preview-mockup-wrap main-preview w-100 d-flex" v-bind:style="{backgroundColor: backgroundColor, padding: (alignmentPadding/2)+'em'}" v-bind:class="previewWrapTextPositionClass">
+            <div class="text-preview-mockup p-1 d-flex" style="cursor:default" v-bind:style="{color: textColor}" v-bind:class="previewTextPositionClass">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligdiam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauriula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
           </div>
         </div>
       </div>
@@ -168,6 +168,20 @@
             </div>
           </label>
         </div>
+
+
+        <div class="form-group row mt-2">
+          <label for="alignment-padding" class="col-12 col-form-label">Padding</label>
+          <div class="col-12">
+            <div class="input-group">
+              <input class="form-control" name="alignment-padding" type="number" min="0" step="0.25" max="10" v-model="alignmentPadding">
+              <span class="input-group-append">
+                  <span class="input-group-text">em</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -179,17 +193,6 @@
       <div class="col-sm-6">
         <input class="form-control" name="background-color" type="color" v-model="backgroundColor">
         <p class="small mb-0 mt-1">RGB ({{backgroundColorRGBValues.r}}, {{backgroundColorRGBValues.g}}, {{backgroundColorRGBValues.b}})</p>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="padding" class="col-sm-6 col-form-label">Padding</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input class="form-control" name="padding" id="padding" type="number" value="1.25" min="0" step="0.25" max="10">
-          <span class="input-group-append">
-              <span class="input-group-text">em</span>
-          </span>
-        </div>
       </div>
     </div>
 
@@ -218,7 +221,7 @@
       <label for="text-shadow-blur" class="col-sm-6 col-form-label">Blur</label>
       <div class="col-sm-6">
         <div class="input-group">
-          <input v-model="shadowBlur" class="form-control" name="text-shadow-blur" type="number" min="0" step="1">
+          <input v-model="shadowBlurRadius" class="form-control" name="text-shadow-blur" type="number" min="0" step="1">
           <span class="input-group-append">
               <span class="input-group-text">px</span>
           </span>
@@ -229,7 +232,7 @@
       <label for="text-shadow-x-position" class="col-sm-6 col-form-label">X Position</label>
       <div class="col-sm-6">
         <div class="input-group">
-          <input v-model="shadowXPosition" class="form-control" name="text-shadow-x-position" type="number" step="0.25">
+          <input v-model="shadowOffsetX" class="form-control" name="text-shadow-x-position" type="number" step="0.05">
           <span class="input-group-append">
               <span class="input-group-text">em</span>
           </span>
@@ -240,7 +243,7 @@
       <label for="text-shadow-y-position" class="col-sm-6 col-form-label">Y Position</label>
       <div class="col-sm-6">
         <div class="input-group">
-          <input v-model="shadowYPosition" class="form-control" name="text-shadow-y-position" type="number" step="0.25">
+          <input v-model="shadowOffsetY" class="form-control" name="text-shadow-y-position" type="number" step="0.05">
           <span class="input-group-append">
               <span class="input-group-text">em</span>
           </span>
@@ -254,6 +257,7 @@
 <script>
 import {debounce} from 'lodash/lodash.js'
 import fontChoices from '../../util/fontChoices.js'
+import hexToRgb from '../../util/hexToRGB'
 
 // Add fonts dynamically
 if (typeof window !== 'undefined') {
@@ -376,28 +380,28 @@ export default {
         this.$store.commit('SET_SHADOW_OPACITY', {shadowOpacity});
       },
     },
-    shadowBlur: {
+    shadowBlurRadius: {
       get () {
-        return this.$store.state.settings.appearance.shadow.blur;
+        return this.$store.state.settings.appearance.shadow.blurRadius;
       },
-      set (shadowBlur) {
-        this.$store.commit('SET_SHADOW_BLUR', {shadowBlur});
+      set (shadowBlurRadius) {
+        this.$store.commit('SET_SHADOW_BLUR_RADIUS', {shadowBlurRadius});
       },
     },
-    shadowXPosition: {
+    shadowOffsetX: {
       get () {
-        return this.$store.state.settings.appearance.shadow.xPosition;
+        return this.$store.state.settings.appearance.shadow.offsetX;
       },
-      set (shadowXPosition) {
-        this.$store.commit('SET_SHADOW_X_POSITION', {shadowXPosition});
+      set (shadowOffsetX) {
+        this.$store.commit('SET_SHADOW_OFFSET_X', {shadowOffsetX});
       },
     },
-    shadowYPosition: {
+    shadowOffsetY: {
       get () {
-        return this.$store.state.settings.appearance.shadow.yPosition;
+        return this.$store.state.settings.appearance.shadow.offsetY;
       },
-      set (shadowYPosition) {
-        this.$store.commit('SET_SHADOW_Y_POSITION', {shadowYPosition});
+      set (shadowOffsetY) {
+        this.$store.commit('SET_SHADOW_OFFSET_Y', {shadowOffsetY});
       },
     },
     backgroundColor: {
@@ -411,21 +415,6 @@ export default {
       }, 200, {leading: true}),
     },
     backgroundColorRGBValues: function() {
-      function hexToRgb(hex) {
-        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-            return r + r + g + g + b + b;
-        });
-
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-      }
-
       return hexToRgb(this.$store.state.settings.appearance.background.color);
     },
     alignmentHorizontal: {
@@ -442,6 +431,14 @@ export default {
       },
       set (alignmentVertical) {
         this.$store.commit('SET_ALIGNMENT_VERTICAL', {alignmentVertical});
+      },
+    },
+    alignmentPadding: {
+      get () {
+        return this.$store.state.settings.appearance.text.alignment.padding;
+      },
+      set (alignmentPadding) {
+        this.$store.commit('SET_ALIGNMENT_PADDING', {alignmentPadding});
       },
     },
 
