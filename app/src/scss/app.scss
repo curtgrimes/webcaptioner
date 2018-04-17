@@ -229,6 +229,27 @@ input[type="color"] {
   font-weight:bold;
 }
 
+/* Custom modal animation */
+
+.modal.fade .modal-dialog {
+  -webkit-transform: scale(0.9);
+  -moz-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);
+  opacity: 0;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.modal.fade.show .modal-dialog {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1;
+}
+
 .caption-wrap.caption-wrap-preview {
     height: 280px;
     overflow-y: scroll;

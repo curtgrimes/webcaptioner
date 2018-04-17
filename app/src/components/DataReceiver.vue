@@ -28,6 +28,7 @@ export default {
   },
   methods: {
     initCastReceiver: function() {
+      console.log('initCastReceiver');
       let self = this;
       cast.receiver.logger.setLevelValue(0);
       this.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
@@ -36,7 +37,7 @@ export default {
       this.castReceiverManager.onReady = function(event) {
         self.message = "Received Ready event: " + JSON.stringify(event.data);
         self.castReceiverManager.setApplicationState(
-          "Application status is ready..."
+          "Ready to Caption"
         );
       };
 
@@ -88,6 +89,8 @@ export default {
     },
 
     processMessage: function({ type, senderId, data }) {
+      this.castReceiverManager.setApplicationState("Captioning");
+
       let { mutationType, payload } = JSON.parse(data);
       // this.message = typeof payload;
       // this.message({mutationType,payload});

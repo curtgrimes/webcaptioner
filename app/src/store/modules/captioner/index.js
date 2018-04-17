@@ -5,6 +5,8 @@ let speechRecognizer;
 
 const state = {
     on: false,
+    microphoneName: '',
+    waitingForInitialTranscript: false,
     transcript: {
         interim: '',
         final: 'final:"work and in to memorize it but it so I just want to share some of us with you and just by telling you something about that book when its when fall starts off in that book he refers to himself as a server"        ',
@@ -16,7 +18,7 @@ const state = {
 }
 
 const actions = {
-    start ({commit, state, rootState}) {
+    start ({commit, state, rootState, getters}) {
         let parser = new RecognitionResultParser({
             wordReplacements: [
                 ...rootState.settings.wordReplacements,
@@ -38,6 +40,7 @@ const actions = {
         speechRecognizer.interimResults = true;
         speechRecognizer.lang = rootState.settings.locale.from;
         speechRecognizer.start();
+        commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitialTranscript: true });
 
         speechRecognizer.onstart = function () {
             commit('SET_CAPTIONER_ON');
@@ -49,6 +52,13 @@ const actions = {
 
         speechRecognizer.onresult = function(event) {
             let {transcriptInterim, transcriptFinal} = parser.getTranscript(event);
+            
+            // Set flag false once we're receiving a transcript
+            // for the first time
+            if (getters.waitingForInitialTranscript) {
+                commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitialTranscript: false });
+            }
+            
 
             if (transcriptInterim) {
                 commit('SET_TRANSCRIPT_INTERIM', { transcriptInterim });
@@ -126,6 +136,14 @@ const mutations = {
         state.volume.tooHigh = volumeTooHigh;
     },
 
+    SET_MICROPHONE_NAME (state, { microphoneName }) {
+        state.microphoneName = microphoneName;
+    },
+
+    SET_WAITING_FOR_INITIAL_TRANSCRIPT (state, { waitingForInitialTranscript }) {
+        state.waitingForInitialTranscript = waitingForInitialTranscript;
+    },
+    
 //   add_to_cart (state, productId) {
 //     state.lastCheckout = null
 //     const record = state.added.find(p => p.id === productId)
@@ -154,24 +172,9 @@ const mutations = {
 }
 
 const getters = {
-//   cartProducts (state, getters, rootState) {
-//     return state.added.map(({ id, quantity }) => {
-//       const product = rootState.products.all.find(p => p.id === id)
-//       return {
-//         title: product.title,
-//         price: product.price,
-//         id,
-//         quantity
-//       }
-//     })
-//   },
-//   cartCount (state) {
-//     var totalCount = 0
-//     state.added.forEach(({ quantity }) => {
-//       totalCount += quantity
-//     })
-//     return totalCount
-//   }
+    waitingForInitialTranscript (state) {
+    return state.waitingForInitialTranscript;
+  }
 }
 
 export default {

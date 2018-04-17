@@ -1,6 +1,6 @@
 <template>
   <div class="h-100">
-    <data-receiver v-if="loopVideoLoaded"></data-receiver>
+    <data-receiver></data-receiver>
     <div v-if="!transcriptExists" class="bg-primary h-100">
         <div style="z-index:5;position:absolute;left:0;right:0;top:0;bottom:0">
             <div class="display-3 w-auto" style="font-size:10vh;position:absolute;left:7vw;top:10vh;width:41vw">
@@ -53,10 +53,14 @@ export default {
       };
   },
   mounted: function() {
-    let self = this;
-    this.$refs.loopVideo.addEventListener("play", function() {
-        self.loopVideoLoaded = true;
-    }, false);
+    this.$watch('transcriptExists', function() {
+        if (this.$refs.loopVideo) {
+            let self = this;
+            this.$refs.loopVideo.addEventListener("play", function() {
+                self.loopVideoLoaded = true;
+            }, false);
+        }
+    });
   },
   computed: {
     transcriptExists: function() {

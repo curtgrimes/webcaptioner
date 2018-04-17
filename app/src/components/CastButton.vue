@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="receiversAvailable">
     <b-button v-if="connecting" id="castConnectingButton" v-b-tooltip.hover title="Connecting" variant="link" disabled>
       <svg style="vertical-align:middle" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
@@ -24,6 +24,13 @@
     <b-button v-else variant="link" v-b-tooltip.hover="'Cast'" @click="sendInitMessage()">
       <img src="/public/cast-icons/cast-icon.svg"/>
     </b-button>
+    <b-modal title="Casting Failed" :hide-header="true" ref="castFailedModal" :ok-only="true" ok-variant="secondary" :hide-header-close="true">
+      <div class="py-2">
+        <div class="pb-2 h4"><i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true"></i></div>
+        <h2>Unable to Cast</h2>
+        <p class="lead">Please try again.</p>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -59,15 +66,10 @@ export default {
   name: 'castButton',
   data: function() {
     return {
-      sendCastMessage: null,
       session: null,
+      receiversAvailable: false,
     };
   },
-  // mounted: function() {
-  //   this.initializeCastApi();
-
-  //   this.$watch("captioningOn", function(captioningOn) {
-  // },
   methods: {
     initializeCastApi: function() {
       let self = this;
@@ -78,7 +80,6 @@ export default {
       }
 
       const sessionListener = function (e) {
-        console.log('New session ID:' + e.sessionId);
         self.session = e;
         self.session.addUpdateListener(sessionUpdateListener);
         self.session.addMessageListener(namespace, onReceivedMessage);
@@ -103,10 +104,10 @@ export default {
 
       const receiverListener = function receiverListener(e) {
         if(e === 'available') {
-          console.log('receiver found');
+          self.receiversAvailable = true;
         }
         else {
-          console.log('receiver list empty');
+          self.receiversAvailable = false;
         }
       };
 
@@ -120,7 +121,7 @@ export default {
         self.connected = false;
       },
       function (e) {
-        console.log(e);
+        // console.log(e);
       });
     },
     sendInitMessage: function() {
@@ -135,40 +136,33 @@ export default {
     sendMessage: function (message) {
       if (this.session != null) {
         this.session.sendMessage(namespace, message, function() {
-          console.log("success: "+ JSON.stringify(message));
+          // console.log("success: "+ JSON.stringify(message));
         },
           function(e) {
-          console.log("error: ");
-          console.log(e);
+          // console.log("error: ");
+          // console.log(e);
         });
       }
       else {
         let self = this;
         self.connecting = true;
-        chrome.cast.requestSession(function(e) {
+        chrome.cast.requestSession(
+          function(e) {
             self.connecting = false;
             self.connected = true;
             self.session = e;
             self.receiverName = self.session.receiver.friendlyName;
-            self.session.sendMessage(namespace, message, 
-            function() {
-              
-              console.log("success: "+ message);
-              console.log(self.session);
-              
-        }, function(e) {
-          self.connecting = false;
-          console.log("error: ");
-          self.connected = false;
-          self.receiverName = null;
-          console.log(e);
-        })
-          }, function(e) {
-          self.connecting = false;
-          console.log("error: ");
-          self.connected = false;
-          self.receiverName = null;
-          console.log(e);
+            self.sendMessage(message);
+          },
+          function(e) {
+            self.connecting = false;
+            self.connected = false;
+            self.receiverName = null;
+
+            if (e.code !== 'cancel') {
+              // Ended abnormally (instead of canceled by user)
+              self.$refs.castFailedModal.show();
+            }
         });
       }
     },
@@ -179,8 +173,8 @@ export default {
         self.session = null;
         self.receiverName = null;
       }, function(e) {
-        console.log("error: ");
-        console.log(e);
+        // console.log("error: ");
+        // console.log(e);
       });
     },
   },
@@ -226,6 +220,7 @@ export default {
   },
   mounted: function() {
     let self = this;
+    
     window['__onGCastApiAvailable'] = function(isAvailable) {
       if (isAvailable) {
         self.initializeCastApi();
@@ -233,15 +228,8 @@ export default {
     };
     
     loadScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1', {async:false}, function (err, script) {
-      if (err) {
-        // print useful message 
-      }
-      else {
-        // console.log(cast);
-        console.log(script.src);// Prints 'foo'.js' 
-        // use script 
-        // note that in IE8 and below loading error wouldn't be reported 
-      }
+      // if (err) {}
+      // else {}
     });
 
     this.$watch("transcriptInterim", function(transcriptInterim) {
@@ -265,21 +253,6 @@ export default {
         });
       }
     });
-
-    /**
-     * Call initialization for Cast
-     */
-    // if (!chrome.cast || !chrome.cast.isAvailable) {
-    //   setTimeout(initializeCastApi, 1000);
-    // }
-
-
-    /**
-     * stop app/session
-     */
-    // function stopApp() {
-    //   session.stop((e) => { console.log('App successfully stopped');}, (e) => { console.log(e); });
-    // }
   },
 }
 </script>

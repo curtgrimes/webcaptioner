@@ -9,10 +9,10 @@
                 <span class="d-none d-md-inline">Web Captioner</span>
             </a>
         </span>
-        <volume-meter></volume-meter>
-        <li id="now_listening" class="navbar-text text-white px-3" hidden>
-        Now listening...
-        </li>
+        <volume-meter v-if="captioningOn && !waitingForInitialTranscript"></volume-meter>
+        <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
+            Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>...
+        </div>
         <cast-button></cast-button>
         <!--
         <b-dropdown variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
@@ -48,7 +48,13 @@ export default {
   },
   computed: {
     captioningOn: function() {
-      return this.$store.state.captioner.on; 
+        return this.$store.state.captioner.on; 
+    },
+    microphoneName: function() {
+        return this.$store.state.captioner.microphoneName;
+    },
+    waitingForInitialTranscript: function() {
+        return this.$store.state.captioner.waitingForInitialTranscript;
     },
   },
   methods: {

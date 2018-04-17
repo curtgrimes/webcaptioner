@@ -34,65 +34,92 @@ export default {
 
       _stream: null,
       _audioMeter: null,
+      _dateUpdateInterval: null,
+      _recordVolumeReadingsInterval: null,
     };
   },
-  created: function() {
-    setInterval(() => { this.now = Date.now(); }, 1000);
-
-    setInterval(() => {
-      if (this.volumeLevel && this.volumeLevel > 0) {
-        this.latestVolumeLevelReadings.push(this.volumeLevel);
-        this.latestVolumeLevelReadings = this.latestVolumeLevelReadings.slice(-10);
-      }
-    }, 300);
-
-    this.$watch("captioningOn", function(captioningOn) {
+  watch: {
+    captioningOn: function(captioningOn) {
       if (captioningOn) {
-        let self = this;
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
-          self._stream = stream; // save reference to stream so we can close it later
-
-          let audioContext = new AudioContext();
-          let mediaStream = audioContext.createMediaStreamSource(stream);
-          self._audioMeter = AudioStreamMeter.audioStreamProcessor(
-            audioContext,
-            function() {
-              self.volumeLevel = clamp(self._audioMeter.volume * 4, 0, 1);
-            },
-            {
-              // https://www.npmjs.com/package/audio-stream-meter
-              volumeFall: 0.85,
-              bufferSize: 4096,
-            },
-          );
-          mediaStream.connect(self._audioMeter);
-        });
+        this.initAudioStream();
       }
       else {
-        // Stop audio meter
+        this.closeAudioStream();
+      }
+    },
+    volumeTooLow: function(newValue, oldValue) {
+      if (typeof newValue !== 'undefined' && newValue != oldValue) {
+        this.$store.commit('captioner/VOLUME_TOO_LOW', { volumeTooLow: newValue });
+      }
+    },
+    volumeTooHigh: function(newValue, oldValue) {
+      if (typeof newValue !== 'undefined' && newValue != oldValue) {
+        this.$store.commit('captioner/VOLUME_TOO_HIGH', { volumeTooHigh: newValue });
+      }
+    }
+  },
+  beforeMount: function() {
+    if (this.captioningOn) {
+      this.initAudioStream();
+    }
+  },
+  beforeDestroy: function() {
+    this.closeAudioStream();
+  },
+  methods: {
+    initAudioStream: function() {
+      let self = this;
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+        self._stream = stream; // save reference to stream so we can close it later
+
+        // Get the name of the device
+        const tracks = self._stream.getTracks();
+        if (tracks && tracks[0] && tracks[0].label) {
+          self.microphoneName = tracks[0].label;
+        }
+
+        let audioContext = new AudioContext();
+        let mediaStream = audioContext.createMediaStreamSource(stream);
+        self._audioMeter = AudioStreamMeter.audioStreamProcessor(
+          audioContext,
+          function() {
+            self.volumeLevel = clamp(self._audioMeter.volume * 4, 0, 1);
+          },
+          {
+            // https://www.npmjs.com/package/audio-stream-meter
+            volumeFall: 0.85,
+            bufferSize: 4096,
+          },
+        );
+        mediaStream.connect(self._audioMeter);
+      });
+
+      this._dateUpdateInterval = setInterval(() => { this.now = Date.now(); }, 1000);
+    
+      this._recordVolumeReadingsInterval = setInterval(() => {
+        if (this.volumeLevel && this.volumeLevel > 0) {
+          this.latestVolumeLevelReadings.push(this.volumeLevel);
+          this.latestVolumeLevelReadings = this.latestVolumeLevelReadings.slice(-10);
+        }
+      }, 300);
+    },
+    closeAudioStream: function() {
+      // Stop audio meter
+      if (this._audioMeter) {
         this._audioMeter.close();
-        
-        // Close all the media stream tracks (should just be one)
+      }
+              
+      // Close all the media stream tracks (should just be one)
+      if (this._stream) {
         let tracks = this._stream.getTracks();
         for (let i = 0; i < tracks.length; i++) {
           tracks[i].stop();
         }
       }
-    });
 
-    this.$watch("volumeTooLow", function(newValue, oldValue) {
-      if (typeof newValue !== 'undefined' && newValue != oldValue) {
-        this.$store.commit('captioner/VOLUME_TOO_LOW', { volumeTooLow: newValue });
-      }
-    });
-
-    this.$watch("volumeTooHigh", function(newValue, oldValue) {
-      if (typeof newValue !== 'undefined' && newValue != oldValue) {
-        this.$store.commit('captioner/VOLUME_TOO_HIGH', { volumeTooHigh: newValue });
-      }
-    });
-  },
-  methods: {
+      clearInterval(this._dateUpdateInterval);
+      clearInterval(this._recordVolumeReadingsInterval);
+    },
     averageVolumeReading: function() {
       let sum = 0;
       for(let i = 0; i < this.latestVolumeLevelReadings.length; i++) {
@@ -106,6 +133,14 @@ export default {
     }
   },
   computed: {
+    microphoneName: {
+      get () {
+        return this.$sstore.state.captioner.microphoneName;
+      },
+      set (microphoneName) {
+        this.$store.commit('captioner/SET_MICROPHONE_NAME', {microphoneName});
+      },
+    },
     captioningOn: function() {
       return this.$store.state.captioner.on;
     },
