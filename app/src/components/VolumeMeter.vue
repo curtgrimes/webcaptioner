@@ -22,7 +22,7 @@ import AudioStreamMeter from "audio-stream-meter";
 import {clamp} from 'lodash/lodash.js'
 
 const VOLUME_TOO_LOW_THRESHOLD = 0.25; // in the range 0 - 1
-const VOLUME_TOO_HIGH_THRESHOLD = 0.85; // in the range 0 - 1
+const VOLUME_TOO_HIGH_THRESHOLD = 0.92; // in the range 0 - 1
 
 export default {
   name: "volumeMeter",

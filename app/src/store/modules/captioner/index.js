@@ -125,6 +125,8 @@ const actions = {
     stopManual ({commit, state, rootState}) {
         console.log('stopManual');
         commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
+        commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
+
         if (speechRecognizer) {
             speechRecognizer.stop();
         }
@@ -161,7 +163,6 @@ const mutations = {
     },
     SET_CAPTIONER_OFF (state) {
         state.on = false;
-        state.transcript.waitingForInitial = false;
     },
     SET_SILENT_RESTART_ON (state) {
         state.silentRestart = true;

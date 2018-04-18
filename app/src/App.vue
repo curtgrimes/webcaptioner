@@ -14,6 +14,7 @@
 
 <script>
 import Combokeys from 'combokeys'
+import screenfull from 'screenfull'
 
 export default {
   name: 'app-view',
@@ -41,6 +42,9 @@ export default {
       })
       .bind('?', function() {
         self.$router.push('/captioner/settings/keyboard-shortcuts');
+      })
+      .bind('w x', function() {
+        screenfull.toggle();
       })
       .bind('w c', function() {
         self.$router.push('/captioner');

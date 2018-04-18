@@ -25,8 +25,6 @@ let mutationInterceptorPlugin = store => {
   store.subscribe(({type, payload}, state) => {
     if (remoteMutationBlacklist.indexOf(type) === -1) {
       // This mutation type is not in the blacklist. Send it to remotely listening devices.
-      console.log(payload);
-      console.log(type);
       RemoteEventBus.$emit('sendMutation', {type, payload});
     }
   })
