@@ -17,6 +17,12 @@
       </div>
       <div class="list-group-item">
         <div class="row">
+          <div class="col-6">Show captions in new window</div>
+          <div class="col-6 text-right"><kbd>w</kbd> then <kbd>n</kbd></div>
+        </div>
+      </div>
+      <div class="list-group-item">
+        <div class="row">
           <div class="col-6">Open Settings</div>
           <div class="col-6 text-right"><kbd>w</kbd> then <kbd>s</kbd></div>
         </div>

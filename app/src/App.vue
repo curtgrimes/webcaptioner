@@ -49,6 +49,9 @@ export default {
         .bind('w x', function() {
           screenfull.toggle();
         })
+        .bind('w n', function() {
+          self.$store.dispatch('START_REMOTE_WINDOW');
+        })
         .bind('w c', function() {
           self.$router.push('/captioner');
           if (!self.captioningOn) {
