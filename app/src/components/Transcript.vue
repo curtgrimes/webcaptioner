@@ -1,7 +1,7 @@
 <template>
   <div
     class="transcript d-flex"
-    v-bind:class="wrapTextPositionClass"
+    v-bind:class="[wrapTextPositionClass, (chromeless ? 'chromeless' : '')]"
     v-bind:style="{color, backgroundColor, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow}">
     <span
       v-bind:class="textPositionClass"
@@ -17,7 +17,7 @@ import hexToRgb from '../util/hexToRGB'
 
 export default {
   name: 'transcript',
-  props: [],
+  props: ['chromeless'],
   methods: {
     scrollToBottom: function () {
       this.$nextTick(function () {
@@ -55,10 +55,9 @@ export default {
       return this.$store.state.settings.appearance.text.textTransform;
     },
     padding () {
-      // Add extra padding bottom to make space for nav bar
       return this.$store.state.settings.appearance.text.alignment.padding + 'em '
         + this.$store.state.settings.appearance.text.alignment.padding + 'em '
-        + (parseFloat(this.$store.state.settings.appearance.text.alignment.padding) + 0.75) + 'em '
+        + this.$store.state.settings.appearance.text.alignment.padding + 'em '
         + this.$store.state.settings.appearance.text.alignment.padding + 'em ';
     },
     textShadow () {
@@ -79,7 +78,7 @@ export default {
       this.scrollToBottom();
 
       // Prepend a space if string is not empty
-      return (this.$store.state.captioner.transcript.interim.length ? ' ' : '')
+      return (this.$store.state.captioner.transcript.interim && this.$store.state.captioner.transcript.interim.length ? ' ' : '')
         + this.$store.state.captioner.transcript.interim;
     },
 

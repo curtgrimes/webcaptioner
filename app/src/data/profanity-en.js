@@ -15,7 +15,7 @@ export default [
     "anus",
     "apeshit",
     "arsehole",
-    "ass",
+    " ass ",
     "asshole",
     "assmunch",
     "auto erotic",

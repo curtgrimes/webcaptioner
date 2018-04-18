@@ -24,42 +24,48 @@ export default {
     };
   },
   mounted: function() {
-    let self = this;
-    this.combokeysDocument = new Combokeys(document.documentElement);
-    this.combokeysDocument
-      .bind('w s', function() {
-        self.$router.push('/captioner/settings');
-      })
-      .bind('w f', function() {
-        self.$router.push('/captioner');
-        self.$router.replace('/captioner/save-to-file');
-      })
-      .bind('w p p', function() {
-        self.$store.dispatch('captioner/restart');
-        self.$store.commit('captioner/CLEAR_TRANSCRIPT');
+    if (!this.$route.meta.disableShortcutKeys) {
+      let self = this;
+      this.combokeysDocument = new Combokeys(document.documentElement);
+      this.combokeysDocument
+        .bind('w s', function() {
+          self.$router.push('/captioner/settings');
+        })
+        .bind('w f', function() {
+          self.$router.push('/captioner');
+          self.$router.replace('/captioner/save-to-file');
+        })
+        .bind('w p p', function() {
+          if (self.captioningOn) {
+            self.$store.dispatch('captioner/restart');
+          }
+          self.$store.commit('captioner/CLEAR_TRANSCRIPT');
 
-        self.$router.replace('/captioner');
-      })
-      .bind('?', function() {
-        self.$router.push('/captioner/settings/keyboard-shortcuts');
-      })
-      .bind('w x', function() {
-        screenfull.toggle();
-      })
-      .bind('w c', function() {
-        self.$router.push('/captioner');
-        if (!self.captioningOn) {
-          self.startCaptioning();
-        }
-        else {
-          self.stopCaptioning();
-        }
-      });
-    
-
-
-
-
+          self.$router.replace('/captioner');
+        })
+        .bind('?', function() {
+          self.$router.push('/captioner/settings/keyboard-shortcuts');
+        })
+        .bind('w x', function() {
+          screenfull.toggle();
+        })
+        .bind('w c', function() {
+          self.$router.push('/captioner');
+          if (!self.captioningOn) {
+            self.startCaptioning();
+          }
+          else {
+            self.stopCaptioning();
+          }
+        })
+        .bind(['ctrl+shift+.', 'command+shift+.'], function() {
+          self.$store.commit('TEXT_SIZE_INCREASE');
+        })
+        .bind(['ctrl+shift+,', 'command+shift+,'], function() {
+          self.$store.commit('TEXT_SIZE_DECREASE');
+        })
+      ;
+    }
   },
   watch: {
     transcript: function(transcript) {

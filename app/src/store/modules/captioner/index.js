@@ -60,31 +60,30 @@ const actions = {
         speechRecognizer.onstart = function () {
             commit('SET_CAPTIONER_ON');
 
-            if (keepAliveInterval) {
-                clearInterval(keepAliveInterval);
-            }
-            keepAliveInterval = setInterval(function() {
-                if (state.shouldBeOn) {
-                    // Currently captioning
-                    let now = Date.now();
-    
-                    if (now - state.transcript.lastUpdate >= SILENT_RESTART_AFTER_NO_RESULTS_MS
-                        && now - state.transcript.lastStart > SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING
-                        // && !state.transcript.waitingForInitial
-                        && !state.volume.tooLow
-                        && !state.volume.tooHigh
-                    ) {
-                        if (!state.silentRestart) {
-                            commit('SET_SILENT_RESTART_ON');
+            if (!keepAliveInterval) {
+                keepAliveInterval = setInterval(function() {
+                    if (state.shouldBeOn) {
+                        // Currently captioning
+                        let now = Date.now();
+                        
+                        const timeSinceLastResult = now - state.transcript.lastUpdate;
+                        const timeSinceLastStart = now - state.transcript.lastStart;
+                        
+                        if (timeSinceLastResult >= SILENT_RESTART_AFTER_NO_RESULTS_MS
+                            && timeSinceLastStart > SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING
+                            // && !state.transcript.waitingForInitial
+                            && (!state.volume.tooLow || timeSinceLastResult > SILENT_RESTART_AFTER_NO_RESULTS_MS)
+                            && (!state.volume.tooHigh || timeSinceLastResult > SILENT_RESTART_AFTER_NO_RESULTS_MS)
+                        ) {
+                            if (!state.silentRestart) {
+                                commit('SET_SILENT_RESTART_ON');
+                            }
+                            dispatch('restart');
                         }
-                        dispatch('restart');
+        
                     }
-                    else {
-                        // console.log('no restart');
-                    }
-    
-                }
-            },1000);
+                },1000);
+            }
         };
 
         speechRecognizer.onend = function (e) {
@@ -92,6 +91,7 @@ const actions = {
 
             if (!state.shouldBeOn) {
                 clearInterval(keepAliveInterval);
+                keepAliveInterval = null;
             }
         };
 
@@ -123,7 +123,6 @@ const actions = {
     },
 
     stopManual ({commit, state, rootState}) {
-        console.log('stopManual');
         commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
         commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
 
@@ -132,13 +131,13 @@ const actions = {
         }
     },
 
-    restart ({commit, state, rootState}) {
+    restart ({commit, state, rootState, dispatch}) {
         if (state.transcript.interim) {
             commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal: state.transcript.interim });
             commit('CLEAR_TRANSCRIPT_INTERIM');
         }
 
-        if (speechRecognizer) {
+        if (speechRecognizer && state.on) {
             const restartSpeechRecognizer = function(event) {
                 speechRecognizer.removeEventListener('end', restartSpeechRecognizer, false); // only do it once
                 speechRecognizer.start();

@@ -6,6 +6,8 @@ import {
 
 import userLocale from 'locale2'
 import supportedLocales from '../data/locales'
+import RemoteEventBus from '../components/RemoteEventBus'
+import ChromelessWindowManager from '../components/ChromelessWindowManager'
 
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
@@ -21,6 +23,10 @@ export default {
     });
 
     return Promise.resolve();
+  },
+
+  START_REMOTE_WINDOW: () => {
+    ChromelessWindowManager.start(RemoteEventBus);
   },
 
 

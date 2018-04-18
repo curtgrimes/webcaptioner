@@ -1,6 +1,7 @@
 <template>
   <div class="h-100">
-    <data-receiver></data-receiver>
+    <cast-receiver v-if="chromecastReceiver"></cast-receiver>
+    <chromeless-receiver v-if="chromelessReceiver"></chromeless-receiver>
     <div v-if="!transcriptExists && !recentlyHadCaptions" class="bg-primary h-100">
         <div style="z-index:5;position:absolute;left:0;right:0;top:0;bottom:0">
             <div class="display-3 w-auto" style="font-size:10vh;position:absolute;left:7vw;top:10vh;width:41vw">
@@ -19,8 +20,8 @@
         <div class="h-25 bg-primary bg-zigzag" style="z-index:4;position:absolute;left:0;right:0;bottom:0"></div>
     </div>
     <div v-else>
-        <transcript></transcript>
-        <nav class="navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
+        <transcript :chromeless="chromelessReceiver"></transcript>
+        <nav v-if="!chromelessReceiver" class="navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
             <span class="navbar-brand mr-auto text-white" style="opacity:.6">
                 <img src="/public/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
                 <span class="d-none d-md-inline">Web Captioner</span>
@@ -37,13 +38,15 @@
 
 <script>
 import Transcript from "../components/Transcript.vue";
-import DataReceiver from "../components/DataReceiver.vue";
+import CastReceiver from "../components/CastReceiver.vue";
+import ChromelessReceiver from "../components/ChromelessReceiver.vue";
 
 export default {
   name: "receiver-view",
   components: {
     Transcript,
-    DataReceiver
+    CastReceiver,
+    ChromelessReceiver,
   },
   data: function() {
       return {
@@ -88,6 +91,12 @@ export default {
     },
     recentlyHadCaptions: function() {
         return this.now - this.transcriptLastUpdated < (5 * 1000);
+    },
+    chromelessReceiver: function() {
+        return this.$route.name === 'receiver-chromeless';
+    },
+    chromecastReceiver: function() {
+        return this.$route.name === 'receiver-chromecast';
     },
   }
 };

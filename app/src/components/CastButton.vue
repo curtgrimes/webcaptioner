@@ -233,7 +233,7 @@ export default {
       // else {}
     });
 
-    RemoteEventBus.$on('sendMutation', ({type, payload}) => {
+    RemoteEventBus.$on('sendMutationToReceivers', ({type, payload}) => {
       if (this.session) {
         this.sendMessage({type, payload});
       }

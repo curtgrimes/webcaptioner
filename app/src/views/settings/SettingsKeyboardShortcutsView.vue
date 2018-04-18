@@ -23,6 +23,18 @@
       </div>
       <div class="list-group-item">
         <div class="row">
+          <div class="col-6">Increase text size</div>
+          <div class="col-6 text-right"><kbd v-if="isMac">&#8984;</kbd><kbd v-else>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>&gt;</kbd></div>
+        </div>
+      </div>
+      <div class="list-group-item">
+        <div class="row">
+          <div class="col-6">Decrease text size</div>
+          <div class="col-6 text-right"><kbd v-if="isMac">&#8984;</kbd><kbd v-else>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>&lt;</kbd></div>
+        </div>
+      </div>
+      <div class="list-group-item">
+        <div class="row">
           <div class="col-6">Open "Save as File" dialog</div>
           <div class="col-6 text-right"><kbd>w</kbd> then <kbd>f</kbd></div>
         </div>
@@ -47,5 +59,10 @@
 
 export default {
   name: 'settings-keyboard-shortcuts-view',
+  computed: {
+    isMac: function() {
+      return navigator ? navigator.platform.toUpperCase().indexOf('MAC') >= 0 : false;
+    }
+  }
 }
 </script>

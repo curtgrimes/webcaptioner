@@ -9,7 +9,7 @@
                 <span class="d-none d-md-inline">Web Captioner</span>
             </a>
         </span>
-
+        
         <!-- Do not remove this from the DOM with v-if. Currently the volume meter needs to exist in order to populate microphoneName. -->
         <volume-meter v-bind:hidden="!captioningOn || waitingForInitialTranscript"></volume-meter>
 
@@ -25,11 +25,14 @@
         <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
         </b-dropdown>
         -->
+        <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Typing Mode"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
         <b-dropdown variant="primary" dropup right split :text="!captioningOn ? 'Start Captioning' : 'Stop'" @click="!captioningOn ? startCaptioning() : stopCaptioning()">
             <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
             <b-dropdown-item href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</b-dropdown-item>
             <b-dropdown-item href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</b-dropdown-item>
             <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
+            <div class="dropdown-divider"></div>
+            <b-dropdown-item @click="newWindow" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><i class="fa fa-external-link fa-fw mr-1" aria-hidden="true"></i> New Window</b-dropdown-item>
             <div class="dropdown-divider"></div>
             <b-dropdown-item to="/captioner/save-to-file" replace onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
             <b-dropdown-item to="/captioner/clear" replace><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
@@ -74,6 +77,10 @@ export default {
     startClearTranscriptModal: function() {
         this.$router.push('/captioner/clear');
     //   this.$refs.clearTranscriptModal.showModal();
+    },
+    newWindow: function() {
+        this.$store.dispatch('START_REMOTE_WINDOW');
+        // TODO: check for when child window closes here and unbind event
     },
   }
 }

@@ -52,7 +52,13 @@ export default {
   SET_ALIGNMENT_PADDING: (state, { alignmentPadding }) => {
     state.settings.appearance.text.alignment.padding = alignmentPadding
   },
-
+  TEXT_SIZE_INCREASE: (state) => {
+    state.settings.appearance.text.textSize = parseFloat(state.settings.appearance.text.textSize) + 0.1;
+  },
+  TEXT_SIZE_DECREASE: (state) => {
+    state.settings.appearance.text.textSize = parseFloat(state.settings.appearance.text.textSize) - 0.1;
+  },
+        
 
   ADD_WORD_REPLACEMENT (state, { wordReplacement }) {
     state.settings.wordReplacements.push(wordReplacement);

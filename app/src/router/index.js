@@ -68,7 +68,28 @@ export function createRouter () {
           },
         ]
       },
-      { path: '/receiver', component: ReceiverView},
+      {
+        path: '/receivers',
+        component: ReceiverView,
+        children: [
+          {
+            path: 'chromecast',
+            component: ReceiverView,
+            name: 'receiver-chromecast',
+            meta: {
+              disableShortcutKeys: true,
+            },
+          },
+          {
+            path: 'chromeless',
+            component: ReceiverView,
+            name: 'receiver-chromeless',
+            meta: {
+              disableShortcutKeys: true,
+            },
+          },
+        ]
+      },
       { path: '/top/:page(\\d+)?', component: createListView('top') },
       { path: '/new/:page(\\d+)?', component: createListView('new') },
       { path: '/show/:page(\\d+)?', component: createListView('show') },

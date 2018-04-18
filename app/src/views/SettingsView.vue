@@ -12,7 +12,8 @@
                 <b-nav-item to="appearance">Appearance</b-nav-item>
                 <b-nav-item to="word-replacements">Word Replacements</b-nav-item>
                 <b-nav-item to="censor">Censor</b-nav-item>
-                <b-nav-item to="Language">Language</b-nav-item>
+                <b-nav-item to="language">Language</b-nav-item>
+                <b-nav-item to="title-cards">Title Cards</b-nav-item>
               </b-nav>
               <hr/>
               <b-nav vertical pills>
