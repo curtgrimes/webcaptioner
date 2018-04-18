@@ -58,6 +58,7 @@
 
 <script>
 import loadScript from 'load-script'
+import RemoteEventBus from '../components/RemoteEventBus'
 
 const applicationID = 'C97D0419';
 const namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
@@ -232,25 +233,9 @@ export default {
       // else {}
     });
 
-    this.$watch("transcriptInterim", function(transcriptInterim) {
+    RemoteEventBus.$on('sendMutation', ({type, payload}) => {
       if (this.session) {
-        this.sendMessage({
-          mutationType: 'captioner/SET_TRANSCRIPT_INTERIM',
-          payload: {
-            transcriptInterim,
-          }
-        });
-      }
-    });
-
-    this.$watch("transcriptFinal", function(transcriptFinal) {
-      if (this.session) {
-        this.sendMessage({
-          mutationType: 'captioner/APPEND_TRANSCRIPT_FINAL',
-          payload: {
-            transcriptFinal,
-          }
-        });
+        this.sendMessage({type, payload});
       }
     });
   },

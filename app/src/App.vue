@@ -73,10 +73,10 @@ export default {
   },
   methods: {
     startCaptioning: function() {
-      this.$store.dispatch('captioner/start');
+      this.$store.dispatch('captioner/startManual');
     },
     stopCaptioning: function() {
-      this.$store.dispatch('captioner/stop');
+      this.$store.dispatch('captioner/stopManual');
     },
   }
 }

@@ -1,15 +1,24 @@
 import RecognitionResultParser from './RecognitionResultParser.js'
 import internalWordReplacements from '../../../data/internalWordReplacements'
 import censoredProfanity from '../../../data/profanity-en'
-let speechRecognizer;
+
+const SILENT_RESTART_AFTER_NO_RESULTS_MS = (2 * 1000);
+const SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING = (2.5 * 1000);
+
+let speechRecognizer,
+    keepAliveInterval;
 
 const state = {
     on: false,
+    shouldBeOn: false,
+    silentRestart: false,
     microphoneName: '',
-    waitingForInitialTranscript: false,
     transcript: {
         interim: '',
         final: 'final:"work and in to memorize it but it so I just want to share some of us with you and just by telling you something about that book when its when fall starts off in that book he refers to himself as a server"        ',
+        lastStart: null,
+        lastUpdate: null,
+        waitingForInitial: false,
     },
     volume: {
         tooLow: false,
@@ -18,7 +27,11 @@ const state = {
 }
 
 const actions = {
-    start ({commit, state, rootState, getters}) {
+    startManual ({commit, dispatch}) {
+        commit('SET_SHOULD_BE_ON', { shouldBeOn: true });
+        dispatch('start');
+    },
+    start ({commit, state, rootState, getters, dispatch}) {
         let parser = new RecognitionResultParser({
             wordReplacements: [
                 ...rootState.settings.wordReplacements,
@@ -40,14 +53,46 @@ const actions = {
         speechRecognizer.interimResults = true;
         speechRecognizer.lang = rootState.settings.locale.from;
         speechRecognizer.start();
-        commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitialTranscript: true });
+        commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: true });
+
+        let self = this;
 
         speechRecognizer.onstart = function () {
             commit('SET_CAPTIONER_ON');
+
+            if (keepAliveInterval) {
+                clearInterval(keepAliveInterval);
+            }
+            keepAliveInterval = setInterval(function() {
+                if (state.shouldBeOn) {
+                    // Currently captioning
+                    let now = Date.now();
+    
+                    if (now - state.transcript.lastUpdate >= SILENT_RESTART_AFTER_NO_RESULTS_MS
+                        && now - state.transcript.lastStart > SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING
+                        // && !state.transcript.waitingForInitial
+                        && !state.volume.tooLow
+                        && !state.volume.tooHigh
+                    ) {
+                        if (!state.silentRestart) {
+                            commit('SET_SILENT_RESTART_ON');
+                        }
+                        dispatch('restart');
+                    }
+                    else {
+                        // console.log('no restart');
+                    }
+    
+                }
+            },1000);
         };
 
-        speechRecognizer.onend = function () {
+        speechRecognizer.onend = function (e) {
             commit('SET_CAPTIONER_OFF');
+
+            if (!state.shouldBeOn) {
+                clearInterval(keepAliveInterval);
+            }
         };
 
         speechRecognizer.onresult = function(event) {
@@ -55,8 +100,8 @@ const actions = {
             
             // Set flag false once we're receiving a transcript
             // for the first time
-            if (getters.waitingForInitialTranscript) {
-                commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitialTranscript: false });
+            if (state.transcript.waitingForInitial) {
+                commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
             }
             
 
@@ -70,15 +115,27 @@ const actions = {
                 commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal });
             }
         };
+
+        speechRecognizer.onerror = function(error) {
+            // console.log('speechRecognizer error');
+            // console.log(error);
+        };      
     },
 
-    stop ({commit, state, rootState}) {
+    stopManual ({commit, state, rootState}) {
+        console.log('stopManual');
+        commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
         if (speechRecognizer) {
             speechRecognizer.stop();
         }
     },
 
     restart ({commit, state, rootState}) {
+        if (state.transcript.interim) {
+            commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal: state.transcript.interim });
+            commit('CLEAR_TRANSCRIPT_INTERIM');
+        }
+
         if (speechRecognizer) {
             const restartSpeechRecognizer = function(event) {
                 speechRecognizer.removeEventListener('end', restartSpeechRecognizer, false); // only do it once
@@ -87,31 +144,34 @@ const actions = {
             speechRecognizer.addEventListener('end', restartSpeechRecognizer, false);
             speechRecognizer.abort();
         }
+        else {
+            // Need to init speechRecognizer again for some reason
+            dispatch('start');
+        }
     },
-
-  // The first argument is the vuex store, but we're using only the
-  // dispatch function, which applies a mutation to the store,
-  // and the current state of the store
-//   checkout ({commit, state}, products) {
-//     const savedCartItems = [...state.added]
-//     commit('checkout_request')
-//     shop.buyProducts(
-//       products,
-//       () => commit('checkout_successful'),
-//       () => commit('checkout_failure', savedCartItems)
-//     )
-//   }
 }
 
 const mutations = {
     SET_CAPTIONER_ON (state) {
         state.on = true;
+        state.transcript.lastStart = Date.now();
+    },
+    SET_SHOULD_BE_ON (state, { shouldBeOn }) {
+        state.shouldBeOn = shouldBeOn;
     },
     SET_CAPTIONER_OFF (state) {
         state.on = false;
+        state.transcript.waitingForInitial = false;
+    },
+    SET_SILENT_RESTART_ON (state) {
+        state.silentRestart = true;
+    },
+    SET_SILENT_RESTART_OFF (state) {
+        state.silentRestart = false;
     },
     SET_TRANSCRIPT_INTERIM (state, { transcriptInterim }) {
         state.transcript.interim = transcriptInterim;
+        state.transcript.lastUpdate = Date.now();
     },
     CLEAR_TRANSCRIPT (state) {
         state.transcript.interim = '';
@@ -127,6 +187,7 @@ const mutations = {
             transcriptFinal = ' ' + transcriptFinal;
         }
         state.transcript.final += transcriptFinal;
+        state.transcript.lastUpdate = Date.now();
     },
 
     VOLUME_TOO_LOW (state, { volumeTooLow }) {
@@ -140,8 +201,8 @@ const mutations = {
         state.microphoneName = microphoneName;
     },
 
-    SET_WAITING_FOR_INITIAL_TRANSCRIPT (state, { waitingForInitialTranscript }) {
-        state.waitingForInitialTranscript = waitingForInitialTranscript;
+    SET_WAITING_FOR_INITIAL_TRANSCRIPT (state, { waitingForInitial }) {
+        state.transcript.waitingForInitial = waitingForInitial;
     },
     
 //   add_to_cart (state, productId) {
@@ -172,9 +233,6 @@ const mutations = {
 }
 
 const getters = {
-    waitingForInitialTranscript (state) {
-    return state.waitingForInitialTranscript;
-  }
 }
 
 export default {

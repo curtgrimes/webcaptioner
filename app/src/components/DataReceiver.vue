@@ -91,7 +91,7 @@ export default {
     processMessage: function({ type, senderId, data }) {
       this.castReceiverManager.setApplicationState("Captioning");
 
-      let { mutationType, payload } = JSON.parse(data);
+      let { type: mutationType, payload } = JSON.parse(data);
       // this.message = typeof payload;
       // this.message({mutationType,payload});
       this.$store.commit(mutationType, payload);

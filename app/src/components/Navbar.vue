@@ -9,9 +9,12 @@
                 <span class="d-none d-md-inline">Web Captioner</span>
             </a>
         </span>
-        <volume-meter v-if="captioningOn && !waitingForInitialTranscript"></volume-meter>
+
+        <!-- Do not remove this from the DOM with v-if. Currently the volume meter needs to exist in order to populate microphoneName. -->
+        <volume-meter v-bind:hidden="!captioningOn || waitingForInitialTranscript"></volume-meter>
+
         <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
-            Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>...
+            Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
         </div>
         <cast-button></cast-button>
         <!--
@@ -48,21 +51,21 @@ export default {
   },
   computed: {
     captioningOn: function() {
-        return this.$store.state.captioner.on; 
+        return this.$store.state.captioner.shouldBeOn;
     },
     microphoneName: function() {
         return this.$store.state.captioner.microphoneName;
     },
     waitingForInitialTranscript: function() {
-        return this.$store.state.captioner.waitingForInitialTranscript;
+        return this.$store.state.captioner.transcript.waitingForInitial;
     },
   },
   methods: {
     startCaptioning: function() {
-      this.$store.dispatch('captioner/start');
+      this.$store.dispatch('captioner/startManual');
     },
     stopCaptioning: function() {
-      this.$store.dispatch('captioner/stop');
+      this.$store.dispatch('captioner/stopManual');
     },
     startSaveToFileModal: function() {
         this.$router.push('/captioner/save-to-file');

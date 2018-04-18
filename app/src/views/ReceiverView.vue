@@ -1,7 +1,7 @@
 <template>
   <div class="h-100">
     <data-receiver></data-receiver>
-    <div v-if="!transcriptExists" class="bg-primary h-100">
+    <div v-if="!transcriptExists && !recentlyHadCaptions" class="bg-primary h-100">
         <div style="z-index:5;position:absolute;left:0;right:0;top:0;bottom:0">
             <div class="display-3 w-auto" style="font-size:10vh;position:absolute;left:7vw;top:10vh;width:41vw">
                 Captioning will<br class="d-none d-lg-block" /> begin shortly. 
@@ -18,7 +18,7 @@
         </div>
         <div class="h-25 bg-primary bg-zigzag" style="z-index:4;position:absolute;left:0;right:0;bottom:0"></div>
     </div>
-    <div v-if="transcriptExists">
+    <div v-else>
         <transcript></transcript>
         <nav class="navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
             <span class="navbar-brand mr-auto text-white" style="opacity:.6">
@@ -39,8 +39,6 @@
 import Transcript from "../components/Transcript.vue";
 import DataReceiver from "../components/DataReceiver.vue";
 
-let videoCache = [];
-
 export default {
   name: "receiver-view",
   components: {
@@ -50,24 +48,46 @@ export default {
   data: function() {
       return {
           loopVideoLoaded: false,
+          now: Date.now(),
+          transcriptLastUpdated: 'b',
       };
   },
   mounted: function() {
-    this.$watch('transcriptExists', function() {
+    this._dateUpdateInterval = setInterval(() => { this.now = Date.now(); }, 250);
+
+    this.$watch('transcriptExists', function(transcriptExists) {
+        this.initVideo();
+    });
+
+    this.$watch('transcript', function() {
+        this.transcriptLastUpdated = Date.now();
+    });
+
+    this.$watch('recentlyHadCaptions', function() {
+        this.initVideo();
+    });
+  },
+  methods: {
+      initVideo: function() {
         if (this.$refs.loopVideo) {
             let self = this;
             this.$refs.loopVideo.addEventListener("play", function() {
                 self.loopVideoLoaded = true;
             }, false);
+            this.$refs.loopVideo.play();
         }
-    });
+      },
   },
   computed: {
+    transcript: function() {
+        return this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim;
+    },
     transcriptExists: function() {
-      return (
-        this.$store.state.captioner.transcript.final.length > 0 ||
-        this.$store.state.captioner.transcript.interim.length > 0
-      );
+        return this.$store.state.captioner.transcript.final.length > 0 ||
+            this.$store.state.captioner.transcript.interim.length > 0;
+    },
+    recentlyHadCaptions: function() {
+        return this.now - this.transcriptLastUpdated < (5 * 1000);
     },
   }
 };

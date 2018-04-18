@@ -6,8 +6,31 @@ import getters from './getters'
 import captioner from './modules/captioner'
 import fontChocies from '../util/fontChoices'
 import vuexPersist from 'vuex-persist'
+import remoteMutationBlacklist from '../data/remoteMutationBlacklist'
+import RemoteEventBus from '../components/RemoteEventBus'
 
 Vue.use(Vuex)
+
+let vuePersistPlugin = new vuexPersist({
+  key: 'webcaptioner:settings',
+  reducer: (state) => {
+    return {
+      settings: state.settings,
+      version: state.version,
+    };
+  },
+}).plugin;
+
+let mutationInterceptorPlugin = store => {
+  store.subscribe(({type, payload}, state) => {
+    if (remoteMutationBlacklist.indexOf(type) === -1) {
+      // This mutation type is not in the blacklist. Send it to remotely listening devices.
+      console.log(payload);
+      console.log(type);
+      RemoteEventBus.$emit('sendMutation', {type, payload});
+    }
+  })
+};
 
 export function createStore () {
   return new Vuex.Store({
@@ -64,14 +87,6 @@ export function createStore () {
     actions,
     mutations,
     getters,
-    plugins: [new vuexPersist({
-      key: 'webcaptioner:settings',
-      reducer: (state) => {
-        return {
-          settings: state.settings,
-          version: state.version,
-        };
-      },
-    }).plugin],
+    plugins: [vuePersistPlugin, mutationInterceptorPlugin],
   })
 }

@@ -21,6 +21,9 @@
 import AudioStreamMeter from "audio-stream-meter";
 import {clamp} from 'lodash/lodash.js'
 
+const VOLUME_TOO_LOW_THRESHOLD = 0.25; // in the range 0 - 1
+const VOLUME_TOO_HIGH_THRESHOLD = 0.85; // in the range 0 - 1
+
 export default {
   name: "volumeMeter",
   props: [],
@@ -32,6 +35,7 @@ export default {
       lastVolumeTooHighEvent: null,
       now: Date.now(),
 
+      _audioContext: null,
       _stream: null,
       _audioMeter: null,
       _dateUpdateInterval: null,
@@ -75,13 +79,17 @@ export default {
         // Get the name of the device
         const tracks = self._stream.getTracks();
         if (tracks && tracks[0] && tracks[0].label) {
-          self.microphoneName = tracks[0].label;
+          if (self.microphoneName != tracks[0].label) {
+            // It has a new name
+            self.microphoneName = tracks[0].label;
+          }
         }
 
-        let audioContext = new AudioContext();
-        let mediaStream = audioContext.createMediaStreamSource(stream);
+        self._audioContext = self._audioContext || new AudioContext();
+
+        let mediaStream = self._audioContext.createMediaStreamSource(stream);
         self._audioMeter = AudioStreamMeter.audioStreamProcessor(
-          audioContext,
+          self._audioContext,
           function() {
             self.volumeLevel = clamp(self._audioMeter.volume * 4, 0, 1);
           },
@@ -135,7 +143,7 @@ export default {
   computed: {
     microphoneName: {
       get () {
-        return this.$sstore.state.captioner.microphoneName;
+        return this.$store.state.captioner.microphoneName;
       },
       set (microphoneName) {
         this.$store.commit('captioner/SET_MICROPHONE_NAME', {microphoneName});
@@ -145,14 +153,14 @@ export default {
       return this.$store.state.captioner.on;
     },
     volumeTooLow: function () {
-      const volumeTooLow = this.averageVolumeReading() < 0.1;
+      const volumeTooLow = this.averageVolumeReading() < VOLUME_TOO_LOW_THRESHOLD;
       if (volumeTooLow) {
         this.lastVolumeTooLowEvent = Date.now();
       }
       return volumeTooLow;
     },
     volumeTooHigh: function () {
-      const volumeTooHigh = this.averageVolumeReading() > 0.85;
+      const volumeTooHigh = this.averageVolumeReading() > VOLUME_TOO_HIGH_THRESHOLD;
       if (volumeTooHigh) {
         this.lastVolumeTooHighEvent = Date.now();
       }
