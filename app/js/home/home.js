@@ -123,7 +123,7 @@ var playbackTimingsInterval;
     var timings;
     var heroAudio = document.createElement('audio');
     // Hero example timings
-    fetch('/static/hero-transcript-price-is-right.json')
+    fetch('/home/static/hero-transcript-price-is-right.json')
         .then(function(response) {
             return response.json();
         })

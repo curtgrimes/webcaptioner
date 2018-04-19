@@ -25,7 +25,7 @@
         <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
         </b-dropdown>
         -->
-        <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Typing Mode"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
+        <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Text Entry"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
         <b-dropdown variant="primary" dropup right split :text="!captioningOn ? 'Start Captioning' : 'Stop'" @click="!captioningOn ? startCaptioning() : stopCaptioning()">
             <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
             <b-dropdown-item href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</b-dropdown-item>
@@ -69,6 +69,12 @@ export default {
     },
     stopCaptioning: function() {
       this.$store.dispatch('captioner/stopManual');
+    },
+    startTyping: function() {
+      this.$store.dispatch('captioner/startTyping');
+    },
+    stopTyping: function() {
+      this.$store.dispatch('captioner/stopTyping');
     },
     startSaveToFileModal: function() {
         this.$router.push('/captioner/save-to-file');

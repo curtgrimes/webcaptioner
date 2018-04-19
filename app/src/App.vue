@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="w-100">
+  <div id="app" class="w-100" v-bind:style="{backgroundColor}">
     <router-view></router-view>
   </div>
 </template>
@@ -82,6 +82,9 @@ export default {
   computed: {
     captioningOn: function() {
       return this.$store.state.captioner.on; 
+    },
+    backgroundColor: function() {
+      return this.$store.state.settings.appearance.background.color;
     },
   },
   methods: {
