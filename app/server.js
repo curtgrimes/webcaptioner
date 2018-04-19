@@ -138,7 +138,7 @@ function render (req, res) {
 }
 
 // Serve app
-app.get(['/captioner', '/captioner*'], isProd ? render : (req, res) => {
+app.get(['/captioner', '/captioner*', '/receivers*'], isProd ? render : (req, res) => {
   readyPromise.then(() => render(req, res))
 });
 

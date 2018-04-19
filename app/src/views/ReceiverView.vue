@@ -7,7 +7,7 @@
             <div class="display-3 w-auto" style="font-size:10vh;position:absolute;left:7vw;top:10vh;width:41vw">
                 Captioning will<br class="d-none d-md-block" /> begin shortly. 
             </div>
-            <div v-bind:class="{show: loopVideoLoaded}" class="fade d-none d-sm-block" style="position:absolute;right:7vw;bottom:10vh;width:43vw;height:65vh;">
+            <div v-bind:class="{show: loopVideoLoaded}" class="fade d-none d-lg-block" style="position:absolute;right:7vw;bottom:10vh;width:43vw;height:65vh;">
                 <video ref="loopVideo" src="/public/cast-loop.mp4" loop preload autoplay type="video/mp4" class="float-right mw-100 mh-100" style="position:absolute;bottom:0;box-shadow: 0 2px 57px rgba(0, 0, 0, 0.3);"></video>
             </div>
             <div class="h-25 d-flex align-items-center " style="position:absolute;left:7vw;right:0;bottom:0">
@@ -57,6 +57,10 @@ export default {
   },
   mounted: function() {
     this._dateUpdateInterval = setInterval(() => { this.now = Date.now(); }, 250);
+    
+    if (!this.transcriptExists) {
+        this.initVideo();
+    }
 
     this.$watch('transcriptExists', function(transcriptExists) {
         this.initVideo();
