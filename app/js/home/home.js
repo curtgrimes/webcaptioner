@@ -1,5 +1,9 @@
 var playbackTimingsInterval;
 (function(){
+    if (!document.getElementById('hero-caption-demo')) {
+        return;
+    }
+
     var heroAudioPlaybackOffsetSeconds = 0.7;
     function hide(element) {
         element.setAttribute('hidden', true);
