@@ -12,6 +12,7 @@ RUN mkdir -p /usr/src/app \
 
 # Install app dependencies
 COPY app/package.json /usr/src/app/
+COPY app/build /usr/src/app/build
 COPY static-site/package.json /usr/src/static-site/
 
 WORKDIR /usr/src/app
