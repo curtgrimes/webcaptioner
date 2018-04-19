@@ -88,15 +88,14 @@ app.get('/health-check', function (req, res) {
 });
 
 // Static site pages
-app.use('/', express.static(path.join(__dirname, '../static-site/public')));
-app.use('/blog', express.static(path.join(__dirname, '../static-site/public/blog')));
-app.use('/help', express.static(path.join(__dirname, '../static-site/public/help')));
-app.use('/donate', express.static(path.join(__dirname, '../static-site/public/donate')));
-app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/public/privacy-policy')));
-app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
-app.use('/feedback', express.static(path.join(__dirname, '../static-site/public/feedback')));
-app.use('/vmix', express.static(path.join(__dirname, '../static-site/public/vmix')));
-app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
+// app.use('/blog', express.static(path.join(__dirname, '../static-site/public/blog')));
+// app.use('/help', express.static(path.join(__dirname, '../static-site/public/help')));
+// app.use('/donate', express.static(path.join(__dirname, '../static-site/public/donate')));
+// app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/public/privacy-policy')));
+// app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
+// app.use('/feedback', express.static(path.join(__dirname, '../static-site/public/feedback')));
+// app.use('/vmix', express.static(path.join(__dirname, '../static-site/public/vmix')));
+// app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 
 // app.use('/captioner', captioner);
 // app.use('/translate', translate);
@@ -109,7 +108,7 @@ app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
 // headers.
 // 1-second microcache.
 // https://www.nginx.com/blog/benefits-of-microcaching-nginx/
-app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl))
+app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl));
 
 function render (req, res) {
   const s = Date.now()
@@ -145,9 +144,13 @@ function render (req, res) {
   })
 }
 
-app.get('*', isProd ? render : (req, res) => {
+// Serve app
+app.get(['/captioner', '/captioner*'], isProd ? render : (req, res) => {
   readyPromise.then(() => render(req, res))
-})
+});
+
+// Serve static pages
+app.use(express.static(path.join(__dirname, '../static-site/public')));
 
 const port = process.env.PORT || 8080
 app.listen(port, () => {
