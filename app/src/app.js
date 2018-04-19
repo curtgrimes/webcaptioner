@@ -6,7 +6,16 @@ import { sync } from 'vuex-router-sync'
 import titleMixin from './util/title'
 import * as filters from './util/filters'
 import BootstrapVue from 'bootstrap-vue'
+import dateFormat from 'date-fns/format'
 
+const dateFormatPlugin = {
+  install () {
+      Vue.helpers = {dateFormat}
+      Vue.prototype.$helpers = {dateFormat}
+  }
+};
+
+Vue.use(dateFormatPlugin);
 Vue.use(BootstrapVue);
 
 // mixin for handling title

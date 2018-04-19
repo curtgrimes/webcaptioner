@@ -33,15 +33,6 @@ Vue.mixin({
   }
 })
 
-const dateFormatPlugin = {
-  install () {
-      Vue.helpers = {dateFormat}
-      Vue.prototype.$helpers = {dateFormat}
-  }
-};
-
-Vue.use(dateFormatPlugin);
-
 const { app, router, store } = createApp()
 
 // prime the store with server-initialized state.
