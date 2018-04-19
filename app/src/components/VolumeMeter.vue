@@ -19,7 +19,7 @@
 
 <script>
 import AudioStreamMeter from "audio-stream-meter";
-import {clamp} from 'lodash/lodash.js'
+import clamp from 'lodash.clamp'
 
 const VOLUME_TOO_LOW_THRESHOLD = 0.25; // in the range 0 - 1
 const VOLUME_TOO_HIGH_THRESHOLD = 0.92; // in the range 0 - 1

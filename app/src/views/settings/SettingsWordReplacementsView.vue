@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {debounce} from 'lodash/lodash.js'
+import debounce from 'lodash.debounce'
 
 export default {
   name: 'settings-word-replacements-view',

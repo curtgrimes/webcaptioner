@@ -22,19 +22,20 @@
 
 <script>
 import changelog from '../../data/changelog.js'
-import format from 'date-fns/format'
-import versionSort from 'version-sort'
+import versionSort from 'semver-compare'
 
 export default {
   name: 'settings-about-view',
   computed: {
     changelogSortedByVersionNumber: function () {
-      return versionSort(changelog, { nested: 'version' }).reverse();
+      return changelog.sort(function (changelogEntryA, changelogEntryB) {
+        return versionSort(changelogEntryA.version, changelogEntryB.version);
+      });
     },
   },
   methods: {
     formatDate: function (date) {
-      return format(date, 'MMM. D, YYYY');
+      return this.$helpers.dateFormat(date, 'MMM. D, YYYY');
     }
   },
 }

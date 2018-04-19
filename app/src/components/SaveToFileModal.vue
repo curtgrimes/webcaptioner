@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { format } from 'date-fns'
 
 const routeName = 'save-to-file';
 
@@ -67,7 +66,7 @@ export default {
       var a = document.createElement('a');
       a.href = 'data:text/plain;base64,' + btoa(this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim);
       a.textContent = 'download';
-      a.download = 'web-captioner-'+ format(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.txt';
+      a.download = 'web-captioner-'+ this.$helpers.dateFormat(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.txt';
       a.click();
 
       // Close dialog
@@ -77,7 +76,7 @@ export default {
       var a = document.createElement('a');
       a.href = 'data:text/html;base64,' + btoa('<html><body>' + this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim + '</body></html>');
       a.textContent = 'download';
-      a.download = 'web-captioner-'+ format(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.doc';
+      a.download = 'web-captioner-'+ this.$helpers.dateFormat(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.doc';
       a.click();
 
       // Close dialog

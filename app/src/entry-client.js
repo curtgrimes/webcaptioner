@@ -2,6 +2,7 @@ import Vue from 'vue'
 import 'es6-promise/auto'
 import { createApp } from './app'
 import ProgressBar from './components/ProgressBar.vue'
+import dateFormat from 'date-fns/format'
 
 // Legacy stuff
 // import './legacy-client/index'
@@ -31,6 +32,15 @@ Vue.mixin({
     }
   }
 })
+
+const dateFormatPlugin = {
+  install () {
+      Vue.helpers = {dateFormat}
+      Vue.prototype.$helpers = {dateFormat}
+  }
+};
+
+Vue.use(dateFormatPlugin);
 
 const { app, router, store } = createApp()
 

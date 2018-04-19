@@ -72,7 +72,6 @@ export default {
   },
   watch: {
     transcript: function(transcript) {
-      console.log(transcript);
       this.sendCastMessage(transcript);
     },
   },

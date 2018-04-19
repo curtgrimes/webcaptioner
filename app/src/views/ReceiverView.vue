@@ -5,7 +5,7 @@
     <div v-if="!transcriptExists && !recentlyHadCaptions" class="bg-primary h-100">
         <div style="z-index:5;position:absolute;left:0;right:0;top:0;bottom:0">
             <div class="display-3 w-auto" style="font-size:10vh;position:absolute;left:7vw;top:10vh;width:41vw">
-                Captioning will<br class="d-none d-lg-block" /> begin shortly. 
+                Captioning will<br class="d-none d-md-block" /> begin shortly. 
             </div>
             <div v-bind:class="{show: loopVideoLoaded}" class="fade d-none d-sm-block" style="position:absolute;right:7vw;bottom:10vh;width:43vw;height:65vh;">
                 <video ref="loopVideo" src="/public/cast-loop.mp4" loop preload autoplay type="video/mp4" class="float-right mw-100 mh-100" style="position:absolute;bottom:0;box-shadow: 0 2px 57px rgba(0, 0, 0, 0.3);"></video>

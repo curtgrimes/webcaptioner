@@ -255,7 +255,7 @@
 </template>
 
 <script>
-import {debounce} from 'lodash/lodash.js'
+import debounce from 'lodash.debounce'
 import fontChoices from '../../util/fontChoices.js'
 import hexToRgb from '../../util/hexToRGB'
 
@@ -269,7 +269,7 @@ if (typeof window !== 'undefined') {
   link.rel = 'stylesheet';
   headID.appendChild(link);
 
-  let fontChoicesString = fontChoices.map((choice) => { return choice.googleFontNameKey.replace(/ /g, '+'); }).join('|');;
+  let fontChoicesString = fontChoices.map(function (choice) { return choice.googleFontNameKey.replace(/ /g, '+'); }).join('|');;
 
   link.href = 'http://fonts.googleapis.com/css?family=' + fontChoicesString;
 

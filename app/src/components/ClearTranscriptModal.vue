@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { format } from 'date-fns'
 
 const routeName = 'clear-transcript';
 

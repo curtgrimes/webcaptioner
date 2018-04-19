@@ -1,4 +1,4 @@
-import {escapeRegExp} from 'lodash/lodash.js'
+import escapeRegExp from 'lodash.escaperegexp'
 
 export default class {
     constructor ({wordReplacements}) {
