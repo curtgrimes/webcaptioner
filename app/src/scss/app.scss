@@ -546,6 +546,9 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
   line-height: 2.15rem;
   overflow: hidden;
   transition: height 0.15s ease-out;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: Cousine,monopsace;
 }
 
 #hero-caption-demo.expanded {
