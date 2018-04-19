@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-npm run gulp
-ls /usr/src/static-site
+cd static-site
 hugo --source="../static-site" --baseURL $HUGO_BASE_URL
-npm start
+gulp
+
+cd ../app
+
+npm run start
