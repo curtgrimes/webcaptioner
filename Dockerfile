@@ -27,7 +27,7 @@ RUN npm install
 COPY ./app /usr/src/app
 
 WORKDIR /usr/src/app/src
-RUN npm start build
+RUN npm run build
 
 # ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/env/google-application-credentials.json
 
