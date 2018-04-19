@@ -63,19 +63,19 @@ const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
 
-if (isProd) {
-  // Redirect http to https
-  app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-      // We're not on HTTPS. AWS sets the X-Forwarded-Proto header from the load balancer.
-      res.redirect('https://' + req.get('Host') + req.url);
-    }
-    else {
-      // No redirect necessary; already on HTTPS
-      next();
-    }
-  });
-}
+// if (isProd) {
+//   // Redirect http to https
+//   app.use(function(req, res, next) {
+//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+//       // We're not on HTTPS. AWS sets the X-Forwarded-Proto header from the load balancer.
+//       res.redirect('https://' + req.get('Host') + req.url);
+//     }
+//     else {
+//       // No redirect necessary; already on HTTPS
+//       next();
+//     }
+//   });
+// }
 
 app.use(compression({ threshold: 0 }))
 app.use(favicon('./public/favicon.ico'))
