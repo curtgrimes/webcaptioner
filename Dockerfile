@@ -12,8 +12,12 @@ RUN mkdir -p /usr/src/app \
 
 # Install app dependencies
 COPY app/package.json /usr/src/app/
+COPY static-site/package.json /usr/src/static-site/
 
 WORKDIR /usr/src/app
+RUN npm install
+
+WORKDIR /usr/src/static-site
 RUN npm install
 
 # Bundle app source
@@ -21,10 +25,13 @@ RUN npm install
 # code changes, we don't need to repeat that step)
 COPY ./app /usr/src/app
 
+WORKDIR /usr/src/app/src
+RUN npm start build
+
 # ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/env/google-application-credentials.json
 
 # Copy static site files
 COPY static-site /usr/src/static-site
 
 EXPOSE 8080
-CMD ["bin/startup.sh"]
+CMD ["npm","run","start"]
