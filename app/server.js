@@ -17,6 +17,11 @@ const serverInfo =
 
 const app = express()
 
+// Health check
+app.use('/health-check', function (req, res) {
+  res.sendStatus(200);
+});
+
 if (isProd) {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
@@ -131,11 +136,6 @@ function render (req, res) {
     }
   })
 }
-
-// Health check
-app.use('/health-check', function (req, res) {
-  res.sendStatus(200);
-});
 
 // Serve app
 app.get(['/captioner', '/captioner*'], isProd ? render : (req, res) => {
