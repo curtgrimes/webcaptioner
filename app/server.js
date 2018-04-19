@@ -83,9 +83,6 @@ app.use('/dist', serve('./dist', true))
 app.use('/public', serve('./public', true))
 app.use('/manifest.json', serve('./manifest.json', true))
 app.use('/service-worker.js', serve('./dist/service-worker.js'))
-app.get('/health-check', function (req, res) {
-  res.sendStatus(200);
-});
 
 // Static site pages
 // app.use('/blog', express.static(path.join(__dirname, '../static-site/public/blog')));
@@ -143,6 +140,11 @@ function render (req, res) {
     }
   })
 }
+
+// Health check
+app.use('/health-check', function (req, res) {
+  res.sendStatus(200);
+});
 
 // Serve app
 app.get(['/captioner', '/captioner*'], isProd ? render : (req, res) => {
