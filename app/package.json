@@ -26,6 +26,7 @@
     "express": "~4.16.2",
     "express-minify-html": "^0.11.4",
     "express-sanitizer": "^1.0.2",
+    "express-sslify": "^1.2.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "firebase": "^4.12.0",
     "font-awesome": "^4.7.0",

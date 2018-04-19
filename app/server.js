@@ -7,6 +7,7 @@ const compression = require('compression')
 const microcache = require('route-cache')
 const resolve = file => path.resolve(__dirname, file)
 const { createBundleRenderer } = require('vue-server-renderer')
+const enforce = require('express-sslify');
 
 const isProd = process.env.NODE_ENV === 'production'
 const useMicroCache = process.env.MICRO_CACHE !== 'false'
@@ -15,6 +16,10 @@ const serverInfo =
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
 
 const app = express()
+
+if (isProd) {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 
 function createRenderer (bundle, options) {
   // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
@@ -62,20 +67,6 @@ if (isProd) {
 const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
-
-// if (isProd) {
-//   // Redirect http to https
-//   app.use(function(req, res, next) {
-//     if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-//       // We're not on HTTPS. AWS sets the X-Forwarded-Proto header from the load balancer.
-//       res.redirect('https://' + req.get('Host') + req.url);
-//     }
-//     else {
-//       // No redirect necessary; already on HTTPS
-//       next();
-//     }
-//   });
-// }
 
 app.use(compression({ threshold: 0 }))
 app.use(favicon('./public/favicon.ico'))

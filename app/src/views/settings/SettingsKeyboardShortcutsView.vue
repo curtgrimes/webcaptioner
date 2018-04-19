@@ -65,10 +65,14 @@
 
 export default {
   name: 'settings-keyboard-shortcuts-view',
-  computed: {
-    isMac: function() {
-      return navigator ? navigator.platform.toUpperCase().indexOf('MAC') >= 0 : false;
-    }
-  }
+  data: function () {
+    return {
+      isMac: false,
+    };
+  },
+  mounted: function() {
+    // Do only client-side after mount
+    this.isMac = navigator ? navigator.platform.toUpperCase().indexOf('MAC') >= 0 : false;
+  },
 }
 </script>
