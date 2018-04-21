@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import {saveToTextFile, saveToWordFile} from '../util/saveToFile'
 
 const routeName = 'save-to-file';
 
@@ -63,24 +64,24 @@ export default {
       this.$refs.textFileButton.focus();
     },
     saveAsText () {
-      var a = document.createElement('a');
-      a.href = 'data:text/plain;base64,' + btoa(this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim);
-      a.textContent = 'download';
-      a.download = 'web-captioner-'+ this.$helpers.dateFormat(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.txt';
-      a.click();
-
-      // Close dialog
-      this.$router.replace('/captioner');
+      let self = this;
+      saveToTextFile({
+        transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
+        dateFormatter: this.$helpers.dateFormat,
+        onDone: function() {
+          self.$router.replace('/captioner'); // Close dialog
+        },
+      });
     },
     saveAsWord () {
-      var a = document.createElement('a');
-      a.href = 'data:text/html;base64,' + btoa('<html><body>' + this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim + '</body></html>');
-      a.textContent = 'download';
-      a.download = 'web-captioner-'+ this.$helpers.dateFormat(new Date(), 'YYYY-MM-DD-HH-mm-ss') +'.doc';
-      a.click();
-
-      // Close dialog
-      this.$router.replace('/captioner');
+      let self = this;
+      saveToWordFile({
+        transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
+        dateFormatter: this.$helpers.dateFormat,
+        onDone: function() {
+          self.$router.replace('/captioner'); // Close dialog
+        },
+      });
     },
   },
 }

@@ -81,6 +81,7 @@ export function createStore () {
           receiverName: null,
         },
       },
+      detached: false,
     },
     actions,
     mutations,

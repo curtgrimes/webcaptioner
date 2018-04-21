@@ -15,6 +15,7 @@
 <script>
 import Combokeys from 'combokeys'
 import screenfull from 'screenfull'
+import {saveToTextFile} from './util/saveToFile'
 
 export default {
   name: 'app-view',
@@ -50,7 +51,7 @@ export default {
           screenfull.toggle();
         })
         .bind('w n', function() {
-          self.$store.dispatch('START_REMOTE_WINDOW');
+          self.$store.dispatch('START_DETACHED_MODE');
         })
         .bind('w c', function() {
           self.$router.push('/captioner');
@@ -66,6 +67,41 @@ export default {
         })
         .bind(['ctrl+shift+,', 'command+shift+,'], function() {
           self.$store.commit('TEXT_SIZE_DECREASE');
+        })
+
+
+        // Detached mode
+        .bind('c', function() {
+          if (self.$store.state.detached) {
+            self.$router.push('/captioner');
+            if (!self.captioningOn) {
+              self.startCaptioning();
+            }
+            else {
+              self.stopCaptioning();
+            }
+          }
+        })
+
+
+        .bind('f', function() {
+          if (self.$store.state.detached) {
+            saveToTextFile({
+              transcript: self.$store.state.captioner.transcript.final + self.$store.state.captioner.transcript.interim,
+              dateFormatter: self.$helpers.dateFormat,
+              onDone: function() {},
+            });
+          }
+        })
+        .bind('p', function() {
+          if (self.$store.state.detached) {
+            if (self.captioningOn) {
+              self.$store.dispatch('captioner/restart');
+            }
+            self.$store.commit('captioner/CLEAR_TRANSCRIPT');
+
+            self.$router.replace('/captioner');
+          }
         })
       ;
     }

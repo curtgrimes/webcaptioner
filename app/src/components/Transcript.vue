@@ -2,7 +2,7 @@
   <div
     class="transcript d-flex"
     v-bind:class="[wrapTextPositionClass, (chromeless ? 'chromeless' : '')]"
-    v-bind:style="{color, backgroundColor, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow}">
+    v-bind:style="{height, color, backgroundColor, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow}">
     <span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
@@ -18,6 +18,11 @@ import hexToRgb from '../util/hexToRGB'
 export default {
   name: 'transcript',
   props: ['chromeless'],
+  data: function() {
+    return {
+      height: null,
+    }
+  },
   methods: {
     scrollToBottom: function () {
       this.$nextTick(function () {
@@ -29,9 +34,19 @@ export default {
   },
   mounted: function() {
     this.scrollToBottom();
+
+    this.$watch('detached', function(newValue) {
+      // Make room for navbar
+      if (document && document.getElementById('navbar')) {
+        let navbarHeight = document.getElementById('navbar').offsetHeight;
+        this.height = 'calc(100vh - '+ navbarHeight +'px)';
+      }
+      else {
+        this.height = 'calc(100vh - 60px)'; // reasonable default
+      }
+    });
   },
   computed: {
-
     // Appearance
     color () {
       return this.$store.state.settings.appearance.text.textColor;
@@ -103,6 +118,9 @@ export default {
         'align-items-center': this.$store.state.settings.appearance.text.alignment.vertical == 'middle',
         'align-items-end': ['bottom','lowerThird'].includes(this.$store.state.settings.appearance.text.alignment.vertical),
       }
+    },
+    detached: function() {
+      return this.$store.state.detached;
     },
   },
 }

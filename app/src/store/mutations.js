@@ -100,6 +100,13 @@ export default {
     state.receivers.chromecast.receiverName = receiverName;
   },
 
+  SET_DETACHED_MODE_ON: (state) => {
+    state.detached = true;
+  },
+
+  SET_DETACHED_MODE_OFF: (state) => {
+    state.detached = false;
+  },
 
 
   SET_ACTIVE_TYPE: (state, { type }) => {

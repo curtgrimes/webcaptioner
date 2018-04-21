@@ -1,6 +1,6 @@
 <template>
-  <div v-if="receiversAvailable">
-    <b-button v-if="connecting" id="castConnectingButton" v-b-tooltip.hover title="Connecting" variant="link" disabled>
+  <div v-if="receiversAvailable" :class="detached ? 'mr-3' : 'mr-2'">
+    <b-button v-if="connecting" id="castConnectingButton" v-b-tooltip.hover title="Connecting" variant="info" disabled :size="detached ? 'lg' : ''" :class="detached ? 'px-4 py-3' : ''">
       <svg style="vertical-align:middle" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
               <g id="ic_cast0_black_24dp" sketch:type="MSArtboardGroup">
@@ -18,10 +18,10 @@
           </g>
       </svg>
     </b-button>
-    <b-button v-else-if="connected" v-b-tooltip.hover="'Casting to ' + receiverName" variant="link" @click="stop()">
+    <b-button v-else-if="connected" v-b-tooltip.hover="'Casting to ' + receiverName" variant="secondary" @click="stop()" :size="detached ? 'lg' : ''" :class="detached ? 'px-4 py-3' : ''">
       <img src="/public/cast-icons/cast-icon-connected.svg"/>
     </b-button>
-    <b-button v-else variant="link" v-b-tooltip.hover="'Cast'" @click="sendInitMessage()">
+    <b-button v-else variant="info" v-b-tooltip.hover="'Cast'" @click="sendInitMessage()" :size="detached ? 'lg' : ''" :class="detached ? 'px-4 py-3' : ''">
       <img src="/public/cast-icons/cast-icon.svg"/>
     </b-button>
     <b-modal title="Casting Failed" :hide-header="true" ref="castFailedModal" :ok-only="true" ok-variant="secondary" :hide-header-close="true">
@@ -217,6 +217,10 @@ export default {
         let doc = new DOMParser().parseFromString(receiverName, "text/html");
         this.$store.commit('SET_CHROMECAST_RECEIVER_NAME', {receiverName: doc.documentElement.textContent});
       },
+    },
+    detached: function() {
+      // detached mode in Web Captioner
+      return this.$store.state.detached;
     },
   },
   mounted: function() {

@@ -25,8 +25,12 @@ export default {
     return Promise.resolve();
   },
 
-  START_REMOTE_WINDOW: () => {
-    ChromelessWindowManager.start(RemoteEventBus);
+  START_DETACHED_MODE: ({commit}) => {
+    ChromelessWindowManager.start(RemoteEventBus, function () {
+      // On close
+      commit('SET_DETACHED_MODE_OFF');  
+    });
+    commit('SET_DETACHED_MODE_ON');
   },
 
 

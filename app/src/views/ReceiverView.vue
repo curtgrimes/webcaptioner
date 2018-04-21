@@ -2,7 +2,7 @@
   <div class="h-100">
     <cast-receiver v-if="chromecastReceiver"></cast-receiver>
     <chromeless-receiver v-if="chromelessReceiver"></chromeless-receiver>
-    <div v-if="!transcriptExists && !recentlyHadCaptions" class="bg-primary h-100">
+    <div v-if="!transcriptExists && !recentlyHadCaptions && !chromelessReceiver" class="bg-primary h-100">
         <div style="z-index:5;position:absolute;left:0;right:0;top:0;bottom:0">
             <div class="display-3 w-auto" style="font-size:10vh;position:absolute;left:7vw;top:10vh;width:41vw">
                 Captioning will<br class="d-none d-md-block" /> begin shortly. 
