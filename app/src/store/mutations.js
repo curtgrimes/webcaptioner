@@ -58,7 +58,17 @@ export default {
   TEXT_SIZE_DECREASE: (state) => {
     state.settings.appearance.text.textSize = parseFloat(state.settings.appearance.text.textSize) - 0.1;
   },
-        
+
+
+  SET_CONNECT_ID: (state, { connectId }) => {
+    state.connectId = connectId;
+  },
+  SET_ROOM_LEADER_TOKEN: (state, { roomLeaderToken }) => {
+    state.settings.roomLeaderToken = roomLeaderToken;
+  },
+  SET_REMOTE_DISPLAYS: (state, { remoteDisplays }) => {
+    state.remoteDisplays = remoteDisplays;
+  },
 
   ADD_WORD_REPLACEMENT (state, { wordReplacement }) {
     state.settings.wordReplacements.push(wordReplacement);

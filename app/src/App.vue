@@ -25,8 +25,9 @@ export default {
     };
   },
   mounted: function() {
+    let self = this;
+
     if (!this.$route.meta.disableShortcutKeys) {
-      let self = this;
       this.combokeysDocument = new Combokeys(document.documentElement);
       this.combokeysDocument
         .bind('w s', function() {

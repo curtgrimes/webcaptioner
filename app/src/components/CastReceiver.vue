@@ -94,11 +94,10 @@ export default {
       let { type: mutationType, payload } = JSON.parse(data);
       // this.message = typeof payload;
       // this.message({mutationType,payload});
+      console.log(mutationType);
+      console.log(payload);
       this.$store.commit(mutationType, payload);
-      let self = this;
-      setTimeout(function() {
-        self.message = self.$store.state.captioner;
-      }, 1000);
+
       // inform all senders on the CastMessageBus of the incoming message event
       // sender message listener will be invoked
       this.messageBus.send(senderId, data);

@@ -22,6 +22,7 @@ const Transcript = () => import('../components/Transcript.vue')
 const SaveToFileModal = () => import('../components/SaveToFileModal.vue')
 const ClearTranscriptModal = () => import('../components/ClearTranscriptModal.vue')
 const ReceiverView = () => import('../views/ReceiverView.vue')
+const RemoteDisplaysView = () => import('../views/RemoteDisplaysView.vue')
 
 export function createRouter () {
   return new Router({
@@ -66,6 +67,10 @@ export function createRouter () {
               },
             ]
           },
+          {
+            path: 'remote-displays',
+            component: RemoteDisplaysView,
+          },
         ]
       },
       {
@@ -88,7 +93,16 @@ export function createRouter () {
               disableShortcutKeys: true,
             },
           },
+          {
+            path: 'connect',
+            component: ReceiverView,
+            name: 'receiver-remote-display',
+          },
         ]
+      },
+      {
+        path: '/connect',
+        redirect: '/receivers/connect',
       },
       { path: '/top/:page(\\d+)?', component: createListView('top') },
       { path: '/new/:page(\\d+)?', component: createListView('new') },

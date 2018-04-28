@@ -25,14 +25,36 @@
             </div>
             <cast-button></cast-button>
 
-            <!--
-            <b-dropdown variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
-            <template slot="button-content">
-                <i class="fa fa-desktop" aria-hidden="true"></i> 1 <span class="sr-only">Screens</span>
-            </template>
-            <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
-            </b-dropdown>
-            -->
+            <transition name="fade">
+                <b-dropdown v-if="remoteDisplays.length > 0" variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
+                    <template slot="button-content">
+                        <i class="fa fa-desktop" aria-hidden="true"></i> {{remoteDisplays.length}} <span class="sr-only">Screens</span>
+                    </template>
+                    <b-dropdown-item disabled class="text-white" style="cursor:default" v-for="remoteDisplay in remoteDisplays" v-bind:key="remoteDisplay.remoteDisplayId">
+                        <span v-if="remoteDisplay.device.isAndroid">
+                            <i class="fa fa-android" aria-hidden="true"></i> Android
+                        </span>
+                        <span v-else-if="remoteDisplay.device.isIosPhone">
+                            <i class="fa fa-apple" aria-hidden="true"></i> iPhone
+                        </span>
+                        <span v-else-if="remoteDisplay.device.isIosTablet">
+                            <i class="fa fa-apple" aria-hidden="true"></i> iPad
+                        </span>
+                        <span v-else-if="remoteDisplay.device.isMac">
+                            <i class="fa fa-apple" aria-hidden="true"></i> Mac
+                        </span>
+                        <span v-else-if="remoteDisplay.device.isLinux">
+                            Linux Device
+                        </span>
+                        <span v-else-if="remoteDisplay.device.isWindows">
+                            <i class="fa fa-windows" aria-hidden="true"></i> Windows Device
+                        </span>
+                        <span v-else>
+                            Device
+                        </span>
+                    </b-dropdown-item>
+                </b-dropdown>
+            </transition>
             <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Text Entry"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
             <b-dropdown v-if="!detached" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
                 <template slot="button-content">
@@ -44,6 +66,7 @@
                 <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
                 <div class="dropdown-divider"></div>
                 <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><i class="fa fa-external-link fa-fw mr-1" aria-hidden="true"></i> New Window</b-dropdown-item>
+                <b-dropdown-item to="/captioner/remote-displays">Remote Displays</b-dropdown-item>
                 <div class="dropdown-divider"></div>
                 <b-dropdown-item to="/captioner/save-to-file" replace onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
                 <b-dropdown-item to="/captioner/clear" replace><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
@@ -93,8 +116,12 @@ export default {
     captioningToggleButtonVariant: function() {
         return !this.captioningOn ? 'primary' : 'danger';
     },
+    remoteDisplays: function() {
+        return this.$store.state.remoteDisplays;
+    },
   },
   methods: {
+      alerttest: function() { alert('hihih');},
     captioningToggleButtonClick: function() {
         if (this.captioningOn) {
             this.stopCaptioning();

@@ -38,6 +38,7 @@ export function createStore () {
     state: {
       version: '2.0.0',
       settings: {
+        roomLeaderToken: null,
         appearance: {
           text: {
             textColor: '#ffffff',
@@ -82,6 +83,8 @@ export function createStore () {
         },
       },
       detached: false,
+      remoteDisplays: [],
+      connectId: null,
     },
     actions,
     mutations,

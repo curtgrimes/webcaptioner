@@ -127,7 +127,7 @@ export default {
     },
     sendInitMessage: function() {
       this.sendMessage({
-        mutationType: 'RESTORE_SETTINGS',
+        type: 'RESTORE_SETTINGS',
         payload: {
           settings: this.$store.state.settings,
           verstion: this.$store.state.version,
@@ -137,7 +137,6 @@ export default {
     sendMessage: function (message) {
       if (this.session != null) {
         this.session.sendMessage(namespace, message, function() {
-          // console.log("success: "+ JSON.stringify(message));
         },
           function(e) {
           // console.log("error: ");

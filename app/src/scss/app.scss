@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
+// @import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
 @import "../node_modules/bootstrap/scss/functions";
 
 $font-family-sans-serif: 'Roboto', sans-serif;
@@ -13,7 +13,7 @@ $font-size-h6: 0.75rem;
 $theme-colors: (
   primary: #f0e500,
   secondary: #274de6,
-  success: #274de6,
+  success: #39ad53,
   info: #000,
   warning: #ffc107, // $yellow
   danger: #e83f6f,
