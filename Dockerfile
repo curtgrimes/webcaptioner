@@ -1,4 +1,4 @@
-FROM node:8.1.2
+FROM node:10.0.0
 
 # Install Hugo
 ADD https://github.com/gohugoio/hugo/releases/download/v0.37.1/hugo_0.37.1_Linux-64bit.tar.gz /tmp
