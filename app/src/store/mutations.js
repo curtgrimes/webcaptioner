@@ -64,10 +64,15 @@ export default {
     state.connectId = connectId;
   },
   SET_ROOM_LEADER_TOKEN: (state, { roomLeaderToken }) => {
+    console.log('roomLeaderToken setting');
     state.settings.roomLeaderToken = roomLeaderToken;
   },
   SET_REMOTE_DISPLAYS: (state, { remoteDisplays }) => {
     state.remoteDisplays = remoteDisplays;
+  },
+  SET_MEMBER_OF_ROOM_ID: (state, { memberOfRoomId }) => {
+    state.memberOfRoomId = memberOfRoomId;
+    state.connectId = null;
   },
 
   ADD_WORD_REPLACEMENT (state, { wordReplacement }) {
@@ -117,6 +122,38 @@ export default {
   SET_DETACHED_MODE_OFF: (state) => {
     state.detached = false;
   },
+
+
+
+  SOCKET_ONOPEN (state, event)  {
+    console.log('socket onopen');
+    state.socket.isConnected = true
+  },
+  SOCKET_ONCLOSE (state, event)  {
+    console.log('socket onclose');
+    state.socket.isConnected = false
+  },
+  SOCKET_ONERROR (state, event)  {
+    console.log('socket onerror');
+    // console.error(state, event)
+  },
+  // default handler called for all methods
+  SOCKET_ONMESSAGE (state, message)  {
+    console.log('socket onmessage');
+    console.log(message);
+    // state.message = message
+  },
+  // mutations for reconnect methods
+  SOCKET_RECONNECT(state, count) {
+    console.log('socket reconnect');
+    // console.info(state, count)
+  },
+  SOCKET_RECONNECT_ERROR(state) {
+    console.log('socket reconnect error');
+    // state.socket.reconnectError = true;
+  },
+
+
 
 
   SET_ACTIVE_TYPE: (state, { type }) => {

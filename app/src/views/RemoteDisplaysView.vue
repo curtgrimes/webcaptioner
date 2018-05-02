@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import socket from "../api/socket";
 
 export default {
   name: "remote-displays-view",
@@ -105,18 +104,22 @@ export default {
   },
   methods: {
     approveRoomRequest: function(connectId) {
-      let self = this;
-      socket.emit("addConnectIdToMyRoom", { connectId }, function({
-        success
-      }) {
-        if (success) {
-          self.connectId = null;
-          self.connectSuccessful = true;
-        } else {
-          self.connectSuccessful = false;
-          self.$refs.connectIdInput.select();
-        }
-      });
+        this.$socket.sendObj({
+            action: 'addMemberToMyRoom',
+            connectId,
+        });
+
+    //   socket.emit("addConnectIdToMyRoom", { connectId }, function({
+    //     success
+    //   }) {
+    //     if (success) {
+    //       self.connectId = null;
+    //       self.connectSuccessful = true;
+    //     } else {
+    //       self.connectSuccessful = false;
+    //       self.$refs.connectIdInput.select();
+    //     }
+    //   });
     }
   }
 };

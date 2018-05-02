@@ -2,6 +2,7 @@ import Vue from 'vue'
 import 'es6-promise/auto'
 import { createApp } from './app'
 import ProgressBar from './components/ProgressBar.vue'
+import VueNativeSock from 'vue-native-websocket'
 
 // global progress bar
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
@@ -23,6 +24,13 @@ Vue.mixin({
 })
 
 const { app, router, store } = createApp()
+
+
+Vue.use(VueNativeSock, 'ws://'+location.host, {
+  // TODO ADD reconnection: true,
+  format: 'json',
+  store,
+});
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.

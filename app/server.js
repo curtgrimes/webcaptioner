@@ -9,7 +9,7 @@ const resolve = file => path.resolve(__dirname, file)
 const { createBundleRenderer } = require('vue-server-renderer')
 const enforce = require('express-sslify');
 const uuid = require('uuid/v4');
-const uws = require('uws');
+const WebSocket = require('ws');
 
 const isProd = process.env.NODE_ENV === 'production'
 const useMicroCache = process.env.MICRO_CACHE !== 'false'
@@ -18,8 +18,8 @@ const serverInfo =
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
 
 const app = express()
-let server = require('http').Server(app);
-let io = require('socket.io')(server, { wsEngine: 'uws' });
+const server = require('http').Server(app);
+const wss = new WebSocket.Server({ server });
 
 // Health check
 app.use('/health-check', function (req, res) {
@@ -160,120 +160,168 @@ server.listen(port, () => {
 
 let roomLeaderTokens = [];
 
-io.on('connection', function (socket) {
-  function generateConnectId() {
-    return Math.floor(100000 + Math.random() * 900000); // Random 6-digit number
-  }
+wss.on('connection', function (socket) {
+  socket.id = uuid();
+  socket._webcaptioner = {};
 
-  function sendRoomMemberListToLeader(roomId) {
-    let roomleaderSocketId = Object.keys(io.sockets.connected).find(function (socketId) {
-      let socket = io.sockets.connected[socketId];
-      return socket._wc && socket._wc.roomId && socket._wc.roomId === roomId;
-    });
+  socket.on('message', (messageJson) => {
+    let message;
 
-    if (roomleaderSocketId) {
-
-      // Get members
-      io.in(roomId).clients((error, clients) => {
-        let remoteDisplays = clients.map((clientId) => {
-          let client = io.sockets.connected[clientId];
-          if (client) {
-            return {
-              remoteDisplayId: client.id,
-              device: client._wc ? client._wc.device : null,
-              joinDate: client._wc ? client._wc.joinDate : null,
-            };
-          }
-        });
-
-        io.to(roomleaderSocketId)
-          .emit('remoteDisplays', {remoteDisplays});
-      });
+    try {
+      message = JSON.parse(messageJson)
     }
-    else {
-      console.log('couldnt find');
+    catch (e) {
+      console.log('trouble parsing json');
+      return;
     }
-  }
 
-  socket._wc = {};
-
-  socket.on('getMyConnectId', ({device}, fn) => {
-    socket._wc.connectId = generateConnectId();
-    socket._wc.device = device;
-    fn({connectId: socket._wc.connectId});
+    switch (message.action) {
+      case 'getMyConnectId':
+        return getMyConnectId(socket, message.deviceInfo);
+      case 'getMyRoomLeaderToken':
+        return getMyRoomLeaderToken(socket);
+      case 'addMemberToMyRoom':
+        return addMemberToMyRoom(socket, parseInt(message.connectId));
+      case 'restoreMyRoomIdFromRoomLeaderToken':
+        return restoreMyRoomIdFromRoomLeaderToken(socket, message.roomLeaderToken);
+      case 'sendMessageToRoom':
+        return sendMessageToRoom(socket, message.type, message.payload);
+      default:
+        console.log('unhandled socket action');
+        console.log(messageJson);
+    }
   });
 
-  socket.on('getMyRoomLeaderToken', (name, fn) => {
-    let roomId = uuid(),
-        roomLeaderToken = uuid();
-    
-    socket._wc.roomId = roomId;
-    socket._wc.roomLeaderToken = roomLeaderToken;
+  socket.on('error', function(e) {
+    console.log('Socket closed');
+  });
+});
+
+
+function generateConnectId() {
+  return Math.floor(100000 + Math.random() * 900000); // Random 6-digit number
+}
+
+function generateRoomId() {
+  return uuid();
+}
+
+function generateRoomLeaderToken() {
+  return uuid();
+}
+
+function getMyConnectId(socket, deviceInfo) {
+  socket._webcaptioner.connectId = generateConnectId();
+  socket._webcaptioner.deviceInfo = deviceInfo;
+
+  socket.send(JSON.stringify({
+    mutation: 'SET_CONNECT_ID',
+    connectId: socket._webcaptioner.connectId,
+  }));
+}
+
+function getMyRoomLeaderToken(socket) {
+  socket._webcaptioner.roomLeaderToken = generateRoomLeaderToken();
+  socket._webcaptioner.roomId = generateRoomId();
 
     roomLeaderTokens.push({
-      roomLeaderToken,
-      roomId,
+      roomLeaderToken: socket._webcaptioner.roomLeaderToken,
+      roomId: socket._webcaptioner.roomId,
     });
 
-    fn({roomLeaderToken});
-  });
+  socket.send(JSON.stringify({
+    mutation: 'SET_ROOM_LEADER_TOKEN',
+    roomLeaderToken: socket._webcaptioner.roomLeaderToken,
+  }));
+}
 
-  socket.on('restoreMyRoomIdFromRoomLeaderToken', ({ roomLeaderToken }, fn) => {
+function restoreMyRoomIdFromRoomLeaderToken(leaderSocket, roomLeaderToken) {
+  console.log("room leader tokens: ");
+  console.log(roomLeaderTokens);
     let room = roomLeaderTokens.find((r) => {
       return r.roomLeaderToken === roomLeaderToken;
     });
 
     if (room) {
-      console.log('restoring room '+room.roomId + ' to socket '+socket.id);
+      console.log('restoring room '+room.roomId + ' to socket.');
 
-      socket._wc.roomId = room.roomId;
-      socket._wc.roomLeaderToken = room.roomLeaderToken;
-      fn({success: true});
+      leaderSocket._webcaptioner.roomLeaderToken = room.roomLeaderToken;
+      leaderSocket._webcaptioner.roomId = room.roomId;
 
-      sendRoomMemberListToLeader(socket._wc.roomId);
+      sendRoomMemberListToLeader(leaderSocket);
     }
     else {
-      fn({success: false});
+      // No preexisting room found for that token. Assign a new room/token.
+      getMyRoomLeaderToken(leaderSocket);
     }
+}
+
+function addMemberToMyRoom(leaderSocket, memberConnectId) {
+  // (wss.clients is a set, not an array)
+  const memberSocket = Array.from(wss.clients).find((client) => {
+    return client._webcaptioner.connectId && client._webcaptioner.connectId === memberConnectId;
   });
 
-  socket.on('sendMessageToRoom', ({type, payload}, fn) => {
-    let thisClientId;
-    io.in(socket._wc.roomId).clients((error, clients) => {
-      let remoteDisplays = clients.map((clientId) => {
-        thisClientId = clientId;
-      });
+  const leaderRoomId = leaderSocket._webcaptioner.roomId;
+
+  if (memberSocket && leaderRoomId) {
+    memberSocket._webcaptioner.memberOfRoomId = leaderRoomId;
+    memberSocket._webcaptioner.joinDate = Date.now();
+    memberSocket._webcaptioner.connectId = null; // we don't need it anyomre
+
+    memberSocket.send(JSON.stringify({
+      mutation: 'SET_MEMBER_OF_ROOM_ID',
+      memberOfRoomId: memberSocket._webcaptioner.memberOfRoomId,
+    }));
+
+    sendRoomMemberListToLeader(leaderSocket);
+  }
+  else {
+    // Nobody with this connect ID was found
+    console.log('Nobody with this connect ID was found');
+  }
+}
+
+function getRoomMembersExcludingLeader(roomId) {
+  let members = [];
+  wss.clients.forEach(function(client) {
+    if (roomId 
+        && client._webcaptioner.memberOfRoomId == roomId
+        && client.readyState === WebSocket.OPEN
+    ) {
+      members.push(client);
+    }
+  });
+  return members;
+}
+
+function sendRoomMemberListToLeader(leaderSocket) {
+  let leaderRoomId = leaderSocket._webcaptioner.roomId;
+  let members = getRoomMembersExcludingLeader(leaderRoomId);
+
+  if (leaderRoomId) {
+    leaderSocket.send(JSON.stringify({
+      mutation: 'SET_REMOTE_DISPLAYS',
+      remoteDisplays: members.map(function(member) {
+        return {
+          device: member._webcaptioner.deviceInfo,
+          joinDate: member._webcaptioner.joinDate,
+        };
+      }),
+    }));
+  }
+  else {
+    // This leader does not have a room
+    getMyRoomLeaderToken(leaderSocket);
+  }
+}
+
+function sendMessageToRoom(leaderSocket, mutation, payload) {
+  getRoomMembersExcludingLeader(leaderSocket._webcaptioner.roomId)
+    .forEach((roomMember) => {
+      roomMember.send(JSON.stringify({
+        mutation,
+        ...payload,
+      }));
     });
-
-    console.log('send message to ' + socket._wc.roomId + ' ' + Date.now());
-    io.to(socket._wc.roomId).emit('processMessage', {type, payload});
-  });
-
-  socket.on('addConnectIdToMyRoom', ({connectId}, ack) => {
-    const joineeSocketId = Object.keys(io.sockets.connected).find((socketId) => {
-      const thisSocketConnectId = io.sockets.connected[socketId]._wc.connectId;
-      return thisSocketConnectId && thisSocketConnectId == connectId;
-    });
-
-    if (joineeSocketId && io.sockets.connected[joineeSocketId]) {
-      let joineeSocket = io.sockets.connected[joineeSocketId];
-      joineeSocket.join(socket._wc.roomId, () => {
-        io.to(joineeSocket.id)
-          .emit('joinedRoom', 'Message to you about joining ' +socket._wc.roomId);
-      });
-
-      joineeSocket._wc.joinDate = Date.now();
-      sendRoomMemberListToLeader(socket._wc.roomId);
-      ack({
-        success: true,
-      });
-    }
-    else {
-      // Nobody with this connect ID was found
-      ack({
-        success: false,
-      });
-    }
-  });
-});
-
+}

@@ -6,7 +6,7 @@
     <div v-if="!transcriptExists && !recentlyHadCaptions && !chromelessReceiver" class="bg-primary h-100">
         <div style="z-index:5;position:absolute;left:0;right:0;top:0;bottom:0">
             <div class="text-container">
-                <div v-if="remoteDisplayReceiver">
+                <div v-if="remoteDisplayReceiver && !memberOfRoomId">
                     <div :class="{show: connectId}" class="fade">
                         <transition-group name="connectId" tag="div">
                             <span class="connectId" v-for="(n, $index) in connectIdSplitToArray" :key="$index">{{n}}</span>
@@ -14,8 +14,8 @@
                         <p class="underConnectIdText">Use this code to connect.</p>
                     </div>
                 </div>
-                <div v-else class="display-3">
-                    Captioning will<br class="d-none d-md-block" /> begin shortly. 
+                <div v-else class="display-3 w-75">
+                    <span v-if="memberOfRoomId">Connected!</span> Captioning will begin shortly. 
                 </div>
             </div>
             <div v-if="false" v-bind:class="{show: loopVideoLoaded}" class="fade d-none d-md-block video-container" style="position:absolute;right:7vw;bottom:10vh;width:43vw;height:65vh;">
@@ -200,6 +200,15 @@ export default {
       };
   },
   mounted: function() {
+    if (!this.socketConnected) {
+        this.$watch('socketConnected', function(socketConnected) {
+            this.initConnectId();
+        });
+    }
+    else {
+        this.initConnectId();
+    }
+
     this._dateUpdateInterval = setInterval(() => { this.now = Date.now(); }, 250);
     
     if (!this.transcriptExists) {
@@ -231,11 +240,9 @@ export default {
             }
         }
     });
-let self = this;
-    setTimeout(function(){ self.$nextTick(function(){ self.$forceUpdate(); console.log('forced update'); }); },2000);
   },
   methods: {
-      initVideo: function() {
+    initVideo: function() {
         if (this.$refs.loopVideo) {
             let self = this;
             this.$refs.loopVideo.addEventListener("play", function() {
@@ -243,9 +250,32 @@ let self = this;
             }, false);
             this.$refs.loopVideo.play();
         }
-      },
+    },
+    initConnectId: function() {
+        this.$socket.sendObj({
+            action: 'getMyConnectId',
+            deviceInfo: this.getDeviceInfo(),
+        });
+    },
+    getDeviceInfo: function() {
+        let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        return {
+            isAndroid: /android/i.test(userAgent),
+            isIosPhone: /iPhone|iPod/.test(userAgent) && !window.MSStream,
+            isIosTablet: /iPad/.test(userAgent) && !window.MSStream,
+            isMac: navigator ? navigator.platform.toUpperCase().indexOf('MAC') >= 0 : false,
+            isLinux: navigator ? navigator.platform.toUpperCase().indexOf('Linux') >= 0 : false,
+            isWindows: navigator ? navigator.platform.toUpperCase().indexOf('Win') >= 0 : false,
+        }
+    },
   },
   computed: {
+    memberOfRoomId: function() {
+        return this.$store.state.memberOfRoomId;
+    },
+    socketConnected: function() {
+      return this.$store.state.socket.isConnected;
+    },
     transcript: function() {
         return this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim;
     },

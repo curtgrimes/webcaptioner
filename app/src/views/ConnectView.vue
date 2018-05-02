@@ -21,7 +21,6 @@
 
 
 <script>
-import socket from '../api/socket'
 
 export default {
   name: "connect-view",
@@ -31,10 +30,12 @@ export default {
       }
   },
   mounted: function() {
-    let self = this;
-    socket.emit('getMyConnectId', {device: self.getDeviceInfo()}, ({connectId}) => {
-        self.connectId = connectId;
-    });
+    // let self = this;
+    // socket.emit('getMyConnectId', {device: self.getDeviceInfo()}, ({connectId}) => {
+    //     self.connectId = connectId;
+    // });
+    this.$socket.sendObj({awesome: 'data2'});
+
   },
   methods: {
       getDeviceInfo: function() {

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "node server",
+    "dev": "node --inspect server",
     "start": "cross-env NODE_ENV=production node server",
     "build": "rimraf dist && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",
@@ -64,6 +64,7 @@
     "uws": "^9.148.0",
     "version-sort": "^0.1.1",
     "vue": "^2.5.3",
+    "vue-native-websocket": "^2.0.7",
     "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.16",
     "vuex": "^3.0.1",
@@ -71,7 +72,7 @@
     "vuex-router-sync": "^5.0.0",
     "webfontloader": "^1.6.28",
     "whatwg-fetch": "^2.0.3",
-    "ws": "^4.0.0"
+    "ws": "^4.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",

@@ -1,24 +1,25 @@
 <template></template>
 
 <script>
-import socket from '../api/socket'
 
 export default {
   name: "remote-display-receiver",
   mounted: function() {
+
+
     let self = this;
-    socket.emit('getMyConnectId', {device: self.getDeviceInfo()}, function ({connectId}) {
-      self.connectId = connectId;
-    });
+    // socket.emit('getMyConnectId', {device: self.getDeviceInfo()}, function ({connectId}) {
+    //   self.connectId = connectId;
+    // });
 
-    socket.on('joinedRoom', function(message) {
-        console.log('JOINED ROOM!');
-        console.log(message);
-    });
+    // socket.on('joinedRoom', function(message) {
+    //     console.log('JOINED ROOM!');
+    //     console.log(message);
+    // });
 
-    socket.on('processMessage', function({type, payload}) {
-        self.$store.commit(type, payload);
-    });
+    // socket.on('processMessage', function({type, payload}) {
+    //     self.$store.commit(type, payload);
+    // });
   },
   computed: {
     connectId: {
