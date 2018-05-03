@@ -37,7 +37,7 @@
       <!-- non-xs navigation -->
       <div class="d-none d-sm-block col-sm-4 py-5 pr-md-4 pr-xl-5 bg-primary" style="min-height:100%">
         <div class="row h-100">
-          <div class="col-md-10 col-lg-7 col-xl-6 ml-auto">
+          <div class="col-lg-9 col-xl-7 ml-auto">
             <div class="position-sticky" style="top:20px">
               <h2 class="d-none d-sm-block lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
               <nav>
@@ -64,7 +64,7 @@
       </div>
       <div class="col-sm-8 pt-sm-5 pb-sm-5 pl-md-4 pl-xl-5 bg-light" :class="{'d-none d-sm-flex': !showBackButton}">
         <div class="row pb-5 pt-4 pt-sm-0"> <!-- pb-5 here adds bottom padding to clear the fixed navbar. pt-4 is extra for top navbar on xs. -->
-          <div class="col-md-11 col-lg-10 col-xl-9 mr-auto">
+          <div class="col-lg-10 col-xl-9 mr-auto">
             <h2 class="d-none" :class="{'d-sm-block': showBackButton}">{{navbarTitle}}</h2>
             <transition name="fade" mode="out-in">
               <router-view></router-view>
