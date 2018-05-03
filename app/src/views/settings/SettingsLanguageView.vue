@@ -1,14 +1,13 @@
 <template>
   <div class="settings-language-view">
-    <h2>Language</h2>
     <p>Web Captioner will recognize speech in this language. Learn more about <a href="https://webcaptioner.com/help/general/supported-languages/" target="_blank">supported languages and dialects</a>.</p>
     <h3>Select a Language</h3>
     <div class="row mb-3">
-      <div class="col-sm-7">
+      <div class="col-9 col-sm-7">
         <input ref="search" type="text" v-model="searchQuery" placeholder="Search..." class="form-control" />
       </div>
-      <div class="col-sm-2 pl-0">
-        <button v-bind:class="{'show' : searchQuery !== '', 'invisible' : searchQuery == ''}" class="btn btn-sm btn-outline-dark fade" type="button" @click="clearSearch()">Clear</button>
+      <div class="col-3 col-sm-3 col-lg-2 pl-0">
+        <button v-bind:class="{'show' : searchQuery !== '', 'invisible' : searchQuery == ''}" class="btn btn-sm btn-outline-dark fade w-100" type="button" @click="clearSearch()">Clear</button>
       </div>
     </div>
     <div class="list-group">

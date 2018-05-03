@@ -1,4 +1,4 @@
-// @import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
+@import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
 @import "../node_modules/bootstrap/scss/functions";
 
 $font-family-sans-serif: 'Roboto', sans-serif;
@@ -11,13 +11,13 @@ $font-size-h5: 1rem;
 $font-size-h6: 0.75rem;
 
 $theme-colors: (
-  primary: #f0e500,
+  primary: #ffe200,
   secondary: #274de6,
   success: #39ad53,
   info: #000,
   warning: #ffc107, // $yellow
   danger: #e83f6f,
-  light: #ddd,
+  light: #f4f4f4,
   dark: #292b2c
 ) !default;
 
@@ -33,10 +33,10 @@ $modal-content-border-width: 0;
 $modal-content-border-color: theme-color("primary")y;
 $modal-title-line-height: 1.2;
 
-$component-active-color: #000;
+$component-active-color: #fff;
+$component-active-bg: theme-color("secondary");
 
-$custom-control-indicator-bg: #fff;
-$custom-control-checked-indicator-bg: #000;
+// $custom-control-indicator-bg: #fff;
 
 $dropdown-bg: #555;
 $dropdown-divider-bg: darken($dropdown-bg, 5%);
@@ -65,14 +65,12 @@ $nav-tabs-active-link-hover-bg: theme-color("primary");
 $nav-pills-link-active-color: #fff;
 $nav-pills-link-active-bg: theme-color("secondary");
 
-$component-active-color: #fff;
-$component-active-bg:    #000;
-
-$list-group-bg: lighten(theme-color("primary"), 5%);
-$list-group-hover-bg: lighten($modal-header-border-color, 5%);
+$list-group-bg: #fff;
+$list-group-hover-bg: darken($list-group-bg, 5%);
 $list-group-active-bg: theme-color("secondary");
 $list-group-action-color: #111;
-$list-group-action-active-bg:  darken(theme-color("primary"), 10%);
+$list-group-action-active-color: #fff;
+$list-group-action-active-bg:  darken(theme-color("secondary"), 10%);
 
 $thumbnail-bg:                theme-color("primary");
 $thumbnail-border-color:      $modal-header-border-color;
@@ -86,9 +84,6 @@ $container-max-widths: (
 $pagination-active-bg: theme-color("secondary");
 $pagination-active-border: theme-color("secondary");
 $pagination-disabled-color: #999;
-
-$custom-control-indicator-checked-bg: theme-color("secondary");
-$custom-control-indicator-bg: theme-color("light");
 
 $carousel-indicator-width: 50px;
 $carousel-indicator-height: 10px;
@@ -138,6 +133,7 @@ $fa-font-path: '/build/font-awesome';
 @import "../node_modules/bootstrap/scss/carousel";
 
 @import "../node_modules/bootstrap/scss/utilities";
+
 
 
 h1, h2,
@@ -548,7 +544,7 @@ a.hover-no-underline:hover, a.hover-no-underline:focus {
   transition: height 0.15s ease-out;
   color: #fff;
   text-transform: uppercase;
-  font-family: Cousine,monopsace;
+  font-family: 'Cousine', monopsace;
 }
 
 #hero-caption-demo.expanded {

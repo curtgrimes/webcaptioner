@@ -1,85 +1,82 @@
 <template>
-    <div id="navbar" class="position-absolute" style="left:0;bottom:0;right:0">
-        <nav v-if="detached" class="navbar navbar-expand navbar-inverse bg-dark pt-4 pb-1">
-            <div class="mr-auto">
-                <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">Clear <kbd class="small ml-3">p</kbd></b-button>
+    <div>
+        <nav class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark d-flex flex-column" :class="detached ? 'pt-3 pb-4' : 'pr-2'">
+            <div v-if="detached" class="d-flex w-100 pb-3">
+                <div class="mr-auto">
+                    <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">Clear <kbd class="small ml-3">p</kbd></b-button>
+                </div>
+                <b-button @click="saveToTextFile" variant="info" size="lg" class="px-4 py-3">Save to File <kbd class="small ml-3">f</kbd></b-button>
             </div>
-            <b-button @click="saveToTextFile" variant="info" size="lg" class="px-4 py-3">Save to File <kbd class="small ml-3">f</kbd></b-button>
-        </nav>
-        <nav class="navbar navbar-expand navbar-inverse bg-dark" :class="detached ? 'pt-3 pb-4' : 'pr-2'">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <span class="navbar-brand mr-auto">
-                <a href="/">
-                    <img src="/public/logo.svg" width="20" height="20" class="d-inline-block align-top mr-2" alt="Web Captioner" />
-                    <span class="d-none d-md-inline">Web Captioner</span>
-                </a>
-            </span>
+            <div class="d-flex w-100">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-brand mr-auto" :class="{'mt-3' : detached}">
+                    <a href="/">
+                        <img src="/public/logo.svg" width="20" height="20" class="d-inline-block align-top mr-2" alt="Web Captioner" />
+                        <span class="d-none d-md-inline">Web Captioner</span>
+                    </a>
+                </div>
             
-            <!-- Do not remove this from the DOM with v-if. Currently the volume meter needs to exist in order to populate microphoneName. -->
-            <volume-meter v-bind:hidden="!captioningOn || waitingForInitialTranscript"></volume-meter>
+                <!-- Do not remove this from the DOM with v-if. Currently the volume meter needs to exist in order to populate microphoneName. -->
+                <volume-meter v-bind:hidden="!captioningOn || waitingForInitialTranscript"></volume-meter>
 
-            <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
-                Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
-            </div>
-            <cast-button></cast-button>
+                <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
+                    Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
+                </div>
+                <cast-button></cast-button>
 
-            <transition name="fade">
-                <b-dropdown v-if="remoteDisplays.length > 0" variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
+                <transition name="fade">
+                    <b-dropdown v-if="remoteDisplays.length > 0" variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
+                        <template slot="button-content">
+                            <i class="fa fa-desktop" aria-hidden="true"></i> {{remoteDisplays.length}} <span class="sr-only">Screens</span>
+                        </template>
+                        <b-dropdown-item disabled class="text-white" style="cursor:default" v-for="remoteDisplay in remoteDisplays" v-bind:key="remoteDisplay.remoteDisplayId">
+                            <span v-if="remoteDisplay.device.isAndroid">
+                                <i class="fa fa-android" aria-hidden="true"></i> Android
+                            </span>
+                            <span v-else-if="remoteDisplay.device.isIosPhone">
+                                <i class="fa fa-apple" aria-hidden="true"></i> iPhone
+                            </span>
+                            <span v-else-if="remoteDisplay.device.isIosTablet">
+                                <i class="fa fa-apple" aria-hidden="true"></i> iPad
+                            </span>
+                            <span v-else-if="remoteDisplay.device.isMac">
+                                <i class="fa fa-apple" aria-hidden="true"></i> Mac
+                            </span>
+                            <span v-else-if="remoteDisplay.device.isLinux">
+                                Linux Device
+                            </span>
+                            <span v-else-if="remoteDisplay.device.isWindows">
+                                <i class="fa fa-windows" aria-hidden="true"></i> Windows Device
+                            </span>
+                            <span v-else>
+                                Device
+                            </span>
+                        </b-dropdown-item>
+                    </b-dropdown>
+                </transition>
+                <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Text Entry"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
+                <b-dropdown :size="detached ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
                     <template slot="button-content">
-                        <i class="fa fa-desktop" aria-hidden="true"></i> {{remoteDisplays.length}} <span class="sr-only">Screens</span>
+                        <div :class="{'px-4 py-2' : detached}">
+                            <span v-html="captionToggleButtonText"></span> <kbd v-if="detached" class="small ml-3">c</kbd>
+                        </div>
                     </template>
-                    <b-dropdown-item disabled class="text-white" style="cursor:default" v-for="remoteDisplay in remoteDisplays" v-bind:key="remoteDisplay.remoteDisplayId">
-                        <span v-if="remoteDisplay.device.isAndroid">
-                            <i class="fa fa-android" aria-hidden="true"></i> Android
-                        </span>
-                        <span v-else-if="remoteDisplay.device.isIosPhone">
-                            <i class="fa fa-apple" aria-hidden="true"></i> iPhone
-                        </span>
-                        <span v-else-if="remoteDisplay.device.isIosTablet">
-                            <i class="fa fa-apple" aria-hidden="true"></i> iPad
-                        </span>
-                        <span v-else-if="remoteDisplay.device.isMac">
-                            <i class="fa fa-apple" aria-hidden="true"></i> Mac
-                        </span>
-                        <span v-else-if="remoteDisplay.device.isLinux">
-                            Linux Device
-                        </span>
-                        <span v-else-if="remoteDisplay.device.isWindows">
-                            <i class="fa fa-windows" aria-hidden="true"></i> Windows Device
-                        </span>
-                        <span v-else>
-                            Device
-                        </span>
-                    </b-dropdown-item>
+                    <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
+                    <b-dropdown-item href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</b-dropdown-item>
+                    <b-dropdown-item href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</b-dropdown-item>
+                    <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
+                    <div class="dropdown-divider"></div>
+                    <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><i class="fa fa-external-link fa-fw mr-1" aria-hidden="true"></i> New Window</b-dropdown-item>
+                    <b-dropdown-item to="/captioner/remote-displays">Remote Displays</b-dropdown-item>
+                    <div class="dropdown-divider"></div>
+                    <b-dropdown-item to="/captioner/save-to-file" replace onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
+                    <b-dropdown-item to="/captioner/clear" replace><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
+                    <div class="dropdown-divider"></div>
+                    <b-dropdown-item to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</b-dropdown-item>
                 </b-dropdown>
-            </transition>
-            <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Text Entry"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
-            <b-dropdown v-if="!detached" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
-                <template slot="button-content">
-                    <span v-html="captionToggleButtonText"></span>
-                </template>
-                <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
-                <b-dropdown-item href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</b-dropdown-item>
-                <b-dropdown-item href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</b-dropdown-item>
-                <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
-                <div class="dropdown-divider"></div>
-                <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><i class="fa fa-external-link fa-fw mr-1" aria-hidden="true"></i> New Window</b-dropdown-item>
-                <b-dropdown-item to="/captioner/remote-displays">Remote Displays</b-dropdown-item>
-                <div class="dropdown-divider"></div>
-                <b-dropdown-item to="/captioner/save-to-file" replace onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
-                <b-dropdown-item to="/captioner/clear" replace><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
-                <div class="dropdown-divider"></div>
-                <b-dropdown-item to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</b-dropdown-item>
-            </b-dropdown>
-
-            <!-- Bigger buttons for detached mode-->
-            <div v-if="detached">
-                <b-button @click="captioningToggleButtonClick" size="lg" :variant="captioningToggleButtonVariant" class="px-4 py-3">
-                    <span v-html="captionToggleButtonText"></span>  <kbd class="small ml-3">c</kbd>
-                </b-button>
-            </div>
+            </div> <!-- bottom row in big UI mode -->
         </nav>
     </div>
 </template>

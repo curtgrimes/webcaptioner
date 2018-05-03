@@ -1,6 +1,5 @@
 <template>
   <div class="settings-vmix-view">
-    <h2>vMix</h2>
     <p><a href="https://vmix.com" target="_blank">vMix</a> is a popular software video mixer and switcher. You can send text directly to vMix and display it in a title input. You can then use vMix's font and color controls to style captioned text. <a href="/help/integrations/vmix/">Visit the Help Center</a> for more information.</p>
             <!--
             <button id="sendToVmixSettingToggle" type="button" class="btn btn-secondary btn-block" disabled autocomplete="off">

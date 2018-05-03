@@ -35,35 +35,61 @@ export function createRouter () {
           { path: '', component: Transcript },
           { path: 'save-to-file', component: Transcript, name: 'save-to-file' },
           { path: 'clear', component: Transcript, name: 'clear-transcript' },
-          { path: 'settings', component: SettingsView, redirect: '/captioner/settings/about',
+          {
+            path: 'settings',
+            component: SettingsView,
+            meta: {
+              navbarTitle: 'Settings',
+            },
             children: [
               {
                 path: 'about',
-                component: SettingsAboutView
+                component: SettingsAboutView,
+                meta: {
+                  navbarTitle: 'About',
+                },
               },
               {
                 path: 'appearance',
-                component: SettingsAppearanceView
+                component: SettingsAppearanceView,
+                meta: {
+                  navbarTitle: 'Appearance',
+                },
               },
               {
                 path: 'word-replacements',
-                component: SettingsWordReplacementsView
+                component: SettingsWordReplacementsView,
+                meta: {
+                  navbarTitle: 'Word Replacements',
+                },
               },
               {
                 path: 'censor',
-                component: SettingsCensorView
+                component: SettingsCensorView,
+                meta: {
+                  navbarTitle: 'Censor',
+                },
               },
               {
                 path: 'language',
-                component: SettingsLanguageView
+                component: SettingsLanguageView,
+                meta: {
+                  navbarTitle: 'Language',
+                },
               },
               {
                 path: 'vmix',
-                component: SettingsVmixView
+                component: SettingsVmixView,
+                meta: {
+                  navbarTitle: 'vMix',
+                },
               },
               {
                 path: 'keyboard-shortcuts',
-                component: SettingsKeyboardShortcutsView
+                component: SettingsKeyboardShortcutsView,
+                meta: {
+                  navbarTitle: 'Keyboard Shortcuts',
+                },
               },
             ]
           },

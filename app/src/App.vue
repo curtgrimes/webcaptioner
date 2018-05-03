@@ -105,11 +105,16 @@ export default {
           }
         })
       ;
+
+      this.redirectSettingsRouteOnMobile(this.$route.path); // if navigating to settings page on load
     }
   },
   watch: {
     transcript: function(transcript) {
       this.sendCastMessage(transcript);
+    },
+    '$route' (toRoute) {
+      this.redirectSettingsRouteOnMobile(toRoute.path);
     },
   },
   beforeDestroy: function() {
@@ -129,6 +134,14 @@ export default {
     },
     stopCaptioning: function() {
       this.$store.dispatch('captioner/stopManual');
+    },
+    redirectSettingsRouteOnMobile(currentPath) {
+      // This is a client-side method because we're
+      // doing a redirection based on screen width.
+      // xs screen size has a standalone settings menu.
+      if (currentPath === '/captioner/settings' && window.outerWidth > 575) {
+        this.$router.replace('/captioner/settings/about');
+      }
     },
   }
 }

@@ -1,8 +1,6 @@
 <template>
   <div class="settings-word-replacements-view">
-    <h2>Keyboard Shortcuts</h2>
-
-    <div class="list-group">
+    <div class="list-group mt-sm-3">
       <div class="list-group-item">
         <div class="row">
           <div class="col-6">Toggle captioning on/off</div>

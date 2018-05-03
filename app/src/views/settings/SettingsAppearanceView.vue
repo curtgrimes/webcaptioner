@@ -1,8 +1,6 @@
 <template>
   <div class="settings-appearance-view">
-    <h2>Appearance</h2>
-
-    <h3>Text</h3>
+    <h3 class="mt-0 mt-sm-3">Text</h3>
     <div class="form-group row">
       <label for="text-color" class="col-sm-6 col-form-label">Font Family</label>
       <div class="col-sm-6">

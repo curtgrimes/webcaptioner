@@ -1,6 +1,5 @@
 <template>
   <div class="settings-word-replacements-view">
-    <h2>Word Replacements</h2>
     <p>Replace or hide specific words or phrases during captioning.</p>
     <div class="row">
       <div class="col-5">

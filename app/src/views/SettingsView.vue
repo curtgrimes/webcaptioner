@@ -1,35 +1,75 @@
 <template>
-  <div class="settings-view bg-primary" style="min-height:100%">
-    <router-link to="/captioner" class="btn btn-primary position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
-    <div class="container pb-5 h-100">
-      <div class="row h-100">
-        <div class="col-md-3 pt-5" style="border-right:1px solid rgba(0,0,0,.1);min-height:100%">
-          <div class="position-sticky" style="top:20px">
-            <h2 class="lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
-            <nav>
-              <b-nav vertical pills>
-                <b-nav-item to="about">About</b-nav-item>
-                <b-nav-item to="appearance">Appearance</b-nav-item>
-                <b-nav-item to="word-replacements">Word Replacements</b-nav-item>
-                <b-nav-item to="censor">Censor</b-nav-item>
-                <b-nav-item to="language">Language</b-nav-item>
-                <b-nav-item to="title-cards">Title Cards</b-nav-item>
-              </b-nav>
-              <hr/>
-              <b-nav vertical pills>
-                <b-nav-item to="vmix">vMix</b-nav-item>
-              </b-nav>
-              <hr/>
-              <b-nav vertical pills>
-                <b-nav-item to="keyboard-shortcuts">Keyboard Shortcuts</b-nav-item>
-              </b-nav>
-            </nav>
+  <div class="settings-view h-100">
+    <router-link to="/captioner" class="btn btn-primary d-none d-sm-block position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
+    <nav class="d-sm-none navbar sticky-top navbar-light bg-primary" :class="{'pl-2': showBackButton}">
+      <div class="mr-auto">
+        <router-link to="/captioner/settings" class="btn btn-primary mr-2" v-if="showBackButton">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </router-link>
+        <div class="navbar-text font-weight-bold" style="position: relative;top: 2px;">
+          {{navbarTitle}}
+        </div>
+      </div>
+    </nav>
+    <div class="row mx-0" style="min-height:100%">
+
+      <!-- xs navigation -->
+      <div :hidden="showBackButton" class="d-sm-none col p-0 bg-white pb-5 mb-3"> <!--  pb-5 mb-3 for bottom navbar space -->
+        <h3 class="text-muted pl-3 pt-2 small">General</h3>
+        <b-list-group flush>
+          <b-list-group-item to="/captioner/settings/about">About</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/appearance">Appearance</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/word-replacements">Word Replacements</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/censor">Censor</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/language">Language</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/title-cards">Title Cards</b-list-group-item>
+        </b-list-group>
+        <h3 class="text-muted pl-3 pt-2 small">Integrations</h3>
+        <b-list-group flush>
+          <b-list-group-item to="/captioner/settings/vmix">vMix</b-list-group-item>
+        </b-list-group>
+        <h3 class="text-muted pl-3 pt-2 small">Other</h3>
+        <b-list-group flush>
+          <b-list-group-item to="/captioner/settings/keyboard-shortcuts">Keyboard Shortcuts</b-list-group-item>
+        </b-list-group>
+      </div>
+
+      <!-- non-xs navigation -->
+      <div class="d-none d-sm-block col-sm-4 py-5 pr-md-4 pr-xl-5 bg-primary" style="min-height:100%">
+        <div class="row h-100">
+          <div class="col-md-10 col-lg-7 col-xl-6 ml-auto">
+            <div class="position-sticky" style="top:20px">
+              <h2 class="d-none d-sm-block lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
+              <nav>
+                <b-nav vertical pills>
+                  <b-nav-item to="/captioner/settings/about">About</b-nav-item>
+                  <b-nav-item to="/captioner/settings/appearance">Appearance</b-nav-item>
+                  <b-nav-item to="/captioner/settings/word-replacements">Word Replacements</b-nav-item>
+                  <b-nav-item to="/captioner/settings/censor">Censor</b-nav-item>
+                  <b-nav-item to="/captioner/settings/language">Language</b-nav-item>
+                  <b-nav-item to="/captioner/settings/title-cards">Title Cards</b-nav-item>
+                </b-nav>
+                <hr/>
+                <b-nav vertical pills>
+                  <b-nav-item to="/captioner/settings/vmix">vMix</b-nav-item>
+                </b-nav>
+                <hr/>
+                <b-nav vertical pills>
+                  <b-nav-item to="/captioner/settings/keyboard-shortcuts">Keyboard Shortcuts</b-nav-item>
+                </b-nav>
+              </nav>
+            </div>
           </div>
         </div>
-        <div class="col-md-9 mb-2 py-5">
-          <transition name="fade" mode="out-in">
-            <router-view></router-view>
-          </transition>
+      </div>
+      <div class="col-sm-8 pt-sm-5 pb-sm-5 pl-md-4 pl-xl-5 bg-light" :class="{'d-none d-sm-flex': !showBackButton}">
+        <div class="row pb-5 pt-4 pt-sm-0"> <!-- pb-5 here adds bottom padding to clear the fixed navbar. pt-4 is extra for top navbar on xs. -->
+          <div class="col-md-11 col-lg-10 col-xl-9 mr-auto">
+            <h2 class="d-none" :class="{'d-sm-block': showBackButton}">{{navbarTitle}}</h2>
+            <transition name="fade" mode="out-in">
+              <router-view></router-view>
+            </transition>
+          </div>
         </div>
       </div>
     </div>
@@ -55,6 +95,14 @@ export default {
   },
   beforeDestroy: function() {
     this.escShortcut.detach();
+  },
+  computed: {
+    'showBackButton': function() {
+      return this.$route.path !== '/captioner/settings';
+    },
+    'navbarTitle': function() {
+      return this.$route.meta ? this.$route.meta.navbarTitle : '';
+    },
   },
 }
 </script>

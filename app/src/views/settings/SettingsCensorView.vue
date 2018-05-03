@@ -1,6 +1,5 @@
 <template>
   <div class="settings-about-view">
-    <h2>Censor</h2>
     <div class="custom-control custom-checkbox mb-2">
       <input v-model="censor" class="custom-control-input" name="word-replacements-censor-profanity" type="checkbox" id="word-replacements-censor-profanity">
       <label class="custom-control-label" for="word-replacements-censor-profanity">Censor profane language (US English only).</label>
