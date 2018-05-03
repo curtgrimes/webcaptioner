@@ -27,7 +27,7 @@ app.use('/health-check', function (req, res) {
 });
 
 if (isProd) {
-  // app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 function createRenderer (bundle, options) {
