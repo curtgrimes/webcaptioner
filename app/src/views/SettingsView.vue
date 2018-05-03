@@ -1,7 +1,9 @@
 <template>
   <div class="settings-view h-100">
-    <router-link to="/captioner" class="btn btn-primary d-none d-sm-block position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
-    <nav class="d-sm-none navbar sticky-top navbar-light bg-primary" :class="{'pl-2': showBackButton}">
+    <router-link to="/captioner" class="btn btn-light d-none d-sm-block position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
+
+    <!-- xs navbar -->
+    <nav class="d-sm-none navbar sticky-top navbar-light bg-primary pr-2" :class="{'pl-2': showBackButton}">
       <div class="mr-auto">
         <router-link to="/captioner/settings" class="btn btn-primary mr-2" v-if="showBackButton">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -10,6 +12,7 @@
           {{navbarTitle}}
         </div>
       </div>
+      <router-link to="/captioner" class="btn btn-primary"><i class="fa fa-times" aria-label="Close"></i></router-link>
     </nav>
     <div class="row mx-0" style="min-height:100%">
 
