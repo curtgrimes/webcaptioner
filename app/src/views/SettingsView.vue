@@ -25,7 +25,7 @@
           <b-list-group-item to="/captioner/settings/word-replacements">Word Replacements</b-list-group-item>
           <b-list-group-item to="/captioner/settings/censor">Censor</b-list-group-item>
           <b-list-group-item to="/captioner/settings/language">Language</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/title-cards">Title Cards</b-list-group-item>
+          <!-- <b-list-group-item to="/captioner/settings/title-cards">Title Cards</b-list-group-item> -->
         </b-list-group>
         <h3 class="text-muted pl-3 pt-2 small">Integrations</h3>
         <b-list-group flush>
@@ -41,7 +41,7 @@
       <!-- non-xs navigation -->
       <div class="d-none d-sm-block col-sm-4 py-5 pr-md-4 pr-xl-5 bg-primary" style="min-height:100%">
         <div class="row h-100">
-          <div class="col-lg-9 col-xl-7 ml-auto">
+          <div class="col-lg-9 col-xl-7 ml-auto mb-5">
             <div class="position-sticky" style="top:20px">
               <h2 class="d-none d-sm-block lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
               <nav>
@@ -51,7 +51,7 @@
                   <b-nav-item to="/captioner/settings/word-replacements">Word Replacements</b-nav-item>
                   <b-nav-item to="/captioner/settings/censor">Censor</b-nav-item>
                   <b-nav-item to="/captioner/settings/language">Language</b-nav-item>
-                  <b-nav-item to="/captioner/settings/title-cards">Title Cards</b-nav-item>
+                  <!-- <b-nav-item to="/captioner/settings/title-cards">Title Cards</b-nav-item> -->
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>
