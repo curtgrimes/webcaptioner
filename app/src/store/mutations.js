@@ -74,6 +74,15 @@ export default {
     state.memberOfRoomId = memberOfRoomId;
     state.connectId = null;
   },
+  SET_REMOTE_DISPLAY_CONNECTED_ID_NOT_FOUND_ERROR: (state, { on }) => {
+    state.remoteDisplayConnectIdNotFoundError = on;
+    state.remoteDisplayConnectIdFoundMessage = false;
+  },
+  SET_REMOTE_DISPLAY_CONNECTED_ID_FOUND_MESSAGE: (state, { on }) => {
+    state.remoteDisplayConnectIdFoundMessage = on;
+    state.remoteDisplayConnectIdNotFoundError = false;
+  },
+
 
   ADD_WORD_REPLACEMENT (state, { wordReplacement }) {
     state.settings.wordReplacements.push(wordReplacement);

@@ -85,6 +85,8 @@ export function createStore () {
       },
       detached: false,
       remoteDisplays: [],
+      remoteDisplayConnectIdNotFoundError: false,
+      remoteDisplayConnectIdFoundMessage: false,
       connectId: null,
       memberOfRoomId: null,
       socket: {

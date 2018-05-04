@@ -274,11 +274,19 @@ function addMemberToMyRoom(leaderSocket, memberConnectId) {
       memberOfRoomId: memberSocket._webcaptioner.memberOfRoomId,
     }));
 
+    leaderSocket.send(JSON.stringify({
+      mutation: 'SET_REMOTE_DISPLAY_CONNECTED_ID_FOUND_MESSAGE',
+      on: true,
+    }));
+
     sendRoomMemberListToLeader(leaderSocket);
   }
   else {
     // Nobody with this connect ID was found
-    console.log('Nobody with this connect ID was found');
+    leaderSocket.send(JSON.stringify({
+      mutation: 'SET_REMOTE_DISPLAY_CONNECTED_ID_NOT_FOUND_ERROR',
+      on: true,
+    }));
   }
 }
 

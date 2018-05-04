@@ -10,6 +10,9 @@
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.config.js --progress --hide-modules"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.0-13",
+    "@fortawesome/free-solid-svg-icons": "^5.1.0-10",
+    "@fortawesome/vue-fontawesome": "0.1.0-4",
     "@google-cloud/translate": "^0.8.2",
     "audio-stream-meter": "^1.0.4",
     "body-parser": "^1.17.2",

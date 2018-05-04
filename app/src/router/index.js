@@ -16,13 +16,13 @@ const SettingsLanguageView = () => import('../views/settings/SettingsLanguageVie
 const SettingsWordReplacementsView = () => import('../views/settings/SettingsWordReplacementsView.vue')
 const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vue')
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
+const SettingsRemoteDisplaysView = () => import('../views/settings/SettingsRemoteDisplaysView.vue')
 const SettingsKeyboardShortcutsView = () => import('../views/settings/SettingsKeyboardShortcutsView.vue')
 const CaptionerView = () => import('../views/CaptionerView.vue')
 const Transcript = () => import('../components/Transcript.vue')
 const SaveToFileModal = () => import('../components/SaveToFileModal.vue')
 const ClearTranscriptModal = () => import('../components/ClearTranscriptModal.vue')
 const ReceiverView = () => import('../views/ReceiverView.vue')
-const RemoteDisplaysView = () => import('../views/RemoteDisplaysView.vue')
 
 export function createRouter () {
   return new Router({
@@ -78,6 +78,13 @@ export function createRouter () {
                 },
               },
               {
+                path: 'remote-displays',
+                component: SettingsRemoteDisplaysView,
+                meta: {
+                  navbarTitle: 'Remote Displays',
+                },
+              },
+              {
                 path: 'vmix',
                 component: SettingsVmixView,
                 meta: {
@@ -92,10 +99,6 @@ export function createRouter () {
                 },
               },
             ]
-          },
-          {
-            path: 'remote-displays',
-            component: RemoteDisplaysView,
           },
         ]
       },
