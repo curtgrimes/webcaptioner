@@ -80,18 +80,20 @@ const serve = (path, cache) => express.static(resolve(path), {
 })
 
 app.use('*.map', function (req, res, next) {
-  console.log(process.env);
-  console.log(process.env.sentrySecurityToken);
+  console.log(process.env['SENTRY_SECURITY_TOKEN']);
   console.log(req.headers['x-sentry-token']);
-  // disable requests ending in .map in production
+  // Only show .map files if the request is accompanied with Sentry's token
   if (
-    req.headers && req.headers['x-sentry-token']
-    && req.headers['x-sentry-token'] === process.env.sentrySecurityToken
+    process.env['SENTRY_SECURITY_TOKEN'] // token exists in this environment
+    && req.headers && req.headers['x-sentry-token']
+    && req.headers['x-sentry-token'] === process.env['SENTRY_SECURITY_TOKEN'] // request had this token
   ) {
-    res.send(404);
+    // Show the .map file
+    next();
   }
   else {
-    next();
+    // Don't show it
+    res.send(404);
   }
 });
 
