@@ -47,6 +47,7 @@
     "normalize-strings": "^1.1.0",
     "popper.js": "^1.12.9",
     "promise-polyfill": "7.1.0",
+    "raven-js": "^3.24.2",
     "request": "^2.81.0",
     "route-cache": "^0.4.4",
     "screenfull": "^3.3.2",

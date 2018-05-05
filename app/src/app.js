@@ -7,6 +7,13 @@ import titleMixin from './util/title'
 import * as filters from './util/filters'
 import BootstrapVue from 'bootstrap-vue'
 import dateFormat from 'date-fns/format'
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
+
+Raven
+    .config('REMOVED')
+    .addPlugin(RavenVue, Vue)
+    .install();
 
 const dateFormatPlugin = {
   install () {
