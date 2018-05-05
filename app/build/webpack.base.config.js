@@ -9,13 +9,11 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  devtool: isProd
-    ? false
-    : '#cheap-module-source-map',
+  devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/dist/',
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
   },
   resolve: {
     alias: {
@@ -80,7 +78,7 @@ module.exports = {
   plugins: isProd
     ? [
         new UglifyJsPlugin({
-          
+          sourceMap: true,
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new ExtractTextPlugin({

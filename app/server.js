@@ -77,6 +77,20 @@ const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
 
+app.use('*.map', function (req, res, next) {
+  // disable requests ending in .map in production
+  if (
+    isProd
+    && req.headers && req.headers['x-sentry-token']
+    && req.headers['x-sentry-token'] === process.env.sentrySecurityToken
+  ) {
+    res.send(404);
+  }
+  else {
+    next();
+  }
+});
+
 app.use(compression({ threshold: 0 }))
 app.use(favicon('./public/favicon.ico'))
 app.use('/dist', serve('./dist', true))
@@ -236,8 +250,6 @@ function getMyRoomLeaderToken(socket) {
 }
 
 function restoreMyRoomIdFromRoomLeaderToken(leaderSocket, roomLeaderToken) {
-  console.log("room leader tokens: ");
-  console.log(roomLeaderTokens);
     let room = roomLeaderTokens.find((r) => {
       return r.roomLeaderToken === roomLeaderToken;
     });
@@ -273,6 +285,7 @@ function addMemberToMyRoom(leaderSocket, memberConnectId) {
       mutation: 'SET_MEMBER_OF_ROOM_ID',
       memberOfRoomId: memberSocket._webcaptioner.memberOfRoomId,
     }));
+    console.log('Connected ' + memberConnectId + ' to room.');
 
     leaderSocket.send(JSON.stringify({
       mutation: 'SET_REMOTE_DISPLAY_CONNECTED_ID_FOUND_MESSAGE',
