@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
@@ -78,10 +80,11 @@ const serve = (path, cache) => express.static(resolve(path), {
 })
 
 app.use('*.map', function (req, res, next) {
+  console.log(process.env.sentrySecurityToken);
+  console.log(req.headers['x-sentry-token']);
   // disable requests ending in .map in production
   if (
-    isProd
-    && req.headers && req.headers['x-sentry-token']
+    req.headers && req.headers['x-sentry-token']
     && req.headers['x-sentry-token'] === process.env.sentrySecurityToken
   ) {
     res.send(404);
