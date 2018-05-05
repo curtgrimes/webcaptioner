@@ -21,7 +21,7 @@ export default {
   props: ['chromeless'],
   data: function() {
     return {
-      height: null,
+      height: '100vh',
     }
   },
   methods: {

@@ -92,7 +92,7 @@ export default {
   data: function() {
     return {
       escShortcut: null,
-      height: 'auto',
+      height: '100vh',
     };
   },
   mounted: function() {
