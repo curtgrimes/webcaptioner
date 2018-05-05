@@ -71,9 +71,9 @@ export default {
         })
 
 
-        // Detached mode
+        // Larger layout mode
         .bind('c', function() {
-          if (self.$store.state.detached) {
+          if (self.largerLayout) {
             self.$router.push('/captioner');
             if (!self.captioningOn) {
               self.startCaptioning();
@@ -86,7 +86,7 @@ export default {
 
 
         .bind('f', function() {
-          if (self.$store.state.detached) {
+          if (self.largerLayout) {
             saveToTextFile({
               transcript: self.$store.state.captioner.transcript.final + self.$store.state.captioner.transcript.interim,
               dateFormatter: self.$helpers.dateFormat,
@@ -95,7 +95,7 @@ export default {
           }
         })
         .bind('p', function() {
-          if (self.$store.state.detached) {
+          if (self.largerLayout) {
             if (self.captioningOn) {
               self.$store.dispatch('captioner/restart');
             }
@@ -107,6 +107,10 @@ export default {
       ;
 
       this.redirectSettingsRouteOnMobile(this.$route.path); // if navigating to settings page on load
+
+      this.$on('navbarChangedHeight', function() {
+        console.log('navbarChangedHeight');
+      });
     }
   },
   watch: {
@@ -121,6 +125,9 @@ export default {
     this.combokeysDocument.detach();
   },
   computed: {
+    largerLayout: function() {
+      return this.$store.state.settings.controls.layout.larger;
+    },
     captioningOn: function() {
       return this.$store.state.captioner.on; 
     },

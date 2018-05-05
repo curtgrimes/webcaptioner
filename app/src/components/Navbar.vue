@@ -1,7 +1,8 @@
 <template>
     <div>
-        <nav class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark d-flex flex-column" :class="detached ? 'pt-3 pb-4' : 'pr-2'">
-            <div v-if="detached" class="d-flex w-100 pb-3">
+        <!-- id # is used in util/appHeightAdjuster -->
+        <nav id="navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark d-flex flex-column" :class="largerLayout ? 'pt-3 pb-4' : 'pr-2'">
+            <div class="w-100 pb-3" :class="{'d-flex' : largerLayout, 'd-none': !largerLayout}">
                 <div class="mr-auto">
                     <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">Clear <kbd class="small ml-3">p</kbd></b-button>
                 </div>
@@ -11,7 +12,7 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-brand mr-auto" :class="{'mt-3' : detached}">
+                <div class="navbar-brand mr-auto" :class="{'mt-3' : largerLayout}">
                     <a href="/">
                         <img src="/public/logo.svg" width="20" height="20" class="d-inline-block align-top mr-2" alt="Web Captioner" />
                         <span class="d-none d-md-inline">Web Captioner</span>
@@ -57,10 +58,10 @@
                     </b-dropdown>
                 </transition>
                 <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Text Entry"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
-                <b-dropdown :size="detached ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
+                <b-dropdown :size="largerLayout ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
                     <template slot="button-content">
-                        <div :class="{'px-4 py-2' : detached}">
-                            <span v-html="captionToggleButtonText"></span> <kbd v-if="detached" class="small ml-3">c</kbd>
+                        <div :class="{'px-4 py-2' : largerLayout}">
+                            <span v-html="captionToggleButtonText"></span> <kbd v-show="largerLayout" class="small ml-3">c</kbd>
                         </div>
                     </template>
                     <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
@@ -101,8 +102,8 @@ export default {
     waitingForInitialTranscript: function() {
         return this.$store.state.captioner.transcript.waitingForInitial;
     },
-    detached: function() {
-        return this.$store.state.detached;
+    largerLayout: function() {
+        return this.$store.state.settings.controls.layout.larger;
     },
     captionToggleButtonText: function() {
         return !this.captioningOn

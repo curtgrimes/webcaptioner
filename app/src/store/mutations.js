@@ -84,6 +84,10 @@ export default {
   },
 
 
+  SET_LAYOUT_LARGER: (state, { on }) => {
+    state.settings.controls.layout.larger = Boolean(on);
+  },
+
   ADD_WORD_REPLACEMENT (state, { wordReplacement }) {
     state.settings.wordReplacements.push(wordReplacement);
   },
@@ -135,7 +139,6 @@ export default {
 
 
   SOCKET_ONOPEN (state, event)  {
-    console.log('socket onopen');
     state.socket.isConnected = true
   },
   SOCKET_ONCLOSE (state, event)  {

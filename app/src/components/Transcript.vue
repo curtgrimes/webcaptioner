@@ -14,6 +14,7 @@
 
 <script>
 import hexToRgb from '../util/hexToRGB'
+import appHeightAdjuster from '../util/appHeightAdjuster'
 
 export default {
   name: 'transcript',
@@ -35,15 +36,19 @@ export default {
   mounted: function() {
     this.scrollToBottom();
 
-    this.$watch('detached', function(newValue) {
-      // Make room for navbar
-      if (document && document.getElementById('navbar')) {
-        let navbarHeight = document.getElementById('navbar').offsetHeight;
-        this.height = 'calc(100vh - '+ navbarHeight +'px)';
-      }
-      else {
-        this.height = 'calc(100vh - 60px)'; // reasonable default
-      }
+    this.$nextTick(function () {
+      let self = this;
+
+      setTimeout(function() {
+        // Hacky way to make sure settings view is correct
+        // height after load where it is immediately active
+        self.height = appHeightAdjuster();
+      },1000);
+    });
+    
+
+    this.$watch('largerLayout', function() {
+      this.height = appHeightAdjuster();
     });
   },
   computed: {
@@ -119,8 +124,8 @@ export default {
         'align-items-end': ['bottom','lowerThird'].includes(this.$store.state.settings.appearance.text.alignment.vertical),
       }
     },
-    detached: function() {
-      return this.$store.state.detached;
+    largerLayout: function() {
+      return this.$store.state.settings.controls.layout.larger;
     },
   },
 }

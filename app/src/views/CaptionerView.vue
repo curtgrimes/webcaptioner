@@ -48,7 +48,7 @@ export default {
           });
       }
       else {
-        console.log("no remote displays to send to");
+        // console.log("no remote displays to send to");
       }
     }, 0, {leading: true}));
   },

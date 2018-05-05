@@ -15,6 +15,7 @@ const SettingsAppearanceView = () => import('../views/settings/SettingsAppearanc
 const SettingsLanguageView = () => import('../views/settings/SettingsLanguageView.vue')
 const SettingsWordReplacementsView = () => import('../views/settings/SettingsWordReplacementsView.vue')
 const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vue')
+const SettingsControlsView = () => import('../views/settings/SettingsControlsView.vue')
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
 const SettingsRemoteDisplaysView = () => import('../views/settings/SettingsRemoteDisplaysView.vue')
 const SettingsKeyboardShortcutsView = () => import('../views/settings/SettingsKeyboardShortcutsView.vue')
@@ -68,6 +69,13 @@ export function createRouter () {
                 component: SettingsCensorView,
                 meta: {
                   navbarTitle: 'Censor',
+                },
+              },
+              {
+                path: 'controls',
+                component: SettingsControlsView,
+                meta: {
+                  navbarTitle: 'Controls',
                 },
               },
               {

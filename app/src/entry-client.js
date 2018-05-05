@@ -8,6 +8,8 @@ import VueNativeSock from 'vue-native-websocket'
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
 
+Vue.config.productionTip = false
+
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({
   beforeRouteUpdate (to, from, next) {

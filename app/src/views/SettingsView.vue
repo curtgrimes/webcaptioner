@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-view h-100">
+  <div class="settings-view" :style="{height}" style="overflow:auto">
     <router-link to="/captioner" class="btn btn-light d-none d-sm-block position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><i class="fa fa-times fa-2x" aria-label="Close"></i></router-link>
 
     <!-- xs navbar -->
@@ -22,9 +22,10 @@
         <b-list-group flush>
           <b-list-group-item to="/captioner/settings/about">About</b-list-group-item>
           <b-list-group-item to="/captioner/settings/appearance">Appearance</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/word-replacements">Word Replacements</b-list-group-item>
           <b-list-group-item to="/captioner/settings/censor">Censor</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/controls">Controls</b-list-group-item>
           <b-list-group-item to="/captioner/settings/language">Language</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/word-replacements">Word Replacements</b-list-group-item>
           <!-- <b-list-group-item to="/captioner/settings/title-cards">Title Cards</b-list-group-item> -->
         </b-list-group>
         <h3 class="text-muted pl-3 pt-2 small">Integrations</h3>
@@ -48,9 +49,10 @@
                 <b-nav vertical pills>
                   <b-nav-item to="/captioner/settings/about">About</b-nav-item>
                   <b-nav-item to="/captioner/settings/appearance">Appearance</b-nav-item>
-                  <b-nav-item to="/captioner/settings/word-replacements">Word Replacements</b-nav-item>
                   <b-nav-item to="/captioner/settings/censor">Censor</b-nav-item>
+                  <b-nav-item to="/captioner/settings/controls">Controls</b-nav-item>
                   <b-nav-item to="/captioner/settings/language">Language</b-nav-item>
+                  <b-nav-item to="/captioner/settings/word-replacements">Word Replacements</b-nav-item>
                   <!-- <b-nav-item to="/captioner/settings/title-cards">Title Cards</b-nav-item> -->
                 </b-nav>
                 <hr/>
@@ -83,12 +85,14 @@
 
 <script>
 import Combokeys from 'combokeys'
+import appHeightAdjuster from '../util/appHeightAdjuster'
 
 export default {
   name: 'settings-view',
   data: function() {
     return {
       escShortcut: null,
+      height: 'auto',
     };
   },
   mounted: function() {
@@ -97,16 +101,35 @@ export default {
     this.escShortcut.bind('esc', function() {
       self.$router.push('/captioner');
     });
+
+    this.$nextTick(function () {
+      let self = this;
+
+      setTimeout(function() {
+        // Hacky way to make sure settings view is correct
+        // height after load where it is immediately active
+        self.height = appHeightAdjuster();
+      },1000);
+    });
+    
+
+    this.$watch('largerLayout', function() {
+      this.height = appHeightAdjuster();
+    });
+
   },
   beforeDestroy: function() {
     this.escShortcut.detach();
   },
   computed: {
-    'showBackButton': function() {
+    showBackButton: function() {
       return this.$route.path !== '/captioner/settings';
     },
-    'navbarTitle': function() {
+    navbarTitle: function() {
       return this.$route.meta ? this.$route.meta.navbarTitle : '';
+    },
+    largerLayout: function() {
+      return this.$store.state.settings.controls.layout.larger;
     },
   },
 }
