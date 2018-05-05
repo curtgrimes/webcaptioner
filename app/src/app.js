@@ -18,6 +18,14 @@ const dateFormatPlugin = {
 Vue.use(dateFormatPlugin);
 Vue.use(BootstrapVue);
 
+Vue.directive('autofocus', {
+  // When the bound element is inserted into the DOM...
+  inserted: function (el) {
+    // Focus the element
+    el.focus()
+  }
+})
+
 // mixin for handling title
 Vue.mixin(titleMixin)
 

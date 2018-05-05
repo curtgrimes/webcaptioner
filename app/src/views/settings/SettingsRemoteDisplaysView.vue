@@ -3,7 +3,7 @@
     <p>Send live captions to another tablet, phone, computer, or browser on this computer.</p>
     <p>Visit <strong><a href="/connect" target="_blank">webcaptioner.com/connect</a></strong> on another device or browser to get its 6-digit connection code.</p>
     <div class="input-group">
-        <input type="text" maxlength="6" @keydown="connectSuccessful = null" ref="connectIdInput" autofocus class="form-control" placeholder="Connection Code" v-model="connectId" />
+        <input type="text" v-autofocus maxlength="6" @keydown="connectSuccessful = null" ref="connectIdInput" autofocus class="form-control" placeholder="Connection Code" v-model="connectId" />
         <div class="input-group-append">
             <button class="btn btn-secondary" :disabled="!Boolean(connectId)" type="submit" @click="approveRoomRequest(connectId)">Add Display</button>
         </div>

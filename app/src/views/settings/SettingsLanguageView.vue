@@ -4,7 +4,7 @@
     <h3>Select a Language</h3>
     <div class="row mb-3">
       <div class="col-sm-7" :class="{'col-9': showClearButton}">
-        <input ref="search" type="text" v-model="searchQuery" placeholder="Search..." class="form-control" />
+        <input ref="search" v-autofocus type="text" v-model="searchQuery" placeholder="Search..." class="form-control" />
       </div>
       <div class="col-3 col-sm-3 col-lg-2 pl-0" v-if="showClearButton">
         <button v-bind:class="{'show' : showClearButton, 'invisible' : !showClearButton}" class="btn btn-sm btn-outline-dark fade w-100" type="button" @click="clearSearch()">Clear</button>
