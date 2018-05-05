@@ -1,14 +1,14 @@
 <template>
   <div class="settings-remote-displays-view">
     <p>Send live captions to another tablet, phone, computer, or browser on this computer.</p>
-    <p>Visit <strong><a href="/connect" target="_blank">webcaptioner.com/connect</a></strong> on another device or browser to get its 6-digit connection code.</p>
+    <p>Visit <strong><a href="/connect" target="_blank">webcaptioner.com/connect</a></strong> on another device or browser window to get its 6-digit connection code.</p>
     <div class="input-group">
-        <input type="text" v-autofocus maxlength="6" @keydown="connectSuccessful = null" ref="connectIdInput" autofocus class="form-control" placeholder="Connection Code" v-model="connectId" />
+        <input type="text" v-autofocus maxlength="6" @keydown="connectSuccessful = null" @keydown.enter="approveRoomRequest(connectId)" ref="connectIdInput" autofocus class="form-control" placeholder="Connection Code" v-model="connectId" />
         <div class="input-group-append">
             <button class="btn btn-secondary" :disabled="!Boolean(connectId)" type="submit" @click="approveRoomRequest(connectId)">Add Display</button>
         </div>
     </div>
-    <b-alert :show="remoteDisplayConnectIdNotFoundError" variant="danger" class="my-3"><span class="fa fa-times" aria-hidden="true"></span> Display not found.</b-alert>
+    <b-alert :show="remoteDisplayConnectIdNotFoundError" variant="danger" class="my-3"><span class="fa fa-times" aria-hidden="true"></span> Display not found. Visit <strong><a href="/connect" target="_blank">webcaptioner.com/connect</a></strong> on another device or browser window to get its 6-digit connection code.</b-alert>
     <!-- <b-alert :show="remoteDisplayConnectIdFoundMessage" variant="success" class="my-3"><span class="fa fa-check" aria-hidden="true"></span> Added display.</b-alert> -->
     <div v-if="remoteDisplays.length">
         <hr class="my-4" />
@@ -71,7 +71,7 @@ export default {
               let self = this;
               setTimeout(function(){
                   self.remoteDisplayConnectIdNotFoundError = false;
-              },5000);
+              },10000);
           }
       },
       remoteDisplayConnectIdFoundMessage: function(on) {
