@@ -80,6 +80,7 @@ const serve = (path, cache) => express.static(resolve(path), {
 })
 
 app.use('*.map', function (req, res, next) {
+  console.log(process.env);
   console.log(process.env.sentrySecurityToken);
   console.log(req.headers['x-sentry-token']);
   // disable requests ending in .map in production
