@@ -29,7 +29,7 @@ const { app, router, store } = createApp()
 
 const websocketProtocol = location.hostname === 'localhost' ? 'ws' : 'wss';
 Vue.use(VueNativeSock, websocketProtocol + '://' + location.host, {
-  // TODO ADD reconnection: true,
+  reconnection: true,
   format: 'json',
   store,
 });
