@@ -269,7 +269,7 @@ if (typeof window !== 'undefined') {
 
   let fontChoicesString = fontChoices.map(function (choice) { return choice.googleFontNameKey.replace(/ /g, '+'); }).join('|');;
 
-  link.href = 'http://fonts.googleapis.com/css?family=' + fontChoicesString;
+  link.href = 'https://fonts.googleapis.com/css?family=' + fontChoicesString;
 
   // Add "Redacted Regular" font
   var link2 = document.createElement('link');
