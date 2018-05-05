@@ -1,9 +1,6 @@
 import Vue from 'vue'
 
 export default {
-  RESTORE_SETTINGS: (state, { settings, version }) => {
-    state.settings = settings;
-  },
   SET_TEXT_COLOR: (state, { textColor }) => {
     state.settings.appearance.text.textColor = textColor
   },
@@ -64,7 +61,6 @@ export default {
     state.connectId = connectId;
   },
   SET_ROOM_LEADER_TOKEN: (state, { roomLeaderToken }) => {
-    console.log('roomLeaderToken setting');
     state.settings.roomLeaderToken = roomLeaderToken;
   },
   SET_REMOTE_DISPLAYS: (state, { remoteDisplays }) => {

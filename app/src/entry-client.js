@@ -43,7 +43,7 @@ if (window.__INITIAL_STATE__) {
 // Restore locally saved settings
 const localSettings = JSON.parse(localStorage.getItem('webcaptioner:settings'));
 if (localSettings) {
-  store.commit('RESTORE_SETTINGS', {
+  store.dispatch('RESTORE_SETTINGS', {
     settings: localSettings.settings,
     version: localSettings.version,
   });

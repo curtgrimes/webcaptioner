@@ -40,6 +40,7 @@
     "lodash.clamp": "^4.0.3",
     "lodash.debounce": "^4.0.8",
     "lodash.escaperegexp": "^4.1.2",
+    "lodash.get": "^4.4.2",
     "lodash.throttle": "^4.1.1",
     "lru-cache": "^4.1.2",
     "morgan": "~1.8.1",

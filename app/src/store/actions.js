@@ -8,6 +8,7 @@ import userLocale from 'locale2'
 import supportedLocales from '../data/locales'
 import RemoteEventBus from '../components/RemoteEventBus'
 import ChromelessWindowManager from '../components/ChromelessWindowManager'
+import get from 'lodash.get'
 
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
@@ -31,6 +32,44 @@ export default {
       commit('SET_DETACHED_MODE_OFF');  
     });
     commit('SET_DETACHED_MODE_ON');
+  },
+
+
+  RESTORE_SETTINGS: ({ commit }, { settings }) => {
+    
+    commit('SET_TEXT_COLOR', { textColor: get(settings, 'appearance.text.textColor') });
+    commit('SET_TEXT_COLOR_INTERIM', { textColorInterim: get(settings, 'appearance.text.textColorInterim') });
+    commit('SET_FONT_FAMILY', { fontFamily: get(settings, 'appearance.text.fontFamily') });
+    commit('SET_TEXT_SIZE', { textSize: get(settings, 'appearance.text.textSize') });
+    commit('SET_LINE_HEIGHT', { lineHeight: get(settings, 'appearance.text.lineHeight') });
+    commit('SET_LETTER_SPACING', { letterSpacing: get(settings, 'appearance.text.letterSpacing') });
+    commit('SET_TEXT_TRANSFORM', { textTransform: get(settings, 'appearance.text.textTransform') });
+
+    commit('SET_SHADOW_COLOR', { shadowColor: get(settings, 'appearance.shadow.color') });
+    commit('SET_SHADOW_OPACITY', { shadowOpacity: get(settings, 'appearance.shadow.opacity') });
+    commit('SET_SHADOW_BLUR_RADIUS', { shadowBlurRadius: get(settings, 'appearance.shadow.blurRadius') });
+    commit('SET_SHADOW_OFFSET_X', { shadowOffsetX: get(settings, 'appearance.shadow.offsetX') });
+    commit('SET_SHADOW_OFFSET_Y', { shadowOffsetY: get(settings, 'appearance.shadow.offsetY') });
+
+    commit('SET_BACKGROUND_COLOR', { backgroundColor: get(settings, 'appearance.background.color') });
+    commit('SET_ALIGNMENT_HORIZONTAL', { alignmentHorizontal: get(settings, 'appearance.text.alignment.horizontal') });
+    commit('SET_ALIGNMENT_VERTICAL', { alignmentVertical: get(settings, 'appearance.text.alignment.vertical') });
+    commit('SET_ALIGNMENT_PADDING', { alignmentPadding: get(settings, 'appearance.text.alignment.padding') });
+
+    commit('SET_CENSOR', { censor: get(settings, 'censor.on') });
+    commit('SET_CENSOR_REPLACE_WITH', { replaceWith: get(settings, 'censor.replaceWith') });
+
+    commit('SET_LAYOUT_LARGER', { on: get(settings, 'controls.layout.larger') });
+
+    commit('SET_LOCALE_USER_DEFAULT', { locale: get(settings, 'locale.userDefault') });
+    commit('SET_LOCALE_FROM', { locale: get(settings, 'locale.from') });
+
+    commit('SET_ROOM_LEADER_TOKEN', { roomLeaderToken: get(settings, 'roomLeaderToken') });
+
+    const wordReplacements = get(settings, 'wordReplacements');
+    for (let i = 0; i < wordReplacements.length; i++) {
+      commit('ADD_WORD_REPLACEMENT', { wordReplacement: wordReplacements[i] });
+    }
   },
 
 
