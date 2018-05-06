@@ -1,14 +1,14 @@
 <template>
   <div class="settings-remote-displays-view">
     <p>Send live captions to another tablet, phone, computer, or browser on this computer.</p>
-    <p>Visit <strong><a href="/connect" target="_blank">webcaptioner.com/connect</a></strong> on another device or browser window to get its 6-digit connection code.</p>
+    <p>Visit <strong><a :href="connectURL" target="_blank">{{connectURLDisplay}}</a></strong> on another device or browser window to get its 6-digit connection code.</p>
     <div class="input-group">
         <input type="text" v-autofocus maxlength="6" @keydown="connectSuccessful = null" @keydown.enter="approveRoomRequest(connectId)" ref="connectIdInput" autofocus class="form-control" placeholder="Connection Code" v-model="connectId" />
         <div class="input-group-append">
             <button class="btn btn-secondary" :disabled="!Boolean(connectId)" type="submit" @click="approveRoomRequest(connectId)">Add Display</button>
         </div>
     </div>
-    <b-alert :show="remoteDisplayConnectIdNotFoundError" variant="danger" class="my-3"><span class="fa fa-times" aria-hidden="true"></span> Display not found. Visit <strong><a href="/connect" target="_blank">webcaptioner.com/connect</a></strong> on another device or browser window to get its 6-digit connection code.</b-alert>
+    <b-alert :show="remoteDisplayConnectIdNotFoundError" variant="danger" class="my-3"><span class="fa fa-times" aria-hidden="true"></span> Display not found. Visit <strong><a :href="connectURL" target="_blank">{{connectURLDisplay}}</a></strong> on another device or browser window to get its 6-digit connection code.</b-alert>
     <!-- <b-alert :show="remoteDisplayConnectIdFoundMessage" variant="success" class="my-3"><span class="fa fa-check" aria-hidden="true"></span> Added display.</b-alert> -->
     <div v-if="remoteDisplays.length">
         <hr class="my-4" />
@@ -62,7 +62,13 @@ export default {
     return {
       connectId: null,
       connectSuccessful: null,
+      connectURL: null, // populated client-side on mount
+      connectURLDisplay: null, // populated client-side on mount
     };
+  },
+  mounted: function() {
+      this.connectURL = window.location.origin + '/connect';
+      this.connectURLDisplay = this.connectURL.replace('https://','').replace('http://','');
   },
   watch: {
       remoteDisplayConnectIdNotFoundError: function(on) {

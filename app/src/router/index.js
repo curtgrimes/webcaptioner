@@ -18,7 +18,6 @@ const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vu
 const SettingsControlsView = () => import('../views/settings/SettingsControlsView.vue')
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
 const SettingsRemoteDisplaysView = () => import('../views/settings/SettingsRemoteDisplaysView.vue')
-const SettingsKeyboardShortcutsView = () => import('../views/settings/SettingsKeyboardShortcutsView.vue')
 const CaptionerView = () => import('../views/CaptionerView.vue')
 const Transcript = () => import('../components/Transcript.vue')
 const SaveToFileModal = () => import('../components/SaveToFileModal.vue')
@@ -97,13 +96,6 @@ export function createRouter () {
                 component: SettingsVmixView,
                 meta: {
                   navbarTitle: 'vMix',
-                },
-              },
-              {
-                path: 'keyboard-shortcuts',
-                component: SettingsKeyboardShortcutsView,
-                meta: {
-                  navbarTitle: 'Keyboard Shortcuts',
                 },
               },
             ]
