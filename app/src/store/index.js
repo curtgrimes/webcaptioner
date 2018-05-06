@@ -96,6 +96,13 @@ export function createStore () {
       socket: {
         isConnected: false,
       },
+      integrations: {
+        vmix: {
+          chromeExtensionInstalled: null,
+          webControllerAddress: '',
+          webControllerConnected: null,
+        },
+      },
     },
     actions,
     mutations,

@@ -132,14 +132,17 @@ export default {
 }
 </script>
 
-<style>
+
+
+
+<style scoped>
   h3 {
     text-transform:uppercase;
     font-size:1.3rem;
     margin:1rem 0;
   }
 
-  .settings-view .nav-pills {
+  .nav-pills {
     font-size:0.92rem;
   }
 </style>

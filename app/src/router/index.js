@@ -95,7 +95,7 @@ export function createRouter () {
                 path: 'vmix',
                 component: SettingsVmixView,
                 meta: {
-                  navbarTitle: 'vMix',
+                  navbarTitle: 'Connect to vMix',
                 },
               },
             ]

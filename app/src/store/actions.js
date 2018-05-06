@@ -9,6 +9,7 @@ import supportedLocales from '../data/locales'
 import RemoteEventBus from '../components/RemoteEventBus'
 import ChromelessWindowManager from '../components/ChromelessWindowManager'
 import get from 'lodash.get'
+import vmixSetup from '../util/vmixSetup'
 
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
@@ -72,6 +73,25 @@ export default {
     }
   },
 
+  REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}) => {
+    let {
+      checkIfExtensionInstalled,
+      testWebControllerConnectivity,
+    } = vmixSetup;
+    
+    checkIfExtensionInstalled()
+      .then(function(installed) {
+        commit('SET_VMIX_CHROME_EXTENSION_INSTALLED', {installed});
+      });
+    testWebControllerConnectivity(
+      (state.integrations.vmix.webControllerAddress || '').trim().replace(/\/$/, "") + '/API'
+    )
+      .then(function(connected) {
+        console.log("HElLO");
+        console.log(connected);
+        commit('SET_VMIX_WEB_CONTROLLER_CONNECTED', {connected});
+      })
+  },
 
 
   // ensure data for rendering given list type

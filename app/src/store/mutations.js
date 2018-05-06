@@ -162,6 +162,18 @@ export default {
   },
 
 
+  SET_VMIX_CHROME_EXTENSION_INSTALLED: (state, { installed }) => {
+    state.integrations.vmix.chromeExtensionInstalled = Boolean(installed);
+  },
+  SET_VMIX_WEB_CONTROLLER_ADDRESS: (state, { webControllerAddress }) => {
+    state.integrations.vmix.webControllerAddress = webControllerAddress;
+  },
+  SET_VMIX_WEB_CONTROLLER_CONNECTED: (state, { connected }) => {
+    state.integrations.vmix.webControllerConnected = Boolean(connected);
+  },
+  RESET_WEB_CONTROLLER_CONNECTED_STATUS: (state) => {
+    state.integrations.vmix.webControllerConnected = null;
+  },
 
 
   SET_ACTIVE_TYPE: (state, { type }) => {
