@@ -76,7 +76,7 @@
                 <b-alert :show="showConnectionFailureMessage" dismissible variant="danger">Cannot connect to vMix at "{{webControllerAddress}}". Make sure Web Controller is enabled in vMix and that you've copied over the website address correctly. It should look something like this: http://192.168.1.1:8080</b-alert>
                 <hr class="my-3" />
                 <div class="text-right">
-                  <b-button @click="step2NextClick()" size="sm" :variant="webControllerAddress == '' ? 'default' : 'secondary'" :disabled="webControllerAddress == '' || attemptingWebControllerConnect">
+                  <b-button @click="step2NextClick()" size="sm" :variant="webControllerAddress == '' ? 'default' : 'secondary'" :disabled="!webControllerAddress || attemptingWebControllerConnect">
                     <div v-if="!attemptingWebControllerConnect">
                       Next <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </div>
@@ -253,7 +253,8 @@ export default {
       }
     },
     showConnectionFailureMessage: function () {
-      return this.webControllerAddress != '' && this.webControllerConnected === false;
+      // Show the message if an address is set but we can't connect
+      return Boolean(this.webControllerAddress) && this.webControllerConnected === false;
     },
     showCantFindTemplateMessage: function () {
       return !this.showConnectionFailureMessage
