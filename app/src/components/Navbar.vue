@@ -31,7 +31,7 @@
                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> vMix Not Connected
                     </span>
                     <b-button-group size="sm">
-                        <b-btn to="/captioner/settings/vmix" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
+                        <b-btn to="/captioner/settings/vmix" @click="vmixNotFullySetUpMessageDismissed = true" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
                             Set Up
                         </b-btn>
                         <b-button @click="showVmixNotFullySetUpMessage = false; vmixNotFullySetUpMessageDismissed = true" aria-label="Dismiss"><i class="fa fa-times" aria-hidden="true"></i></b-button>

@@ -112,6 +112,10 @@ export default {
     let testVmixTemplate = new Promise((resolve, reject) => {
       sendMessage(getVmixPath(state.settings.integrations.vmix.webControllerAddress))
         .then(function(response) {
+          if (!response || (response && !response.text)) {
+            return resolve(false);
+          }
+
           let xml = response.text;
 
           // There is an <input></input> element in vMix's response that isn't a proper
@@ -119,9 +123,15 @@ export default {
           // <input> tag. We need to rename it to something unique so we can get its children.
           xml = xml.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>');
 
-          const parser = new DOMParser();
-          const xmlDOM = parser.parseFromString(xml, "application/xml");
-          const textElement = xmlDOM.querySelector('text[name="WebCaptionerCaptions"]');
+          try {
+            const parser = new DOMParser();
+            const xmlDOM = parser.parseFromString(xml, "application/xml");
+            const textElement = xmlDOM.querySelector('text[name="WebCaptionerCaptions"]');
+          }
+          catch (e) {
+            // Unable to parse
+            resolve(false);
+          }
           
           // Timeout is totally unnecessary here. It usually resolves instantly, but that seems
           // to lead to some confusion on whether it really checked or not -- so introduce a short

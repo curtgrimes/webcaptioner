@@ -184,6 +184,9 @@ export default {
           self.vmixStepsTabIndex = 1;
           self.showSettings = true;
         }
+        else {
+          self.showSettings = true;
+        }
       });
   },
   methods: {
