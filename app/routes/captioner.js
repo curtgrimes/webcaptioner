@@ -24,6 +24,26 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'Afrikaans (South Africa)',
     },
     {
+      name: 'አማርኛ',
+      code: 'am-ET',
+      nameEnglish: 'Amharic (Ethiopia)',
+    },
+    {
+      name: 'Azərbaycanca',
+      code: 'az-AZ',
+      nameEnglish: 'Azeri (Cyrillic)',
+    },
+    {
+      name: 'বাংলা (বাংলাদেশ)',
+      code: 'bn-BD',
+      nameEnglish: 'Bengali (Bangladesh)',
+    },
+    {
+      name: 'বাংলা (ভারত)',
+      code: 'bn-IN',
+      nameEnglish: 'Bengali (India)',
+    },
+    {
       name: 'Bahasa Indonesia (Indonesia)',
       code: 'id-ID',
       nameEnglish: 'Indonesian (Indonesia)',
@@ -64,6 +84,11 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'English (Canada)',
     },
     {
+      name: 'English (Ghana)',
+      code: 'en-GH',
+      nameEnglish: 'English (Ghana)',
+    },
+    {
       name: 'English (Great Britain)',
       code: 'en-GB',
       nameEnglish: 'English (United Kingdom)',
@@ -79,9 +104,19 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'English (Ireland)',
     },
     {
+      name: 'English (Kenya)',
+      code: 'en-KE',
+      nameEnglish: 'English (Kenya)',
+    },
+    {
       name: 'English (New Zealand)',
       code: 'en-NZ',
       nameEnglish: 'English (New Zealand)',
+    },
+    {
+      name: 'English (Nigeria)',
+      code: 'en-NG',
+      nameEnglish: 'English (Nigeria)',
     },
     {
       name: 'English (Philippines)',
@@ -92,6 +127,11 @@ router.get('/', function(req, res, next) {
       name: 'English (South Africa)',
       code: 'en-ZA',
       nameEnglish: 'English (South Africa)',
+    },
+    {
+      name: 'English (Tanzania)',
+      code: 'en-TZ',
+      nameEnglish: 'English (Tanzania)',
     },
     {
       name: 'English (United States)',
@@ -224,6 +264,11 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'Galician (Spain)',
     },
     {
+      name: 'ગુજરાતી (India)',
+      code: 'gu-IN',
+      nameEnglish: 'Gujarati (India)',
+    },
+    {
       name: 'Hrvatski (Hrvatska)',
       code: 'hr-HR',
       nameEnglish: 'Croatian (Croatia)',
@@ -244,9 +289,39 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'Italian (Italy)',
     },
     {
+      name: 'Italiano (Svizzera)',
+      code: 'it-CH',
+      nameEnglish: 'Italian (Switzerland)',
+    },
+    {
+      name: 'ಕನ್ನಡ',
+      code: 'kn-IN',
+      nameEnglish: 'Kannada (India)',
+    },
+    {
+      name: 'ភាសាខ្មែរ',
+      code: 'km-KH',
+      nameEnglish: 'Khmer (Cambodia)',
+    },
+    {
+      name: 'Latviešu',
+      code: 'lv-LV',
+      nameEnglish: 'Latvian (Latvia)',
+    },
+    {
       name: 'Lietuvių (Lietuva)',
       code: 'lt-LT',
       nameEnglish: 'Lithuanian (Lithuania)',
+    },
+    {
+      name: 'മലയാളം',
+      code: 'ml-IN',
+      nameEnglish: 'Malayalam (India)',
+    },
+    {
+      name: 'मराठी',
+      code: 'ml-IN',
+      nameEnglish: 'Marathi (India)',
     },
     {
       name: 'Magyar (Magyarország)',
@@ -254,9 +329,19 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'Hungarian (Hungary)',
     },
     {
+      name: 'ລາວ',
+      code: 'lo-LA',
+      nameEnglish: 'Lao (Lao P.D.R.)',
+    },
+    {
       name: 'Nederlands (Nederland)',
       code: 'nl-NL',
       nameEnglish: 'Dutch (Netherlands)',
+    },
+    {
+      name: 'नेपाली भाषा',
+      code: 'ne-NP',
+      nameEnglish: 'Nepali (Nepal)',
     },
     {
       name: 'Norsk bokmål (Norge)',
@@ -284,14 +369,24 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'Romanian (Romania)',
     },
     {
-      name: 'Slovenčina (Slovensko)',
-      code: 'sk-SK',
-      nameEnglish: 'Slovak (Slovakia)',
+      name: 'සිංහල',
+      code: 'si-LK',
+      nameEnglish: 'Sinhala (Sri Lanka)',
     },
     {
       name: 'Slovenščina (Slovenija)',
       code: 'sl-SI',
       nameEnglish: 'Slovenian (Slovenia)',
+    },
+    {
+      name: 'Basa Sunda',
+      code: 'sl-SI',
+      nameEnglish: 'Sundanese (Indonesia)',
+    },
+    {
+      name: 'Slovenčina',
+      code: 'sk-SK',
+      nameEnglish: 'Slovak (Slovakia)',
     },
     {
       name: 'Suomi (Suomi)',
@@ -304,7 +399,52 @@ router.get('/', function(req, res, next) {
       nameEnglish: 'Swedish (Sweden)',
     },
     {
-      name: 'Tiếng Việt (Việt Nam)',
+      name: 'Kiswahili (Tanzania)',
+      code: 'sv-SE',
+      nameEnglish: 'Swahili (Tanzania)',
+    },
+    {
+      name: 'Kiswahili (Kenya)',
+      code: 'sv-KE',
+      nameEnglish: 'Swahili (Kenya)',
+    },
+    {
+      name: 'ქართული',
+      code: 'ka-GE',
+      nameEnglish: 'Georgian (Georgia)',
+    },
+    {
+      name: 'Հայերեն',
+      code: 'hy-AM',
+      nameEnglish: 'Armenian (Armenia)',
+    },
+    {
+      name: 'தமிழ் (இந்தியா)',
+      code: 'ta-IN',
+      nameEnglish: 'Tamil (India)',
+    },
+    {
+      name: 'தமிழ் (சிங்கப்பூர்)',
+      code: 'ta-SG',
+      nameEnglish: 'Tamil (Singapore)',
+    },
+    {
+      name: 'தமிழ் (இலங்கை)',
+      code: 'ta-LK',
+      nameEnglish: 'Tamil (Sri Lanka)',
+    },
+    {
+      name: 'தமிழ் (மலேசியா)',
+      code: 'ta-MY',
+      nameEnglish: 'Tamil (Malaysia)',
+    },
+    {
+      name: 'தமிழ் (மலேசியா)',
+      code: 'te-IN',
+      nameEnglish: 'Telugu (India)',
+    },
+    {
+      name: 'తెలుగు',
       code: 'vi-VN',
       nameEnglish: 'Vietnamese (Vietnam)',
     },
@@ -312,6 +452,16 @@ router.get('/', function(req, res, next) {
       name: 'Türkçe (Türkiye)',
       code: 'tr-TR',
       nameEnglish: 'Turkish (Turkey)',
+    },
+    {
+      name: '(پاکستان (اُردُو',
+      code: 'ur-PK',
+      nameEnglish: 'Urdu (Islamic Republic of Pakistan)',
+    },
+    {
+      name: '(بھارت (اُردُو',
+      code: 'ur-IN',
+      nameEnglish: 'Urdu (India)',
     },
     {
       name: 'Ελληνικά (Ελλάδα)',
