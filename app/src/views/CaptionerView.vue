@@ -39,6 +39,15 @@ export default {
         this.initRoom();
     }
 
+    if (this.vmixOn) {
+      this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')
+        .then(function() {
+          if (!self.$store.state.integrations.vmix.cachedInputGUID) {
+            self.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
+          }
+        })
+    }
+
     RemoteEventBus.$on('sendMutationToReceivers', throttle(({type, payload}) => {
       if (self.remoteDisplays.length) {
           this.$socket.sendObj({
@@ -65,9 +74,22 @@ export default {
       }
     },
   },
+  watch: {
+    transcript: function() {
+      if (this.vmixOn) {
+        this.$store.dispatch('SEND_TO_VMIX', {text: this.transcript});
+      }
+    },
+  },
   computed: {
+    transcript: function() {
+      return this.$store.state.captioner.transcript.final + ' ' + this.$store.state.captioner.transcript.interim;
+    },
     socketConnected: function() {
       return this.$store.state.socket.isConnected;
+    },
+    vmixOn: function() {
+      return this.$store.state.settings.integrations.vmix.on;
     },
     remoteDisplays: {
       get () {

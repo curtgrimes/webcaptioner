@@ -1,4 +1,5 @@
-const chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe';
+// const chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe';
+const chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd';
 
 const checkIfExtensionInstalled = function () {
     return new Promise(function(resolve, reject) {
@@ -27,4 +28,22 @@ const testWebControllerConnectivity = function (path) {
     })
 };
 
-export default {checkIfExtensionInstalled, testWebControllerConnectivity}
+const sendMessage = function (path) {
+    return new Promise(function(resolve, reject) {
+        chrome.runtime.sendMessage(
+            chromeExtensionId,
+            {path},
+            function(response) {
+                if (response && response.success && response.code && response.code == 200) {
+                    // Success!
+                    resolve(response);
+                }
+                else {
+                    resolve(false);
+                }
+            }
+        );
+    })
+};
+
+export default {checkIfExtensionInstalled, testWebControllerConnectivity, sendMessage};

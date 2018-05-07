@@ -78,7 +78,13 @@ export function createStore () {
         locale: {
           from: null,
           userDefault: null,
-        }
+        },
+        integrations: {
+          vmix: {
+            on: false,
+            webControllerAddress: '',
+          },
+        },
       },
       receivers: {
         chromecast: {
@@ -98,9 +104,11 @@ export function createStore () {
       },
       integrations: {
         vmix: {
-          chromeExtensionInstalled: null,
+          showNotFullySetUpMessage: false,
           webControllerAddress: '',
+          chromeExtensionInstalled: null,
           webControllerConnected: null,
+          cachedInputGUID: null,
         },
       },
     },

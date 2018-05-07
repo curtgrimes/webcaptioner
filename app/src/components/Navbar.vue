@@ -26,6 +26,17 @@
                     Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
                 </div>
                 <cast-button></cast-button>
+                <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
+                    <span class="navbar-text text-white pr-3 text-primary">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> vMix Not Connected
+                    </span>
+                    <b-button-group size="sm">
+                        <b-btn to="/captioner/settings/vmix" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
+                            Set Up
+                        </b-btn>
+                        <b-button @click="showVmixNotFullySetUpMessage = false; vmixNotFullySetUpMessageDismissed = true" aria-label="Dismiss"><i class="fa fa-times" aria-hidden="true"></i></b-button>
+                    </b-button-group>
+                </div>
 
                 <transition name="fade">
                     <b-dropdown v-if="remoteDisplays.length > 0" variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
@@ -92,6 +103,11 @@ export default {
     VolumeMeter,
     CastButton,
   },
+  data: function() {
+      return {
+          vmixNotFullySetUpMessageDismissed: false,
+      };
+  },
   computed: {
     captioningOn: function() {
         return this.$store.state.captioner.shouldBeOn;
@@ -115,6 +131,16 @@ export default {
     },
     remoteDisplays: function() {
         return this.$store.state.remoteDisplays;
+    },
+    showVmixNotFullySetUpMessage: {
+        // User wanted vMix to be on but it can't. Show a message in the navbar.
+        get () {
+            return this.$store.state.settings.integrations.vmix.on
+                    && this.$store.state.integrations.vmix.showNotFullySetUpMessage;
+        },
+        set (on) {
+            this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on});
+        },
     },
   },
   methods: {
