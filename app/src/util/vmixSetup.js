@@ -1,5 +1,5 @@
-// const chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe';
-const chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd';
+const chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe';
+// const chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd';
 
 const checkIfExtensionInstalled = function () {
     return new Promise(function(resolve, reject) {
