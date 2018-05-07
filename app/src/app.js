@@ -10,10 +10,10 @@ import dateFormat from 'date-fns/format'
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
-// Raven
-//     .config('REMOVED')
-//     .addPlugin(RavenVue, Vue)
-//     .install();
+Raven
+    .config('REMOVED')
+    .addPlugin(RavenVue, Vue)
+    .install();
 
 const dateFormatPlugin = {
   install () {
