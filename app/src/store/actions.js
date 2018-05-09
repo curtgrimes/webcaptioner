@@ -116,8 +116,9 @@ export default {
             return resolve(false);
           }
 
-          let xml = response.text;
-
+          let xml = response.text,
+              textElement;
+          
           // There is an <input></input> element in vMix's response that isn't a proper
           // <input> element. The browser automatically interprets it as a self-closing
           // <input> tag. We need to rename it to something unique so we can get its children.
@@ -126,7 +127,7 @@ export default {
           try {
             const parser = new DOMParser();
             const xmlDOM = parser.parseFromString(xml, "application/xml");
-            const textElement = xmlDOM.querySelector('text[name="WebCaptionerCaptions"]');
+            textElement = xmlDOM.querySelector('text[name="WebCaptionerCaptions"]');
           }
           catch (e) {
             // Unable to parse
