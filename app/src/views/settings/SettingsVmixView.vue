@@ -44,7 +44,7 @@
                 <p class="mb-2">The Web Captioner Connector extension for Google Chrome lets Web Captioner connect to vMix.</p>
                 <div class="mt-3 mb-4">
                   <b-button v-if="!chromeExtensionInstalled" @click="initChromeExtensionInstall" variant="outline-info"><fa :icon="['fab','chrome']" class="mr-2"/> Add to Chrome</b-button>
-                  <b-button v-else variant="outline-info" disabled><fa icon="check-circle" class="mr-2" /> Extension Installed</b-button>
+                  <b-button v-else variant="outline-success" disabled><fa icon="check-circle" class="mr-2" /> Extension Installed</b-button>
                 </div>
                 <hr class="my-3" />
                 <div class="text-right">
@@ -195,6 +195,8 @@ export default {
       chrome.webstore.install(null, function() {
         // Successful
         self.refreshVmixSetupStatus();
+        // Go to step 2
+        self.vmixStepsTabIndex = 1;
       }, function() {
         // Unsuccessful
       });
