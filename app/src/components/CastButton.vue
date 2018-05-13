@@ -26,7 +26,7 @@
     </b-button>
     <b-modal title="Casting Failed" :hide-header="true" ref="castFailedModal" :ok-only="true" ok-variant="secondary" :hide-header-close="true">
       <div class="py-2">
-        <div class="pb-2 h4"><i class="fa fa-exclamation-triangle fa-3x" aria-hidden="true"></i></div>
+        <div class="pb-2 h4"><fa icon="exclamation-triangle" size="3x" /></div>
         <h2>Unable to Cast</h2>
         <p class="lead">Please try again.</p>
       </div>

@@ -28,39 +28,39 @@
                 <cast-button></cast-button>
                 <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
                     <span class="navbar-text text-white pr-3 text-primary">
-                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> vMix Not Connected
+                        <fa icon="exclamation-triangle" /> vMix Not Connected
                     </span>
                     <b-button-group size="sm">
                         <b-btn to="/captioner/settings/vmix" @click="vmixNotFullySetUpMessageDismissed = true" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
                             Set Up
                         </b-btn>
-                        <b-button @click="showVmixNotFullySetUpMessage = false; vmixNotFullySetUpMessageDismissed = true" aria-label="Dismiss"><i class="fa fa-times" aria-hidden="true"></i></b-button>
+                        <b-button @click="showVmixNotFullySetUpMessage = false; vmixNotFullySetUpMessageDismissed = true" aria-label="Dismiss"><fa icon="times"/></b-button>
                     </b-button-group>
                 </div>
 
                 <transition name="fade">
                     <b-dropdown v-if="remoteDisplays.length > 0" variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
                         <template slot="button-content">
-                            <i class="fa fa-desktop" aria-hidden="true"></i> {{remoteDisplays.length}} <span class="sr-only">Screens</span>
+                            <fa icon="desktop" /> {{remoteDisplays.length}} <span class="sr-only">Screens</span>
                         </template>
                         <b-dropdown-item disabled class="text-white" style="cursor:default" v-for="remoteDisplay in remoteDisplays" v-bind:key="remoteDisplay.remoteDisplayId">
                             <span v-if="remoteDisplay.device.isAndroid">
-                                <i class="fa fa-android" aria-hidden="true"></i> Android
+                                <fa :icon="['fab', 'android']" /> Android
                             </span>
                             <span v-else-if="remoteDisplay.device.isIosPhone">
-                                <i class="fa fa-apple" aria-hidden="true"></i> iPhone
+                                <fa :icon="['fab', 'apple']" /> iPhone
                             </span>
                             <span v-else-if="remoteDisplay.device.isIosTablet">
-                                <i class="fa fa-apple" aria-hidden="true"></i> iPad
+                                <fa :icon="['fab', 'apple']" /> iPad
                             </span>
                             <span v-else-if="remoteDisplay.device.isMac">
-                                <i class="fa fa-apple" aria-hidden="true"></i> Mac
+                                <fa :icon="['fab', 'apple']" /> Mac
                             </span>
                             <span v-else-if="remoteDisplay.device.isLinux">
                                 Linux Device
                             </span>
                             <span v-else-if="remoteDisplay.device.isWindows">
-                                <i class="fa fa-windows" aria-hidden="true"></i> Windows Device
+                                <fa :icon="['fab', 'windows']" /> Windows Device
                             </span>
                             <span v-else>
                                 Device
@@ -68,11 +68,13 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </transition>
-                <!-- <b-button variant="primary" class="mr-3" v-b-tooltip.top title="Manual Text Entry"><i class="fa fa-i-cursor" aria-hidden="true"></i></b-button> -->
                 <b-dropdown :size="largerLayout ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
                     <template slot="button-content">
                         <div :class="{'px-4 py-2' : largerLayout}">
-                            <span v-html="captionToggleButtonText"></span> <kbd v-show="largerLayout" class="small ml-3">c</kbd>
+                            <span v-if="!this.captioningOn">
+                                <fa icon="microphone" /> Start Captioning
+                            </span>
+                            <span v-else>Stop Captioning</span> <kbd v-show="largerLayout" class="small ml-3">c</kbd>
                         </div>
                     </template>
                     <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
@@ -80,12 +82,12 @@
                     <b-dropdown-item href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</b-dropdown-item>
                     <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
                     <div class="dropdown-divider"></div>
-                    <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><i class="fa fa-external-link fa-fw mr-1" aria-hidden="true"></i> New Window</b-dropdown-item>
+                    <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><fa icon="external-link-alt" fixed-width class="mr-1" /> New Window</b-dropdown-item>
                     <div class="dropdown-divider"></div>
-                    <b-dropdown-item to="/captioner/save-to-file" replace onclick="ga('send', 'event', 'settings', 'saveToFile')"><i class="fa fa-floppy-o mr-1" aria-hidden="true"></i> Save to File</b-dropdown-item>
-                    <b-dropdown-item to="/captioner/clear" replace><i class="fa fa-trash-o mr-1" aria-hidden="true"></i> Clear...</b-dropdown-item>
+                    <b-dropdown-item to="/captioner/save-to-file" replace onclick="ga('send', 'event', 'settings', 'saveToFile')"><fa icon="save" class="mr-1" fixed-width /> Save to File</b-dropdown-item>
+                    <b-dropdown-item to="/captioner/clear" replace><fa icon="trash-alt" class="mr-1" fixed-width /> Clear...</b-dropdown-item>
                     <div class="dropdown-divider"></div>
-                    <b-dropdown-item to="/captioner/settings" class="dropdown-item"><i class="fa fa-cog mr-1" aria-hidden="true"></i> Settings</b-dropdown-item>
+                    <b-dropdown-item to="/captioner/settings" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> Settings</b-dropdown-item>
                 </b-dropdown>
             </div> <!-- bottom row in big UI mode -->
         </nav>
@@ -120,11 +122,6 @@ export default {
     },
     largerLayout: function() {
         return this.$store.state.settings.controls.layout.larger;
-    },
-    captionToggleButtonText: function() {
-        return !this.captioningOn
-            ? '<i class="fa fa-microphone" aria-hidden="true"></i> Start Captioning'
-            : 'Stop Captioning';
     },
     captioningToggleButtonVariant: function() {
         return !this.captioningOn ? 'primary' : 'danger';

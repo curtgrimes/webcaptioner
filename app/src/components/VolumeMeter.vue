@@ -3,7 +3,7 @@
     <div class="row mr-1" style="width:350px">
       <div class="col text-right mt-1">
         <span class="navbar-text text-white bg-danger px-2 small">
-          <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i>
+          <fa icon="exclamation-triangle" class="mr-1" />
           <span v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh">Too quiet</span>
           <span v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow">Too loud</span>
         </span>

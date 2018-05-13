@@ -7,13 +7,13 @@
       <div class="row">
         <div class="col-6">
           <b-button @click="saveAsText()" :disabled="transcriptEmpty" variant="secondary" block class="py-3" ref="textFileButton">
-              <i class="fa fa-file-text-o d-block fa-3x pb-3" aria-hidden="true"></i>
+              <fa icon="file-alt" size="3x" class="d-block mx-auto mb-3 mt-2" />
               Text File
           </b-button>
         </div>
         <div class="col-6">
           <b-button @click="saveAsWord()" :disabled="transcriptEmpty" variant="secondary" block class="py-3">
-              <i class="fa fa-file-word-o d-block fa-3x pb-3" aria-hidden="true"></i>
+              <fa icon="file-word" size="3x" class="d-block mx-auto mb-3 mt-2" />
               Word Document
           </b-button>
         </div>

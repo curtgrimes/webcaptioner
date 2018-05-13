@@ -8,10 +8,6 @@
   @import 'scss/app.scss';
 </style>
 
-<style lang="css">
-  @import '../node_modules/font-awesome/css/font-awesome.css';
-</style>
-
 <script>
 import Combokeys from 'combokeys'
 import screenfull from 'screenfull'

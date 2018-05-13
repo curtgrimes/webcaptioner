@@ -92,10 +92,6 @@ export default {
       this.castReceiverManager.setApplicationState("Captioning");
 
       let { type: mutationType, payload } = JSON.parse(data);
-      // this.message = typeof payload;
-      // this.message({mutationType,payload});
-      console.log(mutationType);
-      console.log(payload);
       this.$store.commit(mutationType, payload);
 
       // inform all senders on the CastMessageBus of the incoming message event

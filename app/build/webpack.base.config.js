@@ -34,14 +34,7 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           presets: [
-            [
-              "env",
-              {
-                "targets": {
-                  "browsers": ["last 2 versions"]
-                }
-              }
-            ],
+            ['env', { modules: false }],
           ],
           plugins: [
             "syntax-dynamic-import",

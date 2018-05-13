@@ -19,11 +19,11 @@
           <input type="text" v-model="wordReplacement.to" @keyup="updateWordReplacement(wordReplacement, index)" class="form-control" placeholder="Replace with" />
         </div>
         <div class="col-1">
-          <button type="button" v-if="wordReplacements.length > 1" @click="removeWordReplacement(index)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-animation="false" data-placement="top" title="Remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+          <button type="button" v-if="wordReplacements.length > 1" @click="removeWordReplacement(index)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-animation="false" data-placement="top" title="Remove"><fa icon="minus-circle" /></button>
         </div>
       </div>
     </div>
-    <button type="button" @click="addWordReplacement({from:'',to:''})" class="btn btn-success btn-sm mt-3"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Another</button>
+    <button type="button" @click="addWordReplacement({from:'',to:''})" class="btn btn-success btn-sm mt-3"><fa icon="plus-circle"/> Add Another</button>
   </div>
 </template>
 

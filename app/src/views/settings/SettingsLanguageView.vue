@@ -13,7 +13,7 @@
     <div class="list-group">
       <button v-for="locale in filteredLocales" v-bind:key="locale.code" @click="localeFrom = locale.code" class="list-group-item list-group-item-action" v-bind:class="{'active': localeFrom == locale.code}">
         <span class="row">
-          <span class="col-1 pr-1 text-center"><i v-if="localeFrom == locale.code" class="fa fa-check-circle fa-2x mt-2" aria-hidden="true"></i></span>
+          <span class="col-1 pr-1 text-center"><span class="mt-2 d-block"><fa v-if="localeFrom == locale.code" icon="check-circle" size="2x" /></span></span>
           <span class="col-11">
             {{locale.nameEnglish}}<br/>
             <span class="small">{{locale.name}}</span>

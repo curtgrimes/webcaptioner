@@ -9,6 +9,30 @@ import BootstrapVue from 'bootstrap-vue'
 import dateFormat from 'date-fns/format'
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+import { faFileAlt, faFileWord, faExclamationTriangle, faTimes, faMicrophone, faDesktop, faExternalLinkAlt, faSave, faTrashAlt, faCog, faCheckCircle, faSpinner, faChevronRight, faMinusCircle, faPlusCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+
+import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
+
+import { faApple, faWindows, faAndroid, faChrome } from '@fortawesome/fontawesome-free-brands'
+
+library.add(faFileAlt, faThumbsUp, faFileWord, faExclamationTriangle, faTimes, faMicrophone, faDesktop, faApple, faWindows, faAndroid, faExternalLinkAlt, faSave, faTrashAlt, faCog, faCheckCircle, faSpinner, faChrome,faChevronRight, faMinusCircle, faPlusCircle, faArrowLeft)
+
+Vue.component('fa', {
+  functional: true,
+  props: FontAwesomeIcon.props,
+  render (h, context) {
+    if (context.parent._isMounted) {
+      return h(FontAwesomeIcon, context)
+    } else {
+      context.parent.$once('hook:mounted', () => {
+        context.parent.$forceUpdate()
+      })
+    }
+  }
+})
 
 Raven
     .config('REMOVED')

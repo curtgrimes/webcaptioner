@@ -14,7 +14,7 @@
         </ul>
       </div>
       <div v-else-if="typeof releaseNoteEntry.notes === 'string'" v-html="releaseNoteEntry.notes" class="ml-4"></div>
-      <div v-else class="ml-4"><i class="fa fa-thumbs-o-up pr-1" aria-hidden="true"></i>  Just working on making some stuff run better. </div>
+      <div v-else class="ml-4"><fa :icon="['far', 'thumbs-up']" class="mr-1" />  Just working on making some stuff run better. </div>
     </div>
   </div>
 </template>

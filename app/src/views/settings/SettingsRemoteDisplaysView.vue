@@ -8,8 +8,7 @@
             <button class="btn btn-secondary" :disabled="!Boolean(connectId)" type="submit" @click="approveRoomRequest(connectId)">Add Display</button>
         </div>
     </div>
-    <b-alert :show="remoteDisplayConnectIdNotFoundError" variant="danger" class="my-3"><span class="fa fa-times" aria-hidden="true"></span> Display not found. Visit <strong><a :href="connectURL" target="_blank">{{connectURLDisplay}}</a></strong> on another device or browser window to get its 6-digit connection code.</b-alert>
-    <!-- <b-alert :show="remoteDisplayConnectIdFoundMessage" variant="success" class="my-3"><span class="fa fa-check" aria-hidden="true"></span> Added display.</b-alert> -->
+    <b-alert :show="remoteDisplayConnectIdNotFoundError" variant="danger" class="my-3"><fa icon="times"/> Display not found. Visit <strong><a :href="connectURL" target="_blank">{{connectURLDisplay}}</a></strong> on another device or browser window to get its 6-digit connection code.</b-alert>
     <div v-if="remoteDisplays.length">
         <hr class="my-4" />
         <div class="mb-4">
@@ -20,22 +19,22 @@
                 <div class="row">
                     <div class="col-3 py-2">
                         <span v-if="remoteDisplay.device.isAndroid">
-                            <i class="fa fa-android" aria-hidden="true"></i> Android
+                            <fa icon="android"/> Android
                         </span>
                         <span v-else-if="remoteDisplay.device.isIosPhone">
-                            <i class="fa fa-apple" aria-hidden="true"></i> iPhone
+                            <fa icon="apple"/> iPhone
                         </span>
                         <span v-else-if="remoteDisplay.device.isIosTablet">
-                            <i class="fa fa-apple" aria-hidden="true"></i> iPad
+                            <fa icon="apple"/> iPad
                         </span>
                         <span v-else-if="remoteDisplay.device.isMac">
-                            <i class="fa fa-apple" aria-hidden="true"></i> Mac
+                            <fa icon="apple"/> Mac
                         </span>
                         <span v-else-if="remoteDisplay.device.isLinux">
                             Linux Device
                         </span>
                         <span v-else-if="remoteDisplay.device.isWindows">
-                            <i class="fa fa-windows" aria-hidden="true"></i> Windows Device
+                            <fa icon="windows"/> Windows Device
                         </span>
                         <span v-else>
                             Device

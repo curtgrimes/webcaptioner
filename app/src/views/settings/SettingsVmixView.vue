@@ -3,7 +3,7 @@
     <p><a href="https://vmix.com" target="_blank">vMix</a> is a popular software video mixer and switcher. You can send text directly to vMix and display it in a title input. You can then use vMix's font and color controls to style captioned text. <a href="/help/integrations/vmix/">Visit the Help Center</a> to learn more.</p>
     <transition name="fade">
       <b-alert :show="showStep3SuccessMessage" variant="success" dismissible>
-        <i class="fa fa-check fa-fw"></i> Successfully set up vMix.
+        <fa icon="check-circle" fixed-width/> Successfully set up vMix.
       </b-alert>
     </transition>
     <b-alert class="py-3 mb-4" show variant="secondary">
@@ -13,7 +13,7 @@
         </div>
         <div class="col-sm-6 text-right">
           <span v-if="!setupComplete && !loading && sendToVmixOn" class="small badge badge-danger p-2 rounded">
-            <i class="fa fa-exclamation-triangle pr-1" aria-hidden="true"></i>
+            <fa icon="exclamation-triangle" class="mr-1" />
             Finish Setup
           </span>
           <b-button @click="sendToVmixOn = false" :variant="sendToVmixOn ? 'link' : 'secondary'">Off</b-button>
@@ -25,9 +25,9 @@
       <transition name="fade">
         <b-btn @click="showSettings = true" v-if="setupComplete && !showSettings && !loading" variant="outline-secondary" class="position-absolute" style="top:0">Show Setup Instructions</b-btn>
       </transition>
-      <b-btn v-if="loading" variant="default" disabled class="position-absolute" style="top:0">
+      <b-btn v-if="loading" variant="default" disabled class="position-absolute text-muted" style="top:0">
         <!-- Haven't decided yet if settings will show or not -->
-        <i class="fa fa-spinner fa-spin text-muted" aria-hidden="true"></i> Loading
+        <fa icon="spinner" spin /> Loading
       </b-btn>
       <transition name="fade">
         <div v-show="showSettings">
@@ -36,25 +36,25 @@
               <b-tab active>
                 <template slot="title">
                   <div class="text-md-left">
-                    <i class="fa fa-check" v-if="chromeExtensionInstalled" aria-hidden="true"></i> Step 1
+                    <fa icon="check-circle" v-if="chromeExtensionInstalled" /> Step 1
                     <div class="small d-none d-md-block"><span class="d-none d-xl-inline">Install </span>Chrome Extension</div>
                   </div>
                 </template>
                 <h4 class="mt-0">Install the Chrome Extension</h4>
                 <p class="mb-2">The Web Captioner Connector extension for Google Chrome lets Web Captioner connect to vMix.</p>
                 <div class="mt-3 mb-4">
-                  <b-button v-if="!chromeExtensionInstalled" @click="initChromeExtensionInstall" variant="outline-info"><i class="fa fa-chrome mr-2"></i>Add to Chrome</b-button>
-                  <b-button v-else variant="outline-info" disabled><i class="fa fa-check mr-2"></i>Extension Installed</b-button>
+                  <b-button v-if="!chromeExtensionInstalled" @click="initChromeExtensionInstall" variant="outline-info"><fa :icon="['fab','chrome']" class="mr-2"/> Add to Chrome</b-button>
+                  <b-button v-else variant="outline-info" disabled><fa icon="check-circle" class="mr-2" /> Extension Installed</b-button>
                 </div>
                 <hr class="my-3" />
                 <div class="text-right">
-                  <b-button @click="vmixStepsTabIndex = 1" size="sm" :variant="chromeExtensionInstalled ? 'secondary' : 'default'" :disabled="!chromeExtensionInstalled">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></b-button>
+                  <b-button @click="vmixStepsTabIndex = 1" size="sm" :variant="chromeExtensionInstalled ? 'secondary' : 'default'" :disabled="!chromeExtensionInstalled">Next <fa icon="chevron-right" /></b-button>
                 </div>
               </b-tab>
               <b-tab :disabled="!chromeExtensionInstalled">
                 <template slot="title">
                   <div class="text-md-left" id="vmixStep2Tab">
-                    <i class="fa fa-check" v-if="webControllerConnected" aria-hidden="true"></i> Step 2
+                    <fa icon="check-circle" v-if="webControllerConnected" /> Step 2
                     <div class="small d-none d-md-block">vMix Web Controller</div>
                   </div>
                   <b-tooltip v-if="!chromeExtensionInstalled" target="vmixStep2Tab">
@@ -68,7 +68,7 @@
                   <input @keydown="resetWebControllerConnectedStatus()" v-model="webControllerAddress" type="url" class="form-control" placeholder="vMix Web Controller Address" required="true" />
                   <template slot="append" v-if="webControllerConnected">
                     <div class="input-group-text text-success">
-                      <i class="fa fa-check fa-fw pr-3" style="position:relative;top:-1px" aria-hidden="true"></i> Connected
+                      <fa icon="check-circle" fixed-width class="mr-3" style="position:relative;top:-1px"/> Connected
                     </div>
                   </template>
                 </b-input-group>
@@ -78,10 +78,10 @@
                 <div class="text-right">
                   <b-button @click="step2NextClick()" size="sm" :variant="webControllerAddress == '' ? 'default' : 'secondary'" :disabled="!webControllerAddress || attemptingWebControllerConnect">
                     <div v-if="!attemptingWebControllerConnect">
-                      Next <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                      Next <fa icon="chevron-right" />
                     </div>
                     <div v-else aria-label="Loading">
-                      <i class="fa fa-spinner fa-spin " aria-hidden="true"></i>
+                      <fa icon="spinner" spin />
                     </div>
                   </b-button>
                 </div>
@@ -89,7 +89,7 @@
               <b-tab :disabled="!webControllerConnected">
                 <template slot="title">
                   <div class="text-md-left" id="vmixStep3Tab">
-                    <i class="fa fa-check" v-if="foundTemplateInVmix" aria-hidden="true"></i> Step 3
+                    <fa icon="check-circle" v-if="foundTemplateInVmix" /> Step 3
                     <div class="small d-none d-md-block"><span class="d-none d-xl-inline">Import </span>Title Template</div>
                   </div>
                   <b-tooltip v-if="!webControllerConnected" target="vmixStep3Tab">
@@ -99,7 +99,7 @@
                 </template>
                 <h4 class="mt-0">Import the Web Captioner Title Template into vMix</h4>
                 <ol class="ml-0 mb-2">
-                  <li>Download the <strong><a href="/public/web-captioner-title.xaml">Web Captioner vMix title template<i class="fa fa-external-link ml-1" aria-hidden="true"></i></a></strong>.</li>
+                  <li>Download the <strong><a href="/public/web-captioner-title.xaml">Web Captioner vMix title template<fa icon="external-link-alt" fixed-width class="ml-1" /></a></strong>.</li>
                   <li>In vMix, go to <strong>Add Input > Title/XAML</strong>.</li>
                   <li>In the Input Select window, click <strong>Browse...</strong> in the upper right and open the Web Captioner title template you downloaded.</li>
                   <li>The title will appear in the <strong>Recent</strong> tab. Double-click it.</li>
@@ -113,11 +113,11 @@
                       Test and Finish Setup
                     </div>
                     <div v-else aria-label="Loading">
-                      <i class="fa fa-spinner fa-spin " aria-hidden="true"></i>
+                      <fa icon="spinner" spin />
                     </div>
                   </b-button>
                   <b-button v-else disabled variant="outline-secondary">
-                    <i class="fa fa-check" aria-hidden="true"></i> Setup Complete
+                    <fa icon="check-circle" /> Setup Complete
                   </b-button>
                 </div>
               </b-tab>
