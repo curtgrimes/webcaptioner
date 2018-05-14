@@ -34,7 +34,7 @@
                         <b-btn to="/captioner/settings/vmix" @click="vmixNotFullySetUpMessageDismissed = true" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
                             Set Up
                         </b-btn>
-                        <b-button @click="showVmixNotFullySetUpMessage = false; vmixNotFullySetUpMessageDismissed = true" aria-label="Dismiss"><fa icon="times"/></b-button>
+                        <b-button @click="sendToVmix = false" aria-label="Dismiss"><fa icon="times"/></b-button>
                     </b-button-group>
                 </div>
 
@@ -132,16 +132,23 @@ export default {
     showVmixNotFullySetUpMessage: {
         // User wanted vMix to be on but it can't. Show a message in the navbar.
         get () {
-            return this.$store.state.settings.integrations.vmix.on
+            return this.sendToVmix
                     && this.$store.state.integrations.vmix.showNotFullySetUpMessage;
         },
         set (on) {
             this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on});
         },
     },
+    sendToVmix: {
+        get () {
+            return this.$store.state.settings.integrations.vmix.on;
+        },
+        set () {
+            this.$store.commit('SET_SEND_TO_VMIX', {on: false});
+        },
+    },
   },
   methods: {
-      alerttest: function() { alert('hihih');},
     captioningToggleButtonClick: function() {
         if (this.captioningOn) {
             this.stopCaptioning();
