@@ -110,6 +110,10 @@ export default {
     });
 
     let testVmixTemplate = new Promise((resolve, reject) => {
+      
+      // Reset GUID
+      commit('SET_VMIX_CACHED_INPUT_GUID', {guid: null});
+
       sendMessage(getVmixPath(state.settings.integrations.vmix.webControllerAddress))
         .then(function(response) {
           if (!response || (response && !response.text)) {
@@ -140,12 +144,13 @@ export default {
           setTimeout(function() {
             if (textElement) {
               let parent = textElement.parentElement;
+              commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: false});
               resolve(parent.getAttribute('key'));
             }
             else {
               resolve(false);
             }
-          },500);
+          },200);
         });
     });
 

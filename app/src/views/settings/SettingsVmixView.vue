@@ -1,12 +1,7 @@
 <template>
   <div class="settings-vmix-view">
     <p><a href="https://vmix.com" target="_blank">vMix</a> is a popular software video mixer and switcher. You can send text directly to vMix and display it in a title input. You can then use vMix's font and color controls to style captioned text. <a href="/help/integrations/vmix/">Visit the Help Center</a> to learn more.</p>
-    <transition name="fade">
-      <b-alert :show="showStep3SuccessMessage" variant="success" dismissible>
-        <fa icon="check-circle" fixed-width/> Successfully set up vMix.
-      </b-alert>
-    </transition>
-    <b-alert class="py-3 mb-4" show variant="secondary">
+    <!-- <b-alert class="py-3 mb-4" show variant="secondary">
       <div class="row">
         <div class="col-sm-6">
           <p class="lead mb-0 pt-1 position-relative" style="top:2px">Send Captions to vMix</p>
@@ -20,11 +15,63 @@
           <b-button @click="sendToVmixOn = true" :variant="sendToVmixOn ? 'secondary' : 'link'">On</b-button>
         </div>
       </div>
-    </b-alert>
+    </b-alert> -->
+    <transition name="fade">
+      <b-alert :show="showStep3SuccessMessage" variant="success">
+        <fa icon="check-circle" fixed-width/> Connected to vMix! <router-link to="/captioner" class="alert-link">Start captioning</router-link> and your captions will now appear in vMix.
+      </b-alert>
+    </transition>
+    <div v-if="setupComplete && !showSettings">
+      <div class="row">
+        <div class="col-6 pt-2">
+          Connect to vMix
+        </div>
+        <div class="col-6 text-right">
+          <b-button @click="sendToVmixOn = false" :variant="sendToVmixOn ? 'link' : 'outline-secondary'" size="sm">Off</b-button>
+          <b-button @click="sendToVmixOn = true" :variant="sendToVmixOn ? 'secondary' : 'link'" size="sm">On</b-button>
+        </div>
+      </div>
+      <hr/>
+      <div class="row">
+        <div class="col-4 col-sm-6 pt-sm-2">
+          vMix Web Controller Address
+        </div>
+        <div class="col-8 col-sm-6 text-right">
+          <b-input-group size="sm">
+            <b-form-input type="text" v-model="webControllerAddressLocalCopy"></b-form-input>
+            <b-input-group-append>
+              <b-btn variant="outline-secondary" style="padding:.575rem 1rem .425rem 1rem" @click="updateWebControllerAddress()">Update</b-btn>
+            </b-input-group-append>
+          </b-input-group>
+        </div>
+      </div>
+      <hr/>
+      <div class="row">
+        <div class="col-4 col-sm-6 pt-sm-2">
+          Send Test Message
+        </div>
+        <div class="col-8 col-sm-6 text-right">
+          <b-input-group size="sm">
+            <b-form-input type="text" v-model="testMessage"></b-form-input>
+            <b-input-group-append>
+              <b-btn variant="outline-secondary" style="padding:.575rem 1rem .425rem 1rem" @click="sendTestMessage()" :disabled="testMessageSent"><span v-if="!testMessageSent">Send</span><span v-else>Sent!</span></b-btn>
+            </b-input-group-append>
+          </b-input-group>
+        </div>
+      </div>
+      <hr/>
+      <div class="row mb-2">
+        <div class="col-6 pt-2">
+          Setup
+        </div>
+        <div class="col-6 text-right">
+          <b-button @click="showSettings = !showSettings; vmixStepsTabIndex = 2" :variant="showSettings ? 'secondary' : 'outline-secondary'" size="sm"><span v-if="showSettings">Hide</span><span v-else>Show</span> Setup</b-button>
+        </div>
+      </div>
+    </div>
+
+
     <div class="position-relative">
-      <transition name="fade">
-        <b-btn @click="showSettings = true" v-if="setupComplete && !showSettings && !loading" variant="outline-secondary" class="position-absolute" style="top:0">Show Setup Instructions</b-btn>
-      </transition>
       <b-btn v-if="loading" variant="default" disabled class="position-absolute text-muted" style="top:0">
         <!-- Haven't decided yet if settings will show or not -->
         <fa icon="spinner" spin /> Loading
@@ -99,7 +146,7 @@
                 </template>
                 <h4 class="mt-0">Import the Web Captioner Title Template into vMix</h4>
                 <ol class="ml-0 mb-2">
-                  <li>Download the <strong><a href="/public/web-captioner-title.xaml">Web Captioner vMix title template<fa icon="external-link-alt" fixed-width class="ml-1" /></a></strong>.</li>
+                  <li>Download the <strong><a href="/public/web-captioner-title.xaml">Web Captioner vMix title template<span class="ml-1"><fa icon="external-link-alt" fixed-width /></span></a></strong>.</li>
                   <li>In vMix, go to <strong>Add Input > Title/XAML</strong>.</li>
                   <li>In the Input Select window, click <strong>Browse...</strong> in the upper right and open the Web Captioner title template you downloaded.</li>
                   <li>The title will appear in the <strong>Recent</strong> tab. Double-click it.</li>
@@ -108,16 +155,13 @@
                 <b-alert :show="showCantFindTemplateMessage" dismissible variant="danger">Web Captioner can connect to vMix, but it can't find the Web Captioner title template in an input.</b-alert>
                 <hr class="my-3" />
                 <div class="text-right">
-                  <b-button v-if="!foundTemplateInVmix" @click="step3NextClick" size="sm" :variant="webControllerAddress == '' ? 'default' : 'secondary'" :disabled="webControllerAddress == '' || testingVmixTemplate">
+                  <b-button @click="step3NextClick" size="sm" :variant="webControllerAddress == '' ? 'default' : 'secondary'" :disabled="webControllerAddress == '' || testingVmixTemplate">
                     <div v-if="!testingVmixTemplate">
                       Test and Finish Setup
                     </div>
                     <div v-else aria-label="Loading">
                       <fa icon="spinner" spin />
                     </div>
-                  </b-button>
-                  <b-button v-else disabled variant="outline-secondary">
-                    <fa icon="check-circle" /> Setup Complete
                   </b-button>
                 </div>
               </b-tab>
@@ -163,6 +207,9 @@ export default {
       testingVmixTemplate: false,
       testedVmixTemplateManually: false,
       showStep3SuccessMessage: false,
+      webControllerAddressLocalCopy: null,
+      testMessage: '',
+      testMessageSent: false,
     };
   },
   mounted: function() {
@@ -188,6 +235,12 @@ export default {
           self.showSettings = true;
         }
       });
+
+    this.webControllerAddressLocalCopy = this.webControllerAddress;
+
+    this.$watch('webControllerAddress', function(){
+      this.webControllerAddressLocalCopy = this.webControllerAddress;
+    });
   },
   methods: {
     initChromeExtensionInstall: function () {
@@ -200,6 +253,24 @@ export default {
       }, function() {
         // Unsuccessful
       });
+    },
+    updateWebControllerAddress: function() {
+      this.webControllerAddress = this.webControllerAddressLocalCopy;
+      this.loading = true;
+
+      let self = this;
+      this.refreshVmixSetupStatus()
+        .then(function() {
+          self.loading = false;
+
+          if (!self.setupComplete) {
+            self.showSettings = true;
+            self.vmixStepsTabIndex = 1;
+          }
+          else {
+            self.showStep3SuccessMessage = true;
+          }
+        });
     },
     refreshVmixSetupStatus: function () {
       return this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS');
@@ -216,7 +287,12 @@ export default {
         .then(function() {
           self.attemptingWebControllerConnect = false;
 
-          if (self.webControllerConnected) {
+          if (self.setupComplete) {
+            self.showStep3SuccessMessage = true;
+            self.showSettings = false;
+            self.sendToVmixOn = true;
+          }
+          else if (self.webControllerConnected) {
             // Go to step 3
             self.vmixStepsTabIndex = 2;
           }
@@ -235,8 +311,17 @@ export default {
           if (self.foundTemplateInVmix) {
             self.showSettings = false;
             self.showStep3SuccessMessage = true;
+            self.sendToVmixOn = true;
           }
         });
+    },
+    sendTestMessage: function() {
+      this.$store.dispatch('SEND_TO_VMIX', {text: this.testMessage});
+      this.testMessageSent = true;
+      let self = this;
+      setTimeout(function() {
+        self.testMessageSent = false;
+      },1000);
     },
   },
   computed: {
@@ -252,6 +337,8 @@ export default {
       },
       set (webControllerAddress) {
         this.$store.commit('SET_VMIX_WEB_CONTROLLER_ADDRESS', {webControllerAddress});
+
+        this.showStep3SuccessMessage = false;
       }
     },
     showConnectionFailureMessage: function () {
