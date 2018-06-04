@@ -40,7 +40,7 @@ export default {
   },
 
 
-  RESTORE_SETTINGS: ({ commit }, { settings }) => {
+  RESTORE_SETTINGS: ({ commit, dispatch }, { settings }) => {
     
     commit('SET_TEXT_COLOR', { textColor: get(settings, 'appearance.text.textColor') });
     commit('SET_TEXT_COLOR_INTERIM', { textColorInterim: get(settings, 'appearance.text.textColorInterim') });
@@ -70,6 +70,8 @@ export default {
     commit('SET_LOCALE_FROM', { locale: get(settings, 'locale.from') });
 
     commit('SET_ROOM_LEADER_TOKEN', { roomLeaderToken: get(settings, 'roomLeaderToken') });
+    
+    commit('SET_ROOM_MEMBERSHIP_ID', { roomMembershipId: get(settings, 'roomMembershipId') });
 
     const wordReplacements = get(settings, 'wordReplacements');
     for (let i = 0; i < wordReplacements.length; i++) {
@@ -192,7 +194,6 @@ export default {
         }
       });
   },
-
 
   // ensure data for rendering given list type
   FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {

@@ -34,7 +34,7 @@ export default {
     // socket.emit('getMyConnectId', {device: self.getDeviceInfo()}, ({connectId}) => {
     //     self.connectId = connectId;
     // });
-    this.$socket.sendObj({awesome: 'data2'});
+    // this.$socket.sendObj({awesome: 'data2'});
 
   },
   methods: {

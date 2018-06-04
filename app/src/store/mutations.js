@@ -66,8 +66,8 @@ export default {
   SET_REMOTE_DISPLAYS: (state, { remoteDisplays }) => {
     state.remoteDisplays = remoteDisplays;
   },
-  SET_MEMBER_OF_ROOM_ID: (state, { memberOfRoomId }) => {
-    state.memberOfRoomId = memberOfRoomId;
+  SET_ROOM_MEMBERSHIP_ID: (state, { roomMembershipId }) => {
+    state.settings.roomMembershipId = roomMembershipId;
     state.connectId = null;
   },
   SET_REMOTE_DISPLAY_CONNECTED_ID_NOT_FOUND_ERROR: (state, { on }) => {
@@ -138,11 +138,9 @@ export default {
     state.socket.isConnected = true
   },
   SOCKET_ONCLOSE (state, event)  {
-    console.log('socket onclose');
     state.socket.isConnected = false
   },
   SOCKET_ONERROR (state, event)  {
-    console.log('socket onerror');
     // console.error(state, event)
   },
   // default handler called for all methods

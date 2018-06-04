@@ -38,6 +38,7 @@ export function createStore () {
     state: {
       version: '2.0.0',
       settings: {
+        roomMembershipId: null,
         roomLeaderToken: null,
         controls: {
           layout: {

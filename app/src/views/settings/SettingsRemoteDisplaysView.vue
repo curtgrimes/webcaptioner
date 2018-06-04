@@ -19,16 +19,16 @@
                 <div class="row">
                     <div class="col-3 py-2">
                         <span v-if="remoteDisplay.device.isAndroid">
-                            <fa icon="android"/> Android
+                            <fa :icon="['fab', 'android']" /> Android
                         </span>
                         <span v-else-if="remoteDisplay.device.isIosPhone">
-                            <fa icon="apple"/> iPhone
+                            <fa :icon="['fab', 'apple']" /> iPhone
                         </span>
                         <span v-else-if="remoteDisplay.device.isIosTablet">
-                            <fa icon="apple"/> iPad
+                            <fa :icon="['fab', 'apple']" /> iPad
                         </span>
                         <span v-else-if="remoteDisplay.device.isMac">
-                            <fa icon="apple"/> Mac
+                            <fa :icon="['fab', 'apple']" /> Mac
                         </span>
                         <span v-else-if="remoteDisplay.device.isLinux">
                             Linux Device

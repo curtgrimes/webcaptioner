@@ -6,7 +6,7 @@
     <div v-if="!transcriptExists && !recentlyHadCaptions && !chromelessReceiver" class="bg-primary h-100">
         <div style="z-index:5;position:absolute;left:0;right:0;top:0;bottom:0">
             <div class="text-container">
-                <div v-if="remoteDisplayReceiver && !memberOfRoomId">
+                <div v-if="remoteDisplayReceiver && !roomMembershipId">
                     <div :class="{show: connectId}" class="fade">
                         <transition-group name="connectId" tag="div">
                             <span class="connectId" v-for="(n, $index) in connectIdSplitToArray" :key="$index">{{n}}</span>
@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div v-else class="display-3 w-75">
-                    <span v-if="memberOfRoomId">Connected!</span> Captioning will begin shortly. 
+                    <span v-if="roomMembershipId">Connected!</span> Captioning will begin shortly. 
                 </div>
             </div>
             <div v-if="false" v-bind:class="{show: loopVideoLoaded}" class="fade d-none d-md-block video-container" style="position:absolute;right:7vw;bottom:10vh;width:43vw;height:65vh;">
@@ -269,9 +269,25 @@ export default {
         }
     },
   },
+  watch: {
+      roomMembershipId: function() {
+        // Terrible temporary hack until I can figure out why
+        // vuexPersist isn't writing these changes when the window
+        // is inactive
+        let self = this;
+        setTimeout(function(){
+            if (window.localStorage) {
+                let wcSettings = window.localStorage.getItem('webcaptioner:settings');
+                wcSettings = JSON.parse(wcSettings);
+                wcSettings.settings.roomMembershipId = self.$store.state.settings.roomMembershipId;
+                window.localStorage.setItem('webcaptioner:settings', JSON.stringify(wcSettings));
+            }
+        },500);
+      },
+  },
   computed: {
-    memberOfRoomId: function() {
-        return this.$store.state.memberOfRoomId;
+    roomMembershipId: function() {
+        return this.$store.state.settings.roomMembershipId;
     },
     socketConnected: function() {
       return this.$store.state.socket.isConnected;

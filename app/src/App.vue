@@ -101,12 +101,29 @@ export default {
           }
         })
       ;
+    }
 
-      this.redirectSettingsRouteOnMobile(this.$route.path); // if navigating to settings page on load
+    this.redirectSettingsRouteOnMobile(this.$route.path); // if navigating to settings page on load
 
-      this.$on('navbarChangedHeight', function() {
-        console.log('navbarChangedHeight');
-      });
+    this.$on('navbarChangedHeight', function() {
+      console.log('navbarChangedHeight');
+    });
+
+    if (this.$store.state.settings.roomMembershipId) {
+      if (!this.socketConnected) {
+          this.$watch('socketConnected', function(socketConnected) {
+            this.$socket.sendObj({
+              action: 'restoreMyRoomMembership',
+              roomMembershipId: this.$store.state.settings.roomMembershipId,
+            });
+          });
+      }
+      else {
+        this.$socket.sendObj({
+          action: 'restoreMyRoomMembership',
+          roomMembershipId: this.$store.state.settings.roomMembershipId,
+        });
+      }
     }
   },
   watch: {
@@ -121,6 +138,9 @@ export default {
     this.combokeysDocument.detach();
   },
   computed: {
+    socketConnected: function() {
+      return this.$store.state.socket.isConnected;
+    },
     largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },
