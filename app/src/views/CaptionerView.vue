@@ -3,7 +3,7 @@
     <router-view></router-view>
     <save-to-file-modal ref="saveToFileModal"></save-to-file-modal>
     <clear-transcript-modal ref="clearTranscriptModal"></clear-transcript-modal>
-
+    <welcome-modal ref="welcomeModal" />
     <navbar></navbar>
   </div>
 </template>
@@ -12,6 +12,7 @@
 import navbar from '../components/Navbar.vue'
 import SaveToFileModal from '../components/SaveToFileModal.vue'
 import ClearTranscriptModal from '../components/ClearTranscriptModal.vue'
+import WelcomeModal from '../components/WelcomeModal.vue'
 import RemoteEventBus from '../components/RemoteEventBus'
 import throttle from 'lodash.throttle'
 
@@ -20,6 +21,7 @@ export default {
   components: {
     navbar,
     SaveToFileModal,
+    WelcomeModal,
     ClearTranscriptModal,
   },
   mounted: function() {
@@ -38,6 +40,8 @@ export default {
     else {
         this.initRoom();
     }
+
+    this.$refs.welcomeModal.showModal();
 
     if (this.vmixOn) {
       this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')
