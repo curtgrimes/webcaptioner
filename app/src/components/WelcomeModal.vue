@@ -5,9 +5,6 @@
           <div class="col-lg-3 text-center" style="overflow:hidden">
             <div style="margin-right:-100px" class="py-2">
               <img src="/public/logo-inverse.svg" style="width:100%" class="mt-3 mw-100 mx-auto d-block mb-3 logo-animated" alt="" />
-              <!--
-              <span class="logo-text">Web Captioner</span>
-              -->
             </div>
           </div>
           <div class="col-lg-9 pl-4 splash-text-wrap">
@@ -52,8 +49,8 @@
   }
 
   .logo-animated {
-    transition: all 2s;
-    transform: translateX(-25px) rotateY(100deg) scale(0.7);
+    transition: all 0.8s 0.4s ease-out;
+    transform: translateX(20px) rotateY(-20deg) scale(0.8);
     opacity:0;
   }
 
@@ -62,13 +59,8 @@
     opacity:0.3;
   }
 
-  .logo-text, .splash-text, .below-logo-text {
+  .logo-text, .splash-text {
     opacity:0;
-  }
-
-  .logo-animated-wrap.animate .logo-text, .logo-animated-wrap.animate .below-logo-text {
-    animation: fade-in 0.5s;
-    animation-fill-mode: forwards;
   }
 
   .logo-animated-wrap.animate .splash-text {
