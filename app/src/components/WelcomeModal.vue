@@ -49,7 +49,7 @@
   }
 
   .logo-animated {
-    transition: all 0.8s 0.4s ease-out;
+    transition: all 1.4s 0.3s ease-out;
     transform: translateX(20px) rotateY(-20deg) scale(0.8);
     opacity:0;
   }
@@ -64,7 +64,7 @@
   }
 
   .logo-animated-wrap.animate .splash-text {
-    animation: fade-in 1s 0.5s;
+    animation: fade-in 1s 0.3s;
     animation-fill-mode: forwards;
   }
 
