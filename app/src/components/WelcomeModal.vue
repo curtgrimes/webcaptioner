@@ -2,23 +2,24 @@
     <b-modal lazy size="lg" ref="modal" hide-header @shown="autofocusElement()">
       <div class="p-3 logo-animated-wrap" ref="logoAnimatedWrap">
         <div class="row">
-          <div class="col-lg-3 text-center" style="overflow:hidden">
+          <div class="d-none d-lg-block col-lg-3 text-center splash-logo-wrap" style="overflow:hidden">
             <div style="margin-right:-100px" class="py-2">
               <img src="/public/logo-inverse.svg" style="width:100%" class="mt-3 mw-100 mx-auto d-block mb-3 logo-animated" alt="" />
             </div>
           </div>
-          <div class="col-lg-9 pl-4 splash-text-wrap">
-            <div class="splash-text">
-              <h2>What's New: {{formatDate(latestRelease.date)}}</h2>
-              <p class="small"><router-link to="/captioner/settings/about" @click.native="hideModal()">View more updates<span class="ml-1"><fa icon="chevron-right" /></span></router-link></p>
+          <div class="col-lg-9 pl-4">
+            <div class="splash-text d-flex align-items-center h-100">
               <div>
-                <div v-if="Array.isArray(latestRelease.notes) && latestRelease.notes.length > 0">
-                  <ul>
-                    <li v-for="note in latestRelease.notes" v-bind:key="note" v-html="note"></li>
-                  </ul>
+                <h2>What's New in Web Captioner</h2>
+                <div style="max-height:80vh;overflow-y:auto">
+                  <div v-if="Array.isArray(latestRelease.notes) && latestRelease.notes.length > 0">
+                    <ul class="mb-0">
+                      <li v-for="note in latestRelease.notes" v-bind:key="note" v-html="note"></li>
+                    </ul>
+                  </div>
+                  <div v-else-if="typeof latestRelease.notes === 'string'" v-html="latestRelease.notes" class="ml-4"></div>
+                  <div v-else class="ml-4"><fa :icon="['far', 'thumbs-up']" class="mr-1" />  Just working on making some stuff run better. </div>
                 </div>
-                <div v-else-if="typeof latestRelease.notes === 'string'" v-html="latestRelease.notes" class="ml-4"></div>
-                <div v-else class="ml-4"><fa :icon="['far', 'thumbs-up']" class="mr-1" />  Just working on making some stuff run better. </div>
               </div>
             </div>
           </div>
@@ -27,13 +28,11 @@
       <div slot="modal-footer" class="w-100">
         <div class="row">
           <div class="col-6">
-            <b-form-checkbox class="pt-2">
-              Hide until the next update
-            </b-form-checkbox>
+              <p class="ml-3 mt-2 mb-0"><router-link to="/captioner/settings/about" @click.native="hideModal()">Learn more</router-link></p>
           </div>
           <div class="col-6">
-            <b-btn ref="doneButton" class="float-right" variant="info" @click="hideModal()">
-              Done
+            <b-btn ref="getStartedButton" class="float-right" variant="secondary" @click="hideModal()">
+              Get Started
             </b-btn>
           </div>
         </div>
@@ -59,15 +58,6 @@
     opacity:0.3;
   }
 
-  .logo-text, .splash-text {
-    opacity:0;
-  }
-
-  .logo-animated-wrap.animate .splash-text {
-    animation: fade-in 1s 0.3s;
-    animation-fill-mode: forwards;
-  }
-
   @keyframes fade-in {
     0% {
       opacity:0;
@@ -78,12 +68,12 @@
     }
   }
 
-  .splash-text-wrap {
-    border-left:1px solid rgba(0,0,0,.4)
+  .splash-logo-wrap {
+    border-right:1px solid rgba(0,0,0,.4)
   }
 
   .splash-text h2 {
-    font-size:1.5rem;
+    letter-spacing:-1px;
   }
 </style>
 
@@ -125,7 +115,7 @@ export default {
       this.$refs.modal.hide();
     },
     autofocusElement () {
-      // this.$refs.doneButton.focus();
+      this.$refs.getStartedButton.focus();
     },
   },
 }
