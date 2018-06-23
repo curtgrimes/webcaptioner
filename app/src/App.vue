@@ -78,9 +78,6 @@ export default {
         .bind(['ctrl+shift+,', 'command+shift+,'], function() {
           self.$store.commit('TEXT_SIZE_DECREASE');
         })
-        .bind(['e x p e r i m e n t s !'], function() {
-          self.$router.push('/captioner/settings/experiments');
-        })
 
 
         // Larger layout mode
