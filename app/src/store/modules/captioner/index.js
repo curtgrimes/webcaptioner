@@ -6,11 +6,16 @@ const SILENT_RESTART_AFTER_NO_RESULTS_MS = (2 * 1000);
 const SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING = (2.5 * 1000);
 
 let speechRecognizer,
-    keepAliveInterval;
+    keepAliveInterval,
+    microphonePermissionNeededTimeout;
 
 const state = {
     on: false,
     shouldBeOn: false,
+    microphonePermission: {
+        needed: false,
+        denied: false,
+    },
     silentRestart: false,
     microphoneName: '',
     transcript: {
@@ -54,11 +59,23 @@ const actions = {
         speechRecognizer.lang = rootState.settings.locale.from;
         speechRecognizer.start();
         commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: true });
+        microphonePermissionNeededTimeout = setTimeout(() => {
+            // If we get here and this timeout hasn't been canceled yet,
+            // then we probably need to be granted permission to use the
+            // microphone.
+            commit('SET_MICROPHONE_PERMISSION_NEEDED', { microphonePermissionNeeded: true });
+        }, 200);
 
         let self = this;
 
         speechRecognizer.onstart = function () {
             commit('SET_CAPTIONER_ON');
+
+            clearTimeout(microphonePermissionNeededTimeout);
+            console.log('here');
+            if (state.microphonePermission.needed) {
+                commit('SET_MICROPHONE_PERMISSION_NEEDED', { microphonePermissionNeeded: false });
+            }
 
             if (!keepAliveInterval) {
                 keepAliveInterval = setInterval(function() {
@@ -117,8 +134,19 @@ const actions = {
         };
 
         speechRecognizer.onerror = function(error) {
+            clearTimeout(microphonePermissionNeededTimeout);
             // console.log('speechRecognizer error');
             // console.log(error);
+            if (event.error == 'not-allowed') {
+                commit('SET_CAPTIONER_OFF');
+                commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
+                commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
+                commit('SET_MICROPHONE_PERMISSION_DENIED', { microphonePermissionDenied: true });
+                setTimeout(() => {
+                    // Modal appears only by setting it true for a moment.
+                    commit('SET_MICROPHONE_PERMISSION_DENIED', { microphonePermissionDenied: false });
+                },1000);
+            }
         };      
     },
 
@@ -169,6 +197,12 @@ const mutations = {
     SET_SILENT_RESTART_OFF (state) {
         state.silentRestart = false;
     },
+    SET_MICROPHONE_PERMISSION_NEEDED (state, { microphonePermissionNeeded }) {
+        state.microphonePermission.needed = microphonePermissionNeeded;
+    },
+    SET_MICROPHONE_PERMISSION_DENIED (state, { microphonePermissionDenied }) {
+        state.microphonePermission.denied = microphonePermissionDenied;
+    },
     SET_TRANSCRIPT_INTERIM (state, { transcriptInterim }) {
         state.transcript.interim = transcriptInterim;
         state.transcript.lastUpdate = Date.now();
@@ -204,32 +238,6 @@ const mutations = {
     SET_WAITING_FOR_INITIAL_TRANSCRIPT (state, { waitingForInitial }) {
         state.transcript.waitingForInitial = waitingForInitial;
     },
-    
-//   add_to_cart (state, productId) {
-//     state.lastCheckout = null
-//     const record = state.added.find(p => p.id === productId)
-//     if (!record) {
-//       state.added.push({
-//         id: productId,
-//         quantity: 1
-//       })
-//     } else {
-//       record.quantity++
-//     }
-//   },
-//   checkout_request (state) {
-//     // clear cart
-//     state.added = []
-//     state.lastCheckout = null
-//   },
-//   checkout_successful (state) {
-//     state.lastCheckout = 'successful'
-//   },
-//   checkout_failure (state, savedCartItems) {
-//     // rollback to the cart saved before sending the request
-//     state.added = savedCartItems
-//     state.lastCheckout = 'failed'
-//   }
 }
 
 const getters = {

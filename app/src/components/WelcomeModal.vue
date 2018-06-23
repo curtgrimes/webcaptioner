@@ -1,5 +1,5 @@
 <template>
-    <b-modal lazy size="lg" ref="modal" hide-header @shown="autofocusElement()">
+    <b-modal lazy size="lg" ref="modal" hide-header>
       <div class="p-3 logo-animated-wrap" ref="logoAnimatedWrap">
         <div class="row">
           <div class="d-none d-lg-block col-lg-3 text-center splash-logo-wrap" style="overflow:hidden">
@@ -12,13 +12,7 @@
               <div>
                 <h2>What's New in Web Captioner</h2>
                 <div style="max-height:80vh;overflow-y:auto">
-                  <div v-if="Array.isArray(latestRelease.notes) && latestRelease.notes.length > 0">
-                    <ul class="mb-0">
-                      <li v-for="note in latestRelease.notes" v-bind:key="note" v-html="note"></li>
-                    </ul>
-                  </div>
-                  <div v-else-if="typeof latestRelease.notes === 'string'" v-html="latestRelease.notes" class="ml-4"></div>
-                  <div v-else class="ml-4"><fa :icon="['far', 'thumbs-up']" class="mr-1" />  Just working on making some stuff run better. </div>
+                  <whats-new limit="1" :hide-title="true"></whats-new>
                 </div>
               </div>
             </div>
@@ -79,16 +73,14 @@
 
 
 <script>
-import changelog from '../data/changelog.js'
-import versionSort from 'semver-compare'
+import whatsNew from './WhatsNew.vue';
 
 export default {
   name: 'welcome-modal',
+  components: {
+    whatsNew,
+  },
   mounted: function() {
-    // if (this.$route.name == routeName) {
-    //   this.$refs.modal.show();
-    // }
-
     let self = this;
     setTimeout(() => {
       if (self.$refs.logoAnimatedWrap) {
@@ -97,25 +89,12 @@ export default {
     }, 50);
     
   },
-  computed: {
-    latestRelease: function () {
-      return changelog.sort(function (changelogEntryA, changelogEntryB) {
-        return versionSort(changelogEntryA.version, changelogEntryB.version);
-      })[0];
-    },
-  },
   methods: {
-    formatDate: function (date) {
-      return this.$helpers.dateFormat(date, 'MMM. D, YYYY');
-    },
     showModal() {
       this.$refs.modal.show()
     },
     hideModal () {
       this.$refs.modal.hide();
-    },
-    autofocusElement () {
-      this.$refs.getStartedButton.focus();
     },
   },
 }

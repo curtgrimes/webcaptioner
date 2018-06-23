@@ -4,6 +4,8 @@
     <save-to-file-modal ref="saveToFileModal"></save-to-file-modal>
     <clear-transcript-modal ref="clearTranscriptModal"></clear-transcript-modal>
     <welcome-modal ref="welcomeModal" />
+    <microphone-permission-needed-modal ref="microphonePermissionNeededModal" />
+    <microphone-permission-denied-modal ref="microphonePermissionDeniedModal" />
     <navbar></navbar>
   </div>
 </template>
@@ -13,6 +15,8 @@ import navbar from '../components/Navbar.vue'
 import SaveToFileModal from '../components/SaveToFileModal.vue'
 import ClearTranscriptModal from '../components/ClearTranscriptModal.vue'
 import WelcomeModal from '../components/WelcomeModal.vue'
+import MicrophonePermissionNeededModal from '../components/MicrophonePermissionNeededModal.vue'
+import MicrophonePermissionDeniedModal from '../components/MicrophonePermissionDeniedModal.vue'
 import RemoteEventBus from '../components/RemoteEventBus'
 import throttle from 'lodash.throttle'
 
@@ -22,6 +26,8 @@ export default {
     navbar,
     SaveToFileModal,
     WelcomeModal,
+    MicrophonePermissionNeededModal,
+    MicrophonePermissionDeniedModal,
     ClearTranscriptModal,
   },
   mounted: function() {
@@ -84,10 +90,30 @@ export default {
         this.$store.dispatch('SEND_TO_VMIX', {text: this.transcript});
       }
     },
+    microphonePermissionNeeded: function() {
+      if (this.microphonePermissionNeeded) {
+        this.$refs.microphonePermissionNeededModal.showModal();
+      }
+      else {
+        this.$refs.microphonePermissionNeededModal.hideModal();
+      }
+    },
+    microphonePermissionDenied: function() {
+      if (this.microphonePermissionDenied) {
+        this.$refs.microphonePermissionNeededModal.hideModal();
+        this.$refs.microphonePermissionDeniedModal.showModal();
+      }
+    },
   },
   computed: {
     transcript: function() {
       return this.$store.state.captioner.transcript.final + ' ' + this.$store.state.captioner.transcript.interim;
+    },
+    microphonePermissionNeeded: function() {
+      return this.$store.state.captioner.microphonePermission.needed;
+    },
+    microphonePermissionDenied: function() {
+      return this.$store.state.captioner.microphonePermission.denied;
     },
     socketConnected: function() {
       return this.$store.state.socket.isConnected;

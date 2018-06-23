@@ -1,41 +1,38 @@
 <template>
   <div class="settings-about-view" v-once>
-    <p>Version {{changelogSortedByVersionNumber[changelogSortedByVersionNumber.length - 1].version}}</p>
-
+    <div class="card bg-primary">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-3 col-sm-4 col-md-3 mb-3 mb-sm-0">
+            <img src="/public/logo-inverse.svg" class="img-responsive" />
+          </div>
+          <div class="col-sm-8 col-md-9">
+            <div class="d-flex align-items-center h-100">
+              <div>
+                <h3>Web Captioner</h3>
+                <p class="lead mb-2">Real-time captioning for your event, speech, classroom lecture, or church service.</p>
+                <p class="mb-0 small"><a href="/">Learn More</a> &middot; <a href="/help">Help Center</a><span class="d-none d-md-inline"> &middot; </span><br class="d-md-none"/> <a href="/blog">Blog</a> &middot; <a href="/donate">Donate</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <hr class="my-4" />
     
     <h2>What's New</h2>
-    
-    <div v-for="releaseNoteEntry in changelogSortedByVersionNumber" v-bind:key="releaseNoteEntry.version">
-      <h3>Version {{releaseNoteEntry.version}} <small class="text-dark pl-3 text-capitalize">{{formatDate(releaseNoteEntry.date)}}</small></h3>
-      <div v-if="Array.isArray(releaseNoteEntry.notes) && releaseNoteEntry.notes.length > 0">
-        <ul>
-          <li v-for="note in releaseNoteEntry.notes" v-bind:key="note" v-html="note"></li>
-        </ul>
-      </div>
-      <div v-else-if="typeof releaseNoteEntry.notes === 'string'" v-html="releaseNoteEntry.notes" class="ml-4"></div>
-      <div v-else class="ml-4"><fa :icon="['far', 'thumbs-up']" class="mr-1" />  Just working on making some stuff run better. </div>
-    </div>
+    <whats-new/>
+
   </div>
 </template>
 
 <script>
-import changelog from '../../data/changelog.js'
-import versionSort from 'semver-compare'
+import whatsNew from '../../components/WhatsNew.vue'
 
 export default {
   name: 'settings-about-view',
-  computed: {
-    changelogSortedByVersionNumber: function () {
-      return changelog.sort(function (changelogEntryA, changelogEntryB) {
-        return versionSort(changelogEntryA.version, changelogEntryB.version);
-      });
-    },
-  },
-  methods: {
-    formatDate: function (date) {
-      return this.$helpers.dateFormat(date, 'MMM. D, YYYY');
-    }
+  components: {
+    whatsNew,
   },
 }
 </script>
