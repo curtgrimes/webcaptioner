@@ -23,6 +23,19 @@ export default {
   mounted: function() {
     let self = this;
 
+    // Watch for changes and save to localstorage
+    this.$store.watch((state) => { return state.settings; },
+      () => {
+          localStorage.setItem('webcaptioner:settings', JSON.stringify({
+            settings: this.$store.state.settings,
+            version: this.$store.state.version,
+          }));
+      },
+      {
+        deep: true,
+      }
+    );
+
     if (!this.$route.meta.disableShortcutKeys) {
       this.combokeysDocument = new Combokeys(document.documentElement);
       this.combokeysDocument

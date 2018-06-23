@@ -40,17 +40,6 @@ if (window.__INITIAL_STATE__) {
   store.replaceState(window.__INITIAL_STATE__)
 }
 
-// Restore locally saved settings
-const localSettings = JSON.parse(localStorage.getItem('webcaptioner:settings'));
-if (localSettings) {
-  store.dispatch('RESTORE_SETTINGS', {
-    settings: localSettings.settings,
-    version: localSettings.version,
-  });
-}
-
-store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
-
 
 // wait until router has resolved all async before hooks
 // and async components...
@@ -81,7 +70,10 @@ router.onReady(() => {
   })
 
   // actually mount to DOM
-  app.$mount('#app')
+  app.$mount('#app');
+
+  store.dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE');
+  store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
 })
 
 // service worker

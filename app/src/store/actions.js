@@ -40,8 +40,12 @@ export default {
   },
 
 
-  RESTORE_SETTINGS: ({ commit, dispatch }, { settings }) => {
-    
+  RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, dispatch }) => {
+    const {settings} = JSON.parse(localStorage.getItem('webcaptioner:settings'));
+    if (!settings) {
+      return;
+    }
+
     commit('SET_TEXT_COLOR', { textColor: get(settings, 'appearance.text.textColor') });
     commit('SET_TEXT_COLOR_INTERIM', { textColorInterim: get(settings, 'appearance.text.textColorInterim') });
     commit('SET_FONT_FAMILY', { fontFamily: get(settings, 'appearance.text.fontFamily') });

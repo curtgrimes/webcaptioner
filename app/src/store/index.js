@@ -5,21 +5,10 @@ import mutations from './mutations'
 import getters from './getters'
 import captioner from './modules/captioner'
 import fontChocies from '../util/fontChoices'
-import vuexPersist from 'vuex-persist'
 import remoteMutationBlacklist from '../data/remoteMutationBlacklist'
 import RemoteEventBus from '../components/RemoteEventBus'
 
 Vue.use(Vuex)
-
-let vuePersistPlugin = new vuexPersist({
-  key: 'webcaptioner:settings',
-  reducer: (state) => {
-    return {
-      settings: state.settings,
-      version: state.version,
-    };
-  },
-}).plugin;
 
 let mutationInterceptorPlugin = store => {
   store.subscribe(({type, payload}, state) => {
@@ -117,6 +106,6 @@ export function createStore () {
     actions,
     mutations,
     getters,
-    plugins: [vuePersistPlugin, mutationInterceptorPlugin],
+    plugins: [mutationInterceptorPlugin],
   })
 }
