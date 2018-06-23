@@ -1,7 +1,6 @@
 <template>
   <div class="settings-view" :style="{height}" style="overflow:auto">
     <router-link to="/captioner" class="btn btn-light d-none d-sm-block position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><fa icon="times" size="2x" /></router-link>
-
     <!-- xs navbar -->
     <nav class="d-sm-none navbar sticky-top navbar-light bg-primary pr-2" :class="{'pl-2': showBackButton}">
       <div class="mr-auto">
@@ -26,8 +25,9 @@
           <b-list-group-item to="/captioner/settings/appearance">Appearance</b-list-group-item>
           <b-list-group-item to="/captioner/settings/censor">Censor</b-list-group-item>
           <b-list-group-item to="/captioner/settings/controls">Controls</b-list-group-item>
+          <b-list-group-item v-show="experiments['experiments']" to="/captioner/settings/experiments">Experiments</b-list-group-item>
           <b-list-group-item to="/captioner/settings/language">Language</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/remote-displays">Remote Displays</b-list-group-item>
+          <b-list-group-item v-show="experiments['remoteDisplays']" to="/captioner/settings/remote-displays">Remote Displays</b-list-group-item>
           <b-list-group-item to="/captioner/settings/word-replacements">Word Replacements</b-list-group-item>
           <!-- <b-list-group-item to="/captioner/settings/title-cards">Title Cards</b-list-group-item> -->
         </b-list-group>
@@ -46,6 +46,7 @@
               <nav>
                 <b-nav vertical pills>
                   <b-nav-item to="/captioner/settings/about">About</b-nav-item>
+                  <b-nav-item class="nav-item-rainbow" v-if="experiments.includes('science')" to="/captioner/settings/experiments"><fa icon="flask" /> Experiments</b-nav-item>
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>
@@ -53,7 +54,7 @@
                   <b-nav-item to="/captioner/settings/censor">Censor</b-nav-item>
                   <b-nav-item to="/captioner/settings/controls">Controls</b-nav-item>
                   <b-nav-item to="/captioner/settings/language">Language</b-nav-item>
-                  <b-nav-item to="/captioner/settings/remote-displays">Remote Displays</b-nav-item>
+                  <b-nav-item v-if="experiments.includes('remoteDisplays')" to="/captioner/settings/remote-displays">Remote Displays</b-nav-item>
                   <b-nav-item to="/captioner/settings/word-replacements">Word Replacements</b-nav-item>
                   <!-- <b-nav-item to="/captioner/settings/title-cards">Title Cards</b-nav-item> -->
                 </b-nav>
@@ -79,6 +80,21 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+  .nav-item-rainbow .nav-link.active {
+    animation: rainbow 10s infinite alternate;
+  }
+  @keyframes rainbow {
+    0% {background-color: hsl(0, 50%, 50%);}
+    20% {background-color: hsl(50, 50%, 50%);}
+    40% {background-color: hsl(100, 50%, 50%);}
+    60% {background-color: hsl(150, 50%, 50%);}
+    80% {background-color: hsl(200, 50%, 50%);}
+    100% {background-color: hsl(255, 50%, 50%);}
+  }
+</style>
+
 
 <script>
 import Combokeys from 'combokeys'
@@ -113,12 +129,14 @@ export default {
     this.$watch('largerLayout', function() {
       this.height = appHeightAdjuster();
     });
-
   },
   beforeDestroy: function() {
     this.escShortcut.detach();
   },
   computed: {
+    experiments: function() {
+      return this.$store.state.settings.exp;
+    },
     showBackButton: function() {
       return this.$route.path !== '/captioner/settings';
     },

@@ -47,7 +47,7 @@ export default {
         this.initRoom();
     }
 
-    this.$refs.welcomeModal.showModal();
+    // this.$refs.welcomeModal.showModal();
 
     if (this.vmixOn) {
       this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')

@@ -73,6 +73,10 @@ export default {
     
     commit('SET_ROOM_MEMBERSHIP_ID', { roomMembershipId: get(settings, 'roomMembershipId') });
 
+    get(settings, 'exp').forEach((experiment) => {
+      commit('ADD_EXPERIMENT', { experiment });
+    });
+
     const wordReplacements = get(settings, 'wordReplacements');
     for (let i = 0; i < wordReplacements.length; i++) {
       commit('ADD_WORD_REPLACEMENT', { wordReplacement: wordReplacements[i] });

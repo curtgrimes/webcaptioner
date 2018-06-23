@@ -132,6 +132,17 @@ export default {
     state.detached = false;
   },
 
+  ADD_EXPERIMENT: (state, { experiment }) => {
+    if (!state.settings.exp.includes(experiment)) {
+      state.settings.exp.push(experiment);
+    }
+  },
+
+  REMOVE_EXPERIMENT: (state, { experiment }) => {
+    state.settings.exp = state.settings.exp.filter((e) => {
+      return e != experiment;
+    });
+  },
 
 
   SOCKET_ONOPEN (state, event)  {

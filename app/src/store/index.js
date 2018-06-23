@@ -86,6 +86,7 @@ export function createStore () {
             webControllerAddress: '',
           },
         },
+        exp: [],
       },
       receivers: {
         chromecast: {

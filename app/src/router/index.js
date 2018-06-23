@@ -17,6 +17,7 @@ const SettingsWordReplacementsView = () => import('../views/settings/SettingsWor
 const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vue')
 const SettingsControlsView = () => import('../views/settings/SettingsControlsView.vue')
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
+const SettingsExperimentsView = () => import('../views/settings/SettingsExperimentsView.vue')
 const SettingsRemoteDisplaysView = () => import('../views/settings/SettingsRemoteDisplaysView.vue')
 const CaptionerView = () => import('../views/CaptionerView.vue')
 const Transcript = () => import('../components/Transcript.vue')
@@ -96,6 +97,13 @@ export function createRouter () {
                 component: SettingsVmixView,
                 meta: {
                   navbarTitle: 'Connect to vMix',
+                },
+              },
+              {
+                path: 'experiments',
+                component: SettingsExperimentsView,
+                meta: {
+                  navbarTitle: 'Experiments',
                 },
               },
             ]
