@@ -7,10 +7,23 @@
         <b-btn class="float-right" variant="secondary" ref="invalidExperimentModalOkButton" @click="hideInvalidExperimentModal()">Ok</b-btn>
       </div>
     </b-modal>
+    <b-modal ref="experimentConfirmation" hide-header>
+      <h5 class="modal-title">Do you want to add the "{{experimentName}}" experiment?</h5>
+      <div slot="modal-footer">
+        <b-btn class="float-right" variant="secondary" @click="addExperiment({withConfirmation: false})">Add Experiment</b-btn>
+        <b-btn class="float-right" variant="link" @click="hideExperimentConfirmationModal()">Cancel</b-btn>
+      </div>
+    </b-modal>
+    <b-modal ref="experimentAlreadyAdded" hide-header>
+      <h5 class="modal-title">You've already added this experiment.</h5>
+      <div slot="modal-footer">
+        <b-btn class="float-right" variant="secondary" @click="hideExperimentAlreadyAddedModal()">Ok</b-btn>
+      </div>
+    </b-modal>
     <b-input-group size="lg" class="mb-4">
-      <b-form-input @keydown.enter.native="addExperiment" v-model="experimentName" autofocus placeholder="Experiment Name"></b-form-input>
+      <b-form-input @keydown.enter.native="addExperiment({withConfirmation: false})" v-model="experimentName" autofocus placeholder="Experiment Name"></b-form-input>
       <b-input-group-append>
-        <b-btn @click="addExperiment()">Add</b-btn>
+        <b-btn @click="addExperiment({withConfirmation: false})">Add</b-btn>
       </b-input-group-append>
     </b-input-group>
     <div v-if="experiments.length">
@@ -49,9 +62,26 @@ export default {
       return this.$store.state.settings.exp;
     },
   },
+  mounted: function() {
+    if (this.$route.query.add) {
+      if (this.experiments.includes(this.$route.query.add)) {
+        this.$refs.experimentAlreadyAdded.show();
+      }
+      else {
+        this.experimentName = this.$route.query.add;
+        this.addExperiment({withConfirmation: true});
+      }
+    }
+  },
   methods: {
     hideInvalidExperimentModal: function() {
       this.$refs.invalidExperiment.hide();
+    },
+    hideExperimentConfirmationModal: function() {
+      this.$refs.experimentConfirmation.hide();
+    },
+    hideExperimentAlreadyAddedModal: function() {
+      this.$refs.experimentAlreadyAdded.hide();
     },
     getDescription: function(experiment) {
       switch(experiment) {
@@ -66,11 +96,15 @@ export default {
     isValidExperiment: function() {
       return ['remoteDisplays','science'].includes(this.experimentName);
     },
-    addExperiment: function() {
+    addExperiment: function({withConfirmation}) {
       if (this.isValidExperiment()) {
-        this.$store.commit('ADD_EXPERIMENT', {experiment: this.experimentName});
-
-        this.experimentName = '';
+        if (withConfirmation) {
+          this.$refs.experimentConfirmation.show();
+        }
+        else {
+          this.$store.commit('ADD_EXPERIMENT', {experiment: this.experimentName});
+          this.experimentName = '';
+        }
       }
       else {
         this.$refs.invalidExperiment.show();
