@@ -34,10 +34,10 @@ Vue.component('fa', {
   }
 })
 
-// Raven
-//     .config('REMOVED')
-//     .addPlugin(RavenVue, Vue)
-//     .install();
+Raven
+    .config('REMOVED')
+    .addPlugin(RavenVue, Vue)
+    .install();
 
 const dateFormatPlugin = {
   install () {
