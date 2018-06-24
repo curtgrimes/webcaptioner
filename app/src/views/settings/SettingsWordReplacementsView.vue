@@ -32,15 +32,18 @@ import debounce from 'lodash.debounce'
 
 export default {
   name: 'settings-word-replacements-view',
-  created: function () {
+  mounted: function () {
     if (!this.wordReplacements.length) {
+      console.log('adding a word replacement');
       this.addWordReplacement({from:'', to: ''});
     }
   },
   computed: {
     wordReplacements: {
       get () {
-        return this.$store.state.settings.wordReplacements;
+        return this.$store.state.settings.wordReplacements.sort((r1, r2) => {
+          return r1.from < r2.from;
+        });
       },
     },
   },

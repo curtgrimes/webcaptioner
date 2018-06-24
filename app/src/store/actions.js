@@ -106,7 +106,9 @@ export default {
     });
 
     (get(settings, 'wordReplacements') || []).forEach((wordReplacement) => {
-      commit('ADD_WORD_REPLACEMENT', { wordReplacement });
+      if (wordReplacement.from) {
+        commit('ADD_WORD_REPLACEMENT', { wordReplacement });
+      }
     });
   },
 
