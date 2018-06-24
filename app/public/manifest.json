@@ -1,0 +1,14 @@
+{
+    "name": "Web Captioner",
+    "icons": [
+        {
+            "src": "/logo.svg",
+            "sizes": "72x72",
+            "type": "image/svg"
+        }
+    ],
+    "theme_color": "#ffe200",
+    "background_color": "#ffe200",
+    "start_url": "https://webcaptioner.com",
+    "display": "standalone"
+}
