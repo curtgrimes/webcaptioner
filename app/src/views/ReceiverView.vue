@@ -63,7 +63,7 @@
 
         vertical-align: top;
         background: #000;
-        color: #f0e500;
+        color: #ffe200;
         border-radius: 4px;
         line-height: 15vw;
         height: 13vw;

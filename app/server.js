@@ -99,7 +99,7 @@ app.use(compression({ threshold: 0 }))
 app.use(favicon('./public/favicon.ico'))
 app.use('/dist', serve('./dist', true))
 app.use('/public', serve('./public', true))
-app.use('/manifest.json', serve('./manifest.json', true))
+app.use('/manifest.json', serve('./public/manifest.json', true))
 app.use('/service-worker.js', serve('./dist/service-worker.js'))
 
 // Static site pages
