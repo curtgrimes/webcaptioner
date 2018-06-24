@@ -4,6 +4,11 @@ export default [
         date: "2018-06-25",
         notes: [
             {
+                icon: 'iconmonstr-window-19.svg',
+                title: 'Send Captions to a New Window',
+                text: 'Select \'New Window\' from the menu to show captions in a separate window. Perfect for multi-monitor setups!',
+            },
+            {
                 icon: 'iconmonstr-keyboard-13.svg',
                 title: 'Keyboard Shortcuts',
                 text: '<a href="/captioner/settings/controls">Keyboard shortcuts</a> let you start and stop captioning quickly.',

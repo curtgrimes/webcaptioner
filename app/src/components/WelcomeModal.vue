@@ -1,5 +1,5 @@
 <template>
-    <b-modal lazy size="lg" ref="modal" hide-header>
+    <b-modal lazy size="lg" ref="modal" hide-header no-close-on-esc no-close-on-backdrop>
       <div class="p-3 logo-animated-wrap" ref="logoAnimatedWrap">
         <div class="row">
           <div class="d-none d-lg-block col-lg-3 text-center splash-logo-wrap" style="overflow:hidden">
