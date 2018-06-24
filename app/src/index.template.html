@@ -53,13 +53,24 @@
       opacity:0;
     }
 
+    #full-screen-loading-content-wrap {
+      animation:fadeIn 300ms 600ms forwards;
+      opacity:0;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
     .full-screen-loading-logo {
       margin:0 auto;
       width: 35vh;
       height: 35vh;
-      animation:rotateplane 4s 1s infinite ease-in-out;
+      animation:rotateplane 4s 300ms infinite ease-in-out;
       opacity:1;
     }
+
     @keyframes rotateplane {
       0%{
         transform:perspective(70vh) rotateY(0deg);
@@ -82,7 +93,7 @@
 
 <body class="d-flex">
   <div id="full-screen-loading" class="d-flex align-items-center">
-    <div class="w-100 text-center">
+    <div id="full-screen-loading-content-wrap" class="w-100 text-center">
       <div class="full-screen-loading-logo">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 1200 1200" style="enable-background:new 0 0 1200 1200;" xml:space="preserve">
