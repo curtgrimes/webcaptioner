@@ -88,13 +88,20 @@ export default {
       }
     }, 50);
   },
+  computed: {
+    incompatibleBrowser: function() {
+      return this.$store.state.incompatibleBrowser;
+    },
+  },
   methods: {
     showModal() {
       this.$refs.modal.show()
     },
     hideModal () {
       this.$refs.modal.hide();
-      this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
+      if (this.incompatibleBrowser) {
+        this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
+      }
     },
   },
 }
