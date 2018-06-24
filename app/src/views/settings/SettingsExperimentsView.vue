@@ -15,7 +15,7 @@
       </div>
     </b-modal>
     <b-modal ref="experimentAlreadyAdded" hide-header>
-      <h5 class="modal-title">You've already added this experiment.</h5>
+      <h5 class="modal-title">You've already added the "{{alreadyAddedExperimentName}}" experiment.</h5>
       <div slot="modal-footer">
         <b-btn class="float-right" variant="secondary" @click="hideExperimentAlreadyAddedModal()">Ok</b-btn>
       </div>
@@ -55,6 +55,7 @@ export default {
   data: function() {
     return {
       experimentName: '',
+      alreadyAddedExperimentName: '',
     };
   },
   computed: {
@@ -63,15 +64,18 @@ export default {
     },
   },
   mounted: function() {
-    if (this.$route.query.add) {
-      if (this.experiments.includes(this.$route.query.add)) {
-        this.$refs.experimentAlreadyAdded.show();
-      }
-      else {
-        this.experimentName = this.$route.query.add;
-        this.addExperiment({withConfirmation: true});
-      }
-    }
+    this.$nextTick(() => {
+        if (this.$route.query.add) {
+          if (this.experiments.includes(this.$route.query.add)) {
+            this.alreadyAddedExperimentName = this.$route.query.add;
+            this.$refs.experimentAlreadyAdded.show();
+          }
+          else {
+            this.experimentName = this.$route.query.add;
+            this.addExperiment({withConfirmation: true});
+          }
+        }
+      });
   },
   methods: {
     hideInvalidExperimentModal: function() {
@@ -104,6 +108,7 @@ export default {
         else {
           this.$store.commit('ADD_EXPERIMENT', {experiment: this.experimentName});
           this.experimentName = '';
+          this.$refs.experimentConfirmation.hide();
         }
       }
       else {
