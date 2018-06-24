@@ -90,15 +90,17 @@ export default {
     getDescription: function(experiment) {
       switch(experiment) {
           case 'science':
-            return 'Add a persistent "Experiments" menu item to settings for easy access.';
+            return 'This will do something someday I think';
           case 'remoteDisplays':
             return 'Send captions to other phones or tablets.';
+          case 'largerLayout':
+            return 'Adds an option for a larger navbar layout under Settings > Controls.'
           default:
             return '';
       }
     },
     isValidExperiment: function() {
-      return ['remoteDisplays','science'].includes(this.experimentName);
+      return ['remoteDisplays','science','largerLayout',].includes(this.experimentName);
     },
     addExperiment: function({withConfirmation}) {
       if (this.isValidExperiment()) {

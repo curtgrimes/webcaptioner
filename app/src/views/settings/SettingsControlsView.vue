@@ -1,6 +1,6 @@
 <template>
   <div class="settings-controls-view">
-    <div class="row">
+    <div class="row" v-if="experiments.includes('largerLayout')">
       <div class="col-md-6">
         <h3>Screen Layout</h3>
         <b-list-group>
@@ -117,6 +117,9 @@ export default {
     this.isMac = navigator ? navigator.platform.toUpperCase().indexOf('MAC') >= 0 : false;
   },
   computed: {
+    experiments: function() {
+      return this.$store.state.settings.exp;
+    },
     largerLayout: {
       get () {
         return this.$store.state.settings.controls.layout.larger;
