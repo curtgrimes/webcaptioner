@@ -85,6 +85,8 @@ export function createStore () {
           receiverName: null,
         },
       },
+      incompatibleBrowser: false,
+      incompatibleBrowserModalVisible: false,
       detached: false,
       remoteDisplays: [],
       remoteDisplayConnectIdNotFoundError: false,

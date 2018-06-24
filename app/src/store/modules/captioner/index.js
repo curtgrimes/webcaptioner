@@ -32,9 +32,14 @@ const state = {
 }
 
 const actions = {
-    startManual ({commit, dispatch}) {
-        commit('SET_SHOULD_BE_ON', { shouldBeOn: true });
-        dispatch('start');
+    startManual ({commit, dispatch, rootState}) {
+        if (rootState.incompatibleBrowser) {
+            dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL', {}, { root: true });
+        }
+        else {
+            commit('SET_SHOULD_BE_ON', { shouldBeOn: true });
+            dispatch('start');
+        }
     },
     start ({commit, state, rootState, getters, dispatch}) {
         let parser = new RecognitionResultParser({

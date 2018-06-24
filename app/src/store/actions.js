@@ -121,6 +121,14 @@ export default {
     }));
   },
 
+  SHOW_INCOMPATIBLE_BROWSER_MODAL: ({commit}) => {
+    // Just need to toggle it on for a second for the modal to appear
+    commit('SET_INCOMPATIBLE_BROWSER_MODAL_VISIBLE');
+    setTimeout(function(){
+      commit('SET_INCOMPATIBLE_BROWSER_MODAL_INVISIBLE');
+    },1000);
+  },
+
   REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}) => {
     let {
       checkIfExtensionInstalled,

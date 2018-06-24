@@ -4,6 +4,7 @@
     <save-to-file-modal ref="saveToFileModal"></save-to-file-modal>
     <clear-transcript-modal ref="clearTranscriptModal"></clear-transcript-modal>
     <welcome-modal ref="welcomeModal" />
+    <incompatible-browser-modal ref="incompatibleBrowserModal" />
     <microphone-permission-needed-modal ref="microphonePermissionNeededModal" />
     <microphone-permission-denied-modal ref="microphonePermissionDeniedModal" />
     <navbar></navbar>
@@ -15,6 +16,7 @@ import navbar from '../components/Navbar.vue'
 import SaveToFileModal from '../components/SaveToFileModal.vue'
 import ClearTranscriptModal from '../components/ClearTranscriptModal.vue'
 import WelcomeModal from '../components/WelcomeModal.vue'
+import IncompatibleBrowserModal from '../components/IncompatibleBrowserModal.vue'
 import MicrophonePermissionNeededModal from '../components/MicrophonePermissionNeededModal.vue'
 import MicrophonePermissionDeniedModal from '../components/MicrophonePermissionDeniedModal.vue'
 import RemoteEventBus from '../components/RemoteEventBus'
@@ -28,6 +30,7 @@ export default {
     navbar,
     SaveToFileModal,
     WelcomeModal,
+    IncompatibleBrowserModal,
     MicrophonePermissionNeededModal,
     MicrophonePermissionDeniedModal,
     ClearTranscriptModal,
@@ -54,6 +57,11 @@ export default {
         self.$refs.welcomeModal.showModal();
       }
     },0);
+
+    if (!('webkitSpeechRecognition' in window)) {
+        this.$store.commit('SET_INCOMPATIBLE_BROWSER_ON');
+        this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
+    }
 
     if (this.vmixOn) {
       this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')
@@ -91,6 +99,11 @@ export default {
     },
   },
   watch: {
+    incompatibleBrowserModalVisible: function() {
+      if (this.incompatibleBrowserModalVisible) {
+        this.$refs.incompatibleBrowserModal.showModal();
+      }
+    },
     transcript: function() {
       if (this.vmixOn) {
         this.$store.dispatch('SEND_TO_VMIX', {text: this.transcript});
@@ -112,6 +125,9 @@ export default {
     },
   },
   computed: {
+    incompatibleBrowserModalVisible: function() {
+      return this.$store.state.incompatibleBrowserModalVisible;
+    },
     transcript: function() {
       return this.$store.state.captioner.transcript.final + ' ' + this.$store.state.captioner.transcript.interim;
     },

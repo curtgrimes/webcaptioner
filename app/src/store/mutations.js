@@ -136,6 +136,18 @@ export default {
     state.settings.lastWhatsNewVersionSeen = version;
   },
 
+  SET_INCOMPATIBLE_BROWSER_ON: (state) => {
+    state.incompatibleBrowser = true;
+  },
+
+  SET_INCOMPATIBLE_BROWSER_MODAL_VISIBLE: (state) => {
+    state.incompatibleBrowserModalVisible = true;
+  },
+
+  SET_INCOMPATIBLE_BROWSER_MODAL_INVISIBLE: (state) => {
+    state.incompatibleBrowserModalVisible = false;
+  },
+
   ADD_EXPERIMENT: (state, { experiment }) => {
     if (!state.settings.exp.includes(experiment)) {
       state.settings.exp.push(experiment);

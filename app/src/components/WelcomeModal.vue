@@ -87,7 +87,6 @@ export default {
         self.$refs.logoAnimatedWrap.classList.add('animate');
       }
     }, 50);
-    
   },
   methods: {
     showModal() {
@@ -95,6 +94,7 @@ export default {
     },
     hideModal () {
       this.$refs.modal.hide();
+      this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
     },
   },
 }

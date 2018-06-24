@@ -68,7 +68,7 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </transition>
-                <b-dropdown :size="largerLayout ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
+                <b-dropdown :class="incompatibleBrowser ? 'button-only-disabled' : ''" :size="largerLayout ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
                     <template slot="button-content">
                         <div :class="{'px-4 py-2' : largerLayout}">
                             <span v-if="!this.captioningOn">
@@ -93,6 +93,15 @@
         </nav>
     </div>
 </template>
+
+<style>
+    .button-only-disabled > .btn-primary:first-child {
+        opacity:.6;
+        cursor:default;
+    }
+</style>
+
+
 
 <script>
 import VolumeMeter from './VolumeMeter.vue'
@@ -125,6 +134,9 @@ export default {
     },
     captioningToggleButtonVariant: function() {
         return !this.captioningOn ? 'primary' : 'danger';
+    },
+    incompatibleBrowser: function() {
+        return this.$store.state.incompatibleBrowser;
     },
     remoteDisplays: function() {
         return this.$store.state.remoteDisplays;
