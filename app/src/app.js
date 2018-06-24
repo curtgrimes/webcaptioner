@@ -86,9 +86,6 @@ export function createApp () {
       amount: 2,
       delay: 400, // ms
     },
-    debug: {
-      enabled: true
-    },
   });
 
   // create the app instance.
