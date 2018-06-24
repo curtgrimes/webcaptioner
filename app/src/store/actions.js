@@ -10,6 +10,7 @@ import RemoteEventBus from '../components/RemoteEventBus'
 import ChromelessWindowManager from '../components/ChromelessWindowManager'
 import get from 'lodash.get'
 import vmixSetup from '../util/vmixSetup'
+import {normalizeSettings} from '../util/settingsNormalizer'
 
 function getVmixPath(webControllerAddress) {
   return (webControllerAddress || '').trim().replace(/\/$/, "") + '/API';
@@ -41,53 +42,79 @@ export default {
 
 
   RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, dispatch }) => {
-    const {settings} = JSON.parse(localStorage.getItem('webcaptioner:settings'));
+    function commitPropertySetting(mutationName, mutationDataPropertyName, settingsKey) {
+      let value = get(settings, settingsKey);
+      if (value) {
+        commit(mutationName, { [mutationDataPropertyName]: value });
+      }
+      else {
+        // It's already set to the default in the store, so just leave that
+      }
+    }
+
+    const localStorageParsed = JSON.parse(localStorage.getItem('webcaptioner-settings'));
+    
+    if (!localStorageParsed) {
+      return;
+    }
+
+    const settings = normalizeSettings({
+      localStorageData: localStorageParsed,
+      fromVersionNumber: localStorageParsed.version,
+    });
+
     if (!settings) {
       return;
     }
 
-    commit('SET_TEXT_COLOR', { textColor: get(settings, 'appearance.text.textColor') });
-    commit('SET_TEXT_COLOR_INTERIM', { textColorInterim: get(settings, 'appearance.text.textColorInterim') });
-    commit('SET_FONT_FAMILY', { fontFamily: get(settings, 'appearance.text.fontFamily') });
-    commit('SET_TEXT_SIZE', { textSize: get(settings, 'appearance.text.textSize') });
-    commit('SET_LINE_HEIGHT', { lineHeight: get(settings, 'appearance.text.lineHeight') });
-    commit('SET_LETTER_SPACING', { letterSpacing: get(settings, 'appearance.text.letterSpacing') });
-    commit('SET_TEXT_TRANSFORM', { textTransform: get(settings, 'appearance.text.textTransform') });
+    commitPropertySetting('SET_TEXT_COLOR', 'textColor', 'appearance.text.textColor');
+    commitPropertySetting('SET_TEXT_COLOR_INTERIM', 'textColorInterim', 'appearance.text.textColorInterim');
+    commitPropertySetting('SET_FONT_FAMILY', 'fontFamily', 'appearance.text.fontFamily');
+    commitPropertySetting('SET_TEXT_SIZE', 'textSize', 'appearance.text.textSize');
+    commitPropertySetting('SET_LINE_HEIGHT', 'lineHeight', 'appearance.text.lineHeight');
+    commitPropertySetting('SET_LETTER_SPACING', 'letterSpacing', 'appearance.text.letterSpacing');
+    commitPropertySetting('SET_TEXT_TRANSFORM', 'textTransform', 'appearance.text.textTransform');
 
-    commit('SET_SHADOW_COLOR', { shadowColor: get(settings, 'appearance.shadow.color') });
-    commit('SET_SHADOW_OPACITY', { shadowOpacity: get(settings, 'appearance.shadow.opacity') });
-    commit('SET_SHADOW_BLUR_RADIUS', { shadowBlurRadius: get(settings, 'appearance.shadow.blurRadius') });
-    commit('SET_SHADOW_OFFSET_X', { shadowOffsetX: get(settings, 'appearance.shadow.offsetX') });
-    commit('SET_SHADOW_OFFSET_Y', { shadowOffsetY: get(settings, 'appearance.shadow.offsetY') });
+    commitPropertySetting('SET_SHADOW_COLOR', 'shadowColor', 'appearance.shadow.color');
+    commitPropertySetting('SET_SHADOW_OPACITY', 'shadowOpacity', 'appearance.shadow.opacity');
+    commitPropertySetting('SET_SHADOW_BLUR_RADIUS', 'shadowBlurRadius', 'appearance.shadow.blurRadius');
+    commitPropertySetting('SET_SHADOW_OFFSET_X', 'shadowOffsetX', 'appearance.shadow.offsetX');
+    commitPropertySetting('SET_SHADOW_OFFSET_Y', 'shadowOffsetY', 'appearance.shadow.offsetY');
 
-    commit('SET_BACKGROUND_COLOR', { backgroundColor: get(settings, 'appearance.background.color') });
-    commit('SET_ALIGNMENT_HORIZONTAL', { alignmentHorizontal: get(settings, 'appearance.text.alignment.horizontal') });
-    commit('SET_ALIGNMENT_VERTICAL', { alignmentVertical: get(settings, 'appearance.text.alignment.vertical') });
-    commit('SET_ALIGNMENT_PADDING', { alignmentPadding: get(settings, 'appearance.text.alignment.padding') });
+    commitPropertySetting('SET_BACKGROUND_COLOR', 'backgroundColor', 'appearance.background.color');
+    commitPropertySetting('SET_ALIGNMENT_HORIZONTAL', 'alignmentHorizontal', 'appearance.text.alignment.horizontal');
+    commitPropertySetting('SET_ALIGNMENT_VERTICAL', 'alignmentVertical', 'appearance.text.alignment.vertical');
+    commitPropertySetting('SET_ALIGNMENT_PADDING', 'alignmentPadding', 'appearance.text.alignment.padding');
 
-    commit('SET_CENSOR', { censor: get(settings, 'censor.on') });
-    commit('SET_CENSOR_REPLACE_WITH', { replaceWith: get(settings, 'censor.replaceWith') });
+    commitPropertySetting('SET_CENSOR', 'censor', 'censor.on');
+    commitPropertySetting('SET_CENSOR_REPLACE_WITH', 'replaceWith', 'censor.replaceWith');
 
-    commit('SET_LAYOUT_LARGER', { on: get(settings, 'controls.layout.larger') });
+    commitPropertySetting('SET_LAYOUT_LARGER', 'on', 'controls.layout.larger');
 
-    commit('SET_LOCALE_USER_DEFAULT', { locale: get(settings, 'locale.userDefault') });
-    commit('SET_LOCALE_FROM', { locale: get(settings, 'locale.from') });
+    commitPropertySetting('SET_LOCALE_USER_DEFAULT', 'locale', 'locale.userDefault');
+    commitPropertySetting('SET_LOCALE_FROM', 'locale', 'locale.from');
 
-    commit('SET_ROOM_LEADER_TOKEN', { roomLeaderToken: get(settings, 'roomLeaderToken') });
-    
-    commit('SET_ROOM_MEMBERSHIP_ID', { roomMembershipId: get(settings, 'roomMembershipId') });
+    commitPropertySetting('SET_ROOM_LEADER_TOKEN', 'roomLeaderToken', 'roomLeaderToken');
 
-    get(settings, 'exp').forEach((experiment) => {
+    commitPropertySetting('SET_ROOM_MEMBERSHIP_ID', 'roomMembershipId', 'roomMembershipId');
+
+    commitPropertySetting('SET_SEND_TO_VMIX', 'on', 'integrations.vmix.on');
+    commitPropertySetting('SET_VMIX_WEB_CONTROLLER_ADDRESS', 'webControllerAddress', 'integrations.vmix.webControllerAddress');
+
+    (get(settings, 'exp') || []).forEach((experiment) => {
       commit('ADD_EXPERIMENT', { experiment });
     });
 
-    const wordReplacements = get(settings, 'wordReplacements');
-    for (let i = 0; i < wordReplacements.length; i++) {
-      commit('ADD_WORD_REPLACEMENT', { wordReplacement: wordReplacements[i] });
-    }
+    (get(settings, 'wordReplacements') || []).forEach((wordReplacement) => {
+      commit('ADD_WORD_REPLACEMENT', { wordReplacement });
+    });
+  },
 
-    commit('SET_SEND_TO_VMIX', { on: get(settings, 'integrations.vmix.on') });
-    commit('SET_VMIX_WEB_CONTROLLER_ADDRESS', { webControllerAddress: get(settings, 'integrations.vmix.webControllerAddress') });
+  SAVE_SETTINGS_TO_LOCALSTORAGE: ({state}) => {
+    localStorage.setItem('webcaptioner-settings', JSON.stringify({
+      settings: state.settings,
+      version: state.version,
+    }));
   },
 
   REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}) => {

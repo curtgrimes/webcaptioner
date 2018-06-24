@@ -277,10 +277,10 @@ export default {
         let self = this;
         setTimeout(function(){
             if (window.localStorage) {
-                let wcSettings = window.localStorage.getItem('webcaptioner:settings');
+                let wcSettings = window.localStorage.getItem('webcaptioner-settings');
                 wcSettings = JSON.parse(wcSettings);
                 wcSettings.settings.roomMembershipId = self.$store.state.settings.roomMembershipId;
-                window.localStorage.setItem('webcaptioner:settings', JSON.stringify(wcSettings));
+                window.localStorage.setItem('webcaptioner-settings', JSON.stringify(wcSettings));
             }
         },500);
       },

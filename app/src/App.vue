@@ -26,10 +26,7 @@ export default {
     // Watch for changes and save to localstorage
     this.$store.watch((state) => { return state.settings; },
       () => {
-          localStorage.setItem('webcaptioner:settings', JSON.stringify({
-            settings: this.$store.state.settings,
-            version: this.$store.state.version,
-          }));
+        this.$store.dispatch('SAVE_SETTINGS_TO_LOCALSTORAGE');
       },
       {
         deep: true,
