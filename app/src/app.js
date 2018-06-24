@@ -7,6 +7,7 @@ import titleMixin from './util/title'
 import * as filters from './util/filters'
 import BootstrapVue from 'bootstrap-vue'
 import dateFormat from 'date-fns/format'
+import VueAnalytics from 'vue-analytics'
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -75,6 +76,20 @@ export function createApp () {
   // sync the router with the vuex store.
   // this registers `store.state.route`
   sync(store, router)
+
+  Vue.use(VueAnalytics, {
+    id: 'REMOVED',
+    router,
+    store,
+    batch: {
+      enabled: true,
+      amount: 2,
+      delay: 400, // ms
+    },
+    debug: {
+      enabled: true
+    },
+  });
 
   // create the app instance.
   // here we inject the router, store and ssr context to all child components,

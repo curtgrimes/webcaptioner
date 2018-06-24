@@ -45,7 +45,15 @@ export default {
     function commitPropertySetting(mutationName, mutationDataPropertyName, settingsKey) {
       let value = get(settings, settingsKey);
       if (value) {
-        commit(mutationName, { [mutationDataPropertyName]: value });
+        commit(
+          mutationName,
+          {
+            [mutationDataPropertyName]: value,
+
+            // because otherwise we have a huge amount of events on every initial load
+            omitFromGoogleAnalytics: true,
+          }
+        );
       }
       else {
         // It's already set to the default in the store, so just leave that
@@ -104,12 +112,12 @@ export default {
     commitPropertySetting('SET_LAST_WHATS_NEW_VERSION_SEEN', 'version', 'lastWhatsNewVersionSeen');
 
     (get(settings, 'exp') || []).forEach((experiment) => {
-      commit('ADD_EXPERIMENT', { experiment });
+      commit('ADD_EXPERIMENT', { experiment, omitFromGoogleAnalytics: true });
     });
 
     (get(settings, 'wordReplacements') || []).forEach((wordReplacement) => {
       if (wordReplacement.from) {
-        commit('ADD_WORD_REPLACEMENT', { wordReplacement });
+        commit('ADD_WORD_REPLACEMENT', { wordReplacement, omitFromGoogleAnalytics: true });
       }
     });
   },

@@ -16,6 +16,20 @@ let mutationInterceptorPlugin = store => {
       // This mutation type is not in the blacklist. Send it to remotely listening devices.
       RemoteEventBus.$emit('sendMutationToReceivers', {type, payload});
     }
+
+    function shouldTrackMutation(type, payload) {
+      return ((payload && !payload.omitFromGoogleAnalytics) || !payload)
+        && !type.includes('route/');
+    }
+
+    // Track mutations with Google Analytics
+    if (shouldTrackMutation(type, payload)) {
+      Vue.$ga.event({
+        eventCategory: 'captioner',
+        eventAction: type,
+        eventLabel: (payload && Object.keys(payload) ? payload[Object.keys(payload)[0]] : '').toString(), // return the first value from the payload
+      });
+    }
   })
 };
 

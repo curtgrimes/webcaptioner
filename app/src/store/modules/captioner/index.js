@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import RecognitionResultParser from './RecognitionResultParser.js'
 import internalWordReplacements from '../../../data/internalWordReplacements'
 import censoredProfanity from '../../../data/profanity-en'
@@ -128,13 +129,15 @@ const actions = {
             
 
             if (transcriptInterim) {
-                commit('SET_TRANSCRIPT_INTERIM', { transcriptInterim });
+                commit('SET_TRANSCRIPT_INTERIM', { transcriptInterim, omitFromGoogleAnalytics: true, });
             }
             if (transcriptFinal) {
                 // Clear the interim transcript because its content is now
                 // returned in the final transcript
-                commit('CLEAR_TRANSCRIPT_INTERIM');
-                commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal });
+                commit('CLEAR_TRANSCRIPT_INTERIM', {omitFromGoogleAnalytics: true,});
+                commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal, omitFromGoogleAnalytics: true, });
+                
+                dispatch('trackWordCount', { wordCount: transcriptFinal.split(' ').length });
             }
         };
 
@@ -168,6 +171,8 @@ const actions = {
         if (state.transcript.interim) {
             commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal: state.transcript.interim });
             commit('CLEAR_TRANSCRIPT_INTERIM');
+
+            dispatch('trackWordCount', { wordCount: state.transcript.interim.split(' ').length });
         }
 
         if (speechRecognizer && state.on) {
@@ -181,6 +186,16 @@ const actions = {
         else {
             // Need to init speechRecognizer again for some reason
             dispatch('start');
+        }
+    },
+
+    trackWordCount ({}, {wordCount}) {
+        if (wordCount > 0) {
+            Vue.$ga.event({
+                eventCategory: 'recognition',
+                eventAction: 'recognizingSpeech',
+                eventLabel: 'wordCount:' + wordCount,
+              });
         }
     },
 }
