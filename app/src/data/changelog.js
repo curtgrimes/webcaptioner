@@ -16,7 +16,7 @@ export default [
             {
                 icon: 'iconmonstr-magnifier-4.svg',
                 title: 'Search Languages',
-                text: 'A new search box in <a href="/captioner/settings/language">language settings</a> lets you quickly change language Web Captioner is listening in.',
+                text: 'A new search box in <a href="/captioner/settings/language">language settings</a> lets you quickly change the language Web Captioner is listening in.',
             },
         ],
     },
