@@ -77,7 +77,7 @@ const actions = {
             commit('SET_CAPTIONER_ON');
 
             clearTimeout(microphonePermissionNeededTimeout);
-            console.log('here');
+            
             if (state.microphonePermission.needed) {
                 commit('SET_MICROPHONE_PERMISSION_NEEDED', { microphonePermissionNeeded: false });
             }

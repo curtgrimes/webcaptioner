@@ -19,7 +19,7 @@
       <div :hidden="showBackButton" class="d-sm-none col p-0 bg-white pb-5 mb-3"> <!--  pb-5 mb-3 for bottom navbar space -->
         <b-list-group flush>
           <b-list-group-item to="/captioner/settings/about">About</b-list-group-item>
-          <b-list-group-item v-if="experiments.length" to="/captioner/settings/experiments">Experiments</b-list-group-item>
+          <b-list-group-item v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments">Experiments</b-list-group-item>
         </b-list-group>
         <h3 class="text-muted pl-3 pt-2 small">General</h3>
         <b-list-group flush>
@@ -46,7 +46,7 @@
               <nav>
                 <b-nav vertical pills>
                   <b-nav-item to="/captioner/settings/about">About</b-nav-item>
-                  <b-nav-item class="nav-item-rainbow" v-if="experiments.length" to="/captioner/settings/experiments"><fa icon="flask" /> Experiments</b-nav-item>
+                  <b-nav-item class="nav-item-rainbow" v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments"><fa icon="flask" /> Experiments</b-nav-item>
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>
@@ -144,7 +144,6 @@ export default {
         self.height = appHeightAdjuster();
       },1000);
     });
-    
 
     this.$watch('largerLayout', function() {
       this.height = appHeightAdjuster();
@@ -154,6 +153,9 @@ export default {
     this.escShortcut.detach();
   },
   computed: {
+    currentlyOnExperiments: function() {
+      return this.$route.path === '/captioner/settings/experiments';
+    },
     experiments: function() {
       return this.$store.state.settings.exp;
     },
