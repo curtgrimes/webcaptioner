@@ -24,10 +24,16 @@ let mutationInterceptorPlugin = store => {
 
     // Track mutations with Google Analytics
     if (shouldTrackMutation(type, payload)) {
+      let eventLabel;
+
+      if (payload) {
+        // Use the first value of the payload
+        eventLabel = payload[Object.keys(payload)[0]] ? payload[Object.keys(payload)[0]].toString() : null;
+      }
       Vue.$ga.event({
         eventCategory: 'captioner',
         eventAction: type,
-        eventLabel: (payload && Object.keys(payload) ? payload[Object.keys(payload)[0]] : '').toString(), // return the first value from the payload
+        eventLabel,
       });
     }
   })
