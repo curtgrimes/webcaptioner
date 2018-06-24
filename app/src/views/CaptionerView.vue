@@ -148,7 +148,13 @@ export default {
       const currentVersion = getCurrentVersionNumber();
       const hasntSeenWelcomeModalForCurrentVersionYet = versionSort(lastWhatsNewVersionSeen || '0', currentVersion) < 0;
       if (hasntSeenWelcomeModalForCurrentVersionYet) {
-        this.$store.commit('SET_LAST_WHATS_NEW_VERSION_SEEN', { version: currentVersion });
+        // Delay setting for the future in case they leave 
+        // right away and come back. We could reasonably assume they didn't
+        // really see this yet.
+        let self = this;
+        setTimeout(() => {
+          self.$store.commit('SET_LAST_WHATS_NEW_VERSION_SEEN', { version: currentVersion });
+        }, 10000);
       }
       
       return hasntSeenWelcomeModalForCurrentVersionYet;

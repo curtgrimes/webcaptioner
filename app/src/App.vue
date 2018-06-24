@@ -21,6 +21,7 @@ export default {
     };
   },
   mounted: function() {
+    this.hideLoadingScreen();
     let self = this;
 
     // Watch for changes and save to localstorage
@@ -162,6 +163,15 @@ export default {
     },
   },
   methods: {
+    hideLoadingScreen: function() {
+      let loadingScreen = document.getElementById('full-screen-loading');
+      if (loadingScreen) {
+        loadingScreen.classList.add('fadeOut');
+        setTimeout(() => {
+          loadingScreen.remove();
+        }, 500);
+      }
+    },
     startCaptioning: function() {
       this.$store.dispatch('captioner/startManual');
     },
