@@ -83,15 +83,35 @@
 
 <style scoped>
   .nav-item-rainbow .nav-link.active {
-    animation: rainbow 10s infinite alternate;
+    animation: rainbow 5s linear infinite alternate;
+    text-shadow:0 1px 5px rgba(0,0,0,.3);
   }
+
   @keyframes rainbow {
-    0% {background-color: hsl(0, 50%, 50%);}
-    20% {background-color: hsl(50, 50%, 50%);}
-    40% {background-color: hsl(100, 50%, 50%);}
-    60% {background-color: hsl(150, 50%, 50%);}
-    80% {background-color: hsl(200, 50%, 50%);}
-    100% {background-color: hsl(255, 50%, 50%);}
+    0% {
+      background-color: hsl(0, 50%, 50%);
+      box-shadow: 0 0 10px hsl(0, 50%, 50%);
+    }
+    20% {
+      background-color: hsl(50, 70%, 50%);
+      box-shadow: 0 0 10px hsl(50, 70%, 50%);
+    }
+    40% {
+      background-color: hsl(100, 50%, 50%);
+      box-shadow: 0 0 10px hsl(100, 50%, 50%);
+    }
+    60% {
+      background-color: hsl(150, 50%, 50%);
+      box-shadow: 0 0 10px hsl(150, 50%, 50%);
+    }
+    80% {
+      background-color: hsl(200, 50%, 50%);
+      box-shadow: 0 0 10px hsl(200, 50%, 50%);
+    }
+    100% {
+      background-color: hsl(255, 50%, 50%);
+      box-shadow: 0 0 10px hsl(255, 50%, 50%);
+    }
   }
 </style>
 
