@@ -1,14 +1,23 @@
 export default [
     {
         version: "2.0.0",
-        date: "2018-04-01",
+        date: "2018-06-25",
         notes: [
-            'A rewrite of Web Captioner to make fixes and future development much easier. Please leave me <a href="/feedback">lots of feedback</a>.',
-            'Added <a href="/captioner/settings/controls">keyboard shortcuts</a> because keyboard shortcuts are cool. For example, toggle fullscreen mode with <kbd>w</kbd> then <kbd>x</kbd>.',
-            'Added an option to show asterisks for <a href="/captioner/settings/censor">censored words</a>.',
-            'Added search box in <a href="/captioner/settings/language">language settings</a>.',
-            'Removed the chroma key background color setting for simplicity. You can still change the background color on the <a href="/captioner/settings/appearance">appearance tab</a>.',
-            'Got a Chromecast? Cast live captions to your TV with Chromecast. When a Chromecast is connected to your network, a Cast button will appear at the bottom of the screen.',
+            {
+                icon: 'iconmonstr-keyboard-13.svg',
+                title: 'Keyboard Shortcuts',
+                text: '<a href="/captioner/settings/controls">Keyboard shortcuts</a> let you start and stop captioning quickly.',
+            },
+            {
+                icon: 'iconmonstr-password-2.svg',
+                title: 'Asterisks for Censored Words',
+                text: 'In addition to omitting them, you can now optionally <a href="/captioner/settings/censor">use asterisks in place of censored words</a>.',
+            },
+            {
+                icon: 'iconmonstr-magnifier-4.svg',
+                title: 'Search Languages',
+                text: 'A new search box in <a href="/captioner/settings/language">language settings</a> lets you quickly change language Web Captioner is listening in.',
+            },
         ],
     },
 ];
