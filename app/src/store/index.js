@@ -75,6 +75,7 @@ export function createStore () {
             webControllerAddress: '',
           },
         },
+        lastWhatsNewVersionSeen: 'ab',
         exp: [],
       },
       receivers: {

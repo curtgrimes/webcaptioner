@@ -100,6 +100,8 @@ export default {
 
     commitPropertySetting('SET_SEND_TO_VMIX', 'on', 'integrations.vmix.on');
     commitPropertySetting('SET_VMIX_WEB_CONTROLLER_ADDRESS', 'webControllerAddress', 'integrations.vmix.webControllerAddress');
+    
+    commitPropertySetting('SET_LAST_WHATS_NEW_VERSION_SEEN', 'version', 'lastWhatsNewVersionSeen');
 
     (get(settings, 'exp') || []).forEach((experiment) => {
       commit('ADD_EXPERIMENT', { experiment });

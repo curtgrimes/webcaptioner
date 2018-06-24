@@ -1,7 +1,7 @@
 import changelog from '../data/changelog.js'
 import compareVersions from 'semver-compare'
 
-function getCurrentVersionNumber() {
+export function getCurrentVersionNumber() {
     let sortedChangelog = changelog.sort(function (changelogEntryA, changelogEntryB) {
         return compareVersions(changelogEntryA.version, changelogEntryB.version);
     });

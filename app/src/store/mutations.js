@@ -132,6 +132,10 @@ export default {
     state.detached = false;
   },
 
+  SET_LAST_WHATS_NEW_VERSION_SEEN: (state, { version }) => {
+    state.settings.lastWhatsNewVersionSeen = version;
+  },
+
   ADD_EXPERIMENT: (state, { experiment }) => {
     if (!state.settings.exp.includes(experiment)) {
       state.settings.exp.push(experiment);

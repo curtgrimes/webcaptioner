@@ -19,6 +19,8 @@ import MicrophonePermissionNeededModal from '../components/MicrophonePermissionN
 import MicrophonePermissionDeniedModal from '../components/MicrophonePermissionDeniedModal.vue'
 import RemoteEventBus from '../components/RemoteEventBus'
 import throttle from 'lodash.throttle'
+import {getCurrentVersionNumber} from '../util/settingsNormalizer.js'
+import versionSort from 'semver-compare'
 
 export default {
   name: 'captioner-view',
@@ -47,7 +49,11 @@ export default {
         this.initRoom();
     }
 
-    this.$refs.welcomeModal.showModal();
+    setTimeout(() => {
+      if (self.shouldShowWelcomeModal) {
+        self.$refs.welcomeModal.showModal();
+      }
+    },0);
 
     if (this.vmixOn) {
       this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')
@@ -120,6 +126,16 @@ export default {
     },
     vmixOn: function() {
       return this.$store.state.settings.integrations.vmix.on;
+    },
+    shouldShowWelcomeModal: function() {
+      const lastWhatsNewVersionSeen = this.$store.state.settings.lastWhatsNewVersionSeen;
+      const currentVersion = getCurrentVersionNumber();
+      const hasntSeenWelcomeModalForCurrentVersionYet = versionSort(lastWhatsNewVersionSeen || '0', currentVersion) < 0;
+      if (hasntSeenWelcomeModalForCurrentVersionYet) {
+        this.$store.commit('SET_LAST_WHATS_NEW_VERSION_SEEN', { version: currentVersion });
+      }
+      
+      return hasntSeenWelcomeModalForCurrentVersionYet;
     },
     remoteDisplays: {
       get () {
