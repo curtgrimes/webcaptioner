@@ -94,13 +94,15 @@ export default {
           case 'remoteDisplays':
             return 'Send captions to other phones or tablets.';
           case 'largerLayout':
-            return 'Adds an option for a larger navbar layout under Settings > Controls.'
+            return 'Adds an option for a larger navbar layout under Settings > Controls.';
+          case 'chromecast':
+            return 'A cast button will show on the navbar when a Chromecast-enabled device is detected on the network.';
           default:
             return '';
       }
     },
     isValidExperiment: function() {
-      return ['remoteDisplays','science','largerLayout',].includes(this.experimentName);
+      return ['remoteDisplays','science','largerLayout','chromecast',].includes(this.experimentName);
     },
     addExperiment: function({withConfirmation}) {
       if (this.isValidExperiment()) {

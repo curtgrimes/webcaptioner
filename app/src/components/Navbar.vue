@@ -25,7 +25,7 @@
                 <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
                     Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
                 </div>
-                <cast-button></cast-button>
+                <cast-button v-if="experiments.includes('chromecast')"></cast-button>
                 <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
                     <span class="navbar-text text-white pr-3 text-primary">
                         <fa icon="exclamation-triangle" /> vMix Not Connected
@@ -131,6 +131,9 @@ export default {
     },
     largerLayout: function() {
         return this.$store.state.settings.controls.layout.larger;
+    },
+    experiments: function() {
+        return this.$store.state.settings.exp;
     },
     captioningToggleButtonVariant: function() {
         return !this.captioningOn ? 'primary' : 'danger';
