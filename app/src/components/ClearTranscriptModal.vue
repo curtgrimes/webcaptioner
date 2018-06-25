@@ -58,7 +58,9 @@ export default {
       this.$refs.cancelButton.focus();
     },
     clearTranscript () {
-      this.$store.dispatch('captioner/restart');
+      if (this.$store.state.captioner.on) {
+        this.$store.dispatch('captioner/restart');
+      }
       this.$store.commit('captioner/CLEAR_TRANSCRIPT');
 
       // Close dialog
