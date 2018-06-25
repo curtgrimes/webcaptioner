@@ -23,6 +23,11 @@ export default [
                 title: 'Search Languages',
                 text: 'A new search box in <a href="/captioner/settings/language">language settings</a> lets you quickly change the language Web Captioner is listening in.',
             },
+            {
+                icon: 'iconmonstr-menu-10.svg',
+                title: 'And more!',
+                text: '<a href="/blog/2018/06/new-window-mode-keyboard-shortcuts/">Check the blog post</a> for more details.',
+            },
         ],
     },
 ];
