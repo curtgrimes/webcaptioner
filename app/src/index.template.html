@@ -23,39 +23,16 @@
   <style>
     #full-screen-loading {background:#292b2c;z-index:9999;position:fixed;top:0;bottom:0;left:0;right:0;transition: all 300ms;opacity:1;}
     #full-screen-loading.fadeOut {opacity:0;}
-    #full-screen-loading-content-wrap {animation:fadeIn 300ms 600ms forwards;opacity:0;}
+    #full-screen-loading-content-wrap {animation:fadeIn 300ms 600ms forwards;opacity:0;; transform: translateZ(0)}
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-    .full-screen-loading-logo {margin:0 auto;width: 35vh;height: 35vh;animation:rotateplane 4s 300ms infinite ease-in-out;opacity:1;}
+    .full-screen-loading-logo {z-index: 10000; margin:0 auto;width: 25vh;height: 25vh;animation:rotateplane 4s 300ms infinite ease-in-out;opacity:1;}
     @keyframes rotateplane {
-      0%{transform:perspective(70vh) rotateY(0deg)}
-      20%{transform:perspective(70vh) rotateY(-200deg)}
-      40%{transform:perspective(70vh) rotateY(20deg)}
-      70%{transform:perspective(70vh) rotateY(-360deg)}
-      100%{transform:perspective(70vh) rotateY(0deg)}
+      0%{transform:perspective(50vh) rotateY(0deg)}
+      20%{transform:perspective(50vh) rotateY(-200deg)}
+      40%{transform:perspective(50vh) rotateY(20deg)}
+      70%{transform:perspective(50vh) rotateY(-360deg)}
+      100%{transform:perspective(50vh) rotateY(0deg)}
     }
-    .spinner { animation: rotator 1.4s linear infinite;}
-
-    @keyframes rotator {
-      0% {transform: rotate(0deg);}
-      100% {transform: rotate(270deg);}
-    }
-    .spinner-path {
-      stroke-dasharray: 187;
-      stroke-dashoffset: 0;
-      transform-origin: center;
-      animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
-    }
-    @keyframes colors {
-      0%, 100% {stroke:#ffe200}
-      40% {stroke:#274DE6}
-      80% {stroke:#E83F6F}
-    }
-    @keyframes dash {
-      0% {stroke-dashoffset: 187;}
-      50% {stroke-dashoffset: 46.75;transform: rotate(135deg);}
-      100% {stroke-dashoffset: 187;transform: rotate(450deg);}
-    }
-
   </style>
 </head>
 
@@ -71,9 +48,6 @@
             <path fill="#ffe200" d="M-25.1-32.1v1265h1265v-1265H-25.1z M1054.9,1054.9H145.1V145.1h909.8V1054.9z"/>
           </svg>
       </div>
-      <svg class="spinner mt-5" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-        <circle class="spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-     </svg>
     </div>
   </div>
   <!--vue-ssr-outlet-->
