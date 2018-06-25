@@ -2,7 +2,7 @@
   <div class="settings-view" :style="{height}" style="overflow:auto">
     <router-link to="/captioner" class="btn btn-light d-none d-sm-block position-fixed py-md-3 px-3 px-md-4" style="z-index:2;right:0;top:0" role="tab" active-class=""><fa icon="times" size="2x" /></router-link>
     <!-- xs navbar -->
-    <nav class="d-sm-none navbar sticky-top navbar-light bg-primary pr-2" :class="{'pl-2': showBackButton}">
+    <nav class="d-sm-none navbar sticky-top navbar-light bg-primary pr-2" :class="{'pl-2': showBackButton}" style="z-index:1025">
       <div class="mr-auto">
         <router-link to="/captioner/settings" class="btn btn-primary mr-2" v-if="showBackButton">
           <fa icon="arrow-left" />

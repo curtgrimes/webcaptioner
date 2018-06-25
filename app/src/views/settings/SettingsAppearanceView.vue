@@ -96,7 +96,7 @@
     <div class="row">
       <div class="col-6">
         <label class="col-form-label">Alignment</label>
-        <div class="card bg-dark sticky-top" style="top:20px">
+        <div class="card bg-dark sticky-top" style="top:120px">
           <div class="card-header bg-dark text-white small px-2 py-1">
             Preview
           </div>
@@ -160,7 +160,7 @@
             </div>
           </label>
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentVertical == 'lowerThird' }">
-            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-lower-third" value="lowerThird" autocomplete="off"> Lower Third
+            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-lower-third" value="lowerThird" autocomplete="off"> Lower<br class="d-lg-none"/> Third
             <div class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-end" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup h-25 ml-auto p-1" v-bind:style="{color: textColor}">Ut enim ad minima veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</div>
             </div>
