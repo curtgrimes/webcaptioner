@@ -1,7 +1,7 @@
 <template>
     <b-modal lazy ref="modal" hide-footer title="Clear transcript?" @shown="autofocusElement()" @hide="replaceRouteToParent">
       <div class="text-right">
-        <b-btn ref="cancelButton" class="mr-2" variant="outline-info" to="/captioner" replace>Cancel</b-btn>
+        <b-btn ref="cancelButton" class="mr-2" variant="outline-info" @click="cancelModal()">Cancel</b-btn>
         <b-btn variant="danger" @click="clearTranscript">Clear Transcript</b-btn>
       </div>
     </b-modal>
@@ -46,6 +46,10 @@ export default {
     },
     showModal () {
       this.$refs.modal.show();
+    },
+    cancelModal() {
+      this.$refs.modal.hide();
+      this.$router.replace('/captioner');
     },
     hideModal () {
       this.$refs.modal.hide();
