@@ -290,11 +290,6 @@ export default [
         nameEnglish: 'Swedish (Sweden)',
     },
     {
-        name: 'Kiswahili (Tanzania)',
-        code: 'sv-SE',
-        nameEnglish: 'Swahili (Tanzania)',
-    },
-    {
         name: 'Kiswahili (Kenya)',
         code: 'sv-KE',
         nameEnglish: 'Swahili (Kenya)',
@@ -560,11 +555,6 @@ export default [
         nameEnglish: 'Latvian (Latvia)',
     },
     {
-        name: 'മലയാളം',
-        code: 'ml-IN',
-        nameEnglish: 'Malayalam (India)',
-    },
-    {
         name: 'मराठी',
         code: 'ml-IN',
         nameEnglish: 'Marathi (India)',
@@ -578,16 +568,6 @@ export default [
         name: 'नेपाली भाषा',
         code: 'ne-NP',
         nameEnglish: 'Nepali (Nepal)',
-    },
-    {
-        name: 'Basa Sunda',
-        code: 'sl-SI',
-        nameEnglish: 'Sundanese (Indonesia)',
-    },
-    {
-        name: 'Slovenčina',
-        code: 'sk-SK',
-        nameEnglish: 'Slovak (Slovakia)',
     },
     {
         name: '(پاکستان (اُردُو',
