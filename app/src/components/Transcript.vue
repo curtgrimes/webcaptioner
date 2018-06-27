@@ -2,7 +2,8 @@
   <div
     class="transcript d-flex"
     v-bind:class="[wrapTextPositionClass, (chromeless ? 'chromeless' : '')]"
-    v-bind:style="{height, color, backgroundColor, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow}">
+    v-bind:style="{height, color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow}">
+    <link type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" />
     <span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
@@ -61,6 +62,9 @@ export default {
     },
     backgroundColor () {
       return this.$store.state.settings.appearance.background.color;
+    },
+    fontFamily () {
+      return this.$store.state.settings.appearance.text.fontFamily;
     },
     fontSize () {
       return this.$store.state.settings.appearance.text.textSize + 'em';

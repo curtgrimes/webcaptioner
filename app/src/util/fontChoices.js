@@ -12,7 +12,7 @@ export default [
         displayName: 'Oswald',
     },
     {
-        googleFontNameKey: 'Lato:700',
+        googleFontNameKey: 'Lato',
         displayName: 'Lato',
     },
     {

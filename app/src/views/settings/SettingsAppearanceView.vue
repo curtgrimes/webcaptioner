@@ -4,12 +4,19 @@
     <div class="form-group row">
       <label for="text-color" class="col-sm-6 col-form-label">Font Family</label>
       <div class="col-sm-6">
-        <div class="dropdown typeface-select">
-          <button class="btn btn-white btn-block dropdown-toggle" type="button" id="typefaceDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-bind:style="{fontFamily: fontFamily}">{{fontFamilyDisplayName}}</button>
-          <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0)" v-for="fontChoice in getFontChoices()" v-bind:key="fontChoice.googleFontNameKey" v-bind:style="{fontFamily: fontChoice.googleFontNameKey }" v-on:click="fontFamily = fontChoice.googleFontNameKey">{{fontChoice.displayName}}</a>
-          </div>
-        </div>
+        <b-dropdown class="d-block w-100" toggle-class="w-100">
+          <template slot="button-content">
+            <span :style="{fontFamily: fontFamilyDisplayName}">
+              {{fontFamilyDisplayName}}
+            </span>
+          </template>
+          <b-dropdown-item
+            v-for="fontChoice in getFontChoices()"
+            :key="fontChoice.googleFontNameKey"
+            :style="{fontFamily: fontChoice.googleFontNameKey }"
+            @click="fontFamily = fontChoice.googleFontNameKey"
+          >{{fontChoice.displayName}}</b-dropdown-item>
+        </b-dropdown>
       </div>
     </div>
 
