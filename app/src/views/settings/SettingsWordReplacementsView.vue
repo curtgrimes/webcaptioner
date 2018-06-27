@@ -35,7 +35,6 @@ export default {
   mounted: function () {
     let self = this;
     setTimeout(() => {
-      console.log('here');
       if (!self.wordReplacements.length) {
         self.addWordReplacement({from:'', to: ''});
       }
