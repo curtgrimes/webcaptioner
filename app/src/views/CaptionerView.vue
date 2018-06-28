@@ -63,14 +63,9 @@ export default {
         this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
     }
 
-    if (this.vmixOn) {
-      this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')
-        .then(function() {
-          if (!self.$store.state.integrations.vmix.cachedInputGUID) {
-            self.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
-          }
-        })
-    }
+    this.$nextTick(() => {
+      this.refreshVmixStatus();
+    });
 
     RemoteEventBus.$on('sendMutationToReceivers', throttle(({type, payload}) => {
       if (self.remoteDisplays.length) {
@@ -86,6 +81,17 @@ export default {
     }, 0, {leading: true}));
   },
   methods: {
+    refreshVmixStatus: function() {
+      let self = this;
+      if (this.vmixOn) {
+        this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')
+          .then(function() {
+            if (!self.$store.state.integrations.vmix.cachedInputGUID) {
+              self.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
+            }
+          })
+      }
+    },
     initRoom: function() {
       if (this.$store.state.settings.roomLeaderToken) {
         this.$socket.sendObj({
@@ -99,6 +105,11 @@ export default {
     },
   },
   watch: {
+    captioningShouldBeOn: function(shouldBeOn) {
+      if (shouldBeOn) {
+        this.refreshVmixStatus();
+      }
+    },
     incompatibleBrowserModalVisible: function() {
       if (this.incompatibleBrowserModalVisible) {
         this.$refs.incompatibleBrowserModal.showModal();
@@ -130,6 +141,9 @@ export default {
     },
     transcript: function() {
       return this.$store.state.captioner.transcript.final + ' ' + this.$store.state.captioner.transcript.interim;
+    },
+    captioningShouldBeOn: function() {
+      return this.$store.state.captioner.shouldBeOn;
     },
     microphonePermissionNeeded: function() {
       return this.$store.state.captioner.microphonePermission.needed;
