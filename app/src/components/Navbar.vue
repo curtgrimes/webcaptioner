@@ -77,14 +77,14 @@
                             <span v-else>Stop Captioning</span> <kbd v-show="largerLayout" class="small ml-3">c</kbd>
                         </div>
                     </template>
-                    <b-dropdown-item href="/" target="_blank" onclick="ga('send', 'event', 'settings', 'aboutButton')">About</b-dropdown-item>
-                    <b-dropdown-item href="/help" target="_blank" onclick="ga('send', 'event', 'settings', 'helpCenterButton')">Help Center</b-dropdown-item>
-                    <b-dropdown-item href="/feedback" target="_blank" onclick="ga('send', 'event', 'settings', 'reportAProblemButton')">Report a Problem</b-dropdown-item>
-                    <b-dropdown-item href="/donate" target="_blank" onclick="ga('send', 'event', 'settings', 'donateButton')">Donate</b-dropdown-item>
+                    <b-dropdown-item href="/" target="_blank">About</b-dropdown-item>
+                    <b-dropdown-item href="/help" target="_blank">Help Center</b-dropdown-item>
+                    <b-dropdown-item href="/feedback" target="_blank">Report a Problem</b-dropdown-item>
+                    <b-dropdown-item href="/donate" target="_blank">Donate</b-dropdown-item>
                     <div class="dropdown-divider"></div>
                     <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><fa icon="external-link-alt" fixed-width class="mr-1" /> New Window</b-dropdown-item>
                     <div class="dropdown-divider"></div>
-                    <b-dropdown-item to="/captioner/save-to-file" replace onclick="ga('send', 'event', 'settings', 'saveToFile')"><fa icon="save" class="mr-1" fixed-width /> Save to File</b-dropdown-item>
+                    <b-dropdown-item to="/captioner/save-to-file" replace><fa icon="save" class="mr-1" fixed-width /> Save to File</b-dropdown-item>
                     <b-dropdown-item to="/captioner/clear" replace><fa icon="trash-alt" class="mr-1" fixed-width /> Clear...</b-dropdown-item>
                     <div class="dropdown-divider"></div>
                     <b-dropdown-item to="/captioner/settings" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> Settings</b-dropdown-item>
