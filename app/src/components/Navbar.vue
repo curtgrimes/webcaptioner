@@ -78,9 +78,12 @@
                         </div>
                     </template>
                     <b-dropdown-item href="/" target="_blank">About</b-dropdown-item>
+                    <b-dropdown-item href="/blog" target="_blank">Blog</b-dropdown-item>
                     <b-dropdown-item href="/help" target="_blank">Help Center</b-dropdown-item>
-                    <b-dropdown-item href="/feedback" target="_blank">Report a Problem</b-dropdown-item>
+                    <b-dropdown-item href="/community" target="_blank">Community</b-dropdown-item>
                     <b-dropdown-item href="/donate" target="_blank">Donate</b-dropdown-item>
+                    <div class="dropdown-divider"></div>
+                    <b-dropdown-item href="/feedback" target="_blank">Report a Problem</b-dropdown-item>
                     <div class="dropdown-divider"></div>
                     <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><fa icon="external-link-alt" fixed-width class="mr-1" /> New Window</b-dropdown-item>
                     <div class="dropdown-divider"></div>
