@@ -341,6 +341,11 @@ a.nav-link.active {
       position:relative;
     }
 
+    .transcript-scroller::-webkit-scrollbar {
+      width: 0px;  /* remove scrollbar space */
+      background: transparent;  /* optional: just make scrollbar invisible */
+    }
+
     .transcript-scroller-child {
       position:absolute;
       bottom:0; // make transcription start from the bottom
