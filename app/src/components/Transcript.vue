@@ -44,7 +44,7 @@ export default {
         // Hacky way to make sure settings view is correct
         // height after load where it is immediately active
         self.height = appHeightAdjuster();
-      },1000);
+      },500);
     });
     
 
