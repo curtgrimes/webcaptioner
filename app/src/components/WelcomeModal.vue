@@ -11,7 +11,7 @@
             <div class="splash-text d-flex align-items-center h-100">
               <div>
                 <h2>What's New in Web Captioner</h2>
-                <div style="max-height:80vh;overflow-y:auto">
+                <div style="max-height:60vh;overflow-y:auto">
                   <whats-new limit="1" :hide-title="true"></whats-new>
                 </div>
               </div>
