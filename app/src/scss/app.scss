@@ -449,6 +449,16 @@ html.blog, html.blog body {
   background:#fafafa;
 }
 
+/* Fix anchors and fixed header */
+html.blog h2[id]:before {
+  content: '';
+  display: block;
+  position: relative;
+  width: 0;
+  height: 3em;
+  margin-top: -3em
+}
+
 .bg-caption {
   font-weight:normal;
   background: theme-color("dark");
