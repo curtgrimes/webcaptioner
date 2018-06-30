@@ -1,7 +1,7 @@
 export default [
     {
         version: "2.0.0",
-        date: "2018-06-25",
+        date: "2018-07-01",
         notes: [
             {
                 icon: 'iconmonstr-window-19.svg',
