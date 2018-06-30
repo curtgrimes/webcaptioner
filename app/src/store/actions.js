@@ -44,7 +44,7 @@ export default {
   RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, dispatch }) => {
     function commitPropertySetting(mutationName, mutationDataPropertyName, settingsKey) {
       let value = get(settings, settingsKey);
-      if (value) {
+      if (typeof value !== 'undefined') {
         commit(
           mutationName,
           {
