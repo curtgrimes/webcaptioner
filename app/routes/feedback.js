@@ -60,6 +60,7 @@ router.post('/', function(req, res, next) {
       }
     },
     function (error, response, body) {
+      debugger;
       if (JSON.parse(body).success) {
         makeGitLabIssue();
       }

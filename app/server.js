@@ -102,20 +102,6 @@ app.use('/public', serve('./public', true))
 app.use('/manifest.json', serve('./public/manifest.json', true))
 app.use('/service-worker.js', serve('./dist/service-worker.js'))
 
-// Static site pages
-// app.use('/blog', express.static(path.join(__dirname, '../static-site/public/blog')));
-// app.use('/help', express.static(path.join(__dirname, '../static-site/public/help')));
-// app.use('/donate', express.static(path.join(__dirname, '../static-site/public/donate')));
-// app.use('/privacy-policy', express.static(path.join(__dirname, '../static-site/public/privacy-policy')));
-// app.use('/community', express.static(path.join(__dirname, '../static-site/public/community')));
-// app.use('/feedback', express.static(path.join(__dirname, '../static-site/public/feedback')));
-// app.use('/vmix', express.static(path.join(__dirname, '../static-site/public/vmix')));
-// app.use('/static/img', express.static(path.join(__dirname, 'static/img')));
-
-// app.use('/captioner', captioner);
-// app.use('/translate', translate);
-// app.use('/feedback', feedback);
-
 
 // since this app has no user-specific content, every page is micro-cacheable.
 // if your app involves user-specific content, you need to implement custom
@@ -166,6 +152,10 @@ app.get([
   '/connect*',
 ], isProd ? render : (req, res) => {
   readyPromise.then(() => render(req, res))
+});
+
+app.use('/feedback', function (req, res) {
+  res.redirect(301, 'https://feedback.webcaptioner.com');
 });
 
 // Serve static pages
