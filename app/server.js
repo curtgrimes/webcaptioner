@@ -228,24 +228,6 @@ function generateRoomLeaderToken() {
   return uuid();
 }
 
-// function restoreMySocketId(socket, socketId) {
-//   socket.id = socketId;
-  
-//   // If this socket is already a member of a room, connect them again.
-//   let membership = roomMemberships.find((membership) => {
-//     return membership.memberSocketId === socket.id;
-//   });
-
-//   if (membership) {
-//     socket._webcaptioner.connectId = null; // we don't need it anyomre
-
-//     socket.send(JSON.stringify({
-//       mutation: 'SET_ROOM_MEMBERSHIP_ID',
-//       memberOfRoomId: membership.roomId, // TODO THIS CHANGED
-//     }));
-//   }
-// }
-
 function restoreMyRoomMembership(socket, roomMembershipId) {
   let membershipIndex = roomMemberships.findIndex((membership) => {
     return membership.id === roomMembershipId;
@@ -314,7 +296,7 @@ function restoreMyRoomIdFromRoomLeaderToken(leaderSocket, roomLeaderToken) {
     });
 
     if (room) {
-      console.log('restoring room '+room.roomId + ' to socket.');
+      console.log('Restoring room '+room.roomId + ' to socket.');
 
       leaderSocket._webcaptioner.roomLeaderToken = room.roomLeaderToken;
       leaderSocket._webcaptioner.roomId = room.roomId;
@@ -323,6 +305,7 @@ function restoreMyRoomIdFromRoomLeaderToken(leaderSocket, roomLeaderToken) {
     }
     else {
       // No preexisting room found for that token. Assign a new room/token.
+      console.log('Assigning a new token to this leader.');
       getMyRoomLeaderToken(leaderSocket);
     }
 }

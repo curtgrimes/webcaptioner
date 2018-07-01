@@ -120,22 +120,24 @@ export default {
       console.log('navbarChangedHeight');
     });
 
-    if (this.$store.state.settings.roomMembershipId) {
-      if (!this.socketConnected) {
-          this.$watch('socketConnected', function(socketConnected) {
-            this.$socket.sendObj({
-              action: 'restoreMyRoomMembership',
-              roomMembershipId: this.$store.state.settings.roomMembershipId,
+    this.$nextTick(() => {
+      if (this.$store.state.settings.roomMembershipId) {
+        if (!this.socketConnected) {
+            this.$watch('socketConnected', function(socketConnected) {
+              this.$socket.sendObj({
+                action: 'restoreMyRoomMembership',
+                roomMembershipId: this.$store.state.settings.roomMembershipId,
+              });
             });
+        }
+        else {
+          this.$socket.sendObj({
+            action: 'restoreMyRoomMembership',
+            roomMembershipId: this.$store.state.settings.roomMembershipId,
           });
+        }
       }
-      else {
-        this.$socket.sendObj({
-          action: 'restoreMyRoomMembership',
-          roomMembershipId: this.$store.state.settings.roomMembershipId,
-        });
-      }
-    }
+    });
   },
   watch: {
     transcript: function(transcript) {

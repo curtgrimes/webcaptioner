@@ -42,15 +42,16 @@ export default {
     // socket.on("remoteDisplays", function ({ remoteDisplays }) {
     //     self.remoteDisplays = remoteDisplays;
     // });
-
-    if (!this.socketConnected) {
-        this.$watch('socketConnected', function(socketConnected) {
-            this.initRoom();
-        });
-    }
-    else {
-        this.initRoom();
-    }
+    this.$nextTick(() => {
+      if (!this.socketConnected) {
+          this.$watch('socketConnected', function(socketConnected) {
+              this.initRoom();
+          });
+      }
+      else {
+          this.initRoom();
+      }
+    });
 
     setTimeout(() => {
       if (self.shouldShowWelcomeModal) {
