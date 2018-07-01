@@ -1,0 +1,9 @@
+<UserControl Width="1920" Height="1080" Panel.ZIndex="500" InputMethod.IsInputMethodEnabled="True" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:mtl="clr-namespace:vMixTitleLibrary;assembly=vMixTitleLibrary">
+  <Grid InputMethod.IsInputMethodEnabled="True">
+    <mtl:TextBlockDesign Fill="#FFFFFFFF" FontSize="64" TextAlignment="Left" Text="Captions will appear here. Go back to Web Captioner to finish setup." Name="WebCaptionerCaptions" Width="1728" Height="200" Margin="96,784,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Visibility="Visible" InputMethod.IsInputMethodEnabled="True">
+      <mtl:TextBlockDesign.Effect>
+        <DropShadowEffect BlurRadius="1" />
+      </mtl:TextBlockDesign.Effect>
+    </mtl:TextBlockDesign>
+  </Grid>
+</UserControl>

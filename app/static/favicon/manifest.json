@@ -12,8 +12,8 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#f0e500",
-    "background_color": "#f0e500",
+    "theme_color": "#ffe200",
+    "background_color": "#ffe200",
     "start_url": "https://webcaptioner.com",
     "display": "standalone"
 }

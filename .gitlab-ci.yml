@@ -17,6 +17,17 @@ Build:
     - docker build --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
+Demo1:
+  stage: deploy
+  services:
+    - docker:dind
+  environment:
+    name: demo1
+    url: https://demo1.webcaptioner.com
+  script:
+    - source scripts/deploy.sh
+  when: manual
+
 Staging:
   stage: deploy
   services:

@@ -1,8 +1,10 @@
 .DS_Store
 app/node_modules
-app/build/*
+app/dist
 !app/build/.gitkeep
-app/env/google-application-credentials.json
 app/npm-debug.log
 npm-debug.log
 static-site/public
+static-site/node_modules
+static-site/static/build
+.env
