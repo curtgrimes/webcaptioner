@@ -43,7 +43,7 @@ export function normalizeSettings({ localStorageData, fromVersionNumber }) {
                     // chroma-key-color and text-background-transparent are eliminated in 2.0.0
                 },
             },
-            wordReplacements: localStorageData.wordReplacements.map((replacement) => {
+            wordReplacements: (localStorageData.wordReplacements || []).map((replacement) => {
                 return {
                     from: replacement.find,
                     to: replacement.replacement,
