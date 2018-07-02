@@ -127,10 +127,12 @@ export default {
   },
 
   SAVE_SETTINGS_TO_LOCALSTORAGE: ({state}) => {
-    localStorage.setItem('webcaptioner-settings', JSON.stringify({
-      settings: state.settings,
-      version: state.version,
-    }));
+    if (localStorage) {
+      localStorage.setItem('webcaptioner-settings', JSON.stringify({
+        settings: state.settings,
+        version: state.version,
+      }));
+    }
   },
 
   SHOW_INCOMPATIBLE_BROWSER_MODAL: ({commit}) => {
