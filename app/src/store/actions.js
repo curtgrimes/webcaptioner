@@ -62,7 +62,7 @@ export default {
 
     const localStorageParsed = JSON.parse(localStorage.getItem('webcaptioner-settings'));
     
-    if (!localStorageParsed) {
+    if (!localStorageParsed || !localStorageParsed.version) {
       return;
     }
 

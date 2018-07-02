@@ -11,7 +11,12 @@ export function getCurrentVersionNumber() {
 export function normalizeSettings({ localStorageData, fromVersionNumber }) {
     const currentVersionNumber = getCurrentVersionNumber();
 
-    if (compareVersions(fromVersionNumber, currentVersionNumber) === -1) { // Pre-2.0.0
+    if (!fromVersionNumber) {
+        // Can't determine what version number these settings are.
+        // Return nothing.
+        return;
+    }
+    else if (compareVersions(fromVersionNumber, currentVersionNumber) === -1) { // Pre-2.0.0
         console.log('converting settings');
         // Pre-2.0.0 sample
         // {"appearance":{"text-typeface":"Concert One","text-color":"#ccf9ff","text-color-interim-choice":"same-as-text-color","text-color-interim":"#fffeaf","text-size":"3.2","line-height":"3.8","letter-spacing":"0","capitalization":"capitalize","text-shadow-color":"#1800ff","text-shadow-opacity":"100","text-shadow-x-position":"0.25","text-shadow-y-position":"0.25","text-shadow-blur":"0","background-color":"#0004a9","chroma-key-color":"#00ff00","text-background-transparent":false,"horizontal-alignment":"full","vertical-alignment":"full","padding":"1.25"},"version":"1","vmix":{"on":true,"address":"http://192.168.88.58:8088"},"wordReplacements":[{"find":"a","replacement":"b"},{"find":"c","replacement":"d"}],"censorProfanity":false}
