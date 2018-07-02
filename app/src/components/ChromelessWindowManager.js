@@ -11,7 +11,7 @@ const start = function start(RemoteEventBus, onClose) {
     let checkOpenInterval;
 
     checkOpenInterval = setInterval(function(){
-        if (chromelessWindow.closed) {
+        if (!chromelessWindow || chromelessWindow.closed) {
             onClose();
             clearInterval(checkOpenInterval);
         }
