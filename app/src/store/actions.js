@@ -60,6 +60,10 @@ export default {
       }
     }
 
+    if (!localStorage) {
+      return;
+    }
+
     const localStorageParsed = JSON.parse(localStorage.getItem('webcaptioner-settings'));
     
     if (!localStorageParsed || !localStorageParsed.version) {
