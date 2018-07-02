@@ -61,8 +61,8 @@ export function normalizeSettings({ localStorageData, fromVersionNumber }) {
             // being saved correctly in 1.0
             integrations: {
                 vmix: {
-                    on: localStorageData.vmix.on,
-                    webControllerAddress: localStorageData.vmix.address,
+                    on: localStorageData.vmix ? localStorageData.vmix.on : false,
+                    webControllerAddress: localStorageData.vmix ? localStorageData.vmix.address : null,
                 },
             },
         };
