@@ -73,7 +73,9 @@ export default {
   methods: {
     initAudioStream: function() {
       let self = this;
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      
+      let constraints = {audio: true, video: false};
+      let streamHandler = function (stream) {
         self._stream = stream; // save reference to stream so we can close it later
 
         // Get the name of the device
@@ -100,7 +102,28 @@ export default {
           },
         );
         mediaStream.connect(self._audioMeter);
-      });
+      };
+
+      if (typeof navigator.mediaDevices.getUserMedia === 'function') {
+        // Use the current promise-based version of getUserMedia.
+        // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+        navigator.mediaDevices.getUserMedia(constraints).then(streamHandler);
+      }
+      else {
+        // Use the deprecated version of getUserMedia that was a property of navigator
+        // and uses a callback function.
+        // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getUserMedia
+
+        // It was also prefixed.
+        navigator.getUserMedia = (
+          navigator.getUserMedia
+          || navigator.webkitGetUserMedia
+          || navigator.mozGetUserMedia
+          || navigator.msGetUserMedia
+        );
+
+        navigator.getUserMedia(constraints, streamHandler, () => {});
+      }
 
       this._dateUpdateInterval = setInterval(() => { this.now = Date.now(); }, 1000);
     
