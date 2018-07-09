@@ -18,6 +18,7 @@ const SettingsCensorView = () => import('../views/settings/SettingsCensorView.vu
 const SettingsControlsView = () => import('../views/settings/SettingsControlsView.vue')
 const SettingsVmixView = () => import('../views/settings/SettingsVmixView.vue')
 const SettingsExperimentsView = () => import('../views/settings/SettingsExperimentsView.vue')
+const SettingsEventLogView = () => import('../views/settings/SettingsEventLogView.vue')
 const SettingsRemoteDisplaysView = () => import('../views/settings/SettingsRemoteDisplaysView.vue')
 const CaptionerView = () => import('../views/CaptionerView.vue')
 const Transcript = () => import('../components/Transcript.vue')
@@ -104,6 +105,13 @@ export function createRouter () {
                 component: SettingsExperimentsView,
                 meta: {
                   navbarTitle: 'Experiments',
+                },
+              },
+              {
+                path: 'event-log',
+                component: SettingsEventLogView,
+                meta: {
+                  navbarTitle: 'Event Log',
                 },
               },
             ]

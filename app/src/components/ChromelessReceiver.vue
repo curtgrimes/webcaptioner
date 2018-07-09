@@ -5,7 +5,6 @@
 export default {
   name: "chromeless-receiver",
   mounted: function() {
-    console.log('chromeless receiver mount');
 
     if (window) {
       window.addEventListener('processMessage', this.processMessage);

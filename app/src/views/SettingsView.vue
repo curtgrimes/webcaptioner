@@ -19,6 +19,9 @@
       <div :hidden="showBackButton" class="d-sm-none col p-0 bg-white pb-5 mb-3"> <!--  pb-5 mb-3 for bottom navbar space -->
         <b-list-group flush>
           <b-list-group-item to="/captioner/settings/about">About</b-list-group-item>
+          <b-list-group-item v-if="eventLog" to="/captioner/settings/event-log">
+            Event Log
+          </b-list-group-item>
           <b-list-group-item v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments">Experiments</b-list-group-item>
         </b-list-group>
         <h3 class="text-muted pl-3 pt-2 small">General</h3>
@@ -46,6 +49,12 @@
               <nav>
                 <b-nav vertical pills>
                   <b-nav-item to="/captioner/settings/about">About</b-nav-item>
+                  <b-nav-item v-if="eventLog" to="/captioner/settings/event-log">
+                    Event Log <span v-if="eventLogStopTime">({{logTimeRemainingMinutes}}:{{logTimeRemainingSeconds}})</span>
+                    <b-badge variant="light" class="nav-badge">
+                      {{eventLogCount}} <span class="sr-only">events</span> 
+                    </b-badge>
+                  </b-nav-item>
                   <b-nav-item class="nav-item-rainbow" v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments"><fa icon="flask" /> Experiments</b-nav-item>
                 </b-nav>
                 <hr/>
@@ -82,6 +91,12 @@
 </template>
 
 <style scoped>
+  .nav-badge {
+    position: relative;
+    top: 2px;
+    float: right;
+  }
+
   .nav-item-rainbow .nav-link.active {
     animation: rainbow 5s linear infinite alternate;
     text-shadow:0 1px 5px rgba(0,0,0,.3);
@@ -124,8 +139,11 @@ export default {
   name: 'settings-view',
   data: function() {
     return {
+      logTimeRemainingMinutes: '00',
+      logTimeRemainingSeconds: '00',
       escShortcut: null,
       height: '100vh',
+      tickInterval: null,
     };
   },
   mounted: function() {
@@ -148,11 +166,59 @@ export default {
     this.$watch('largerLayout', function() {
       this.height = appHeightAdjuster();
     });
+
+    this.startLogTimer();
   },
   beforeDestroy: function() {
     this.escShortcut.detach();
+
+    if (this.tickInterval) {
+      clearInterval(this.tickInterval);
+    }
+  },
+  watch: {
+    eventLogStopTime: function() {
+      this.startLogTimer();
+    },
+  },
+  methods: {
+    startLogTimer: function() {
+      if (this.eventLogStopTime) {
+        let logTick = () => {
+          let now = Date.now();
+          if (now < this.eventLogStopTime) {
+            let minutesDecimal = (this.eventLogStopTime - Date.now()) / 1000 / 60;
+            this.logTimeRemainingMinutes = (Math.floor(minutesDecimal) + '').padStart(2,'0');
+            this.logTimeRemainingSeconds = (Math.floor((minutesDecimal - this.logTimeRemainingMinutes) * 60) + '').padStart(2,'0');
+          }
+          else {
+            if (this.tickInterval) {
+              clearInterval(this.tickInterval);
+            }
+
+            this.logTimeRemainingMinutes = this.logTimeRemainingSeconds = '00';
+          }
+        }
+
+        if (this.tickInterval) {
+          clearInterval(this.tickInterval);
+        }
+        
+        logTick();
+        this.tickInterval = setInterval(logTick,100);
+      }
+    },
   },
   computed: {
+    eventLog: function() {
+      return Boolean(this.$store.state.eventLog.onUntilStopTime) || this.$store.state.eventLog.log.length > 0;
+    },
+    eventLogCount: function() {
+      return this.$store.state.eventLog.log.length;
+    },
+    eventLogStopTime: function() {
+      return this.$store.state.eventLog.onUntilStopTime;
+    },
     currentlyOnExperiments: function() {
       return this.$route.path === '/captioner/settings/experiments';
     },

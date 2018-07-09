@@ -117,7 +117,7 @@ export default {
     this.redirectSettingsRouteOnMobile(this.$route.path); // if navigating to settings page on load
 
     this.$on('navbarChangedHeight', function() {
-      console.log('navbarChangedHeight');
+      // console.log('navbarChangedHeight');
     });
 
     this.$nextTick(() => {
