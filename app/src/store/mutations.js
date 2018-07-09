@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import CircularJson from 'circular-json'
 
 export default {
   SET_TEXT_COLOR: (state, { textColor }) => {
