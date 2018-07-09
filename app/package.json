@@ -21,6 +21,7 @@
     "body-parser": "^1.17.2",
     "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.6",
+    "circular-json": "^0.5.5",
     "combokeys": "^3.0.0",
     "compression": "^1.7.2",
     "cookie-parser": "~1.4.3",
