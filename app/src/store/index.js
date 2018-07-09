@@ -36,6 +36,21 @@ let mutationInterceptorPlugin = store => {
         eventLabel,
       });
     }
+
+    if (type !== 'APPEND_EVENT_LOG') { // prevent loop
+      store.commit('APPEND_EVENT_LOG', {
+        event: {
+          event: 'mutation',
+          type,
+          payload: type === 'route/ROUTE_CHANGED'
+                    ? {
+                      from: payload.from.path,
+                      to: payload.to.path,
+                    }
+                    : payload,
+        }
+      });
+    }
   })
 };
 
@@ -124,6 +139,10 @@ export function createStore () {
           webControllerConnected: null,
           cachedInputGUID: null,
         },
+      },
+      eventLog: {
+        onUntilStopTime: null,
+        log: [],
       },
     },
     actions,

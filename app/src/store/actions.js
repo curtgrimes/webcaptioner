@@ -16,8 +16,20 @@ function getVmixPath(webControllerAddress) {
   return (webControllerAddress || '').trim().replace(/\/$/, "") + '/API';
 }
 
+function eventLogger(commit, {action, payload}) {
+  commit('APPEND_EVENT_LOG', {
+    event: {
+      event: 'action',
+      action,
+      payload,
+    }
+  });
+}
+
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
+    eventLogger(commit, {action: 'SET_LOCALE_FROM_USER_DEFAULT'});
+
     commit('SET_LOCALE_USER_DEFAULT', { locale: userLocale });
 
     // Find closest match for locale from supported locales
@@ -33,6 +45,8 @@ export default {
   },
 
   START_DETACHED_MODE: ({commit}) => {
+    eventLogger(commit, {action: 'START_DETACHED_MODE'});
+
     ChromelessWindowManager.start(RemoteEventBus, function () {
       // On close
       commit('SET_DETACHED_MODE_OFF');  
@@ -42,6 +56,8 @@ export default {
 
 
   RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, dispatch }) => {
+    eventLogger(commit, {action: 'RESTORE_SETTINGS_FROM_LOCALSTORAGE'});
+
     function commitPropertySetting(mutationName, mutationDataPropertyName, settingsKey) {
       let value = get(settings, settingsKey);
       if (typeof value !== 'undefined') {
@@ -126,7 +142,9 @@ export default {
     });
   },
 
-  SAVE_SETTINGS_TO_LOCALSTORAGE: ({state}) => {
+  SAVE_SETTINGS_TO_LOCALSTORAGE: ({state, commit}) => {
+    eventLogger(commit, {action: 'SAVE_SETTINGS_TO_LOCALSTORAGE'});
+
     if (localStorage) {
       localStorage.setItem('webcaptioner-settings', JSON.stringify({
         settings: state.settings,
@@ -136,6 +154,8 @@ export default {
   },
 
   SHOW_INCOMPATIBLE_BROWSER_MODAL: ({commit}) => {
+    eventLogger(commit, {action: 'SHOW_INCOMPATIBLE_BROWSER_MODAL'});
+
     // Just need to toggle it on for a second for the modal to appear
     commit('SET_INCOMPATIBLE_BROWSER_MODAL_VISIBLE');
     setTimeout(function(){
@@ -144,6 +164,8 @@ export default {
   },
 
   REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}) => {
+    eventLogger(commit, {action: 'REFRESH_VMIX_SETUP_STATUS'});
+
     let {
       checkIfExtensionInstalled,
       testWebControllerConnectivity,
@@ -237,6 +259,8 @@ export default {
   },
 
   SEND_TO_VMIX: ({state, commit}, { text }) => {
+    eventLogger(commit, {action: 'SEND_TO_VMIX', payload: {text}});
+
     let inputGUID = state.integrations.vmix.cachedInputGUID;
     
     if (!inputGUID) {

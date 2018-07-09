@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import CircularJson from 'circular-json'
 
 export default {
   SET_TEXT_COLOR: (state, { textColor }) => {
@@ -207,6 +208,23 @@ export default {
   },
   SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE: (state, { on }) => {
     state.integrations.vmix.showNotFullySetUpMessage = on;
+  },
+
+  SET_EVENT_LOG: (state, { eventLog }) => {
+    state.eventLog.log = eventLog;
+  },
+
+  APPEND_EVENT_LOG: (state, { event }) => {
+    if (Date.now() < state.eventLog.onUntilStopTime) {
+      state.eventLog.log.push({
+        time: Date.now(),
+        event: CircularJson.stringify(event),
+      });
+    }
+  },
+
+  SET_EVENT_LOG_STOP_TIME: (state, { stopTime }) => {
+    state.eventLog.onUntilStopTime = stopTime;
   },
 
 
