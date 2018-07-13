@@ -21,7 +21,7 @@ const serverInfo =
 
 const app = express()
 const server = require('http').Server(app);
-const wss = new WebSocket.Server({ server });
+// const wss = new WebSocket.Server({ server });
 
 // Health check
 app.use('/health-check', function (req, res) {
@@ -169,227 +169,227 @@ server.listen(port, () => {
 let roomLeaderTokens = [];
 let roomMemberships = [];
 
-wss.on('connection', function (socket) {
-  socket.id = uuid();
-  socket._webcaptioner = {};
+// wss.on('connection', function (socket) {
+//   socket.id = uuid();
+//   socket._webcaptioner = {};
 
-  // socket.send(JSON.stringify({
-  //   mutation: 'SET_INITIAL_SOCKET_ID',
-  //   socketId: socket.id,
-  // }));
+//   // socket.send(JSON.stringify({
+//   //   mutation: 'SET_INITIAL_SOCKET_ID',
+//   //   socketId: socket.id,
+//   // }));
 
-  socket.on('message', (messageJson) => {
-    let message;
+//   socket.on('message', (messageJson) => {
+//     let message;
 
-    try {
-      message = JSON.parse(messageJson)
-    }
-    catch (e) {
-      console.log('trouble parsing json');
-      return;
-    }
+//     try {
+//       message = JSON.parse(messageJson)
+//     }
+//     catch (e) {
+//       console.log('trouble parsing json');
+//       return;
+//     }
 
-    switch (message.action) {
-      // case 'restoreMySocketId':
-      //   return restoreMySocketId(socket, message.socketId);
-      case 'restoreMyRoomMembership':
-        return restoreMyRoomMembership(socket, message.roomMembershipId);
-      case 'getMyConnectId':
-        return getMyConnectId(socket, message.deviceInfo);
-      case 'getMyRoomLeaderToken':
-        return getMyRoomLeaderToken(socket);
-      case 'addMemberToMyRoom':
-        return addMemberToMyRoom(socket, parseInt(message.connectId));
-      case 'restoreMyRoomIdFromRoomLeaderToken':
-        return restoreMyRoomIdFromRoomLeaderToken(socket, message.roomLeaderToken);
-      case 'sendMessageToRoom':
-        return sendMessageToRoom(socket, message.type, message.payload);
-      default:
-        console.log('unhandled socket action');
-        console.log(messageJson);
-    }
-  });
+//     switch (message.action) {
+//       // case 'restoreMySocketId':
+//       //   return restoreMySocketId(socket, message.socketId);
+//       case 'restoreMyRoomMembership':
+//         return restoreMyRoomMembership(socket, message.roomMembershipId);
+//       case 'getMyConnectId':
+//         return getMyConnectId(socket, message.deviceInfo);
+//       case 'getMyRoomLeaderToken':
+//         return getMyRoomLeaderToken(socket);
+//       case 'addMemberToMyRoom':
+//         return addMemberToMyRoom(socket, parseInt(message.connectId));
+//       case 'restoreMyRoomIdFromRoomLeaderToken':
+//         return restoreMyRoomIdFromRoomLeaderToken(socket, message.roomLeaderToken);
+//       case 'sendMessageToRoom':
+//         return sendMessageToRoom(socket, message.type, message.payload);
+//       default:
+//         console.log('unhandled socket action');
+//         console.log(messageJson);
+//     }
+//   });
 
-  socket.on('error', function(e) {
-    console.log('Socket closed');
-  });
-});
+//   socket.on('error', function(e) {
+//     console.log('Socket closed');
+//   });
+// });
 
 
-function generateConnectId() {
-  return Math.floor(100000 + Math.random() * 900000); // Random 6-digit number
-}
+// function generateConnectId() {
+//   return Math.floor(100000 + Math.random() * 900000); // Random 6-digit number
+// }
 
-function generateRoomId() {
-  return uuid();
-}
+// function generateRoomId() {
+//   return uuid();
+// }
 
-function generateRoomLeaderToken() {
-  return uuid();
-}
+// function generateRoomLeaderToken() {
+//   return uuid();
+// }
 
-function restoreMyRoomMembership(socket, roomMembershipId) {
-  let membershipIndex = roomMemberships.findIndex((membership) => {
-    return membership.id === roomMembershipId;
-  });
+// function restoreMyRoomMembership(socket, roomMembershipId) {
+//   let membershipIndex = roomMemberships.findIndex((membership) => {
+//     return membership.id === roomMembershipId;
+//   });
 
-  if (membershipIndex >= 0) {
-    // Update the socket id
-    roomMemberships[membershipIndex].memberSocketId = socket.id;
+//   if (membershipIndex >= 0) {
+//     // Update the socket id
+//     roomMemberships[membershipIndex].memberSocketId = socket.id;
 
-    socket.send(JSON.stringify({
-      mutation: 'SET_ROOM_MEMBERSHIP_ID',
-      roomMembershipId: roomMemberships[membershipIndex].id,
-    }));
+//     socket.send(JSON.stringify({
+//       mutation: 'SET_ROOM_MEMBERSHIP_ID',
+//       roomMembershipId: roomMemberships[membershipIndex].id,
+//     }));
 
-    // Find the leader for this room
-    const leaderSocket = Array.from(wss.clients).find((client) => {
-      return client._webcaptioner.roomId && client._webcaptioner.roomId === roomMemberships[membershipIndex].roomId;
-    });
-    debugger;
-    // Notify leader
-    if (leaderSocket) {
-      sendRoomMemberListToLeader(leaderSocket);
-    }
-    else {
-      // Room leader not present; invalidate room?
+//     // Find the leader for this room
+//     const leaderSocket = Array.from(wss.clients).find((client) => {
+//       return client._webcaptioner.roomId && client._webcaptioner.roomId === roomMemberships[membershipIndex].roomId;
+//     });
+//     debugger;
+//     // Notify leader
+//     if (leaderSocket) {
+//       sendRoomMemberListToLeader(leaderSocket);
+//     }
+//     else {
+//       // Room leader not present; invalidate room?
 
-    }
-  }
-  else {
-    // No membership. Invalidate membership ID.
-    socket.send(JSON.stringify({
-      mutation: 'SET_ROOM_MEMBERSHIP_ID',
-      roomMembershipId: null,
-    }));
-  }
-}
+//     }
+//   }
+//   else {
+//     // No membership. Invalidate membership ID.
+//     socket.send(JSON.stringify({
+//       mutation: 'SET_ROOM_MEMBERSHIP_ID',
+//       roomMembershipId: null,
+//     }));
+//   }
+// }
 
-function getMyConnectId(socket, deviceInfo) {
-  socket._webcaptioner.connectId = generateConnectId();
-  socket._webcaptioner.deviceInfo = deviceInfo;
+// function getMyConnectId(socket, deviceInfo) {
+//   socket._webcaptioner.connectId = generateConnectId();
+//   socket._webcaptioner.deviceInfo = deviceInfo;
 
-  socket.send(JSON.stringify({
-    mutation: 'SET_CONNECT_ID',
-    connectId: socket._webcaptioner.connectId,
-  }));
-}
+//   socket.send(JSON.stringify({
+//     mutation: 'SET_CONNECT_ID',
+//     connectId: socket._webcaptioner.connectId,
+//   }));
+// }
 
-function getMyRoomLeaderToken(socket) {
-  socket._webcaptioner.roomLeaderToken = generateRoomLeaderToken();
-  socket._webcaptioner.roomId = generateRoomId();
+// function getMyRoomLeaderToken(socket) {
+//   socket._webcaptioner.roomLeaderToken = generateRoomLeaderToken();
+//   socket._webcaptioner.roomId = generateRoomId();
 
-    roomLeaderTokens.push({
-      roomLeaderToken: socket._webcaptioner.roomLeaderToken,
-      roomId: socket._webcaptioner.roomId,
-    });
+//     roomLeaderTokens.push({
+//       roomLeaderToken: socket._webcaptioner.roomLeaderToken,
+//       roomId: socket._webcaptioner.roomId,
+//     });
 
-  socket.send(JSON.stringify({
-    mutation: 'SET_ROOM_LEADER_TOKEN',
-    roomLeaderToken: socket._webcaptioner.roomLeaderToken,
-  }));
-}
+//   socket.send(JSON.stringify({
+//     mutation: 'SET_ROOM_LEADER_TOKEN',
+//     roomLeaderToken: socket._webcaptioner.roomLeaderToken,
+//   }));
+// }
 
-function restoreMyRoomIdFromRoomLeaderToken(leaderSocket, roomLeaderToken) {
-    let room = roomLeaderTokens.find((r) => {
-      return r.roomLeaderToken === roomLeaderToken;
-    });
+// function restoreMyRoomIdFromRoomLeaderToken(leaderSocket, roomLeaderToken) {
+//     let room = roomLeaderTokens.find((r) => {
+//       return r.roomLeaderToken === roomLeaderToken;
+//     });
 
-    if (room) {
-      console.log('Restoring room '+room.roomId + ' to socket.');
+//     if (room) {
+//       console.log('Restoring room '+room.roomId + ' to socket.');
 
-      leaderSocket._webcaptioner.roomLeaderToken = room.roomLeaderToken;
-      leaderSocket._webcaptioner.roomId = room.roomId;
+//       leaderSocket._webcaptioner.roomLeaderToken = room.roomLeaderToken;
+//       leaderSocket._webcaptioner.roomId = room.roomId;
 
-      sendRoomMemberListToLeader(leaderSocket);
-    }
-    else {
-      // No preexisting room found for that token. Assign a new room/token.
-      console.log('Assigning a new token to this leader.');
-      getMyRoomLeaderToken(leaderSocket);
-    }
-}
+//       sendRoomMemberListToLeader(leaderSocket);
+//     }
+//     else {
+//       // No preexisting room found for that token. Assign a new room/token.
+//       console.log('Assigning a new token to this leader.');
+//       getMyRoomLeaderToken(leaderSocket);
+//     }
+// }
 
-function addMemberToMyRoom(leaderSocket, memberConnectId) {
-  console.log('addmembertomyroom');
-  // (wss.clients is a set, not an array)
-  const memberSocket = Array.from(wss.clients).find((client) => {
-    return client._webcaptioner.connectId && client._webcaptioner.connectId === memberConnectId;
-  });
+// function addMemberToMyRoom(leaderSocket, memberConnectId) {
+//   console.log('addmembertomyroom');
+//   // (wss.clients is a set, not an array)
+//   const memberSocket = Array.from(wss.clients).find((client) => {
+//     return client._webcaptioner.connectId && client._webcaptioner.connectId === memberConnectId;
+//   });
 
-  const leaderRoomId = leaderSocket._webcaptioner.roomId;
+//   const leaderRoomId = leaderSocket._webcaptioner.roomId;
 
-  if (memberSocket && leaderRoomId) {
-    let membership = {
-      memberSocketId: memberSocket.id,
-      roomId: leaderRoomId,
-      joinDate: Date.now(),
-      id: uuid(),
-    };
+//   if (memberSocket && leaderRoomId) {
+//     let membership = {
+//       memberSocketId: memberSocket.id,
+//       roomId: leaderRoomId,
+//       joinDate: Date.now(),
+//       id: uuid(),
+//     };
 
-    roomMemberships.push(membership);
+//     roomMemberships.push(membership);
 
-    memberSocket._webcaptioner.connectId = null; // we don't need it anyomre
+//     memberSocket._webcaptioner.connectId = null; // we don't need it anyomre
 
-    memberSocket.send(JSON.stringify({
-      mutation: 'SET_ROOM_MEMBERSHIP_ID',
-      roomMembershipId: membership.id,
-    }));
-    console.log('Connected ' + memberConnectId + ' to room.');
+//     memberSocket.send(JSON.stringify({
+//       mutation: 'SET_ROOM_MEMBERSHIP_ID',
+//       roomMembershipId: membership.id,
+//     }));
+//     console.log('Connected ' + memberConnectId + ' to room.');
 
-    leaderSocket.send(JSON.stringify({
-      mutation: 'SET_REMOTE_DISPLAY_CONNECTED_ID_FOUND_MESSAGE',
-      on: true,
-    }));
+//     leaderSocket.send(JSON.stringify({
+//       mutation: 'SET_REMOTE_DISPLAY_CONNECTED_ID_FOUND_MESSAGE',
+//       on: true,
+//     }));
 
-    sendRoomMemberListToLeader(leaderSocket);
-  }
-  else {
-    // Nobody with this connect ID was found
-    leaderSocket.send(JSON.stringify({
-      mutation: 'SET_REMOTE_DISPLAY_CONNECTED_ID_NOT_FOUND_ERROR',
-      on: true,
-    }));
-  }
-}
+//     sendRoomMemberListToLeader(leaderSocket);
+//   }
+//   else {
+//     // Nobody with this connect ID was found
+//     leaderSocket.send(JSON.stringify({
+//       mutation: 'SET_REMOTE_DISPLAY_CONNECTED_ID_NOT_FOUND_ERROR',
+//       on: true,
+//     }));
+//   }
+// }
 
-function getRoomMembersExcludingLeader(roomId) {
-  const memberSocketIds = roomMemberships
-    .filter((membership) => {
-      return membership.roomId === roomId;
-    })
-    .map((membership) => {
-      return membership.memberSocketId;
-    });
+// function getRoomMembersExcludingLeader(roomId) {
+//   const memberSocketIds = roomMemberships
+//     .filter((membership) => {
+//       return membership.roomId === roomId;
+//     })
+//     .map((membership) => {
+//       return membership.memberSocketId;
+//     });
   
-  return Array.from(wss.clients).filter(function(client) {
-    return client.readyState === WebSocket.OPEN && memberSocketIds.includes(client.id);
-  });
-}
+//   return Array.from(wss.clients).filter(function(client) {
+//     return client.readyState === WebSocket.OPEN && memberSocketIds.includes(client.id);
+//   });
+// }
 
-function sendRoomMemberListToLeader(leaderSocket) {
-  debugger;
-  let leaderRoomId = leaderSocket._webcaptioner.roomId;
-  let members = getRoomMembersExcludingLeader(leaderRoomId);
+// function sendRoomMemberListToLeader(leaderSocket) {
+//   debugger;
+//   let leaderRoomId = leaderSocket._webcaptioner.roomId;
+//   let members = getRoomMembersExcludingLeader(leaderRoomId);
 
-  if (leaderRoomId) {
-    leaderSocket.send(JSON.stringify({
-      mutation: 'SET_REMOTE_DISPLAYS',
-      remoteDisplays: members.map(function(member) {
-        const membership = roomMemberships.find((membership) => { return membership.memberSocketId === member.id; });
+//   if (leaderRoomId) {
+//     leaderSocket.send(JSON.stringify({
+//       mutation: 'SET_REMOTE_DISPLAYS',
+//       remoteDisplays: members.map(function(member) {
+//         const membership = roomMemberships.find((membership) => { return membership.memberSocketId === member.id; });
 
-        return {
-          device: member._webcaptioner.deviceInfo,
-          joinDate: membership ? membership.joinDate : null,
-        };
-      }),
-    }));
-  }
-  else {
-    // This leader does not have a room
-    getMyRoomLeaderToken(leaderSocket);
-  }
-}
+//         return {
+//           device: member._webcaptioner.deviceInfo,
+//           joinDate: membership ? membership.joinDate : null,
+//         };
+//       }),
+//     }));
+//   }
+//   else {
+//     // This leader does not have a room
+//     getMyRoomLeaderToken(leaderSocket);
+//   }
+// }
 
 function sendMessageToRoom(leaderSocket, mutation, payload) {
   getRoomMembersExcludingLeader(leaderSocket._webcaptioner.roomId)
