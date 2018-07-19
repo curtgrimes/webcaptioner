@@ -1,3 +1,4 @@
+require('newrelic');
 require('dotenv').config()
 
 const fs = require('fs')
@@ -13,7 +14,7 @@ const enforce = require('express-sslify');
 const uuid = require('uuid/v4');
 const WebSocket = require('ws');
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV !== 'dev'
 const useMicroCache = process.env.MICRO_CACHE !== 'false'
 const serverInfo =
   `express/${require('express/package.json').version} ` +
