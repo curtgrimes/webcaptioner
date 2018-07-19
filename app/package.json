@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node --inspect server",
-    "start": "cross-env NODE_ENV=production node server",
+    "start": "node server",
     "build": "rimraf dist && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.config.js --progress --hide-modules"
@@ -17,6 +17,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.1.0-10",
     "@fortawesome/vue-fontawesome": "0.1.0-4",
     "@google-cloud/translate": "^0.8.2",
+    "apicache": "^1.2.3",
     "audio-stream-meter": "^1.0.4",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.1.1",
@@ -48,6 +49,7 @@
     "lodash.throttle": "^4.1.1",
     "lru-cache": "^4.1.2",
     "morgan": "~1.8.1",
+    "newrelic": "^4.5.1",
     "node-env-file": "^0.1.8",
     "node-sass": "^4.9.0",
     "normalize-strings": "^1.1.0",
@@ -73,10 +75,10 @@
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "chokidar": "^1.7.0",
     "css-loader": "^0.28.7",
@@ -87,17 +89,17 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "sw-precache-webpack-plugin": "^0.11.4",
-    "uglifyjs-webpack-plugin": "^1.2.5",
+    "uglifyjs-webpack-plugin": "^1.2.7",
     "url-loader": "^0.6.2",
-    "vue-loader": "^13.5.0",
+    "vue-loader": "^13.7.2",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^3.8.1",
-    "webpack-bundle-analyzer": "^2.11.1",
+    "webpack": "^3.12.0",
+    "webpack-bundle-analyzer": "^2.13.1",
     "webpack-bundle-size-analyzer": "^2.7.0",
     "webpack-dev-middleware": "^1.12.0",
-    "webpack-hot-middleware": "^2.20.0",
-    "webpack-merge": "^4.1.1",
-    "webpack-node-externals": "^1.6.0"
+    "webpack-hot-middleware": "^2.22.3",
+    "webpack-merge": "^4.1.3",
+    "webpack-node-externals": "^1.7.2"
   }
 }

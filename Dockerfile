@@ -1,8 +1,11 @@
-FROM node:10.0.0
+FROM node:10.6
 
 # Force binary name because the current linux architecture
 # wasn't available on GitHub as a prebuilt binary
-ENV SASS_BINARY_NAME linux-x64-59_binding.node
+# ENV SASS_BINARY_NAME linux-x64-59_binding.node
+
+# Set in startup.sh
+ENV GOOGLE_APPLICATION_CREDENTIALS ./app/config/google-application-credentials.json
 
 # Install Hugo
 ADD https://github.com/gohugoio/hugo/releases/download/v0.37.1/hugo_0.37.1_Linux-64bit.tar.gz /tmp
@@ -12,17 +15,24 @@ RUN tar -xf /tmp/hugo_0.37.1_Linux-64bit.tar.gz -C /tmp \
     && mv /tmp/hugo /usr/local/sbin/hugo \
     && rm -rf /tmp/hugo_0.37.1_linux_amd64
 
-# Install app dependencies
-COPY . /usr/src
-
-WORKDIR /usr/src/app
-RUN npm install
-RUN npm run build
-
-WORKDIR /usr/src/static-site
-RUN npm install
-
 WORKDIR /usr/src
 
+# Install app dependencies
+COPY ./app/package*.json ./app/
+COPY ./static-site/package*.json ./static-site/
+
+RUN set -ex \
+    && npm install --prefix ./app ./app \
+    && npm install --prefix ./static-site ./static-site
+
+# Copy the rest of the files
+COPY . ./
+
+# Build
+RUN set -ex \
+    && npm run build --prefix ./app \
+    && hugo --source="./static-site" \
+    && npm run gulp --prefix ./static-site
+
 EXPOSE 8080
-CMD ["bash","startup.sh"]
+CMD ["bash","/usr/src/scripts/run.sh"]
