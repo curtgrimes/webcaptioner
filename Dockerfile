@@ -22,7 +22,6 @@ COPY ./app/package*.json ./app/
 COPY ./static-site/package*.json ./static-site/
 
 RUN set -ex \
-    && npm config set registry http://registry.npmjs.org \
     && npm install --prefix ./app ./app \
     && npm install --prefix ./static-site ./static-site
 
