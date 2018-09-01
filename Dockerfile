@@ -30,6 +30,7 @@ COPY . ./
 
 # Build
 RUN set -ex \
+    && npm config set registry http://registry.npmjs.org \
     && npm run build --prefix ./app \
     && hugo --source="./static-site" \
     && npm run gulp --prefix ./static-site
