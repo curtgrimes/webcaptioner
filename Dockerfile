@@ -33,7 +33,7 @@ COPY . ./
 RUN set -ex \
     && npm run build --prefix ./app \
     && hugo --source="./static-site" \
-    && npm run gulp --prefix ./static-site
+    && npm run build --prefix ./static-site
 
 EXPOSE 8080
 CMD ["bash","/usr/src/scripts/run.sh"]
