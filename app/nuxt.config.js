@@ -61,6 +61,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    // analyze: true,
     /*
     ** Run ESLint on save
     */

@@ -6,7 +6,7 @@ import getters from './getters'
 import captioner from './modules/captioner'
 import fontChocies from '~/mixins/data/fontChoices'
 import remoteMutationBlacklist from '~/mixins/data/remoteMutationBlacklist'
-import RemoteEventBus from '~/mixins/remoteEventBus'
+import RemoteEventBus from '~/mixins/RemoteEventBus'
 
 Vue.use(Vuex)
 

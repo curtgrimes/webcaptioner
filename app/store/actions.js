@@ -1,6 +1,6 @@
 import userLocale from 'locale2'
 import supportedLocales from '~/mixins/data/locales'
-import RemoteEventBus from '~/mixins/remoteEventBus'
+import RemoteEventBus from '~/mixins/RemoteEventBus'
 import ChromelessWindowManager from '~/mixins/ChromelessWindowManager'
 import get from 'lodash.get'
 import vmixSetup from '~/mixins/vmixSetup'

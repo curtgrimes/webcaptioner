@@ -58,9 +58,9 @@
 
 <script>
 import loadScript from 'load-script'
-import RemoteEventBus from '~/mixins/remoteEventBus'
+import RemoteEventBus from '~/mixins/RemoteEventBus'
 
-const applicationID = '782AF9D8';
+const applicationID = '5F384FED';
 const namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
 
 export default {
