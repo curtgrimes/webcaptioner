@@ -3,6 +3,7 @@ app/node_modules
 app/dist
 !app/build/.gitkeep
 app/npm-debug.log
+app/.nuxt
 npm-debug.log
 static-site/public
 static-site/node_modules

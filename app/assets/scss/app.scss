@@ -1,0 +1,738 @@
+@import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
+@import "~bootstrap/scss/functions";
+
+$font-family-sans-serif: 'Roboto', sans-serif;
+$headings-font-family: 'Cousine', monopsace;
+$headings-font-weight: 700;
+
+$font-size-h3: 1.5rem;
+$font-size-h4: 1.25rem;
+$font-size-h5: 1rem;
+$font-size-h6: 0.75rem;
+
+$theme-colors: (
+  primary: #ffe200,
+  secondary: #274de6,
+  success: #39ad53,
+  info: #000,
+  warning: #ffc107, // $yellow
+  danger: #e83f6f,
+  light: #f4f4f4,
+  dark: #292b2c
+) !default;
+
+$link-color: theme-color("secondary");
+
+$border-radius: .2rem;
+$border-radius-lg: .3rem;
+$border-radius-sm: .2rem;
+$modal-content-bg: theme-color("primary");
+$modal-header-border-color: darken(theme-color("primary"), 10%);
+$modal-header-border-width: 1px;
+$modal-content-border-width: 0;
+$modal-content-border-color: theme-color("primary")y;
+$modal-title-line-height: 1.2;
+
+$component-active-color: #fff;
+$component-active-bg: theme-color("secondary");
+
+// $custom-control-indicator-bg: #fff;
+
+$dropdown-bg: #555;
+$dropdown-divider-bg: darken($dropdown-bg, 5%);
+$dropdown-link-color: #ccc;
+$dropdown-link-hover-color: #fff;
+$dropdown-link-hover-bg: #666;
+$dropdown-header-color: #aaa;
+
+$navbar-inverse-color:                 rgba(#fff,.5) !default;
+$navbar-inverse-hover-color:           rgba(#fff,.75) !default;
+$navbar-inverse-active-color:          rgba(#fff,1) !default;
+$navbar-inverse-disabled-color:        rgba(#fff,.25) !default;
+$navbar-inverse-toggler-border:        rgba(#fff,.1) !default;
+$navbar-light-color: #000;
+$navbar-light-hover-color: inherit;
+
+
+
+$nav-tabs-border-color: $modal-header-border-color;
+$nav-tabs-link-active-border-color: $modal-header-border-color $modal-header-border-color rgba(0,0,0,0);
+$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%) lighten($modal-header-border-color, 5%) rgba(0,0,0,0);
+$nav-tabs-link-active-color: #000;
+$nav-tabs-link-active-bg: theme-color("primary");
+$nav-tabs-active-link-hover-bg: theme-color("primary");
+
+$nav-pills-link-active-color: #fff;
+$nav-pills-link-active-bg: theme-color("secondary");
+
+$list-group-bg: #fff;
+$list-group-hover-bg: darken($list-group-bg, 5%);
+$list-group-active-bg: theme-color("secondary");
+$list-group-action-color: #111;
+$list-group-action-active-color: #fff;
+$list-group-action-active-bg:  darken(theme-color("secondary"), 10%);
+
+$thumbnail-bg:                theme-color("primary");
+$thumbnail-border-color:      $modal-header-border-color;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 860px,
+  lg: 910px
+);
+
+$pagination-active-bg: theme-color("secondary");
+$pagination-active-border: theme-color("secondary");
+$pagination-disabled-color: #999;
+
+$carousel-indicator-width: 50px;
+$carousel-indicator-height: 10px;
+$carousel-control-opacity: .8;
+.carousel-indicators li {
+  cursor: pointer;
+}
+
+$hr-margin-y: 0.5rem;
+
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/print";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/input-group";
+@import "~bootstrap/scss/custom-forms";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/breadcrumb";
+@import "~bootstrap/scss/pagination";
+@import "~bootstrap/scss/badge";
+//@import "~bootstrap/scss/jumbotron";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/media";
+@import "~bootstrap/scss/list-group";
+@import "~bootstrap/scss/close";
+
+// Components w/ JavaScript
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/tooltip";
+@import "~bootstrap/scss/popover";
+@import "~bootstrap/scss/carousel";
+
+@import "~bootstrap/scss/utilities";
+
+.logo-text {
+  font-family:$headings-font-family;
+  text-transform: uppercase;
+  font-weight:bold;
+  font-size:1.5rem;
+}
+
+h1, h2,
+.h1, .h2 {
+  text-transform: uppercase;
+}
+
+h3, h4, h5, h6,
+.h3, .h4, .h5, .h6 {
+  font-family:$font-family-sans-serif;
+}
+
+
+input[type="color"] {
+  height: 2.3rem;
+  padding: 0.2rem 0.4rem;
+}
+
+.col-form-label {
+  font-weight:bold;
+}
+
+.btn {
+  font-family: $headings-font-family;
+  font-weight:700;
+  text-transform:uppercase;
+  cursor:pointer;
+  padding:.575rem 1rem .425rem 1rem;
+}
+
+.btn-primary.dropdown-toggle-split {
+  border-left:1px solid $modal-header-border-color;
+}
+
+.navbar-expand .dropup .dropdown-menu {
+  bottom:initial;
+}
+
+.navbar {
+  padding:.5rem 1.1rem;
+}
+
+.navbar-brand {
+  font-family: $headings-font-family;
+  font-size:1.1rem;
+  line-height:1.55rem;
+  text-transform: uppercase;
+  padding: 9px 9px 8px 9px;
+  margin-left: -9px;
+  margin-right: -9px;
+  z-index:10;
+}
+
+.navbar-brand a {
+  text-decoration:none;
+  color:#fff;
+}
+
+.navbar-toggler {
+  z-index:15;
+}
+
+.nav-pills {
+  font-family:$headings-font-family;
+  text-transform:uppercase;
+  font-weight:bold;
+}
+
+.nav-link {
+  /* Adjust for Cousine baseline issue */
+  padding:0.65rem 1rem 0.5rem 1rem;
+}
+
+.btn-info:focus, .btn-info.focus {
+  box-shadow: 0 0 0 3px theme-color("secondary");
+  color:#fff;
+}
+
+.modal-title {
+  margin:0.25rem 0;
+}
+
+.modal .btn-link {
+  color:theme-color("dark");
+}
+
+.modal a:not(.dropdown-item):not(a.btn) {
+  color:theme-color("dark");
+  font-weight:bold;
+}
+
+/* Custom modal animation */
+
+.modal.fade .modal-dialog {
+  -webkit-transform: scale(0.9);
+  -moz-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);
+  opacity: 0;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.modal.fade.show .modal-dialog {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1;
+}
+
+.caption-wrap.caption-wrap-preview {
+    height: 280px;
+    overflow-y: scroll;
+}
+
+.typeface-select {
+  text-transform:uppercase;
+}
+
+.typeface-select .dropdown-menu {
+  font-size:1.5rem;
+}
+
+a.nav-link:not(.active) {
+  color: theme-color("dark");
+}
+
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover,
+a.navbar-brand:hover {
+  background: rgba(0,0,0,.08);
+  border-radius: 2px;
+}
+
+a.nav-link.active {
+  font-weight:bold;
+}
+
+.rgb-label {
+  font-family:'Cousine';
+}
+
+.screen-preview .screen {
+  max-width:100%;
+}
+    html,body {
+      background: #000;
+      height: 100%;
+    }
+
+    html.static-site, html.static-site body {
+      background:theme-color("primary");
+    }
+
+    #info {
+      font-size: 20px;
+    }
+
+    #start_button {
+      border: 0;
+      background-color: transparent;
+      padding: 0;
+      color: #ccc;
+    }
+
+    .interim {
+      color: #fff;
+    }
+    
+    .caption-wrap {
+      background:#000;
+      min-height:100%;
+    }
+
+    .caption-wrap-real {
+      overflow-y:auto;
+    }
+
+    .caption-wrap-real::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
+    }
+
+    .transcript {
+      height: calc(100vh - 60px);
+      width:100%;
+      line-height: 5rem;
+      color: #fff;
+      margin: 0 auto;
+      text-transform: uppercase;
+      font-size: 4em;
+      font-family:'Cousine', monopsace;
+    }
+
+    .transcript.chromeless {
+      height:100vh;
+    }
+
+    .transcript-scroller {
+      overflow-y:scroll;
+      position:relative;
+    }
+
+    .transcript-scroller::-webkit-scrollbar {
+      width: 0px;  /* remove scrollbar space */
+      background: transparent;  /* optional: just make scrollbar invisible */
+    }
+
+    .transcript-scroller-child {
+      position:absolute;
+      bottom:0; // make transcription start from the bottom
+      max-height:100%;
+    }
+
+    .final:focus {
+      outline:0;
+    }
+
+.language-selection .fa-check {
+  display:none;
+}
+
+.language-selection.active .fa-check {
+  display:inline-block;
+}
+
+/* Loading spinner */
+@keyframes lds-message {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+@-webkit-keyframes lds-message {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+.lds-message {
+  position: relative;
+  display:inline-block;
+}
+.lds-message > div {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  top: 20px;
+  -webkit-animation: lds-message 1s cubic-bezier(0.3, 0, 0.7, 1) infinite;
+  animation: lds-message 1s cubic-bezier(0.3, 0, 0.7, 1) infinite;
+}
+.lds-message > div:nth-of-type(4n + 1) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n + 2) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n + 3) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n) {
+  background: #ffffff;
+}
+.lds-message > div:nth-of-type(4n + 1) {
+  left: 38px;
+  -webkit-animation-delay: -0.666666666666667s;
+  animation-delay: -0.666666666666667s;
+}
+.lds-message > div:nth-of-type(4n + 2) {
+  left: 88px;
+  -webkit-animation-delay: -0.333333333333333s;
+  animation-delay: -0.333333333333333s;
+}
+.lds-message > div:nth-of-type(4n + 3) {
+  left: 138px;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+.lds-message {
+  width: 200px !important;
+  height: 50px !important;
+  -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+}
+
+
+
+
+/* Blog specific */
+
+html.blog, html.blog body {
+  background:#fafafa;
+}
+
+/* Fix anchors and fixed header */
+html.blog h2[id]:before {
+  content: '';
+  display: block;
+  position: relative;
+  width: 0;
+  height: 3em;
+  margin-top: -3em
+}
+
+.bg-caption {
+  font-weight:normal;
+  background: theme-color("dark");
+  line-height:3rem;
+  color:#fff;
+  display:inline;
+  box-shadow: -7px 0 0 0 theme-color("dark"), 7px 0 0 0 theme-color("dark"), 0 0 0 7px theme-color("dark");
+}
+
+/* The str-slice is removing the # in front of the color so we can add an encoded %23 instead. Firefox wants %23 intead of #. */
+.bg-primary.bg-zigzag {
+  background-image: url("data:image/svg+xml,%3Csvg width='420' height='60' viewBox='0 0 70 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,5.1L10.8,0h9.9L0,9.9V5.1L0,5.1z M70,9.9L49.3,0h9.9L70,5.1V9.9L70,9.9z M10.8,10l21-10h6.4l21,10h-9.9L35,3.2L20.7,10H10.8L10.8,10z M31.8,10L35,8.5l3.2,1.5H31.8L31.8,10z' fill='%23#{str-slice(inspect(darken(theme-color('primary'),4%)), 2)}' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-position-x:center;
+}
+
+.bg-dark.bg-zigzag {
+  background-image: url("data:image/svg+xml,%3Csvg width='420' height='60' viewBox='0 0 70 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,5.1L10.8,0h9.9L0,9.9V5.1L0,5.1z M70,9.9L49.3,0h9.9L70,5.1V9.9L70,9.9z M10.8,10l21-10h6.4l21,10h-9.9L35,3.2L20.7,10H10.8L10.8,10z M31.8,10L35,8.5l3.2,1.5H31.8L31.8,10z' fill='%23#{str-slice(inspect(darken(theme-color('dark'),4%)), 2)}' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-position-x:center;
+}
+
+a.hidden-link {
+  color:inherit;
+}
+
+a.hidden-link:hover, a.hidden-link:active, a.hidden-link:focus {
+  color:$link-color;
+}
+
+a.block-partial-highlight-children:hover {
+  text-decoration:none;
+}
+
+a.block-partial-highlight-children:hover .inner-link-do-highlight {
+  text-decoration:underline;
+}
+
+a.block-partial-highlight-children:hover .btn-primary {
+  @include button-variant(theme-color("primary"), theme-color("primary"));
+  // color: color-yiq(theme-color("primary");
+  // background-color: darken(theme-color("primary"), 7.5%); /* Get this percentage from _buttons.scss mixin */
+  // border-color: darken(theme-color("primary"), 10%); /* Get this percentage from _buttons.scss mixin */
+}
+
+.blog-article-list h2 {
+  text-transform:none;
+  font-family:$font-family-sans-serif;
+  font-size: 2.2rem;
+  font-weight: normal;
+}
+
+.inner-link-no-highlight {
+  color:#000;
+}
+
+.blog-article-list .inner-link-no-highlight p {
+  margin:0;
+}
+
+.blog-article-date {
+  text-transform: uppercase;
+  font-family: $headings-font-family;
+}
+
+html.blog h2,
+html.blog h3,
+html.blog h4,
+html.blog h5,
+html.blog h6 {
+  font-family:$font-family-sans-serif;
+  text-transform:none;
+}
+
+html.blog h2 {
+  margin:2rem 0 1.5rem 0;
+}
+
+a.hover-no-underline:hover, a.hover-no-underline:focus {
+  text-decoration:none;
+}
+
+.container-fluid.cover {
+  /* Define a background inline
+  /*background-image: url(/blog/2017/07/give-web-captioner-a-custom-look/cover.png);*/
+  background-color: #292b2c;
+  height: 310px;
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-breadcrumb {
+  background:$breadcrumb-bg;
+}
+
+#hero-caption-demo {
+  height:180px;
+  font-size: 1.7rem;
+  line-height: 2.15rem;
+  overflow: hidden;
+  transition: height 0.15s ease-out;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: 'Cousine', monopsace;
+}
+
+#hero-caption-demo.expanded {
+  height:290px;
+}
+
+.featuresList h3 {
+  font-size:1.2rem;
+  margin-top:1rem;
+}
+
+.main-page-headline {
+  font-size: 3.2rem;
+  letter-spacing: -1px;
+}
+
+.navbar-border-bottom {
+  border-bottom:1px solid darken(theme-color("primary"), 4%);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .12s ease;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+}
+
+.two-column-text {
+	column-count: 2;
+	column-gap: 2em;
+}
+
+@include media-breakpoint-up(lg) {
+  .featureScreenshot {
+    margin-bottom:-110px !important;
+  }
+
+  .container-main-page {
+    max-width:1200px;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .main-page-headline {
+    font-size:2.3rem;
+    letter-spacing:-1px;
+    line-height:2.8rem;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .jumbotron .display-3 {
+    font-size:4rem;
+  }
+
+  .two-column-text {
+    column-count: 1;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  .jumbotron .display-3 {
+    font-size:2.5rem;
+    letter-spacing: -2px;
+  }
+
+  .h2.bg-caption {
+    font-size:1.5rem;
+    line-height:2.5rem;
+  }
+
+  .navbar-light .navbar-nav .nav-link:focus,
+  .navbar-light .navbar-nav .nav-link:hover,
+  a.navbar-brand:hover {
+    background:none;
+  }
+
+  h1.display-4 {
+    font-size:2.4rem;
+  }
+}
+
+
+/* Range slider */
+// https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  display:none; /* Hide progress bar until MS can figure out how to follow the standard */
+
+
+  
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 20px;
+  background: #000;
+  cursor: pointer;
+  margin-top: -7px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 16px;
+  width: 16px;
+  border-radius: 20px;
+  background: #000;
+  cursor: pointer;
+}
+
+/* All the same stuff for IE */
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 16px;
+  width: 16px;
+  border-radius: 20px;
+  background: #000;
+  cursor: pointer;
+}
+
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2px;
+  margin-top:9px;
+  cursor: pointer;
+  background: #000;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #000;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: #000;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: #000;
+}
