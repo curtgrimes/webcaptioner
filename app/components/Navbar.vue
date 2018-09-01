@@ -25,7 +25,9 @@
                 <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
                     Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
                 </div>
-                <cast-button v-if="experiments.includes('chromecast')"></cast-button>
+                <transition name="fade">
+                    <cast-button v-if="experiments.includes('chromecast')"></cast-button>
+                </transition>
                 <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
                     <span class="navbar-text text-white pr-3 text-primary">
                         <fa icon="exclamation-triangle" /> vMix Not Connected

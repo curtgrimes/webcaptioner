@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-if="transcript || transcriptChangedRecently()">
+    <div v-if="transcript">
       <transcript></transcript>
-      <nav class="navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
+      <nav id="navbar" class="navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
           <span class="navbar-brand mr-auto text-white" style="opacity:.6">
               <img src="/static/img/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
               <span class="d-none d-md-inline">Web Captioner</span>
@@ -25,7 +25,6 @@ export default {
   },
   data: function() {
     return {
-      lastTranscriptChange: null,
       message: null,
       castReceiverManager: null,
       messageBus: null,
@@ -49,11 +48,6 @@ export default {
     transcript: function() {
         return this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim;
     },
-  },
-  watch: {
-    transcript: function() {
-      this.lastTranscriptChange = Date.now();
-    }
   },
   methods: {
     initCastReceiver: function() {
@@ -125,10 +119,6 @@ export default {
       // inform all senders on the CastMessageBus of the incoming message event
       // sender message listener will be invoked
       this.messageBus.send(senderId, data);
-    },
-
-    transcriptChangedRecently() {
-      return this.lastTranscriptChange && Date.now() - this.lastTranscriptChange > 2000;
     },
   }
 };

@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div v-else class="display-3 w-75">
-                    <span v-if="roomMembershipId">Connected!</span> Captioning will begin shortly. 
+                    <span v-if="roomMembershipId">Connected!</span> Captions will begin shortly. 
                 </div>
             </div>
             <div v-if="false" v-bind:class="{show: loopVideoLoaded}" class="fade d-none d-md-block video-container" style="position:absolute;right:7vw;bottom:10vh;width:43vw;height:65vh;">
@@ -19,8 +19,7 @@
             </div>
             <div class="h-25 d-flex align-items-center " style="position:absolute;left:7vw;right:0;bottom:0">
                 <div class="h2 logo-container">
-                    <img src="/static/img/logo-inverse.svg" class="d-inline-block" />
-                    <span class="logo-text">Web Captioner</span>
+                    <img src="/static/img/logo-wordmark-inverse.svg" class="d-inline-block" alt="Web Captioner" />
                 </div>
             </div>
         </div>
@@ -183,39 +182,15 @@ export default {
         transform: scale(0.8) translate(15px, 10px);
         opacity: .4;
     }
-
-    .logo-container {
-        font-size:3.2vw;
-    }
-
-    .logo-container .logo-text {
-        position:relative;
-        top:0.2vw;
-        left:1.2vw;
-    }
     .logo-container img {
-        width:3.7vw;
-        height:3.7vw;
+        height:7vw;
+        max-height:4rem;
+        min-height:3rem;
     }
 
     @media (max-width:930px) {
         .video-container {
             display:none !important;
-        }
-
-        .logo-container {
-            font-size:4vw;
-            top:-2px;
-        }
-
-        .logo-container .logo-text {
-            position:relative;
-            top:0.3vw;
-            left:2vw;
-        }
-        .logo-container img {
-            width:4.5vw;
-            height:4.5vw;
         }
 
         .connectId {
@@ -231,20 +206,9 @@ export default {
     }
 
     @media (max-width:530px) {
-        .logo-container {
-            font-size:6vw;
-            top:-2px;
-        }
-
-        .logo-container .logo-text {
-            position:relative;
-            top:0.5vw;
-            left:2.5vw;
-        }
-        .logo-container img {
-            width:6.5vw;
-            height:6.5vw;
-        }   
+        /* .logo-container img {
+            height:10vw;
+        }    */
     }
 
     @media (max-height:400px) {

@@ -18,7 +18,7 @@
           </g>
       </svg>
     </b-button>
-    <b-button v-else-if="connected" v-b-tooltip.hover="'Casting to ' + receiverName" variant="secondary" @click="stop()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
+    <b-button id="cast-connected-button" v-else-if="connected" v-b-tooltip.hover="'Casting to ' + receiverName" variant="secondary" @click="stop()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
       <img src="/static/cast-icons/cast-icon-connected.svg"/>
     </b-button>
     <b-button v-else variant="info" v-b-tooltip.hover="'Cast'" @click="sendInitMessage()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
@@ -219,6 +219,22 @@ export default {
     },
     largerLayout: function() {
         return this.$store.state.settings.controls.layout.larger;
+    },
+  },
+  watch: {
+    connected(to, from) {
+      if (!from && to) {
+        // Became connected. Show tooltip for a moment.
+        this.$nextTick(()=> {
+          setTimeout(()=>{
+            this.$root.$emit('bv::show::tooltip', 'cast-connected-button');
+          },500);
+          setTimeout(()=>{
+            this.$root.$emit('bv::hide::tooltip', 'cast-connected-button');
+          },3000);
+        });
+        
+      }
     },
   },
   mounted: function() {
