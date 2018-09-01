@@ -15,7 +15,8 @@ export default {
   mounted: function() {
 
     if (window) {
-      window.addEventListener('processMessage', this.processMessage);
+      window.addEventListener('processVuexMutation', this.processVuexMutation);
+      window.addEventListener('processVuexAction', this.processVuexAction);
     }
 
     // When opener window refreshes or closes, close this window
@@ -27,11 +28,15 @@ export default {
         window.close();
       }
     },250);
-    
+
+    window.opener.dispatchEvent(new CustomEvent('receiverIsReadyToReceiveMutations'));
   },
   methods: {
-    processMessage: function ({detail:{type, payload}}) {
+    processVuexMutation: function ({detail:{type, payload}}) {
       this.$store.commit(type, payload);
+    },
+    processVuexAction: function ({detail:{type, payload}}) {
+      this.$store.dispatch(type, payload);
     },
   }
 };
