@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="releaseNoteEntry in changelogSortedByVersionNumber" v-bind:key="releaseNoteEntry.version">
-      <h3 v-if="hideTitle !== true">{{formatDate(releaseNoteEntry.date)}} <small class="text-dark pl-3 text-capitalize">Version {{releaseNoteEntry.version}}</small></h3>
+      <h3 class="mt-4" v-if="hideTitle !== true">{{formatDate(releaseNoteEntry.date)}} <small class="text-dark pl-3 text-capitalize">Version {{releaseNoteEntry.version}}</small></h3>
       <div v-if="Array.isArray(releaseNoteEntry.notes) && releaseNoteEntry.notes.length > 0" class="pt-2">
         <div class="media" :class="{'mb-4' : index != releaseNoteEntry.notes.length - 1}" v-for="(note, index) in releaseNoteEntry.notes" v-bind:key="note.text">
           <img class="mr-3" style="width:60px" :src="'/static/update-icons/' + note.icon" alt="" />
@@ -11,7 +11,7 @@
           </div>
         </div>
       </div>
-      <div v-else-if="typeof releaseNoteEntry.notes === 'string'" v-html="releaseNoteEntry.notes" class="ml-4"></div>
+      <div v-else-if="typeof releaseNoteEntry.notes === 'string'" v-html="releaseNoteEntry.notes"></div>
       <div v-else class="ml-4"><fa :icon="['far', 'thumbs-up']" class="mr-1" />  Just working on making some stuff run better. </div>
     </div>
   </div>
@@ -31,7 +31,7 @@ export default {
   computed: {
     changelogSortedByVersionNumber: function () {
       let sortedChangelog = changelog.sort(function (changelogEntryA, changelogEntryB) {
-        return versionSort(changelogEntryA.version, changelogEntryB.version);
+        return versionSort(changelogEntryB.version, changelogEntryA.version);
       });
       return sortedChangelog.slice(0, this.limit || 10);
     },

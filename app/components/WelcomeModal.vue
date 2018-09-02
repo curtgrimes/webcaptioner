@@ -1,5 +1,5 @@
 <template>
-    <b-modal lazy size="lg" ref="modal" hide-header no-close-on-esc no-close-on-backdrop>
+    <b-modal lazy size="lg" ref="modal" hide-header no-close-on-esc no-close-on-backdrop @shown="focusOkButton()">
       <div class="p-3 logo-animated-wrap" ref="logoAnimatedWrap">
         <div class="row">
           <div class="d-none d-lg-block col-lg-3 text-center splash-logo-wrap" style="overflow:hidden">
@@ -95,13 +95,18 @@ export default {
   },
   methods: {
     showModal() {
-      this.$refs.modal.show()
+      this.$refs.modal.show();
     },
     hideModal () {
       this.$refs.modal.hide();
       if (this.incompatibleBrowser) {
         this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
       }
+    },
+    focusOkButton () {
+      console.log('here');
+      console.log(this.$refs.getStartedButton);
+      this.$refs.getStartedButton.focus();
     },
   },
 }

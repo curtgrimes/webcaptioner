@@ -30,4 +30,25 @@ export default [
             },
         ],
     },
+    {
+        version: "2.1.0",
+        date: "2018-09-02",
+        notes: [
+            {
+                icon: 'iconmonstr-window-23.svg',
+                title: 'Chromecast',
+                text: 'Just tap the Cast icon to stream to any connected TV.',
+            },
+            {
+                icon: 'iconmonstr-share-7.svg',
+                title: 'Webhooks',
+                text: '<a href="/captioner/settings/webhooks">Webhooks</a> allows you to receive real-time HTTP notifications of captioning events in your application. Events are sent client-side from this browser.',
+            },
+            {
+                icon: 'iconmonstr-download-17.svg',
+                title: 'Export and Restore Settings',
+                text: 'You can now export and restore all of Web Captioner\'s settings from the <a href="/captioner/settings/export-restore">export/restore page</a>.',
+            },
+        ],
+    },
 ];
