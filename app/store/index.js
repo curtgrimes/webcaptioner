@@ -114,6 +114,12 @@ const createStore = () => {
             on: false,
             webControllerAddress: '',
           },
+          webhooks: {
+            on: false,
+            url: '',
+            method: 'POST',
+            throttleMs: 500,
+          },
         },
         lastWhatsNewVersionSeen: '',
         exp: [],
@@ -144,6 +150,9 @@ const createStore = () => {
           chromeExtensionInstalled: null,
           webControllerConnected: null,
           cachedInputGUID: null,
+        },
+        webhooks: {
+          log: [],
         },
       },
       eventLog: {

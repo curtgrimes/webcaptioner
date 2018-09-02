@@ -194,6 +194,79 @@ export default {
       this.refreshVmixStatus();
     });
 
+    let lastWebhookInterimEventDate = 0;
+    RemoteEventBus.$on('sendMutationToReceivers', ({type, payload}) => {
+      if (
+        this.$store.state.settings.integrations.webhooks.on
+        && [
+          'captioner/SET_TRANSCRIPT_INTERIM',
+          'captioner/APPEND_TRANSCRIPT_FINAL',
+        ].includes(type)
+      ) {
+        
+        if (
+          type === 'captioner/SET_TRANSCRIPT_INTERIM'
+          && Date.now() - lastWebhookInterimEventDate < this.$store.state.settings.integrations.webhooks.throttleMs
+        ) {
+          // Skip this interim event due to throttling
+          return;
+        }
+
+        if (type === 'captioner/SET_TRANSCRIPT_INTERIM') {
+          lastWebhookInterimEventDate = Date.now();
+        }
+
+        let payloadToSend = payload;
+        delete payloadToSend.omitFromGoogleAnalytics; // if it exists
+        let typeToSend = type.replace('captioner/', '');
+
+        let bodyToSend = JSON.stringify({
+            type: typeToSend,
+            payload: payloadToSend
+          });
+
+        this.$store.commit('APPEND_WEBHOOK_LOG', {
+          event: {
+            type: 'send',
+            title: this.$store.state.settings.integrations.webhooks.method + ' ' + this.$store.state.settings.integrations.webhooks.url,
+            body: bodyToSend,
+            showBody: false,
+          }
+        });
+
+        fetch(this.$store.state.settings.integrations.webhooks.url, {
+          method: this.$store.state.settings.integrations.webhooks.method,
+          mode: 'cors',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: bodyToSend,
+        })
+        .then((response) => {
+          response.text()
+            .then(() => {
+              this.$store.commit('APPEND_WEBHOOK_LOG', {
+                event: {
+                  type: 'receive',
+                  title: response.status + ' ' + response.statusText,
+                  error: response.status >= 300,
+                }
+              });
+            });
+        })
+        .catch((error) => {
+          this.$store.commit('APPEND_WEBHOOK_LOG', {
+            event: {
+              type: 'receive',
+              title: error.message,
+              error: true,
+            }
+          });
+        });
+      }
+    });
+
     RemoteEventBus.$on('sendMutationToReceivers', throttle(({type, payload}) => {
       if (self.remoteDisplays.length) {
           this.$socket.sendObj({

@@ -107,6 +107,11 @@ export default {
 
       commitPropertySetting('SET_SEND_TO_VMIX', 'on', 'integrations.vmix.on');
       commitPropertySetting('SET_VMIX_WEB_CONTROLLER_ADDRESS', 'webControllerAddress', 'integrations.vmix.webControllerAddress');
+
+      commitPropertySetting('SET_WEBHOOKS_ON', 'onOrOff', 'integrations.webhooks.on');
+      commitPropertySetting('SET_WEBHOOKS_URL', 'url', 'integrations.webhooks.url');
+      commitPropertySetting('SET_WEBHOOKS_METHOD', 'method', 'integrations.webhooks.method');
+      commitPropertySetting('SET_WEBHOOKS_THROTTLE_MS', 'throttleMs', 'integrations.webhooks.throttleMs');
       
       commitPropertySetting('SET_LAST_WHATS_NEW_VERSION_SEEN', 'version', 'lastWhatsNewVersionSeen');
 

@@ -70,6 +70,7 @@
                 <hr/>
                 <b-nav vertical pills>
                   <b-nav-item to="/captioner/settings/vmix">vMix</b-nav-item>
+                  <b-nav-item to="/captioner/settings/webhooks">Webhooks</b-nav-item>
                 </b-nav>
               </nav>
             </div>

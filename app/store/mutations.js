@@ -213,6 +213,32 @@ export default {
     state.integrations.vmix.showNotFullySetUpMessage = on;
   },
 
+  SET_WEBHOOKS_ON: (state, { onOrOff }) => {
+    state.settings.integrations.webhooks.on = onOrOff;
+  },
+  SET_WEBHOOKS_URL: (state, { url }) => {
+    state.settings.integrations.webhooks.url = url;
+  },
+  SET_WEBHOOKS_METHOD: (state, { method }) => {
+    // Should be one of this set of options; otherwise set default
+    let methodValidated = ['POST','PUT'].includes(method) ? method : 'POST';
+    state.settings.integrations.webhooks.method = methodValidated;
+  },
+  SET_WEBHOOKS_THROTTLE_MS: (state, { throttleMs }) => {
+    let throttleMsValidated = Number(throttleMs);
+    if (Number.isNaN(throttleMsValidated)) {
+      throttleMsValidated = 0;
+    }
+    if (throttleMsValidated > 60000) {
+      throttleMsValidated = 60000;
+    }
+
+    state.settings.integrations.webhooks.throttleMs = throttleMsValidated;
+  },
+  APPEND_WEBHOOK_LOG: (state, { event }) => {
+    state.integrations.webhooks.log.push(event);
+  },
+
   SET_EVENT_LOG: (state, { eventLog }) => {
     state.eventLog.log = eventLog;
   },
@@ -229,25 +255,5 @@ export default {
   SET_EVENT_LOG_STOP_TIME: (state, { stopTime }) => {
     state.eventLog.onUntilStopTime = stopTime;
   },
-
-
-  SET_ACTIVE_TYPE: (state, { type }) => {
-    state.activeType = type
-  },
-
-  SET_LIST: (state, { type, ids }) => {
-    state.lists[type] = ids
-  },
-
-  SET_ITEMS: (state, { items }) => {
-    items.forEach(item => {
-      if (item) {
-        Vue.set(state.items, item.id, item)
-      }
-    })
-  },
-
-  SET_USER: (state, { id, user }) => {
-    Vue.set(state.users, id, user || false) /* false means user not found */
-  }
+  
 }
