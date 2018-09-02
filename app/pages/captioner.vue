@@ -196,52 +196,26 @@ export default {
 
     let lastWebhookInterimEventDate = 0;
     RemoteEventBus.$on('sendMutationToReceivers', ({type, payload}) => {
-      if (
-        this.$store.state.settings.integrations.webhooks.on
-        && [
-          'captioner/SET_TRANSCRIPT_INTERIM',
-          'captioner/APPEND_TRANSCRIPT_FINAL',
-        ].includes(type)
-      ) {
-        
-        if (
-          type === 'captioner/SET_TRANSCRIPT_INTERIM'
-          && Date.now() - lastWebhookInterimEventDate < this.$store.state.settings.integrations.webhooks.throttleMs
-        ) {
-          // Skip this interim event due to throttling
-          return;
-        }
-
-        if (type === 'captioner/SET_TRANSCRIPT_INTERIM') {
-          lastWebhookInterimEventDate = Date.now();
-        }
-
-        let payloadToSend = payload;
-        delete payloadToSend.omitFromGoogleAnalytics; // if it exists
-        let typeToSend = type.replace('captioner/', '');
-
-        let bodyToSend = JSON.stringify({
-            type: typeToSend,
-            payload: payloadToSend
-          });
+      let callWebhook = ({url, method, transcript}) => {
+        let body = JSON.stringify({transcript});
 
         this.$store.commit('APPEND_WEBHOOK_LOG', {
           event: {
             type: 'send',
-            title: this.$store.state.settings.integrations.webhooks.method + ' ' + this.$store.state.settings.integrations.webhooks.url,
-            body: bodyToSend,
+            title: method + ' ' + url,
+            body,
             showBody: false,
           }
         });
 
-        fetch(this.$store.state.settings.integrations.webhooks.url, {
-          method: this.$store.state.settings.integrations.webhooks.method,
+        fetch(url, {
+          method,
           mode: 'cors',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
-          body: bodyToSend,
+          body,
         })
         .then((response) => {
           response.text()
@@ -263,6 +237,30 @@ export default {
               error: true,
             }
           });
+        });
+      }
+
+      if (!this.$store.state.settings.integrations.webhooks.on) {
+        return;
+      }
+      
+      if (
+        type === 'captioner/SET_TRANSCRIPT_INTERIM'
+        && (Date.now() - lastWebhookInterimEventDate) >= this.$store.state.settings.integrations.webhooks.interim.throttleMs
+      ) {
+        callWebhook({
+          url: this.$store.state.settings.integrations.webhooks.interim.url,
+          method: this.$store.state.settings.integrations.webhooks.interim.method,
+          transcript: payload.transcriptInterim || '',
+        });
+        lastWebhookInterimEventDate = Date.now();
+      }
+
+      if (type === 'captioner/APPEND_TRANSCRIPT_FINAL') {
+        callWebhook({
+          url: this.$store.state.settings.integrations.webhooks.final.url,
+          method: this.$store.state.settings.integrations.webhooks.final.method,
+          transcript: payload.transcriptFinal || '',
         });
       }
     });

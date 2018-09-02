@@ -116,9 +116,15 @@ const createStore = () => {
           },
           webhooks: {
             on: false,
-            url: '',
-            method: 'POST',
-            throttleMs: 500,
+            interim: {
+              url: '',
+              method: 'POST',
+              throttleMs: 500,
+            },
+            final: {
+              url: '',
+              method: 'POST',
+            },
           },
         },
         lastWhatsNewVersionSeen: '',
