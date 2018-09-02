@@ -57,7 +57,7 @@ export default {
           {deep: true}
         );
       
-        if (this.hasntSeenWelcomeModalForCurrentVersionYet()) {
+        if (this.hasntSeenWelcomeModalForCurrentVersionYet() && !this.shouldAutostart()) {
           self.$refs.welcomeModal.showModal();
           self.$store.commit('SET_LAST_WHATS_NEW_VERSION_SEEN', { version: getCurrentVersionNumber() });
         }
@@ -193,6 +193,10 @@ export default {
     this.$nextTick(() => {
       this.refreshVmixStatus();
     });
+
+    if (this.shouldAutostart()) {
+      this.startCaptioning();
+    }
 
     let lastWebhookInterimEventDate = 0;
     RemoteEventBus.$on('sendMutationToReceivers', ({type, payload}) => {
@@ -408,6 +412,9 @@ export default {
       else {
         this.$socket.sendObj({action: 'getMyRoomLeaderToken'});
       }
+    },
+    shouldAutostart: function() {
+      return this.$route && this.$route.query && Object.keys(this.$route.query).includes('autostart');
     },
   }
 }

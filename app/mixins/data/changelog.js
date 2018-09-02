@@ -40,14 +40,24 @@ export default [
                 text: 'Just tap the Cast icon to stream to any connected TV.',
             },
             {
+                icon: 'iconmonstr-download-17.svg',
+                title: 'Export and Restore Settings',
+                text: 'You can now export and restore all of Web Captioner\'s settings from the <a href="/captioner/settings/export-restore">export/restore page</a>.',
+            },
+            {
+                icon: 'iconmonstr-connection-5.svg',
+                title: 'Autostart',
+                text: 'There\'s now a way for you to <a href="/help/general/autostart/">automatically start captions</a> from a bookmark.',
+            },
+            {
                 icon: 'iconmonstr-share-7.svg',
                 title: 'Webhooks',
                 text: '<a href="/captioner/settings/webhooks">Webhooks</a> allows you to receive real-time HTTP notifications of captioning events in your application. Events are sent client-side from this browser.',
             },
             {
-                icon: 'iconmonstr-download-17.svg',
-                title: 'Export and Restore Settings',
-                text: 'You can now export and restore all of Web Captioner\'s settings from the <a href="/captioner/settings/export-restore">export/restore page</a>.',
+                icon: 'iconmonstr-window-27.svg',
+                title: 'Option for Larger Screen Layout',
+                text: 'Turn on an <a href="/captioner/settings/controls">option for larger controls</a>.',
             },
         ],
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="settings-controls-view">
-    <div class="row" v-if="experiments.includes('largerLayout')">
+    <div class="row">
       <div class="col-md-6">
         <h3>Screen Layout</h3>
         <b-list-group>
@@ -26,7 +26,7 @@
               <b-button variant="info" disabled>Save to File</b-button>
             </div>
             <div class="d-flex w-100 align-items-center">
-              <img src="/public/logo.svg" width="8" height="8" alt="Web Captioner" class="align-middle mr-auto" />
+              <img src="/static/img/logo.svg" width="8" height="8" alt="Web Captioner" class="align-middle mr-auto" />
               <b-dropdown variant="primary" split text="Start Captioning" disabled></b-dropdown>
             </div>
           </b-navbar>
@@ -124,9 +124,6 @@ export default {
     this.isMac = navigator ? navigator.platform.toUpperCase().indexOf('MAC') >= 0 : false;
   },
   computed: {
-    experiments: function() {
-      return this.$store.state.settings.exp;
-    },
     largerLayout: {
       get () {
         return this.$store.state.settings.controls.layout.larger;
