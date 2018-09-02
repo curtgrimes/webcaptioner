@@ -37,6 +37,7 @@
         <h3 class="text-muted pl-3 pt-2 small">Integrations</h3>
         <b-list-group flush>
           <b-list-group-item to="/captioner/settings/vmix">vMix</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/webhooks">Webhooks</b-list-group-item>
         </b-list-group>
       </div>
 
@@ -71,6 +72,10 @@
                 <b-nav vertical pills>
                   <b-nav-item to="/captioner/settings/vmix">vMix</b-nav-item>
                   <b-nav-item to="/captioner/settings/webhooks">Webhooks</b-nav-item>
+                </b-nav>
+                <hr/>
+                <b-nav vertical pills>
+                  <b-nav-item class="small" to="/captioner/settings/export-restore">Export/Restore Settings</b-nav-item>
                 </b-nav>
               </nav>
             </div>

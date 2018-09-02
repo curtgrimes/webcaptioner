@@ -4,9 +4,9 @@ import actions from './actions'
 import mutations from './mutations'
 import getters from './getters'
 import captioner from './modules/captioner'
-import fontChocies from '~/mixins/data/fontChoices'
 import remoteMutationBlacklist from '~/mixins/data/remoteMutationBlacklist'
 import RemoteEventBus from '~/mixins/RemoteEventBus'
+import getSettingsState from './settingsState'
 
 Vue.use(Vuex)
 
@@ -66,70 +66,7 @@ const createStore = () => {
     },
     state: {
       version: '2.0.0',
-      settings: {
-        roomMembershipId: null,
-        roomLeaderToken: null,
-        controls: {
-          layout: {
-            larger: false,
-          },
-        },
-        appearance: {
-          text: {
-            textColor: '#ffffff',
-            textColorInterim: '#ffffff',
-            fontFamily: fontChocies[0].displayName, // first is default
-            textSize: "4", // em
-            lineHeight: "1.2", // em
-            letterSpacing: "0", // em
-            textTransform: "uppercase", // or "capitalize" or "initial"
-            alignment: {
-              horizontal: 'full', // left, middle, right
-              vertical: 'full', // top, middle, bottom, lowerThird
-              padding: "0.25", // em
-            }
-          },
-          shadow: {
-            color: '#000000',
-            opacity: '100',
-            blurRadius: '0',
-            offsetX: '0.25',
-            offsetY: '0.25',
-          },
-          background: {
-            color: '#000000',
-          },
-        },
-        wordReplacements: [],
-        censor: {
-          on: true,
-          replaceWith: 'nothing', // or 'asterisks'
-        },
-        locale: {
-          from: null,
-          userDefault: null,
-        },
-        integrations: {
-          vmix: {
-            on: false,
-            webControllerAddress: '',
-          },
-          webhooks: {
-            on: false,
-            interim: {
-              url: '',
-              method: 'POST',
-              throttleMs: 500,
-            },
-            final: {
-              url: '',
-              method: 'POST',
-            },
-          },
-        },
-        lastWhatsNewVersionSeen: '',
-        exp: [],
-      },
+      settings: getSettingsState(),
       receivers: {
         chromecast: {
           connected: false,

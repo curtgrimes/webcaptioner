@@ -20,5 +20,12 @@ export default {
         
             onDone();
         },
+        saveToJSONFile({settings, onDone}) {
+            var a = document.createElement('a');
+            a.href = 'data:text/plain;base64,' + btoa(settings);
+            a.textContent = 'download';
+            a.download = 'web-captioner-settings.json';
+            a.click();
+        },
     }
 } ;
