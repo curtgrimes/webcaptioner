@@ -70,7 +70,7 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </transition>
-                <b-dropdown :class="incompatibleBrowser ? 'button-only-disabled' : ''" :size="largerLayout ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
+                <b-dropdown id="startCaptioningDropdown" :class="incompatibleBrowser ? 'button-only-disabled' : ''" :size="largerLayout ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
                     <template slot="button-content">
                         <div :class="{'px-4 py-2' : largerLayout}">
                             <span v-if="!this.captioningOn">
