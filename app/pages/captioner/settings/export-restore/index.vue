@@ -54,8 +54,8 @@
     </div>
     <div class="card mb-3">
       <div class="card-body">
-        <h3>Reset Everything</h3>
-        <p>Reset all your settings.</p>
+        <h3>Reset</h3>
+        <p>Reset all of your settings.</p>
         <button class="btn btn-danger d-inline-block" @click="confirmReset()">Reset</button>
       </div>
     </div>
