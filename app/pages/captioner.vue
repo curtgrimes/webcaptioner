@@ -217,7 +217,6 @@ export default {
           mode: 'cors',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
           },
           body,
         })

@@ -54,6 +54,7 @@
     "sass-loader": "^7.1.0",
     "screenfull": "^3.3.2",
     "semver-compare": "^1.0.0",
+    "vue-contenteditable-directive": "^1.2.0",
     "whatwg-fetch": "^2.0.4"
   }
 }

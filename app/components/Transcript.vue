@@ -2,13 +2,14 @@
   <div
     class="transcript d-flex"
     v-bind:class="[wrapTextPositionClass, (chromeless ? 'chromeless' : '')]"
-    v-bind:style="{height, color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow}">
+    v-bind:style="{height, color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
+    @click="focusIfInTypingMode()">
     <link type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" />
     <span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
       ref="scroller">
-      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span></span>
+      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span> <span v-show="typingModeOn" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcriptTyped">Hello world</span></span>
     </span>
   </div>
 </template>
@@ -27,6 +28,7 @@ export default {
   data: function() {
     return {
       height: '100vh',
+      transcriptTypedForDisplay: '',
     }
   },
   methods: {
@@ -36,6 +38,14 @@ export default {
           this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight;
         }
       });
+    },
+    typedTranscriptDidChange: function() {
+      this.$store.commit('captioner/SET_TRANSCRIPT_TYPED', {transcriptTyped: this.$refs.typedTranscript.innerText})
+    },
+    focusIfInTypingMode: function() {
+      if (this.typingModeOn) {
+        this.$refs.typedTranscript.focus();
+      }
     },
   },
   mounted: function() {
@@ -53,6 +63,37 @@ export default {
     this.$watch('largerLayout', () => {
       this.height = this.adjustAppHeight();
     });
+  },
+  watch: {
+    typingModeOn: function (on) {
+      if (on) {
+        // Turned on. Copy the transcript over once.
+        this.transcriptTypedForDisplay = this.typedTranscript;
+        this.$nextTick(() => {
+          this.$refs.typedTranscript.focus();
+
+          // Put caret at end
+          if (typeof window.getSelection != "undefined"
+                  && typeof document.createRange != "undefined") {
+              var range = document.createRange();
+              range.selectNodeContents(this.$refs.typedTranscript);
+              range.collapse(false);
+              var sel = window.getSelection();
+              sel.removeAllRanges();
+              sel.addRange(range);
+          } else if (typeof document.body.createTextRange != "undefined") {
+              var textRange = document.body.createTextRange();
+              textRange.moveToElementText(this.$refs.typedTranscript);
+              textRange.collapse(false);
+              textRange.select();
+          }
+        });
+      }
+      else {
+        // Turned off.
+        this.transcriptTypedForDisplay = '';
+      }
+    },
   },
   computed: {
     // Appearance
@@ -107,6 +148,12 @@ export default {
       return (this.$store.state.captioner.transcript.interim && this.$store.state.captioner.transcript.interim.length ? ' ' : '')
         + this.$store.state.captioner.transcript.interim;
     },
+    typingModeOn () {
+      return this.$store.state.captioner.typingModeOn;
+    },
+    typedTranscript () {
+      return this.$store.state.captioner.transcript.typed;
+    },
 
     textPositionClass: function () {
       return {
@@ -130,6 +177,9 @@ export default {
         'align-items-end': ['bottom','lowerThird'].includes(this.$store.state.settings.appearance.text.alignment.vertical),
       }
     },
+    cursor: function() {
+      return this.typingModeOn ? 'text' : 'default';
+    },
     largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },
@@ -138,4 +188,10 @@ export default {
 </script>
 
 <style lang="css">
+  .transcriptTyped {
+    outline:none;
+    min-width:5px;
+    display:inline-block;
+    min-height:100px;
+  }
 </style>

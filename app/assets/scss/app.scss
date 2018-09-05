@@ -350,6 +350,7 @@ a.nav-link.active {
       position:absolute;
       bottom:0; // make transcription start from the bottom
       max-height:100%;
+      min-width:5px;
     }
 
     .final:focus {

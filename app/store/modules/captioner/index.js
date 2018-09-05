@@ -13,6 +13,7 @@ let speechRecognizer,
 const state = {
     on: false,
     shouldBeOn: false,
+    typingModeOn: false,
     microphonePermission: {
         needed: false,
         denied: false,
@@ -22,6 +23,7 @@ const state = {
     transcript: {
         interim: '',
         final: '',
+        typed: '',
         lastStart: null,
         lastUpdate: null,
         waitingForInitial: false,
@@ -198,6 +200,21 @@ const actions = {
               });
         }
     },
+
+    startTypingMode: ({state, commit, dispatch}) => {
+      dispatch('stopManual');
+      setTimeout(() => {
+        commit('SET_TRANSCRIPT_TYPED', {transcriptTyped: state.transcript.final});
+        commit('CLEAR_TRANSCRIPT_FINAL');
+        commit('SET_TYPING_MODE_ON');
+      },500);
+    },
+
+    stopTypingMode: ({state, commit, dispatch}) => {
+        commit('APPEND_TRANSCRIPT_FINAL', {transcriptFinal: state.transcript.typed });
+        commit('CLEAR_TRANSCRIPT_TYPED');
+        commit('SET_TYPING_MODE_OFF');
+    },
 }
 
 const mutations = {
@@ -227,12 +244,22 @@ const mutations = {
         state.transcript.interim = transcriptInterim;
         state.transcript.lastUpdate = Date.now();
     },
+    SET_TRANSCRIPT_TYPED (state, { transcriptTyped }) {
+        state.transcript.typed = transcriptTyped;
+    },
     CLEAR_TRANSCRIPT (state) {
         state.transcript.interim = '';
         state.transcript.final = '';
+        state.transcript.typed = '';
     },
     CLEAR_TRANSCRIPT_INTERIM (state) {
         state.transcript.interim = '';
+    },
+    CLEAR_TRANSCRIPT_FINAL (state) {
+        state.transcript.final = '';
+    },
+    CLEAR_TRANSCRIPT_TYPED (state) {
+        state.transcript.typed = '';
     },
     APPEND_TRANSCRIPT_FINAL (state, { transcriptFinal }) {
         if (state.transcript.final.length && state.transcript.final.charAt(state.transcript.final.length - 1) != ' ') {
@@ -257,6 +284,14 @@ const mutations = {
 
     SET_WAITING_FOR_INITIAL_TRANSCRIPT (state, { waitingForInitial }) {
         state.transcript.waitingForInitial = waitingForInitial;
+    },
+
+    SET_TYPING_MODE_ON (state) {
+        state.typingModeOn = true;
+    },
+
+    SET_TYPING_MODE_OFF (state) {
+        state.typingModeOn = false;
     },
 }
 

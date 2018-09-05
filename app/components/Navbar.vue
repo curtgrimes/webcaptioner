@@ -25,6 +25,12 @@
                 <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
                     Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
                 </div>
+                <b-btn v-show="false && !typingModeOn" variant="info" class="mr-3" v-b-tooltip.top title="Typing Mode" @click="startTypingMode">
+                    <fa icon="keyboard"/>
+                </b-btn>
+                <b-btn v-show="false && typingModeOn" variant="secondary" class="mr-3" v-b-tooltip.top title="Turn Off" @click="stopTypingMode">
+                    <fa icon="keyboard"/> Typing Mode
+                </b-btn>
                 <transition name="fade">
                     <cast-button v-if="experiments.includes('chromecast')"></cast-button>
                 </transition>
@@ -131,6 +137,9 @@ export default {
     captioningOn: function() {
         return this.$store.state.captioner.shouldBeOn;
     },
+    typingModeOn: function() {
+        return this.$store.state.captioner.typingModeOn;
+    },
     microphoneName: function() {
         return this.$store.state.captioner.microphoneName;
     },
@@ -186,11 +195,11 @@ export default {
     stopCaptioning: function() {
       this.$store.dispatch('captioner/stopManual');
     },
-    startTyping: function() {
-      this.$store.dispatch('captioner/startTyping');
+    startTypingMode: function() {
+        this.$store.dispatch('captioner/startTypingMode');
     },
-    stopTyping: function() {
-      this.$store.dispatch('captioner/stopTyping');
+    stopTypingMode: function() {
+        this.$store.dispatch('captioner/stopTypingMode');
     },
     startSaveToFileModal: function() {
         this.$router.push('/captioner/save-to-file');
