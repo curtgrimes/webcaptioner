@@ -25,7 +25,7 @@ module.exports = {
   },
   modules: [
     ['bootstrap-vue/nuxt', { css: false }],
-    ['@nuxtjs/sentry'],
+    // ['@nuxtjs/sentry'],
     ['@nuxtjs/google-analytics', {
       id: 'REMOVED',
       batch: {
