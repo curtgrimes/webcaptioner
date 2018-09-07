@@ -20,7 +20,6 @@
     "build-a": "nuxt build -a"
   },
   "dependencies": {
-    "@nuxtjs/ngrok": "^1.1.3",
     "dotenv": "^6.0.0",
     "nuxt": "^1.0.0",
     "redirect-ssl": "^1.3.0"
