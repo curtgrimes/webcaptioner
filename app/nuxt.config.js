@@ -1,7 +1,13 @@
+require('dotenv').config()
+
 const serveStatic = require('serve-static')
 const path = require('path')
+const redirectSSL = require('redirect-ssl')
 
 module.exports = {
+  env: {
+    GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
+  },
   /*
   ** Headers of the page
   */
@@ -17,6 +23,7 @@ module.exports = {
     ],
   },
   modules: [
+    '@nuxtjs/ngrok',
     ['bootstrap-vue/nuxt', { css: false }],
     // ['@nuxtjs/sentry'],
     ['@nuxtjs/google-analytics', {
@@ -78,24 +85,31 @@ module.exports = {
         })
       }
 
-      // if (isClient) {
-      //   config.devtool = '#source-map';
-      // }
+      if (isClient) {
+        config.devtool = '#source-map';
+      }
 
       if (isServer) {
 
       }
     }
   },
+  hooks(hook) {
+    hook ('render:before', (renderer) => {
+      renderer.useMiddleware({
+        handler: '~/middleware/server/sourcemaps.js'
+      })
+    })
+  },
   serverMiddleware: [
     // Put this first
-    'redirect-ssl',
+    redirectSSL,
 
-    // Put this before /
-    { path: '/feedback', handler: '~/api/feedback/index.js' },
+    // // Put this before /
+    // { path: '/feedback', handler: '~/middleware/server/feedback.js' },
 
-    { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
-    { path: '/health-check', handler: '~/api/health-check/index.js' },
+    // { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
+    // { path: '/health-check', handler: '~/middleware/server/health-check.js' },
   ],
 }
 

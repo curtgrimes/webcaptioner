@@ -1,5 +1,4 @@
-const chromeExtensionId = 'fckappdcgnijafmmjkcmicdidflhelfe'; // prod
-// const chromeExtensionId = 'ipngpifbnlijigdmhaoiepdlfjpfnajd'; // dev
+const chromeExtensionId = process.env.CHROME_EXTENSION_ID;
 
 const checkIfExtensionInstalled = function () {
     return new Promise(function(resolve, reject) {
