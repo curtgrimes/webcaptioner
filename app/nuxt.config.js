@@ -3,6 +3,7 @@ require('dotenv').config()
 const serveStatic = require('serve-static')
 const path = require('path')
 const redirectSSL = require('redirect-ssl')
+const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 
 module.exports = {
   env: {
@@ -95,10 +96,8 @@ module.exports = {
     }
   },
   hooks(hook) {
-    hook ('render:before', (renderer) => {
-      renderer.useMiddleware({
-        handler: '~/middleware/server/sourcemaps.js'
-      })
+    hook ('render:setupMiddleware', (app) => {
+      app.use(sourcemapMiddleware);
     })
   },
   serverMiddleware: [
