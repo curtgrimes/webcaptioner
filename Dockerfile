@@ -4,7 +4,8 @@ FROM node:10.6
 # wasn't available on GitHub as a prebuilt binary
 # ENV SASS_BINARY_NAME linux-x64-59_binding.node
 
-# Set in startup.sh
+# Environment variables that need to be available at build
+ENV GOOGLE_ANALYTICS_ID $GOOGLE_ANALYTICS_ID
 ENV GOOGLE_APPLICATION_CREDENTIALS ./app/config/google-application-credentials.json
 
 # Install Hugo

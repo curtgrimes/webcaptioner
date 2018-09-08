@@ -49,7 +49,6 @@ let taskDefinition = {
         "environment": [
             ...getEnvironmentKeyPairs([
                 'CHROME_EXTENSION_ID',
-                'GOOGLE_ANALYTICS_ID',
                 'GOOGLE_CAST_APP_ID',
                 'SENTRY_SECURITY_TOKEN',
                 'SENTRY_PUBLIC_KEY',
