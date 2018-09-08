@@ -48,17 +48,13 @@ let taskDefinition = {
         "name": "webcaptioner",
         "environment": [
             ...getEnvironmentKeyPairs([
-                'CURT_TEST_2',
-                'ANOTHER_TEST',
+                'GOOGLE_CAST_APP_ID',
+                // 'CHROME_EXTENSION_ID',
             ]),
             {
-                "name": "HUGO_BASE_URL",
-                "value": "https://staging.webcaptioner.com"
+                name: "HOSTNAME",
+                value: process.env.CI_ENVIRONMENT_URL,
             },
-            {
-                "name": "SENTRY_SECURITY_TOKEN",
-                "value": "ba5a6c5c501f11e8aab94201c0a8d03b"
-            }
         ]
       }
     ]

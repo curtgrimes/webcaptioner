@@ -6,9 +6,6 @@ const redirectSSL = require('redirect-ssl')
 const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 
 module.exports = {
-  env: {
-    GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
-  },
   /*
   ** Headers of the page
   */
@@ -25,7 +22,7 @@ module.exports = {
   },
   modules: [
     ['nuxt-env', {
-      curtTest2: process.env.CURT_TEST_2,
+      GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
     }],
     ['bootstrap-vue/nuxt', { css: false }],
     // ['@nuxtjs/sentry'],

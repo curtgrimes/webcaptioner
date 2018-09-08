@@ -41,6 +41,8 @@ export default {
     };
   },
   mounted: function() {
+    console.log('env');
+    console.log(this.$env.GOOGLE_CAST_APP_ID);
     let self = this;
     this.$store.dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE')
       .then(() => {
