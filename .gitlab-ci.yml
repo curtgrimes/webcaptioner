@@ -20,7 +20,7 @@ Build:
   script:
     - source scripts/init-env.sh
     - env
-    - exit 0
+    - exit 1
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME || echo Could not fetch $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME from registry.
     - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME

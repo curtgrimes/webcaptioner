@@ -3,5 +3,6 @@ ENV_VAR_SUFFIX="__${CI_ENVIRONMENT_SLUG}"
 
 for var in $(env | awk -F "=" '{print $1}' | grep "${ENV_VAR_SUFFIX}$")
 do
+    echo ${var%${ENV_VAR_SUFFIX}}
     export ${var%${ENV_VAR_SUFFIX}}="${!var}"
 done 
