@@ -1,8 +1,6 @@
-console.log(process.env);
-
 function env(key) {
     let envKey = key + '__' + process.env.CI_ENVIRONMENT_SLUG;
-    
+
     if (!process.env[envKey]) {
         console.error('Environment variable '+ envKey +' does not exist.')
         process.exit(1);
@@ -12,10 +10,14 @@ function env(key) {
     }
 }
 
-console.log('env test');
-console.log(env('CURT_TEST_2'));
-console.log(env('ANOTHER_TEST'));
-console.log(env('LEAVEALONE'));
+function getEnvironmentKeyPairs(keys) {
+    return keys.map((key) => {
+        return {
+            name: key,
+            value: env(key),
+        };
+    });
+}
 
 let taskDefinition = {
     "volumes": [],
@@ -45,14 +47,18 @@ let taskDefinition = {
         "image": "REMOVED:" + process.env.CI_ENVIRONMENT_SLUG,
         "name": "webcaptioner",
         "environment": [
-          {
-            "name": "HUGO_BASE_URL",
-            "value": "https://staging.webcaptioner.com"
-          },
-          {
-            "name": "SENTRY_SECURITY_TOKEN",
-            "value": "ba5a6c5c501f11e8aab94201c0a8d03b"
-          }
+            ...getEnvironmentKeyPairs([
+                'CURT_TEST_2',
+                'ANOTHER_TEST',
+            ]),
+            {
+                "name": "HUGO_BASE_URL",
+                "value": "https://staging.webcaptioner.com"
+            },
+            {
+                "name": "SENTRY_SECURITY_TOKEN",
+                "value": "ba5a6c5c501f11e8aab94201c0a8d03b"
+            }
         ]
       }
     ]
