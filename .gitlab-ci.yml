@@ -21,6 +21,7 @@ Build:
   stage: build
   script:
     - source .variables
+    - cat .variables
     - env
     - exit(0)
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME || echo Could not fetch $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME from registry.
