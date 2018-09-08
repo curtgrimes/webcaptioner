@@ -41,8 +41,6 @@ export default {
     };
   },
   mounted: function() {
-    console.log('env');
-    console.log(this.$env.GOOGLE_CAST_APP_ID);
     let self = this;
     this.$store.dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE')
       .then(() => {
@@ -395,7 +393,9 @@ export default {
     refreshVmixStatus: function() {
       let self = this;
       if (this.vmixOn) {
-        this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS')
+        this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS', {
+          chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
+        })
           .then(function() {
             if (!self.$store.state.integrations.vmix.cachedInputGUID) {
               self.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});

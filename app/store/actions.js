@@ -184,7 +184,7 @@ export default {
     },1000);
   },
 
-  REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}) => {
+  REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}, {chromeExtensionId}) => {
     eventLogger(commit, {action: 'REFRESH_VMIX_SETUP_STATUS'});
 
     let {
@@ -203,13 +203,13 @@ export default {
 
 
     
-    let extensionCheck = checkIfExtensionInstalled()
+    let extensionCheck = checkIfExtensionInstalled(chromeExtensionId)
       .then(function(installed) {
         commit('SET_VMIX_CHROME_EXTENSION_INSTALLED', {installed});
       });
     
     let testConnection = new Promise((resolve, reject) => {
-      testWebControllerConnectivity(getVmixPath(state.settings.integrations.vmix.webControllerAddress))
+      testWebControllerConnectivity(getVmixPath(state.settings.integrations.vmix.webControllerAddress), chromeExtensionId)
         .then(function(connected) {
           resolve(connected);
         });
@@ -220,7 +220,7 @@ export default {
       // Reset GUID
       commit('SET_VMIX_CACHED_INPUT_GUID', {guid: null});
 
-      sendMessage(getVmixPath(state.settings.integrations.vmix.webControllerAddress))
+      sendMessage(getVmixPath(state.settings.integrations.vmix.webControllerAddress), chromeExtensionId)
         .then(function(response) {
           if (!response || (response && !response.text)) {
             return resolve(false);
@@ -292,7 +292,8 @@ export default {
     let {sendMessage} = vmixSetup;
     sendMessage(
       getVmixPath(state.settings.integrations.vmix.webControllerAddress) +
-        '/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000))
+        '/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000)),
+        chromeExtensionId
     )
       .then(function(response) {
         if (!response && !response.success) {

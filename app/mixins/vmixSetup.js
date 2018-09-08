@@ -1,6 +1,4 @@
-const chromeExtensionId = process.env.CHROME_EXTENSION_ID;
-
-const checkIfExtensionInstalled = function () {
+const checkIfExtensionInstalled = function (chromeExtensionId) {
     return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage(
             chromeExtensionId,
@@ -14,7 +12,7 @@ const checkIfExtensionInstalled = function () {
     });
 }
 
-const testWebControllerConnectivity = function (path) {
+const testWebControllerConnectivity = function (path, chromeExtensionId) {
    return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage(
             chromeExtensionId,
@@ -27,7 +25,7 @@ const testWebControllerConnectivity = function (path) {
     })
 };
 
-const sendMessage = function (path) {
+const sendMessage = function (path, chromeExtensionId) {
     return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage(
             chromeExtensionId,

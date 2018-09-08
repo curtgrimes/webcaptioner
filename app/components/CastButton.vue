@@ -73,7 +73,7 @@ export default {
   methods: {
     initializeCastApi: function() {
       let self = this;
-      let sessionRequest = new chrome.cast.SessionRequest(process.env.GOOGLE_CAST_APP_ID);
+      let sessionRequest = new chrome.cast.SessionRequest(this.$env.GOOGLE_CAST_APP_ID);
       const onReceivedMessage = function(namespace, message) {
         console.log('Received message:');
         console.log(namespace, message);

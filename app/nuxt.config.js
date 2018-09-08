@@ -6,11 +6,14 @@ const redirectSSL = require('redirect-ssl')
 const healthCheckMiddleware = require('./middleware/server/health-check.js')
 const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 const url = require('url');
+// const packageVersion = require('./package.json').version;
+const gitRevision = require('git-rev-sync');
 
 module.exports = {
-  /*
-  ** Headers of the page
-  */
+  env: { // Will be available client-side
+    GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
+    CHROME_EXTENSION_ID: process.env.CHROME_EXTENSION_ID,
+  },
   head: {
     title: 'Web Captioner',
     meta: [
@@ -23,13 +26,11 @@ module.exports = {
     ],
   },
   modules: [
-    ['nuxt-env', {
-      GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
-    }],
+    ['nuxt-env'],
     ['bootstrap-vue/nuxt', { css: false }],
-    // ['@nuxtjs/sentry'],
+    ['@nuxtjs/sentry'],
     ['@nuxtjs/google-analytics', {
-      id: 'REMOVED',
+      id: process.env.GOOGLE_ANALYTICS_ID,
       batch: {
         enabled: true,
         amount: 2,
@@ -61,9 +62,12 @@ module.exports = {
     '@/assets/scss/app.scss',
   ],
   sentry: {
-    public_key: 'REMOVED',
-    project_id: 'web-captioner',
-    config: {},
+    public_key: process.env.SENTRY_PUBLIC_KEY,
+    project_id: process.env.SENTRY_PROJECT_ID,
+    config: {
+      release: gitRevision.short(),
+      environment: process.env.HOSTNAME,
+    },
   },
   /*
   ** Customize the progress bar color

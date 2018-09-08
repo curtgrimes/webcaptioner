@@ -280,7 +280,9 @@ export default {
         });
     },
     refreshVmixSetupStatus: function () {
-      return this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS');
+      return this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS', {
+        chromeExtensionId: this.$env.CHROME_EXTENSION_ID
+      });
     },
     resetWebControllerConnectedStatus: function () {
       this.$store.commit('RESET_WEB_CONTROLLER_CONNECTED_STATUS');

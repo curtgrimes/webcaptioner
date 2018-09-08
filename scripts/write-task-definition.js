@@ -48,8 +48,12 @@ let taskDefinition = {
         "name": "webcaptioner",
         "environment": [
             ...getEnvironmentKeyPairs([
+                'CHROME_EXTENSION_ID',
+                'GOOGLE_ANALYTICS_ID',
                 'GOOGLE_CAST_APP_ID',
-                // 'CHROME_EXTENSION_ID',
+                'SENTRY_SECURITY_TOKEN',
+                'SENTRY_PUBLIC_KEY',
+                'SENTRY_PROJECT_ID',
             ]),
             {
                 name: "HOSTNAME",
