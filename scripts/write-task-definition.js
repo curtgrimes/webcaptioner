@@ -1,7 +1,15 @@
 console.log(process.env);
 
 function env(key) {
-    return process.env[key + '__' + process.env.CI_ENVIRONMENT_SLUG];
+    let envKey = key + '__' + process.env.CI_ENVIRONMENT_SLUG;
+    
+    if (!process.env[envKey]) {
+        console.error('Environment variable '+ envKey +' does not exist.')
+        process.exit(1);
+    }
+    else {
+        return process.env[envKey];
+    }
 }
 
 console.log('env test');
