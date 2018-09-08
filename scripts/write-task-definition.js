@@ -1,5 +1,14 @@
 console.log(process.env);
 
+function env(key) {
+    return process.env[key + '__' + process.env.CI_ENVIRONMENT_SLUG];
+}
+
+console.log('env test');
+console.log(env('CURT_TEST_2'));
+console.log(env('ANOTHER_TEST'));
+console.log(env('LEAVEALONE'));
+
 let taskDefinition = {
     "volumes": [],
     "family": "webcaptioner-" + process.env.CI_ENVIRONMENT_SLUG,
