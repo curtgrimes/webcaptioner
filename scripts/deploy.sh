@@ -1,9 +1,9 @@
 # Get env variables for this deployment environment
 # https://gitlab.com/gitlab-org/gitlab-ce/issues/20367#note_89285011
 ENV_VAR_SUFFIX="__${CI_ENVIRONMENT_SLUG}"
-for var in $(compgen -e | grep "${ENV_VAR_SUFFIX}$")
+for var in $(env | awk -F "=" '{print $1}' | grep "${ENV_VAR_SUFFIX}$")
 do
-    declare -x ${var%${ENV_VAR_SUFFIX}}="${!var}"
+    export ${var%${ENV_VAR_SUFFIX}}="${!var}"
 done 
 
 
