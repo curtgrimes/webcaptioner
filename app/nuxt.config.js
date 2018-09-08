@@ -8,9 +8,7 @@ const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 const url = require('url');
 // const packageVersion = require('./package.json').version;
 const gitRevision = require('git-rev-sync');
-console.log('process.env');
-console.log(process.env);
-console.log(process.env.GOOGLE_ANALYTICS_ID);
+
 module.exports = {
   env: { // Will be available client-side
     GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
