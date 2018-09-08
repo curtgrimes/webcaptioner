@@ -5,6 +5,9 @@ const path = require('path')
 const redirectSSL = require('redirect-ssl')
 const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 
+console.log('CURT_TEST_2');
+console.log(process.env.CURT_TEST_2);
+
 module.exports = {
   env: {
     GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
