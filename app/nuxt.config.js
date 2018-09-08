@@ -96,12 +96,15 @@ module.exports = {
   },
   hooks(hook) {
     hook ('render:setupMiddleware', (app) => {
+      // put this first
+      app.use(redirectSSL.create({
+        redirectHost: process.env.HOSTNAME
+      }));
+
       app.use(sourcemapMiddleware);
     })
   },
   serverMiddleware: [
-    // Put this first
-    redirectSSL,
 
     // // Put this before /
     // { path: '/feedback', handler: '~/middleware/server/feedback.js' },
