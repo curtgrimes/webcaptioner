@@ -6,6 +6,7 @@ FROM node:10.6
 
 # Set in startup.sh
 ENV GOOGLE_APPLICATION_CREDENTIALS ./app/config/google-application-credentials.json
+ENV CURT_TEST_2 $CURT_TEST_2
 
 # Install Hugo
 ADD https://github.com/gohugoio/hugo/releases/download/v0.37.1/hugo_0.37.1_Linux-64bit.tar.gz /tmp
