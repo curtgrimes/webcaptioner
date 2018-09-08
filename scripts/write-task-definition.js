@@ -1,9 +1,8 @@
-console.log('inside script');
-console.log(process.env.CI_ENVIRONMENT_SLUG);
+console.log(process.env);
 
 let taskDefinition = {
     "volumes": [],
-    "family": "webcaptioner-staging",
+    "family": "webcaptioner-" + process.env.CI_ENVIRONMENT_SLUG,
     "executionRoleArn": "REMOVED",
     "networkMode": "awsvpc",
     "containerDefinitions": [
@@ -26,7 +25,7 @@ let taskDefinition = {
         "cpu": 0,
         "memoryReservation": 300,
         "volumesFrom": [],
-        "image": "REMOVED:staging",
+        "image": "REMOVED:" + process.env.CI_ENVIRONMENT_SLUG,
         "name": "webcaptioner",
         "environment": [
           {

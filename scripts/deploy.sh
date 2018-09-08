@@ -1,3 +1,12 @@
+# Get env variables for this deployment environment
+# https://gitlab.com/gitlab-org/gitlab-ce/issues/20367#note_89285011
+ENV_VAR_SUFFIX="__${CI_ENVIRONMENT_SLUG}"
+for var in $(compgen -e | grep "${ENV_VAR_SUFFIX}$")
+do
+    declare -x ${var%${ENV_VAR_SUFFIX}}="${!var}"
+done 
+
+
 # Install awscli
 apk add --update python python-dev py-pip nodejs
 pip install awscli --upgrade
