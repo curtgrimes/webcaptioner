@@ -3,6 +3,7 @@ require('dotenv').config()
 const serveStatic = require('serve-static')
 const path = require('path')
 const redirectSSL = require('redirect-ssl')
+const healthCheckMiddleware = require('./middleware/server/health-check.js')
 const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 const url = require('url');
 
@@ -97,7 +98,8 @@ module.exports = {
   },
   hooks(hook) {
     hook ('render:setupMiddleware', (app) => {
-      // put this first
+      app.use('/health-check', healthCheckMiddleware);
+
       app.use(redirectSSL.create({
         redirectHost: url.parse(process.env.HOSTNAME).hostname,
       }));
@@ -107,9 +109,7 @@ module.exports = {
   },
   serverMiddleware: [
     { path: '/feedback', handler: '~/middleware/server/feedback.js' },
-
     { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
-    { path: '/health-check', handler: '~/middleware/server/health-check.js' },
   ],
 }
 
