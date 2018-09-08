@@ -4,6 +4,7 @@ const serveStatic = require('serve-static')
 const path = require('path')
 const redirectSSL = require('redirect-ssl')
 const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
+const url = require('url');
 
 module.exports = {
   /*
@@ -98,7 +99,7 @@ module.exports = {
     hook ('render:setupMiddleware', (app) => {
       // put this first
       app.use(redirectSSL.create({
-        redirectHost: process.env.HOSTNAME
+        redirectHost: url.parse(process.env.HOSTNAME).hostname,
       }));
 
       app.use(sourcemapMiddleware);
