@@ -2,7 +2,7 @@
 apk add --update python python-dev py-pip nodejs
 pip install awscli --upgrade
 
-node write-task-definition.js >> testfile2
+node scripts/write-task-definition.js >> testfile2
 
 cat testfile2
 
