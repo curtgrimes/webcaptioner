@@ -106,12 +106,10 @@ module.exports = {
     })
   },
   serverMiddleware: [
+    { path: '/feedback', handler: '~/middleware/server/feedback.js' },
 
-    // // Put this before /
-    // { path: '/feedback', handler: '~/middleware/server/feedback.js' },
-
-    // { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
-    // { path: '/health-check', handler: '~/middleware/server/health-check.js' },
+    { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
+    { path: '/health-check', handler: '~/middleware/server/health-check.js' },
   ],
 }
 
