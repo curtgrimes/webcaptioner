@@ -13,7 +13,7 @@ before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
 
   # https://gitlab.com/gitlab-org/gitlab-ce/issues/20367#note_89285011
-  - ENV_VAR_SUFFIX="__${CI_ENVIRONMENT_NAME}"; for var in $(compgen -e | grep "${ENV_VAR_SUFFIX}$"); do declare -x ${var%${ENV_VAR_SUFFIX}}="${!var}"; echo ${var%${ENV_VAR_SUFFIX}}; echo "${!var}"; done 
+  - ENV_VAR_SUFFIX="__${CI_ENVIRONMENT_NAME}"; for var in $(compgen -e | grep "${ENV_VAR_SUFFIX}$"); do declare -x ${var%${ENV_VAR_SUFFIX}}="${!var}"; echo ${var}; done 
   - echo 
 
 Build:
