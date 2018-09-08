@@ -50,6 +50,7 @@
     "lodash.throttle": "^4.1.1",
     "node-sass": "^4.9.3",
     "normalize-strings": "^1.1.0",
+    "nuxt-env": "0.0.3",
     "nuxt-fontawesome": "^0.3.0",
     "promise-polyfill": "^8.1.0",
     "sass-loader": "^7.1.0",

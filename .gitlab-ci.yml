@@ -12,15 +12,9 @@ variables:
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
 
-  # https://gitlab.com/gitlab-org/gitlab-ce/issues/20367#note_89285011
-
-
 Build:
   stage: build
   script:
-    - source scripts/init-env.sh
-    - env
-    - exit 1
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME || echo Could not fetch $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME from registry.
     - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME

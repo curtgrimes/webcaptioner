@@ -1,6 +1,12 @@
 # Install awscli
-apk add --update python python-dev py-pip
+apk add --update python python-dev py-pip nodejs
 pip install awscli --upgrade
+
+node write-task-definition.js >> testfile2
+
+cat testfile2
+
+exit 1
 
 docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
