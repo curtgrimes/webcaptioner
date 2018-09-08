@@ -13,8 +13,10 @@ before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
 
   # https://gitlab.com/gitlab-org/gitlab-ce/issues/20367#note_89285011
-  - ENV_VAR_SUFFIX="__${CI_ENVIRONMENT_NAME}"; for var in $(env | awk -F "=" '{print $1}' | grep "${ENV_VAR_SUFFIX}$"); do export ${var%${ENV_VAR_SUFFIX}}="${!var}"; echo ${var}; done 
+  - ENV_VAR_SUFFIX="__${CI_ENVIRONMENT_NAME}"; for var in $(env | awk -F "=" '{print $1}' | grep "${ENV_VAR_SUFFIX}$"); do echo ${var%${ENV_VAR_SUFFIX}}; export ${var%${ENV_VAR_SUFFIX}}="${!var}"; done 
+  - echo $CURT_TEST_2
   - env
+  - exit(0)
 
 Build:
   stage: build
