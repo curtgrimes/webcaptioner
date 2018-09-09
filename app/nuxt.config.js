@@ -10,10 +10,6 @@ const url = require('url');
 const gitRevision = require('git-rev-sync');
 
 module.exports = {
-  env: { // Will be available client-side
-    GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
-    CHROME_EXTENSION_ID: process.env.CHROME_EXTENSION_ID,
-  },
   head: {
     title: 'Web Captioner',
     meta: [
@@ -26,7 +22,12 @@ module.exports = {
     ],
   },
   modules: [
-    ['nuxt-env'],
+    ['nuxt-env', {
+      keys: [
+        'GOOGLE_CAST_APP_ID',
+        'CHROME_EXTENSION_ID',
+      ],
+    }],
     ['bootstrap-vue/nuxt', { css: false }],
     ['@nuxtjs/sentry'],
     ['@nuxtjs/google-analytics', {
