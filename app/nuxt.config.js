@@ -15,7 +15,13 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Real-time captioning for your event, speech, classroom lecture, or church service.' }
+      { hid: 'description', name: 'description', content: 'Free, real-time captioning for your event.' },
+      { name: 'theme-color', content: '#ffe200' },
+      { property: 'og:image', content: 'https://webcaptioner.com/static/og-image.jpg' },
+      { property: 'og:image:secure_url', content: 'https://webcaptioner.com/static/og-image.jpg' },
+      { property: 'og:image:type', content: 'image/jpg' },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=2' }, // https://github.com/nuxt/nuxt.js/issues/1204
