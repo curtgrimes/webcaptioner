@@ -300,7 +300,10 @@ export default {
     },
     transcript: function() {
       if (this.vmixOn) {
-        this.$store.dispatch('SEND_TO_VMIX', {text: this.transcript});
+        this.$store.dispatch('SEND_TO_VMIX', {
+          text: this.transcript,
+          chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
+        });
       }
     },
     microphonePermissionNeeded: function() {

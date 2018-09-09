@@ -279,9 +279,8 @@ export default {
     ]);
   },
 
-  SEND_TO_VMIX: ({state, commit}, { text }) => {
+  SEND_TO_VMIX: ({state, commit}, { text, chromeExtensionId }) => {
     eventLogger(commit, {action: 'SEND_TO_VMIX', payload: {text}});
-
     let inputGUID = state.integrations.vmix.cachedInputGUID;
     
     if (!inputGUID) {

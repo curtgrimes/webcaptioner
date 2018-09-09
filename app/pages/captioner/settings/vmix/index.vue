@@ -40,7 +40,7 @@
           <b-input-group size="sm">
             <b-form-input type="text" v-model="webControllerAddressLocalCopy"></b-form-input>
             <b-input-group-append>
-              <b-btn variant="outline-secondary" style="padding:.575rem 1rem .425rem 1rem" @click="updateWebControllerAddress()">Update</b-btn>
+              <b-btn variant="outline-secondary" style="padding:.35rem 1rem .425rem 1rem" @click="updateWebControllerAddress()">Update</b-btn>
             </b-input-group-append>
           </b-input-group>
         </div>
@@ -54,7 +54,7 @@
           <b-input-group size="sm">
             <b-form-input type="text" v-model="testMessage"></b-form-input>
             <b-input-group-append>
-              <b-btn variant="outline-secondary" style="padding:.575rem 1rem .425rem 1rem" @click="sendTestMessage()" :disabled="testMessageSent"><span v-if="!testMessageSent">Send</span><span v-else>Sent!</span></b-btn>
+              <b-btn variant="outline-secondary" style="padding:.35rem 1rem .425rem 1rem" @click="sendTestMessage()" :disabled="testMessageSent"><span v-if="!testMessageSent">Send</span><span v-else>Sent!</span></b-btn>
             </b-input-group-append>
           </b-input-group>
         </div>
@@ -90,12 +90,13 @@
                 <h4 class="mt-0">Install the Chrome Extension</h4>
                 <p class="mb-2">The Web Captioner Connector extension for Google Chrome lets Web Captioner connect to vMix.</p>
                 <div class="mt-3 mb-4">
-                  <b-button v-if="!chromeExtensionInstalled" @click="initChromeExtensionInstall" variant="outline-info"><fa :icon="['fab','chrome']" class="mr-2"/> Add to Chrome</b-button>
+                  <a href="https://chrome.google.com/webstore/detail/web-captioner-connector/fckappdcgnijafmmjkcmicdidflhelfe" target="_blank" v-if="!chromeExtensionInstalled" class="btn btn-outline-info"><fa :icon="['fab','chrome']" class="mr-2"/> Add to Chrome</a>
                   <b-button v-else variant="outline-success" disabled><fa icon="check-circle" class="mr-2" /> Extension Installed</b-button>
                 </div>
+                <b-alert :show="showExtensionNotInstalledMessage" variant="danger">Extension not installed.</b-alert>
                 <hr class="my-3" />
                 <div class="text-right">
-                  <b-button @click="vmixStepsTabIndex = 1" size="sm" :variant="chromeExtensionInstalled ? 'secondary' : 'default'" :disabled="!chromeExtensionInstalled">Next <fa icon="chevron-right" /></b-button>
+                  <b-button @click="step1NextClick()" size="sm" :variant="chromeExtensionInstalled ? 'secondary' : 'default'">Next <fa icon="chevron-right" /></b-button>
                 </div>
               </b-tab>
               <b-tab :disabled="!chromeExtensionInstalled">
@@ -146,7 +147,7 @@
                 </template>
                 <h4 class="mt-0">Import the Web Captioner Title Template into vMix</h4>
                 <ol class="ml-0 mb-2">
-                  <li>Download the <strong><a href="/public/web-captioner-title.xaml">Web Captioner vMix title template<span class="ml-1"><fa icon="external-link-alt" fixed-width /></span></a></strong>.</li>
+                  <li>Download the <strong><a href="/web-captioner-title.xaml">Web Captioner vMix title template<span class="ml-1"><fa icon="external-link-alt" fixed-width /></span></a></strong>.</li>
                   <li>In vMix, go to <strong>Add Input > Title/XAML</strong>.</li>
                   <li>In the Input Select window, click <strong>Browse...</strong> in the upper right and open the Web Captioner title template you downloaded.</li>
                   <li>The title will appear in the <strong>Recent</strong> tab. Double-click it.</li>
@@ -211,6 +212,7 @@ export default {
       vmixStepsTabIndex: 0,
       showSettings: false,
       attemptingWebControllerConnect: false,
+      showExtensionNotInstalledMessage: false,
       testingVmixTemplate: false,
       testedVmixTemplateManually: false,
       showStep3SuccessMessage: false,
@@ -222,25 +224,30 @@ export default {
   mounted: function() {
     let self = this;
     this.refreshVmixSetupStatus()
-      .then(function() {
-        self.loading = false;
-        if (self.setupComplete) {
-          // Step 3 was completed.
-          self.showSettings = false;
-        }
-        else if (self.webControllerConnected) {
-          // Step 2 completed. Go to step 3.
-          self.vmixStepsTabIndex = 2;
-          self.showSettings = true;
-        }
-        else if (self.chromeExtensionInstalled) {
-          // Step 1 completed. Go to step 2.
-          self.vmixStepsTabIndex = 1;
-          self.showSettings = true;
-        }
-        else {
-          self.showSettings = true;
-        }
+      .then(() => {
+        self.$nextTick(() => {
+          setTimeout(()=> { // Todo: Figure out how to avoid hacky timeout
+            self.loading = false;
+            if (self.setupComplete) {
+              // Step 3 was completed.
+              self.showSettings = false;
+            }
+            else if (self.webControllerConnected) {
+              // Step 2 completed. Go to step 3.
+              self.vmixStepsTabIndex = 2;
+              self.showSettings = true;
+            }
+            else if (self.chromeExtensionInstalled) {
+              // Step 1 completed. Go to step 2.
+              self.vmixStepsTabIndex = 1;
+              self.showSettings = true;
+            }
+            else {
+              // Step 1 hasn't been completed
+              self.showSettings = true;
+            }
+          },500);
+        });
       });
 
     this.webControllerAddressLocalCopy = this.webControllerAddress;
@@ -248,19 +255,23 @@ export default {
     this.$watch('webControllerAddress', function(){
       this.webControllerAddressLocalCopy = this.webControllerAddress;
     });
+
+    // Determine if Chrome extension was installed
+    // setInterval(this.refreshVmixSetupStatus, 1000);
   },
   methods: {
-    initChromeExtensionInstall: function () {
-      let self = this;
-      chrome.webstore.install(null, function() {
-        // Successful
-        self.refreshVmixSetupStatus();
-        // Go to step 2
-        self.vmixStepsTabIndex = 1;
-      }, function() {
-        // Unsuccessful
-      });
-    },
+    // No longer doing this because Chrome is now disallowing this kind of install
+    // initChromeExtensionInstall: function () {
+    //   let self = this;
+    //   chrome.webstore.install(null, function() {
+    //     // Successful
+    //     self.refreshVmixSetupStatus();
+    //     // Go to step 2
+    //     self.vmixStepsTabIndex = 1;
+    //   }, function() {
+    //     // Unsuccessful
+    //   });
+    // },
     updateWebControllerAddress: function() {
       this.webControllerAddress = this.webControllerAddressLocalCopy;
       this.loading = true;
@@ -286,6 +297,18 @@ export default {
     },
     resetWebControllerConnectedStatus: function () {
       this.$store.commit('RESET_WEB_CONTROLLER_CONNECTED_STATUS');
+    },
+    step1NextClick: function() {
+      this.refreshVmixSetupStatus()
+        .then(() => {
+          if (this.chromeExtensionInstalled) {
+            this.showExtensionNotInstalledMessage = false;
+            this.vmixStepsTabIndex = 1;
+          }
+          else {
+            this.showExtensionNotInstalledMessage = true;
+          }
+        });
     },
     step2NextClick: function() {
       this.attemptingWebControllerConnect = true;
@@ -325,7 +348,10 @@ export default {
         });
     },
     sendTestMessage: function() {
-      this.$store.dispatch('SEND_TO_VMIX', {text: this.testMessage});
+      this.$store.dispatch('SEND_TO_VMIX', {
+        text: this.testMessage,
+        chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
+      });
       this.testMessageSent = true;
       let self = this;
       setTimeout(function() {
