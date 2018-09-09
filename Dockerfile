@@ -28,6 +28,8 @@ RUN set -ex \
 COPY . ./
 
 # Build
+# EVERYTHING THAT HAPPENS HERE MUST BE
+# ENVIRONMENT-AGNOSTIC
 RUN set -ex \
     && npm run build --prefix ./app \
     && hugo --source="./static-site" \
