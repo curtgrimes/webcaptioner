@@ -29,8 +29,10 @@ COPY . ./
 
 # Build
 RUN set -ex \
+    && npm run build --prefix ./app \
     && hugo --source="./static-site" \
     && npm run build --prefix ./static-site \
+    && npm prune --production --prefix ./app
 
 EXPOSE 8080
 CMD ["bash","/usr/src/scripts/run.sh"]

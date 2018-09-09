@@ -30,7 +30,7 @@ module.exports = {
     ['bootstrap-vue/nuxt', { css: false }],
     ['@nuxtjs/sentry'],
     ['@nuxtjs/google-analytics', {
-      id: process.env.GOOGLE_ANALYTICS_ID,
+      id: 'REMOVED',
       batch: {
         enabled: true,
         amount: 2,
@@ -62,8 +62,8 @@ module.exports = {
     '@/assets/scss/app.scss',
   ],
   sentry: {
-    public_key: process.env.SENTRY_PUBLIC_KEY,
-    project_id: process.env.SENTRY_PROJECT_ID,
+    public_key: 'REMOVED',
+    project_id: 'REMOVED',
     config: {
       release: gitRevision.short(),
       environment: process.env.HOSTNAME,
