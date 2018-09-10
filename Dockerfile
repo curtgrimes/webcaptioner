@@ -4,7 +4,6 @@ FROM node:10.6
 # wasn't available on GitHub as a prebuilt binary
 # ENV SASS_BINARY_NAME linux-x64-59_binding.node
 
-# Set in startup.sh
 ENV GOOGLE_APPLICATION_CREDENTIALS ./app/config/google-application-credentials.json
 
 # Install Hugo
@@ -29,10 +28,13 @@ RUN set -ex \
 COPY . ./
 
 # Build
+# EVERYTHING THAT HAPPENS HERE MUST BE
+# ENVIRONMENT-AGNOSTIC
 RUN set -ex \
     && npm run build --prefix ./app \
     && hugo --source="./static-site" \
-    && npm run gulp --prefix ./static-site
+    && npm run build --prefix ./static-site \
+    && npm prune --production --prefix ./app
 
 EXPOSE 8080
 CMD ["bash","/usr/src/scripts/run.sh"]

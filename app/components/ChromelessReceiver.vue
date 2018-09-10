@@ -1,0 +1,43 @@
+<template>
+  <transcript :chromeless="true"></transcript>
+</template>
+
+<script>
+import ChromelessReceiver from '~/components/ChromelessReceiver.vue';
+import Transcript from '~/components/Transcript.vue';
+
+export default {
+  name: "chromeless-receiver",
+  components: {
+    ChromelessReceiver,
+    Transcript,
+  },
+  mounted: function() {
+
+    if (window) {
+      window.addEventListener('processVuexMutation', this.processVuexMutation);
+      window.addEventListener('processVuexAction', this.processVuexAction);
+    }
+
+    // When opener window refreshes or closes, close this window
+    window.opener.addEventListener('unload', () => {
+      window.close();
+    });
+    setInterval(() => {
+      if (!window.opener) {
+        window.close();
+      }
+    },250);
+
+    window.opener.dispatchEvent(new CustomEvent('receiverIsReadyToReceiveMutations'));
+  },
+  methods: {
+    processVuexMutation: function ({detail:{type, payload}}) {
+      this.$store.commit(type, payload);
+    },
+    processVuexAction: function ({detail:{type, payload}}) {
+      this.$store.dispatch(type, payload);
+    },
+  }
+};
+</script>
