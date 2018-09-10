@@ -97,16 +97,14 @@ export default {
             return 'This will do something someday I think';
           case 'remoteDisplays':
             return 'Send captions to other phones or tablets.';
-          case 'largerLayout':
-            return 'Adds an option for a larger navbar layout under Settings > Controls.';
-          case 'chromecast':
-            return 'A cast button will show on the navbar when a Chromecast-enabled device is detected on the network.';
+          case 'webhooks':
+            return 'Use webhooks to integration your application with Web Captioner.';
           default:
             return '';
       }
     },
     isValidExperiment: function() {
-      return ['remoteDisplays','science','largerLayout','chromecast',].includes(this.experimentName);
+      return ['remoteDisplays','science','','webhooks',].includes(this.experimentName);
     },
     addExperiment: function({withConfirmation}) {
       if (this.isValidExperiment()) {

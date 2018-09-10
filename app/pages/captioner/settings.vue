@@ -37,7 +37,7 @@
         <h3 class="text-muted pl-3 pt-2 small">Integrations</h3>
         <b-list-group flush>
           <b-list-group-item to="/captioner/settings/vmix">vMix</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/webhooks">Webhooks</b-list-group-item>
+          <b-list-group-item v-if="experiments.includes('webhooks')" to="/captioner/settings/webhooks">Webhooks</b-list-group-item>
         </b-list-group>
         <h3 class="text-muted pl-3 pt-2 small">Other</h3>
         <b-list-group flush>
@@ -75,7 +75,7 @@
                 <hr/>
                 <b-nav vertical pills>
                   <b-nav-item to="/captioner/settings/vmix">vMix</b-nav-item>
-                  <b-nav-item to="/captioner/settings/webhooks">Webhooks</b-nav-item>
+                  <b-nav-item v-if="experiments.includes('webhooks')" to="/captioner/settings/webhooks">Webhooks</b-nav-item>
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>

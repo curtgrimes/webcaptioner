@@ -143,6 +143,9 @@ export default {
       showLog: false,
     };
   },
+  mounted: function() {
+    this.$store.commit('ADD_EXPERIMENT', {experiment: 'webhooks'});
+  },
   computed: {
     on: {
       get () {
