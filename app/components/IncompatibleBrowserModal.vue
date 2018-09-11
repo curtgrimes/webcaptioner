@@ -1,11 +1,12 @@
 <template>
     <b-modal ref="modal" title="Incompatible Browser" no-close-on-esc no-close-on-backdrop>
-      <p>Sorry, currently Web Captioner only works in Google Chrome.</p>
-      <p class="mb-0">You can still look around and play with settings, but in order to start captioning, you'll have to <strong>switch to Google Chrome</strong>.</p>
+      <p>Sorry, but currently Web Captioner only works in Google Chrome.</p>
+      <p>You can still look around and play with settings, but in order to start captioning, you'll have to <strong>switch to Google Chrome</strong>.</p>
+      <p class="mb-0">If compatibility with browsers other than Chrome is important to you, <a href="https://feedback.webcaptioner.com/posts/28/make-web-captioner-work-on-browsers-other-than-chrome" target="_blank">cast a vote here</a>.</p>
       <div slot="modal-footer" class="w-100">
         <div class="row">
           <div class="col-6">
-              <p class="ml-3 mt-2 mb-0"><a href="/help/general/browser-compatibility/" target="_blank">Why?</a></p>
+              <p class="ml-3 mt-2 mb-0"><a href="/help/general/browser-compatibility/" target="_blank">Why just Chrome?</a></p>
           </div>
           <div class="col-6">
             <b-btn ref="getStartedButton" class="float-right" variant="secondary" @click="hideModal()">

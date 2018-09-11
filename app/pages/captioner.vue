@@ -185,9 +185,20 @@ export default {
       }
     });
 
+    function isChromium() { 
+      for (var i = 0, u="Chromium", l =u.length; i < navigator.plugins.length; i++) {
+        if (navigator.plugins[i].name != null && navigator.plugins[i].name.substr(0, l) === u) {
+          return true;
+        }
+      }
+      return false;
+    }
 
-
-    if (!('webkitSpeechRecognition' in window)) {
+    if (
+      !('webkitSpeechRecognition' in window)
+      || navigator.userAgent.indexOf("Opera") !== -1
+      || isChromium()
+    ) {
         this.$store.commit('SET_INCOMPATIBLE_BROWSER_ON');
         this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
     }
