@@ -13,6 +13,7 @@
 import Combokeys from 'combokeys'
 import screenfull from 'screenfull'
 import saveToFile from '~/mixins/saveToFile.js'
+import dateFormat from '~/mixins/dateFormat'
 import navbar from '~/components/Navbar.vue'
 import WelcomeModal from '~/components/WelcomeModal.vue'
 import IncompatibleBrowserModal from '~/components/IncompatibleBrowserModal.vue'
@@ -27,6 +28,7 @@ export default {
   name: 'app-view',
   mixins: [
     saveToFile,
+    dateFormat,
   ],
   components: {
     navbar,
@@ -121,11 +123,11 @@ export default {
         })
 
 
-        .bind('f', function() {
-          if (self.largerLayout) {
+        .bind('f', () => {
+          if (this.largerLayout) {
             this.saveToTextFile({
-              transcript: self.$store.state.captioner.transcript.final + self.$store.state.captioner.transcript.interim,
-              dateFormatter: self.$helpers.dateFormat,
+              transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
+              dateFormatter: this.dateFormat,
               onDone: function() {},
             });
           }

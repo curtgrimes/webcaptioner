@@ -6,7 +6,7 @@
                 <div class="mr-auto">
                     <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">Clear <kbd class="small ml-3">p</kbd></b-button>
                 </div>
-                <b-button @click="saveToTextFile" variant="info" size="lg" class="px-4 py-3">Save to File <kbd class="small ml-3">f</kbd></b-button>
+                <b-button @click="startSaveToTextFile" variant="info" size="lg" class="px-4 py-3">Save to File <kbd class="small ml-3">f</kbd></b-button>
             </div>
             <div class="d-flex w-100">
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,11 +118,13 @@
 import VolumeMeter from './VolumeMeter.vue'
 import CastButton from '../components/CastButton.vue'
 import saveToFile from '~/mixins/saveToFile'
+import dateFormat from '~/mixins/dateFormat'
 
 export default {
   name: 'navbar',
   mixins: [
-      saveToFile,
+    saveToFile,
+    dateFormat,
   ],
   components: {
     VolumeMeter,
@@ -203,7 +205,6 @@ export default {
     },
     startSaveToFileModal: function() {
         this.$router.push('/captioner/save-to-file');
-    //   this.$refs.saveToFileModal.showModal();
     },
     startClearTranscriptModal: function() {
         this.$router.push('/captioner/clear');
@@ -220,12 +221,12 @@ export default {
 
         this.$router.replace('/captioner');
     },
-    saveToTextFile: function() {
-        this.saveToTextFile({
-            transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
-            dateFormatter: this.$helpers.dateFormat,
-            onDone: function() {},
-        });
+    startSaveToTextFile() {
+      this.saveToTextFile({
+        transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
+        dateFormatter: this.dateFormat,
+        onDone: () => {},
+      });
     },
   }
 }
