@@ -3,60 +3,59 @@
     <b-modal ref="invalidSettingsFile" class="text-center" hide-header @shown="focusInvalidSettingsFileModalOkButton()">
       <div class="py-2">
         <div class="pb-2 h4"><fa icon="exclamation-triangle" size="3x" /></div>
-        <h2>Hmmm</h2>
-        <p class="lead">It looks like something's wrong with that file.</p>
+        <p class="lead">{{$t('settings.exportRestore.somethingWrongWithFile')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="secondary" ref="invalidSettingsFileModalOkButton" @click="hideInvalidSettingsFileModal()">Ok</b-btn>
+        <b-btn class="float-right" variant="secondary" ref="invalidSettingsFileModalOkButton" @click="hideInvalidSettingsFileModal()">{{$t('common.ok')}}</b-btn>
       </div>
     </b-modal>
     <b-modal ref="confirmRestore" hide-header @shown="focusConfirmRestoreModalOkButton()">
       <div class="py-2">
-        <h2>Restore settings from this file?</h2>
-        <p class="lead">All of your current settings will be lost.</p>
+        <h2>{{$t('settings.exportRestore.restoreSettingsQuestion')}}</h2>
+        <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn class="float-right ml-2" variant="secondary" ref="confirmRestoreModalOkButton" @click="restoreSettings()">Restore</b-btn>
-        <b-btn class="float-right" variant="primary" @click="cancelConfirmRestoreModal()">Cancel</b-btn>
+        <b-btn class="float-right ml-2" variant="secondary" ref="confirmRestoreModalOkButton" @click="restoreSettings()">{{$t('settings.exportRestore.restore')}}</b-btn>
+        <b-btn class="float-right" variant="primary" @click="cancelConfirmRestoreModal()">{{$t('common.cancel')}}</b-btn>
       </div>
     </b-modal>
     <b-modal ref="confirmReset" hide-header @shown="focusConfirmResetModalOkButton()">
       <div class="py-2">
-        <h2>Reset all your settings?</h2>
-        <p class="lead">All of your current settings will be lost.</p>
+        <h2>{{$t('settings.exportRestore.resetSettingsQuestion')}}</h2>
+        <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn class="float-right ml-2" variant="danger" ref="confirmResetModalOkButton" @click="resetSettings()">Reset</b-btn>
-        <b-btn class="float-right" variant="primary" @click="cancelConfirmResetModal()">Cancel</b-btn>
+        <b-btn class="float-right ml-2" variant="danger" ref="confirmResetModalOkButton" @click="resetSettings()">{{$t('settings.exportRestore.reset')}}</b-btn>
+        <b-btn class="float-right" variant="primary" @click="cancelConfirmResetModal()">{{$t('common.cancel')}}</b-btn>
       </div>
     </b-modal>
     <b-modal class="text-center" ref="restoreSuccessModal" ok-only hide-header>
       <div class="pb-2 h4"><fa icon="check-circle" size="3x" /></div>
-      <h2>Settings Restored</h2>
+      <h2>{{$t('settings.exportRestore.restoredSettings')}}</h2>
     </b-modal>
     <b-modal class="text-center" ref="resetSuccessModal" ok-only hide-header>
       <div class="pb-2 h4"><fa icon="check-circle" size="3x" /></div>
-      <h2>Settings Reset</h2>
+      <h2>{{$t('settings.exportRestore.settingsReset')}}</h2>
     </b-modal>
     <div class="card mb-3">
       <div class="card-body">
-        <h3>Export</h3>
-        <p>Your settings will be saved locally as a JSON file.</p>
-        <button class="btn btn-secondary d-inline-block" @click="exportSettings()">Export</button>
+        <h3>{{$t('settings.exportRestore.export')}}</h3>
+        <p>{{$t('settings.exportRestore.saveDescription')}}</p>
+        <button class="btn btn-secondary d-inline-block" @click="exportSettings()">{{$t('settings.exportRestore.export')}}</button>
       </div>
     </div>
     <div class="card mb-3">
       <div class="card-body">
-        <h3>Restore</h3>
-        <p>Restore settings (appearance, censor settings, word replacements, vMix settings, etc.) from a settings file you previously exported.</p>
+        <h3>{{$t('settings.exportRestore.restore')}}</h3>
+        <p>{{$t('settings.exportRestore.restoreDescription')}}</p>
         <input ref="settingsFileUpload" type="file" accept=".json" @change="loadSettingsFile($event)" />
       </div>
     </div>
     <div class="card mb-3">
       <div class="card-body">
-        <h3>Reset</h3>
-        <p>Reset all of your settings.</p>
-        <button class="btn btn-danger d-inline-block" @click="confirmReset()">Reset</button>
+        <h3>{{$t('settings.exportRestore.reset')}}</h3>
+        <p>{{$t('settings.exportRestore.resetDescription')}}</p>
+        <button class="btn btn-danger d-inline-block" @click="confirmReset()">{{$t('settings.exportRestore.reset')}}</button>
       </div>
     </div>
   </div>
@@ -65,6 +64,7 @@
 <script>
 import saveToFile from '~/mixins/saveToFile'
 import getDefaultSettings from '~/store/settingsState'
+import Vue from 'vue'
 
 export default {
   transition: 'fade',

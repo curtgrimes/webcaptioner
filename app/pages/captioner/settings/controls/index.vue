@@ -26,7 +26,7 @@
               <b-button variant="info" disabled>Save to File</b-button>
             </div>
             <div class="d-flex w-100 align-items-center">
-              <img src="/static/img/logo.svg" width="8" height="8" alt="Web Captioner" class="align-middle mr-auto" />
+              <img src="/static/img/logo.svg" width="8" height="8" class="align-middle mr-auto" />
               <b-dropdown variant="primary" split text="Start Captioning" disabled></b-dropdown>
             </div>
           </b-navbar>

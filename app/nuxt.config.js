@@ -35,6 +35,18 @@ module.exports = {
       ],
     }],
     ['bootstrap-vue/nuxt', { css: false }],
+    ['nuxt-i18n', {
+      defaultLocale: 'en',
+      locales: [
+        {
+          code: 'en',
+          file: 'en-US.js',
+          iso: 'en-US',
+        },
+      ],
+      lazy: true,
+      langDir: 'lang/'
+    }],
     ['@nuxtjs/sentry'],
     ['@nuxtjs/google-analytics', {
       id: 'REMOVED',

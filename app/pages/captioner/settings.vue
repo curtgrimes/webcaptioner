@@ -50,36 +50,36 @@
         <div class="row h-100">
           <div class="col-lg-9 col-xl-7 ml-auto mb-5">
             <div class="position-sticky" style="top:20px">
-              <h2 class="d-none d-sm-block lead pl-3 text-dark" style="padding-top:.6rem">Settings</h2>
+              <h2 class="d-none d-sm-block lead pl-3 text-dark" style="padding-top:.6rem">{{$t('settings.settings')}}</h2>
               <nav>
                 <b-nav vertical pills>
-                  <b-nav-item to="/captioner/settings/about">About</b-nav-item>
+                  <b-nav-item to="/captioner/settings/about">{{$t('settings.about.about')}}</b-nav-item>
                   <b-nav-item v-if="eventLog" to="/captioner/settings/event-log">
-                    Event Log <span v-if="eventLogStopTime">({{logTimeRemainingMinutes}}:{{logTimeRemainingSeconds}})</span>
+                    {{$t('settings.eventLog.eventLog')}} <span v-if="eventLogStopTime">({{logTimeRemainingMinutes}}:{{logTimeRemainingSeconds}})</span>
                     <b-badge variant="light" class="nav-badge">
                       {{eventLogCount}} <span class="sr-only">events</span> 
                     </b-badge>
                   </b-nav-item>
-                  <b-nav-item class="nav-item-rainbow" v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments"><fa icon="flask" /> Experiments</b-nav-item>
+                  <b-nav-item class="nav-item-rainbow" v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments"><fa icon="flask" /> {{$t('settings.experiments.experiments')}}</b-nav-item>
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>
-                  <b-nav-item to="/captioner/settings/appearance">Appearance</b-nav-item>
-                  <b-nav-item to="/captioner/settings/censor">Censor</b-nav-item>
-                  <b-nav-item to="/captioner/settings/controls">Controls</b-nav-item>
-                  <b-nav-item to="/captioner/settings/language">Language</b-nav-item>
-                  <b-nav-item v-if="experiments.includes('remoteDisplays')" to="/captioner/settings/remote-displays">Remote Displays</b-nav-item>
-                  <b-nav-item to="/captioner/settings/word-replacements">Word Replacements</b-nav-item>
+                  <b-nav-item to="/captioner/settings/appearance">{{$t('settings.appearance.appearance')}}</b-nav-item>
+                  <b-nav-item to="/captioner/settings/censor">{{$t('settings.censor.censor')}}</b-nav-item>
+                  <b-nav-item to="/captioner/settings/controls">{{$t('settings.controls.controls')}}</b-nav-item>
+                  <b-nav-item to="/captioner/settings/language">{{$t('settings.language.language')}}</b-nav-item>
+                  <b-nav-item v-if="experiments.includes('remoteDisplays')" to="/captioner/settings/remote-displays">{{$t('settings.remoteDisplays.remoteDisplays')}}</b-nav-item>
+                  <b-nav-item to="/captioner/settings/word-replacements">{{$t('settings.wordReplacements.wordReplacements')}}</b-nav-item>
                   <!-- <b-nav-item to="/captioner/settings/title-cards">Title Cards</b-nav-item> -->
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>
-                  <b-nav-item to="/captioner/settings/vmix">vMix</b-nav-item>
-                  <b-nav-item v-if="experiments.includes('webhooks')" to="/captioner/settings/webhooks">Webhooks</b-nav-item>
+                  <b-nav-item to="/captioner/settings/vmix">{{$t('settings.vmix.vmix')}}</b-nav-item>
+                  <b-nav-item v-if="experiments.includes('webhooks')" to="/captioner/settings/webhooks">{{$t('settings.webhooks.webhooks')}}</b-nav-item>
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>
-                  <b-nav-item class="small" to="/captioner/settings/export-restore">Export/Restore Settings</b-nav-item>
+                  <b-nav-item class="small" to="/captioner/settings/export-restore">{{$t('settings.exportRestore.exportRestoreSettings')}}</b-nav-item>
                 </b-nav>
               </nav>
             </div>

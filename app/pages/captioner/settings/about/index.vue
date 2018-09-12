@@ -9,9 +9,9 @@
           <div class="col-sm-8 col-md-9">
             <div class="d-flex align-items-center h-100">
               <div>
-                <h3>Web Captioner</h3>
-                <p class="lead mb-2">Real-time captioning for your event, speech, classroom lecture, or church service.</p>
-                <p class="mb-0 small"><a href="/">Learn More</a> &middot; <a href="/help">Help Center</a><span class="d-none d-md-inline"> &middot; </span><br class="d-md-none"/> <a href="/blog">Blog</a> &middot; <a href="/donate">Donate</a></p>
+                <h3>{{$t('app.webCaptioner')}}</h3>
+                <p class="lead mb-2">{{$t('app.description')}}</p>
+                <p class="mb-0 small"><a href="/">{{$t('settings.about.learnMore')}}</a> &middot; <a href="/help">{{$t('navbar.menu.helpCenter')}}</a><span class="d-none d-md-inline"> &middot; </span><br class="d-md-none"/> <a href="/blog">{{$t('navbar.menu.blog')}}</a> &middot; <a href="/donate">{{$t('navbar.menu.donate')}}</a></p>
               </div>
             </div>
           </div>
@@ -20,7 +20,7 @@
     </div>
     <hr class="my-4" />
     
-    <h2>What's New</h2>
+    <h2>{{$t('settings.about.whatsNew')}}</h2>
     <whats-new/>
 
   </div>

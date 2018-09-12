@@ -19,7 +19,7 @@
             </div>
             <div class="h-25 d-flex align-items-center " style="position:absolute;left:7vw;right:0;bottom:0">
                 <div class="h2 logo-container">
-                    <img src="/static/img/logo-wordmark-inverse.svg" class="d-inline-block" alt="Web Captioner" />
+                    <img src="/static/img/logo-wordmark-inverse.svg" class="d-inline-block" :alt="$t('app.webCaptioner')" />
                 </div>
             </div>
         </div>
