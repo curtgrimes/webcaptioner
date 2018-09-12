@@ -107,6 +107,14 @@ export default {
         .bind(['ctrl+shift+,', 'command+shift+,'], function() {
           self.$store.commit('TEXT_SIZE_DECREASE');
         })
+        .bind('t', () => {
+          if (this.experiments.includes('typingMode')) {
+            this.$store.dispatch('captioner/startTypingMode');
+          }
+        })
+        .bind('esc', () => {
+          this.$store.dispatch('captioner/stopTypingMode');
+        })
 
 
         // Larger layout mode
@@ -338,6 +346,9 @@ export default {
     this.combokeysDocument.detach();
   },
   computed: {
+    experiments: function() {
+        return this.$store.state.settings.exp;
+    },
     largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },

@@ -35,7 +35,11 @@ const state = {
 }
 
 const actions = {
-    startManual ({commit, dispatch, rootState}) {
+    startManual ({commit, dispatch, state, rootState}) {
+        if (state.typingModeOn) {
+            dispatch('stopTypingMode');
+        }
+
         if (rootState.incompatibleBrowser) {
             dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL', {}, { root: true });
         }

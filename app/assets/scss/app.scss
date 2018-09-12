@@ -166,8 +166,12 @@ input[type="color"] {
   padding:.575rem 1rem .425rem 1rem;
 }
 
-.btn-primary.dropdown-toggle-split {
-  border-left:1px solid $modal-header-border-color;
+.btn-group > * {
+  border-left:1px solid rgba(0,0,0,.2);
+}
+
+.btn-group .btn:first-child, .btn-group .btn:first-child:hover {
+  border-left:none;
 }
 
 .navbar-expand .dropup .dropdown-menu {

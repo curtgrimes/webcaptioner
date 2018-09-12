@@ -9,7 +9,7 @@
       v-bind:class="textPositionClass"
       class="transcript-scroller"
       ref="scroller">
-      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span> <span v-show="typingModeOn" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcriptTyped">Hello world</span></span>
+      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span> <span v-show="typingModeOn" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcriptTyped combokeys" id="test2">Hello world</span></span>
     </span>
   </div>
 </template>
@@ -17,6 +17,7 @@
 <script>
 import hexToRGB from '~/mixins/hexToRGB'
 import appHeightAdjuster from '~/mixins/appHeightAdjuster'
+import Combokeys from 'combokeys'
 
 export default {
   name: 'transcript',
@@ -58,7 +59,11 @@ export default {
         this.height = this.adjustAppHeight();
       },500);
     });
-    
+  
+    new Combokeys(this.$refs.typedTranscript)
+      .bind('esc', () => {
+        this.$store.dispatch('captioner/stopTypingMode');
+      })
 
     this.$watch('largerLayout', () => {
       this.height = this.adjustAppHeight();

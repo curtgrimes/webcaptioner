@@ -95,6 +95,8 @@ export default {
       switch(experiment) {
           case 'science':
             return 'This will do something someday I think';
+          case 'typingMode':
+            return 'Add a manual typing mode.';
           case 'remoteDisplays':
             return 'Send captions to other phones or tablets.';
           case 'webhooks':
@@ -104,7 +106,7 @@ export default {
       }
     },
     isValidExperiment: function() {
-      return ['remoteDisplays','science','','webhooks',].includes(this.experimentName);
+      return ['typingMode','remoteDisplays','science','','webhooks',].includes(this.experimentName);
     },
     addExperiment: function({withConfirmation}) {
       if (this.isValidExperiment()) {

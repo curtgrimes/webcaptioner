@@ -25,14 +25,8 @@
                 <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
                     Listening<span v-if="microphoneName"> to "{{microphoneName}}"</span>
                 </div>
-                <b-btn v-show="false && !typingModeOn" variant="info" class="mr-3" v-b-tooltip.top title="Typing Mode" @click="startTypingMode">
-                    <fa icon="keyboard"/>
-                </b-btn>
-                <b-btn v-show="false && typingModeOn" variant="secondary" class="mr-3" v-b-tooltip.top title="Turn Off" @click="stopTypingMode">
-                    <fa icon="keyboard"/> Typing Mode
-                </b-btn>
                 <transition name="fade">
-                    <cast-button v-if="experiments.includes('chromecast')"></cast-button>
+                    <cast-button></cast-button>
                 </transition>
                 <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
                     <span class="navbar-text text-white pr-3 text-primary">
@@ -76,30 +70,38 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </transition>
-                <b-dropdown id="startCaptioningDropdown" :class="incompatibleBrowser ? 'button-only-disabled' : ''" :size="largerLayout ? 'lg' : ''" :variant="captioningToggleButtonVariant" dropup right split @click="captioningToggleButtonClick">
-                    <template slot="button-content">
+                <b-button-group :size="largerLayout ? 'lg' : ''">
+                    <b-button id="startCaptioningDropdown" :class="incompatibleBrowser ? 'button-only-disabled' : ''" :variant="captioningToggleButtonVariant" @click="captioningToggleButtonClick">
                         <div :class="{'px-4 py-2' : largerLayout}">
                             <span v-if="!this.captioningOn">
-                                <fa icon="microphone" /> Start Captioning
+                                <fa icon="microphone" /> <span v-show="!typingModeOn"> Start Captioning</span>
                             </span>
                             <span v-else>Stop Captioning</span> <kbd v-show="largerLayout" class="small ml-3">c</kbd>
                         </div>
-                    </template>
-                    <b-dropdown-item href="/" target="_blank">About</b-dropdown-item>
-                    <b-dropdown-item href="/blog" target="_blank">Blog</b-dropdown-item>
-                    <b-dropdown-item href="/help" target="_blank">Help Center</b-dropdown-item>
-                    <b-dropdown-item href="/community" target="_blank">Community</b-dropdown-item>
-                    <b-dropdown-item href="/donate" target="_blank">Donate</b-dropdown-item>
-                    <div class="dropdown-divider"></div>
-                    <b-dropdown-item href="/feedback" target="_blank">Feedback</b-dropdown-item>
-                    <div class="dropdown-divider"></div>
-                    <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><fa icon="external-link-alt" fixed-width class="mr-1" /> New Window</b-dropdown-item>
-                    <div class="dropdown-divider"></div>
-                    <b-dropdown-item to="/captioner/save-to-file" replace><fa icon="save" class="mr-1" fixed-width /> Save to File</b-dropdown-item>
-                    <b-dropdown-item to="/captioner/clear" replace><fa icon="trash-alt" class="mr-1" fixed-width /> Clear...</b-dropdown-item>
-                    <div class="dropdown-divider"></div>
-                    <b-dropdown-item to="/captioner/settings" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> Settings</b-dropdown-item>
-                </b-dropdown>
+                    </b-button>
+                    <b-button v-show="experiments.includes('typingMode') && !typingModeOn" variant="primary" v-b-tooltip.top title="Start Typing (t)" @click="startTypingMode">
+                        <fa icon="keyboard"/>
+                    </b-button>
+                    <b-btn v-if="typingModeOn" variant="danger" @click="stopTypingMode">
+                        <fa icon="keyboard"/> Done Typing <kbd>ESC</kbd>
+                    </b-btn>
+                    <b-dropdown dropup right variant="primary">
+                        <b-dropdown-item href="/" target="_blank">About</b-dropdown-item>
+                        <b-dropdown-item href="/blog" target="_blank">Blog</b-dropdown-item>
+                        <b-dropdown-item href="/help" target="_blank">Help Center</b-dropdown-item>
+                        <b-dropdown-item href="/community" target="_blank">Community</b-dropdown-item>
+                        <b-dropdown-item href="/donate" target="_blank">Donate</b-dropdown-item>
+                        <div class="dropdown-divider"></div>
+                        <b-dropdown-item href="/feedback" target="_blank">Feedback</b-dropdown-item>
+                        <div class="dropdown-divider"></div>
+                        <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left title="Show captions in a new window"><fa icon="external-link-alt" fixed-width class="mr-1" /> New Window</b-dropdown-item>
+                        <div class="dropdown-divider"></div>
+                        <b-dropdown-item to="/captioner/save-to-file" replace><fa icon="save" class="mr-1" fixed-width /> Save to File</b-dropdown-item>
+                        <b-dropdown-item to="/captioner/clear" replace><fa icon="trash-alt" class="mr-1" fixed-width /> Clear...</b-dropdown-item>
+                        <div class="dropdown-divider"></div>
+                        <b-dropdown-item to="/captioner/settings" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> Settings</b-dropdown-item>
+                    </b-dropdown>
+                </b-button-group>
             </div> <!-- bottom row in big UI mode -->
         </nav>
     </div>
