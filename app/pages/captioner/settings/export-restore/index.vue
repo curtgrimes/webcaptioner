@@ -40,7 +40,7 @@
     <div class="card mb-3">
       <div class="card-body">
         <h3>{{$t('settings.exportRestore.export')}}</h3>
-        <p>{{$t('settings.exportRestore.saveDescription')}}</p>
+        <p>{{$t('settings.exportRestore.exportDescription')}}</p>
         <button class="btn btn-secondary d-inline-block" @click="exportSettings()">{{$t('settings.exportRestore.export')}}</button>
       </div>
     </div>
