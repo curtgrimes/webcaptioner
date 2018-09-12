@@ -85,7 +85,7 @@
                     <b-btn v-if="typingModeOn" variant="danger" @click="stopTypingMode">
                         <fa icon="keyboard"/> Done Typing <kbd>ESC</kbd>
                     </b-btn>
-                    <b-dropdown dropup right variant="primary">
+                    <b-dropdown dropup right :variant="captioningToggleButtonVariant">
                         <b-dropdown-item href="/" target="_blank">About</b-dropdown-item>
                         <b-dropdown-item href="/blog" target="_blank">Blog</b-dropdown-item>
                         <b-dropdown-item href="/help" target="_blank">Help Center</b-dropdown-item>
