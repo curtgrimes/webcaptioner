@@ -18,30 +18,30 @@
       <!-- xs navigation -->
       <div :hidden="showBackButton" class="d-sm-none col p-0 bg-white pb-5 mb-3"> <!--  pb-5 mb-3 for bottom navbar space -->
         <b-list-group flush>
-          <b-list-group-item to="/captioner/settings/about">About</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/about">{{$t('settings.about.about')}}</b-list-group-item>
           <b-list-group-item v-if="eventLog" to="/captioner/settings/event-log">
-            Event Log
+            {{$t('settings.eventLog.eventLog')}}
           </b-list-group-item>
-          <b-list-group-item v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments">Experiments</b-list-group-item>
+          <b-list-group-item v-if="experiments.length || currentlyOnExperiments" to="/captioner/settings/experiments">{{$t('settings.experiments.experiments')}}</b-list-group-item>
         </b-list-group>
-        <h3 class="text-muted pl-3 pt-2 small">General</h3>
+        <h3 class="text-muted pl-3 pt-2 small">{{$t('settings.general')}}</h3>
         <b-list-group flush>
-          <b-list-group-item to="/captioner/settings/appearance">Appearance</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/censor">Censor</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/controls">Controls</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/language">Language</b-list-group-item>
-          <b-list-group-item v-if="experiments.includes('remoteDisplays')" to="/captioner/settings/remote-displays">Remote Displays</b-list-group-item>
-          <b-list-group-item to="/captioner/settings/word-replacements">Word Replacements</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/appearance">{{$t('settings.appearance.appearance')}}</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/censor">{{$t('settings.censor.censor')}}</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/controls">{{$t('settings.controls.controls')}}</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/language">{{$t('settings.language.language')}}</b-list-group-item>
+          <b-list-group-item v-if="experiments.includes('remoteDisplays')" to="/captioner/settings/remote-displays">{{$t('settings.remoteDisplays.remoteDisplays')}}</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/word-replacements">{{$t('settings.wordReplacements.wordReplacements')}}</b-list-group-item>
           <!-- <b-list-group-item to="/captioner/settings/title-cards">Title Cards</b-list-group-item> -->
         </b-list-group>
-        <h3 class="text-muted pl-3 pt-2 small">Integrations</h3>
+        <h3 class="text-muted pl-3 pt-2 small">{{$t('settings.integrations')}}</h3>
         <b-list-group flush>
-          <b-list-group-item to="/captioner/settings/vmix">vMix</b-list-group-item>
-          <b-list-group-item v-if="experiments.includes('webhooks')" to="/captioner/settings/webhooks">Webhooks</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/vmix">{{$t('settings.vmix.vmix')}}</b-list-group-item>
+          <b-list-group-item v-if="experiments.includes('webhooks')" to="/captioner/settings/webhooks">{{$t('settings.webhooks.webhooks')}}</b-list-group-item>
         </b-list-group>
-        <h3 class="text-muted pl-3 pt-2 small">Other</h3>
+        <h3 class="text-muted pl-3 pt-2 small">{{$t('settings.other')}}</h3>
         <b-list-group flush>
-          <b-list-group-item to="/captioner/settings/export-restore">Export/Restore Settings</b-list-group-item>
+          <b-list-group-item to="/captioner/settings/export-restore">{{$t('settings.exportRestore.exportRestoreSettings')}}</b-list-group-item>
         </b-list-group>
       </div>
 
@@ -255,7 +255,6 @@ export default {
 <style scoped>
   h3 {
     text-transform:uppercase;
-    font-size:1.3rem;
     margin:1rem 0;
   }
 

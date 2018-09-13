@@ -1,8 +1,8 @@
 <template>
   <div class="settings-appearance-view">
-    <h3 class="mt-0 mt-sm-3">Text</h3>
+    <h3 class="mt-0 mt-sm-3">{{$t('settings.appearance.text')}}</h3>
     <div class="form-group row">
-      <label for="text-color" class="col-sm-6 col-form-label">Font Family</label>
+      <label for="text-color" class="col-sm-6 col-form-label">{{$t('settings.appearance.fontFamily')}}</label>
       <div class="col-sm-6">
         <b-dropdown class="d-block w-100" toggle-class="w-100">
           <template slot="button-content">
@@ -23,7 +23,7 @@
 
     
     <div class="form-group row">
-      <label for="text-color" class="col-sm-6 col-form-label">Text Color</label>
+      <label for="text-color" class="col-sm-6 col-form-label">{{$t('settings.appearance.textColor')}}</label>
       <div class="col-sm-6">
         <input v-model="textColor" class="form-control" type="color" />
       </div>
@@ -31,19 +31,19 @@
 
     <div class="form-group row">
       <div class="col-sm-6">
-        <label for="textColorInterim" class="col-form-label">Interim Text Color</label>
+        <label for="textColorInterim" class="col-form-label">{{$t('settings.appearance.textColorInterim')}}</label>
       </div>
       <div class="col-sm-6">
         <input name="textColorInterim" v-model="textColorInterim" class="form-control mb-1" type="color" />
-        <button class="btn btn-link btn-sm ml-auto d-block pr-0" v-if="textColorInterim !== textColor" @click="textColorInterim = textColor">Use regular text color</button>
+        <button class="btn btn-link btn-sm ml-auto d-block pr-0" v-if="textColorInterim !== textColor" @click="textColorInterim = textColor">{{$t('settings.appearance.useRegularTextColor')}}</button>
       </div>
       <div class="col-12 mt-1">
-        <p class="small mb-0">During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.</p>
+        <p class="small mb-0">{{$t('settings.appearance.interimTextColorDescription')}}</p>
       </div>
     </div>
 
     <div class="form-group row">
-      <label for="text-size" class="col-sm-6 col-form-label">Text Size</label>
+      <label for="text-size" class="col-sm-6 col-form-label">{{$t('settings.appearance.textSize')}}</label>
       <div class="col-sm-6">
         <div class="input-group">
           <input v-model="textSize" class="form-control" name="text-size" type="number" id="text-size" min="0.1" step="0.1">
@@ -55,7 +55,7 @@
     </div>
 
     <div class="form-group row">
-      <label for="text-size" class="col-sm-6 col-form-label">Line Height</label>
+      <label for="text-size" class="col-sm-6 col-form-label">{{$t('settings.appearance.lineHeight')}}</label>
       <div class="col-sm-6">
         <div class="input-group">
           <input v-model="lineHeight" class="form-control" name="text-size" type="number" id="text-size" min="0.1" step="0.1" max="10">
@@ -67,7 +67,7 @@
     </div>
 
     <div class="form-group row">
-      <label for="text-size" class="col-sm-6 col-form-label">Letter Spacing</label>
+      <label for="text-size" class="col-sm-6 col-form-label">{{$t('settings.appearance.letterSpacing')}}</label>
       <div class="col-sm-6">
         <div class="input-group">
           <input v-model="letterSpacing" class="form-control" name="text-size" type="number" id="text-size" min="-10" step="0.025" max="20">
@@ -79,21 +79,21 @@
     </div>
 
     <div class="form-group row">
-      <label for="capitalization-uppercase" class="col-sm-6 col-form-label pt-0">Capitalization</label>
+      <label for="capitalization-uppercase" class="col-sm-6 col-form-label pt-0">{{$t('settings.appearance.capitalization')}}</label>
       <div class="col-sm-6">
         <div class="custom-control custom-radio mt-1">
           <input v-model="textTransform" class="custom-control-input" type="radio" name="capitalization" id="capitalization-uppercase" value="uppercase">
-          <label class="custom-control-label" for="capitalization-uppercase">UPPERCASE</label>
+          <label class="custom-control-label" for="capitalization-uppercase">{{$t('settings.appearance.uppercase')}}</label>
         </div>
         <div class="custom-control custom-radio">
           <input v-model="textTransform" class="custom-control-input" type="radio" name="capitalization" id="capitalization-first-letter-only" value="capitalize">
-          <label class="custom-control-label" for="capitalization-first-letter-only">First Letter Of Each Word</label>
+          <label class="custom-control-label" for="capitalization-first-letter-only">{{$t('settings.appearance.firstLetterOfEachWord')}}</label>
         </div>
         <div class="custom-control custom-radio">
           <input v-model="textTransform" class="custom-control-input" type="radio" name="capitalization" id="capitalization-initial" value="initial">
           <label class="custom-control-label" for="capitalization-initial">
-            Proper nouns and the start of sentences<br/>
-            <p class="small mb-0">Separate sentences are detected only when a puncuation mark like &#34;period&#34; or &#34;question mark&#34; is literally said.</p>
+            {{$t('settings.appearance.properNouns')}}<br/>
+            <p class="small mb-0">{{$t('settings.appearance.properNounsDescription')}}</p>
           </label>
         </div>
       </div>
@@ -102,10 +102,10 @@
 
     <div class="row">
       <div class="col-6">
-        <label class="col-form-label">Alignment</label>
+        <label class="col-form-label">{{$t('settings.appearance.alignment')}}</label>
         <div class="card bg-dark sticky-top" style="top:120px">
           <div class="card-header bg-dark text-white small px-2 py-1">
-            Preview
+            {{$t('settings.appearance.preview')}}
           </div>
           <div class="text-preview-mockup-wrap main-preview w-100 d-flex" v-bind:style="{backgroundColor: backgroundColor, padding: (alignmentPadding/2)+'em'}" v-bind:class="previewWrapTextPositionClass">
             <div class="text-preview-mockup p-1 d-flex" style="cursor:default" v-bind:style="{color: textColor}" v-bind:class="previewTextPositionClass">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligdiam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauriula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
@@ -113,61 +113,61 @@
         </div>
       </div>
       <div class="col-6">
-        <label for="horizontal-alignment-full" class="col-form-label">Horizontal Alignment</label>
+        <label for="horizontal-alignment-full" class="col-form-label">{{$t('settings.appearance.horizontalAlignment')}}</label>
         <div class="btn-group btn-group-toggle d-flex flex-wrap">
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentHorizontal == 'full' }">
-            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-full" value="full" autocomplete="off" checked> Full
+            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-full" value="full" autocomplete="off" checked> {{$t('settings.appearance.full')}}
             <div class="text-preview-mockup-wrap w-100 mt-2" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup w-100 p-1" v-bind:style="{color: textColor}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
             </div>
           </label>
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentHorizontal == 'left' }">
-            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-left" value="left" autocomplete="off"> Left
+            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-left" value="left" autocomplete="off"> {{$t('settings.appearance.left')}}
             <div class="text-preview-mockup-wrap w-100 mt-2" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup w-50 p-1" v-bind:style="{color: textColor}">Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
             </div>
           </label>
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentHorizontal == 'middle' }">
-            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-middle" value="middle" autocomplete="off"> Middle
+            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-middle" value="middle" autocomplete="off"> {{$t('settings.appearance.middle')}}
             <div class="text-preview-mockup-wrap w-100 mt-2" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup w-50 mx-auto p-1" v-bind:style="{color: textColor}">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et.</div>
             </div>
           </label>
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentHorizontal == 'right' }">
-            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-right" value="right" autocomplete="off"> Right
+            <input v-model="alignmentHorizontal" type="radio" name="horizontal-alignment" id="horizontal-alignment-right" value="right" autocomplete="off"> {{$t('settings.appearance.right')}}
             <div class="text-preview-mockup-wrap w-100 mt-2" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup w-50 ml-auto p-1" v-bind:style="{color: textColor}">Ut enim ad minima veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</div>
             </div>
           </label>
         </div>
-        <label for="vertical-alignment-full" class="mt-3 mb-0 col-form-label">Vertical Alignment</label>
+        <label for="vertical-alignment-full" class="mt-3 mb-0 col-form-label">{{$t('settings.appearance.verticalAlignment')}}</label>
         <div class="btn-group btn-group-toggle d-flex flex-wrap">
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentVertical == 'full' }">
-            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-full" value="full" autocomplete="off"> Full
+            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-full" value="full" autocomplete="off"> {{$t('settings.appearance.full')}}
             <div class="text-preview-mockup-wrap w-100 mt-2" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup w-100 p-1" v-bind:style="{color: textColor}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
             </div>
           </label>
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentVertical == 'top' }">
-            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-top" value="top" autocomplete="off"> Top
+            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-top" value="top" autocomplete="off"> {{$t('settings.appearance.top')}}
             <div class="text-preview-mockup-wrap w-100 mt-2" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup h-50 p-1" style="overflow:hidden" v-bind:style="{color: textColor}">Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequaturiure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
             </div>
           </label>
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentVertical == 'middle' }">
-            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="horizontal-alignment-middle" value="middle" autocomplete="off"> Middle
+            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="horizontal-alignment-middle" value="middle" autocomplete="off"> {{$t('settings.appearance.middle')}}
             <div class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-center" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup h-50 my-auto p-1" v-bind:style="{color: textColor}">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et.</div>
             </div>
           </label>
           <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentVertical == 'bottom' }">
-            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-bottom" value="bottom" autocomplete="off"> Bottom
+            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-bottom" value="bottom" autocomplete="off"> {{$t('settings.appearance.bottom')}}
             <div class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-end" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup h-50 mt-auto p-1" v-bind:style="{color: textColor}">Ut enim ad minima veniam, qeligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimusuis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</div>
             </div>
           </label>
-          <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentVertical == 'lowerThird' }">
-            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-lower-third" value="lowerThird" autocomplete="off"> Lower<br class="d-lg-none"/> Third
+          <label class="btn btn-primary btn-block text-left p-2 m-0 w-50" v-bind:class="{ active: alignmentVertical == 'lowerThird' }" style="white-space:pre-line">
+            <input v-model="alignmentVertical" type="radio" name="vertical-alignment" id="vertical-alignment-lower-third" value="lowerThird" autocomplete="off"> {{$t('settings.appearance.lowerThird')}}
             <div class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-end" v-bind:style="{backgroundColor: backgroundColor}">
               <div class="text-preview-mockup h-25 ml-auto p-1" v-bind:style="{color: textColor}">Ut enim ad minima veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</div>
             </div>
@@ -176,7 +176,7 @@
 
 
         <div class="form-group row mt-2">
-          <label for="alignment-padding" class="col-12 col-form-label">Padding</label>
+          <label for="alignment-padding" class="col-12 col-form-label">{{$t('settings.appearance.padding')}}</label>
           <div class="col-12">
             <div class="input-group">
               <input class="form-control" name="alignment-padding" type="number" min="0" step="0.25" max="10" v-model="alignmentPadding">
@@ -192,9 +192,9 @@
 
     <hr class="my-4" />
 
-    <h3>Background</h3>
+    <h3>{{$t('settings.appearance.background')}}</h3>
     <div class="form-group row">
-      <label for="background-color" class="col-sm-6 col-form-label">Background Color</label>
+      <label for="background-color" class="col-sm-6 col-form-label">{{$t('settings.appearance.backgroundColor')}}</label>
       <div class="col-sm-6">
         <input class="form-control" name="background-color" type="color" v-model="backgroundColor">
         <p class="small mb-0 mt-1">RGB ({{backgroundColorRGBValues.r}}, {{backgroundColorRGBValues.g}}, {{backgroundColorRGBValues.b}})</p>
@@ -203,16 +203,16 @@
 
     <hr class="my-4" />
 
-    <h3>Text Shadow</h3>
+    <h3>{{$t('settings.appearance.textShadow')}}</h3>
 
     <div class="form-group row">
-      <label for="text-shadow-color" class="col-sm-6 col-form-label">Shadow Color</label>
+      <label for="text-shadow-color" class="col-sm-6 col-form-label">{{$t('settings.appearance.shadowColor')}}</label>
       <div class="col-sm-6">
         <input v-model="shadowColor" class="form-control" name="text-shadow-color" type="color" />
       </div>
     </div>
     <div class="form-group row">
-      <label for="text-shadow-opacity" class="col-sm-6 col-form-label">Opacity</label>
+      <label for="text-shadow-opacity" class="col-sm-6 col-form-label">{{$t('settings.appearance.opacity')}}</label>
       <div class="col-sm-6">
         <div class="input-group">
           <input v-model="shadowOpacity" class="form-control" name="text-shadow-opacity" type="number" min="0" max="100" step="5">
@@ -223,7 +223,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="text-shadow-blur" class="col-sm-6 col-form-label">Blur</label>
+      <label for="text-shadow-blur" class="col-sm-6 col-form-label">{{$t('settings.appearance.blur')}}</label>
       <div class="col-sm-6">
         <div class="input-group">
           <input v-model="shadowBlurRadius" class="form-control" name="text-shadow-blur" type="number" min="0" step="1">
@@ -234,7 +234,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="text-shadow-x-position" class="col-sm-6 col-form-label">X Position</label>
+      <label for="text-shadow-x-position" class="col-sm-6 col-form-label">{{$t('settings.appearance.xPosition')}}</label>
       <div class="col-sm-6">
         <div class="input-group">
           <input v-model="shadowOffsetX" class="form-control" name="text-shadow-x-position" type="number" step="0.05">
@@ -245,7 +245,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="text-shadow-y-position" class="col-sm-6 col-form-label">Y Position</label>
+      <label for="text-shadow-y-position" class="col-sm-6 col-form-label">{{$t('settings.appearance.yPosition')}}</label>
       <div class="col-sm-6">
         <div class="input-group">
           <input v-model="shadowOffsetY" class="form-control" name="text-shadow-y-position" type="number" step="0.05">
@@ -289,7 +289,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Appearance',
+    settingsPageTitleKey: 'settings.appearance.appearance',
   },
   methods: {
     getFontChoices: () => {

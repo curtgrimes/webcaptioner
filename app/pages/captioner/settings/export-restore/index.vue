@@ -72,7 +72,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Export/Restore Settings',
+    settingsPageTitleKey: 'settings.exportRestore.exportRestoreSettings',
   },
   mixins: [
     saveToFile,

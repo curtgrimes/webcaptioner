@@ -1,46 +1,37 @@
 <template>
   <div class="settings-vmix-view">
-    <p><a href="https://vmix.com" target="_blank">vMix</a> is a popular software video mixer and switcher. You can send text directly to vMix and display it in a title input. You can then use vMix's font and color controls to style captioned text. <a href="/help/integrations/vmix/">Visit the Help Center</a> to learn more.</p>
-    <!-- <b-alert class="py-3 mb-4" show variant="secondary">
-      <div class="row">
-        <div class="col-sm-6">
-          <p class="lead mb-0 pt-1 position-relative" style="top:2px">Send Captions to vMix</p>
-        </div>
-        <div class="col-sm-6 text-right">
-          <span v-if="!setupComplete && !loading && sendToVmixOn" class="small badge badge-danger p-2 rounded">
-            <fa icon="exclamation-triangle" class="mr-1" />
-            Finish Setup
-          </span>
-          <b-button @click="sendToVmixOn = false" :variant="sendToVmixOn ? 'link' : 'secondary'">Off</b-button>
-          <b-button @click="sendToVmixOn = true" :variant="sendToVmixOn ? 'secondary' : 'link'">On</b-button>
-        </div>
-      </div>
-    </b-alert> -->
+    <i18n path="settings.vmix.description.text" tag="p">
+      <a place="vMix" href="https://vmix.com" target="_blank">{{$t('settings.vmix.vmix')}}</a>
+      <a place="visitTheHelpCenter" href="/help/integrations/vmix/">{{$t('settings.vmix.description.visitTheHelpCenter')}}</a>
+    </i18n>
     <transition name="fade">
       <b-alert :show="showStep3SuccessMessage" variant="success">
-        <fa icon="check-circle" fixed-width/> Connected to vMix! <router-link to="/captioner" class="alert-link">Start captioning</router-link> and your captions will now appear in vMix.
+        <fa icon="check-circle" fixed-width/> {{$t('settings.vmix.connectedToVmix')}} 
+        <i18n path="settings.vmix.captionsWillAppear" tag="span">
+          <router-link place="startCaptioning" to="/captioner" class="alert-link">{{$t('settings.vmix.startCaptioning')}}</router-link>
+        </i18n>
       </b-alert>
     </transition>
     <div v-if="setupComplete && !showSettings">
       <div class="row">
         <div class="col-6 pt-2">
-          Connect to vMix
+          {{$t('settings.vmix.connectToVmix')}}
         </div>
         <div class="col-6 text-right">
-          <b-button @click="sendToVmixOn = false" :variant="sendToVmixOn ? 'link' : 'outline-secondary'" size="sm">Off</b-button>
-          <b-button @click="sendToVmixOn = true" :variant="sendToVmixOn ? 'secondary' : 'link'" size="sm">On</b-button>
+          <b-button @click="sendToVmixOn = false" :variant="sendToVmixOn ? 'link' : 'outline-secondary'" size="sm">{{$t('common.off')}}</b-button>
+          <b-button @click="sendToVmixOn = true" :variant="sendToVmixOn ? 'secondary' : 'link'" size="sm">{{$t('common.on')}}</b-button>
         </div>
       </div>
       <hr/>
       <div class="row">
         <div class="col-4 col-sm-6 pt-sm-2">
-          vMix Web Controller Address
+          {{$t('settings.vmix.webControllerAddress')}}
         </div>
         <div class="col-8 col-sm-6 text-right">
           <b-input-group size="sm">
             <b-form-input type="text" v-model="webControllerAddressLocalCopy"></b-form-input>
             <b-input-group-append>
-              <b-btn variant="outline-secondary" style="padding:.35rem 1rem .425rem 1rem" @click="updateWebControllerAddress()">Update</b-btn>
+              <b-btn variant="outline-secondary" style="padding:.35rem 1rem .425rem 1rem" @click="updateWebControllerAddress()">{{$t('common.update')}}</b-btn>
             </b-input-group-append>
           </b-input-group>
         </div>
@@ -48,13 +39,13 @@
       <hr/>
       <div class="row">
         <div class="col-4 col-sm-6 pt-sm-2">
-          Send Test Message
+          {{$t('settings.vmix.sendTestMessage')}}
         </div>
         <div class="col-8 col-sm-6 text-right">
           <b-input-group size="sm">
             <b-form-input type="text" v-model="testMessage"></b-form-input>
             <b-input-group-append>
-              <b-btn variant="outline-secondary" style="padding:.35rem 1rem .425rem 1rem" @click="sendTestMessage()" :disabled="testMessageSent"><span v-if="!testMessageSent">Send</span><span v-else>Sent!</span></b-btn>
+              <b-btn variant="outline-secondary" style="padding:.35rem 1rem .425rem 1rem" @click="sendTestMessage()" :disabled="testMessageSent"><span v-if="!testMessageSent">Send</span><span v-else>{{$t('settings.vmix.sent')}}</span></b-btn>
             </b-input-group-append>
           </b-input-group>
         </div>
@@ -62,10 +53,10 @@
       <hr/>
       <div class="row mb-2">
         <div class="col-6 pt-2">
-          Setup
+          {{$t('common.setup')}}
         </div>
         <div class="col-6 text-right">
-          <b-button @click="showSettings = !showSettings; vmixStepsTabIndex = 2" :variant="showSettings ? 'secondary' : 'outline-secondary'" size="sm"><span v-if="showSettings">Hide</span><span v-else>Show</span> Setup</b-button>
+          <b-button @click="showSettings = !showSettings; vmixStepsTabIndex = 2" :variant="showSettings ? 'secondary' : 'outline-secondary'" size="sm"><span v-if="showSettings">{{$t('common.hideSetup')}}</span><span v-else>{{$t('common.showSetup')}}</span></b-button>
         </div>
       </div>
     </div>
@@ -74,7 +65,7 @@
     <div class="position-relative">
       <b-btn v-if="loading" variant="default" disabled class="position-absolute text-muted" style="top:0">
         <!-- Haven't decided yet if settings will show or not -->
-        <fa icon="spinner" spin /> Loading
+        <fa icon="spinner" spin /> {{$t('common.loading')}}
       </b-btn>
       <transition name="fade">
         <div v-show="showSettings">
@@ -83,50 +74,57 @@
               <b-tab active>
                 <template slot="title">
                   <div class="text-md-left">
-                    <fa icon="check-circle" v-if="chromeExtensionInstalled" /> Step 1
-                    <div class="small d-none d-md-block"><span class="d-none d-xl-inline">Install </span>Chrome Extension</div>
+                    <fa icon="check-circle" v-if="chromeExtensionInstalled" /> {{$t('settings.vmix.step1')}}
+                    <div class="small d-none d-md-block"><span class="d-inline d-xl-none">{{$t('common.install')}}</span><span class="d-none d-xl-inline">{{$t('settings.vmix.installChromeExtension')}}</span></div>
                   </div>
                 </template>
-                <h4 class="mt-0">Install the Chrome Extension</h4>
-                <p class="mb-2">The Web Captioner Connector extension for Google Chrome lets Web Captioner connect to vMix.</p>
+                <h4 class="mt-0">{{$t('settings.vmix.installChromeExtension')}}</h4>
+                <p class="mb-2">{{$t('settings.vmix.installChromeExtensionDescription')}}</p>
                 <div class="mt-3 mb-4">
-                  <a href="https://chrome.google.com/webstore/detail/web-captioner-connector/fckappdcgnijafmmjkcmicdidflhelfe" target="_blank" v-if="!chromeExtensionInstalled" class="btn btn-outline-info"><fa :icon="['fab','chrome']" class="mr-2"/> Add to Chrome</a>
-                  <b-button v-else variant="outline-success" disabled><fa icon="check-circle" class="mr-2" /> Extension Installed</b-button>
+                  <a href="https://chrome.google.com/webstore/detail/web-captioner-connector/fckappdcgnijafmmjkcmicdidflhelfe" target="_blank" v-if="!chromeExtensionInstalled" class="btn btn-outline-info"><fa :icon="['fab','chrome']" class="mr-2"/> {{$t('settings.vmix.addToChrome')}}</a>
+                  <b-button v-else variant="outline-success" disabled><fa icon="check-circle" class="mr-2" /> {{$t('settings.vmix.extensionInstalled')}}</b-button>
                 </div>
-                <b-alert :show="showExtensionNotInstalledMessage" variant="danger">Extension not installed.</b-alert>
+                <b-alert :show="showExtensionNotInstalledMessage" variant="danger">{{$t('settings.vmix.extensionNotInstalled')}}</b-alert>
                 <hr class="my-3" />
                 <div class="text-right">
-                  <b-button @click="step1NextClick()" size="sm" :variant="chromeExtensionInstalled ? 'secondary' : 'default'">Next <fa icon="chevron-right" /></b-button>
+                  <b-button @click="step1NextClick()" size="sm" :variant="chromeExtensionInstalled ? 'secondary' : 'default'">{{$t('common.next')}} <fa icon="chevron-right" /></b-button>
                 </div>
               </b-tab>
               <b-tab :disabled="!chromeExtensionInstalled">
                 <template slot="title">
                   <div class="text-md-left" id="vmixStep2Tab">
-                    <fa icon="check-circle" v-if="webControllerConnected" /> Step 2
-                    <div class="small d-none d-md-block">vMix Web Controller</div>
+                    <fa icon="check-circle" v-if="webControllerConnected" /> {{$t('settings.vmix.step2')}}
+                    <div class="small d-none d-md-block">{{$t('settings.vmix.vmixWebController')}}</div>
                   </div>
                   <b-tooltip v-if="!chromeExtensionInstalled" target="vmixStep2Tab">
-                    Complete step 1 first
+                    {{$t('settings.vmix.completeStep1First')}}
                   </b-tooltip>
                 </template>
-                <h4 class="mt-0">Enable the vMix Web Controller</h4>
-                <p>In vMix, go to <strong>Settings > Web Controller</strong>. Check the box to enable the <a href="http://www.vmix.com/knowledgebase/article.aspx/69/how-to-control-vmix-from-a-web-browser-using-vmix-web-controller" target="_blank">web controller</a>. Specify a port number or accept the default.</p>
-                <p>Provide the address that appears in vMix:</p>
+                <h4 class="mt-0">{{$t('settings.vmix.enableVmixWebController')}}</h4>
+                <i18n path="settings.vmix.enableVmixWebControllerInstructions" tag="p">
+                  <strong place="settingMenu">{{$t('settings.vmix.enableVmixWebControllerSettingMenu')}}</strong>
+                  <a place="webController" href="http://www.vmix.com/knowledgebase/article.aspx/69/how-to-control-vmix-from-a-web-browser-using-vmix-web-controller" target="_blank">{{$t('settings.vmix.webController')}}</a>
+                </i18n>
+                <p>{{$t('settings.vmix.provideAddress')}}</p>
                 <b-input-group :class="{'append-embedded-in-input': webControllerConnected}">
-                  <input @keydown="resetWebControllerConnectedStatus()" v-model="webControllerAddress" type="url" class="form-control" placeholder="vMix Web Controller Address" required="true" />
+                  <input @keydown="resetWebControllerConnectedStatus()" v-model="webControllerAddress" type="url" class="form-control" :placeholder="$t('settings.vmix.webControllerAddress')" required="true" />
                   <template slot="append" v-if="webControllerConnected">
                     <div class="input-group-text text-success">
-                      <fa icon="check-circle" fixed-width class="mr-3" style="position:relative;top:-1px"/> Connected
+                      <fa icon="check-circle" fixed-width class="mr-3" style="position:relative;top:-1px"/> {{$t('settings.vmix.connected')}}
                     </div>
                   </template>
                 </b-input-group>
-                <p class="mt-2"><small class="form-text text-muted">Example: http://192.168.1.1:8080</small></p>
-                <b-alert :show="showConnectionFailureMessage" dismissible variant="danger">Cannot connect to vMix at "{{webControllerAddress}}". Make sure Web Controller is enabled in vMix and that you've copied over the website address correctly. It should look something like this: http://192.168.1.1:8080</b-alert>
+                <p class="mt-2"><small class="form-text text-muted">{{$t('settings.vmix.example')}} http://192.168.1.1:8080</small></p>
+                <b-alert :show="showConnectionFailureMessage" dismissible variant="danger">
+                  <i18n path="settings.vmix.cannotConnect" tag="span">
+                    <span place="webControllerAddress">{{webControllerAddress}}</span>
+                  </i18n>
+                </b-alert>
                 <hr class="my-3" />
                 <div class="text-right">
                   <b-button @click="step2NextClick()" size="sm" :variant="webControllerAddress == '' ? 'default' : 'secondary'" :disabled="!webControllerAddress || attemptingWebControllerConnect">
                     <div v-if="!attemptingWebControllerConnect">
-                      Next <fa icon="chevron-right" />
+                      {{$t('common.next')}} <fa icon="chevron-right" />
                     </div>
                     <div v-else aria-label="Loading">
                       <fa icon="spinner" spin />
@@ -137,28 +135,45 @@
               <b-tab :disabled="!webControllerConnected">
                 <template slot="title">
                   <div class="text-md-left" id="vmixStep3Tab">
-                    <fa icon="check-circle" v-if="foundTemplateInVmix" /> Step 3
-                    <div class="small d-none d-md-block"><span class="d-none d-xl-inline">Import </span>Title Template</div>
+                    <fa icon="check-circle" v-if="foundTemplateInVmix" /> {{$t('settings.vmix.step3')}}
+                    <div class="small d-none d-md-block"><span class="d-inline d-xl-none">{{$t('settings.vmix.import')}}</span><span class="d-none d-xl-inline">{{$t('settings.vmix.importTitleTemplate')}}</span></div>
                   </div>
                   <b-tooltip v-if="!webControllerConnected" target="vmixStep3Tab">
-                    <span v-if="!chromeExtensionInstalled">Complete steps 1 and 2 first</span>
-                    <span v-else>Complete step 2 first</span>
+                    <span v-if="!chromeExtensionInstalled">{{$t('settings.vmix.completeSteps1And2First')}}</span>
+                    <span v-else>{{$t('settings.vmix.completeStep2First')}}</span>
                   </b-tooltip>
                 </template>
-                <h4 class="mt-0">Import the Web Captioner Title Template into vMix</h4>
+                <h4 class="mt-0">{{$t('settings.vmix.importTitleTemplateLonger')}}</h4>
                 <ol class="ml-0 mb-2">
-                  <li>Download the <strong><a href="/web-captioner-title.xaml">Web Captioner vMix title template<span class="ml-1"><fa icon="external-link-alt" fixed-width /></span></a></strong>.</li>
-                  <li>In vMix, go to <strong>Add Input > Title/XAML</strong>.</li>
-                  <li>In the Input Select window, click <strong>Browse...</strong> in the upper right and open the Web Captioner title template you downloaded.</li>
-                  <li>The title will appear in the <strong>Recent</strong> tab. Double-click it.</li>
-                  <li>In the Title Editor that appears, optionally customize font and text size. Close it when you are finished.</li>
+                  <li>
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.0" tag="span">
+                      <strong place="webCaptionerTitleTemplate"><a href="/web-captioner-title.xaml">{{$t('settings.vmix.webCaptionerTitleTemplate')}}<span class="ml-1"><fa icon="external-link-alt" fixed-width /></span></a></strong>
+                    </i18n>
+                  </li>
+                  <li>
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.1" tag="span">
+                      <strong place="addInputSetting">Add Input > Title/XAML</strong>
+                    </i18n>
+                  </li>
+                  <li>
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.2" tag="span">
+                      <strong place="inputSelect">Input Select</strong>
+                      <strong place="browse">Browse...</strong>
+                    </i18n>
+                  </li>
+                  <li>
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.3" tag="span">
+                      <strong place="recent">Recent</strong>
+                    </i18n>
+                  </li>
+                  <li>{{$t('settings.vmix.importTitleTemplateInstructions.4')}}</li>
                 </ol>
-                <b-alert :show="showCantFindTemplateMessage" dismissible variant="danger">Web Captioner can connect to vMix, but it can't find the Web Captioner title template in an input.</b-alert>
+                <b-alert :show="showCantFindTemplateMessage" dismissible variant="danger">{{$t('settings.vmix.cantFindTemplate')}}</b-alert>
                 <hr class="my-3" />
                 <div class="text-right">
                   <b-button @click="step3NextClick" size="sm" :variant="webControllerAddress == '' ? 'default' : 'secondary'" :disabled="webControllerAddress == '' || testingVmixTemplate">
                     <div v-if="!testingVmixTemplate">
-                      Test and Finish Setup
+                      {{$t('settings.vmix.testAndFinishSetup')}}
                     </div>
                     <div v-else aria-label="Loading">
                       <fa icon="spinner" spin />
@@ -204,7 +219,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'vMix',
+    settingsPageTitleKey: 'settings.vmix.vmix',
   },
   data: function() {
     return {

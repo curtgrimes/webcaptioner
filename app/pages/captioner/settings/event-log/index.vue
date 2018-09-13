@@ -1,25 +1,29 @@
 <template>
   <div class="settings-event-log-view">
-    <p>Reproduce the issue you were having, and then copy this log and <a href="https://m.me/webcaptioner">send it to me on Facebook</a>. The log includes the content of your current transcription, if any. You can leave this page and continue to use Web Captioner like normal.</p>
-    <p>For performance reasons, logging will automatically shut off after {{loggingDurationMinutes}} minutes. You can still copy the log after it shuts off as long as you don't reload the page.</p>
+    <p>
+      <i18n path="settings.eventLog.instructions.0" tag="span">
+        <a place="sendItToMeOnFacebook" href="https://m.me/webcaptioner">{{$t('settings.eventLog.instructions.sendItToMeOnFacebook')}}</a>
+      </i18n>
+    </p>
+    <p>{{$t('settings.eventLog.instructions.1', {loggingDurationMinutes})}}</p>
     <div class="card bg-white mb-3">
       <div class="card-header px-3">
         <div class="row">
           <div class="col-lg-4">
-            <b-btn size="sm" v-if="!copyLogMode" variant="secondary" class="mr-2" @click="copyLogMode = true">Copy Log</b-btn>
-            <b-btn size="sm" v-if="copyLogMode" variant="outline-secondary" class="mr-2" @click="copyLogMode = false">Done</b-btn>
-            <b-btn class="d-lg-none" size="sm" v-if="tickInterval" variant="danger" @click="stopLogging()">Stop Logging</b-btn>
-            <b-btn class="d-lg-none" size="sm" v-if="!tickInterval" variant="default" @click="initEventLog()">Restart Logging</b-btn>
+            <b-btn size="sm" v-if="!copyLogMode" variant="secondary" class="mr-2" @click="copyLogMode = true">{{$t('settings.eventLog.copyLog')}}</b-btn>
+            <b-btn size="sm" v-if="copyLogMode" variant="outline-secondary" class="mr-2" @click="copyLogMode = false">{{$t('common.done')}}</b-btn>
+            <b-btn class="d-lg-none" size="sm" v-if="tickInterval" variant="danger" @click="stopLogging()">{{$t('settings.eventLog.stopLogging')}}</b-btn>
+            <b-btn class="d-lg-none" size="sm" v-if="!tickInterval" variant="default" @click="initEventLog()">{{$t('settings.eventLog.restartLogging')}}</b-btn>
           </div>
           <div class="col-lg-8 small text-lg-right">
             <span class="pt-2 pr-2 d-inline-block">
               <span v-if="tickInterval">
-              Logging turns off in {{timeRemainingMinutes}}:{{timeRemainingSeconds}}
+              {{$t('settings.eventLog.loggingTurnsOffIn', {timeRemainingMinutes, timeRemainingSeconds})}}
               </span>
-              <span v-else>Logging off</span>
+              <span v-else>{{$t('settings.eventLog.loggingOff')}}</span>
             </span>
-            <b-btn class="d-none d-lg-inline-block" size="sm" v-if="tickInterval" variant="danger" @click="stopLogging()">Stop Logging</b-btn>
-            <b-btn class="d-none d-lg-inline-block" size="sm" v-if="!tickInterval" variant="default" @click="initEventLog()">Restart Logging</b-btn>
+            <b-btn class="d-none d-lg-inline-block" size="sm" v-if="tickInterval" variant="danger" @click="stopLogging()">{{$t('settings.eventLog.stopLogging')}}</b-btn>
+            <b-btn class="d-none d-lg-inline-block" size="sm" v-if="!tickInterval" variant="default" @click="initEventLog()">{{$t('settings.eventLog.restartLogging')}}</b-btn>
           </div>
         </div>
       </div>
@@ -27,7 +31,7 @@
         <textarea class="form-control text-monospace" v-model="eventLogString" style="height:40vh;overflow-y:auto;resize:none;font-size:50%;" readonly="readonly" ref="copyLogTextarea" @mousedown="focusAndSelectCopyTextarea()" @blur="copyLogMode = false"></textarea>
       </div>
       <div v-show="!copyLogMode" class="list-group list-group-flush small" style="max-height:40vh;overflow-y:auto;" ref="eventLogWrap" @wheel="autoscroll = false">
-        <li v-if="notShowingCount > 0" class="list-group-item list-group-item-light py-3 text-muted text-center">{{notShowingCount}} events are hidden, but they'll be included when you copy the log.</li>
+        <li v-if="notShowingCount > 0" class="list-group-item list-group-item-light py-3 text-muted text-center">{{$t('settings.eventLog.eventsHidden', {notShowingCount})}}</li>
         <li class="list-group-item list-group-item-light p-2 text-monospace" v-for="(eventLogItem, index) in eventLogLimited" :key="index" >
           <div class="row m-0">
             <div class="col-sm-2">{{formatLogTime(eventLogItem.time)}}</div>
@@ -38,10 +42,10 @@
       <div class="card-footer text-muted small">
         <div class="row">
           <div class="col-6">
-            {{eventLog.length}} event<span v-if="eventLog.length !== 1">s</span>
+            {{$tc('settings.eventLog.events', eventLog.length, {count: eventLog.length})}}
           </div>
           <div class="col-6 text-right">
-            <label class="mb-0"><input type="checkbox" v-model="autoscroll" style="position:relative;top:-1px;" class="mr-1" /> Auto scroll</label>
+            <label class="mb-0"><input type="checkbox" v-model="autoscroll" style="position:relative;top:-1px;" class="mr-1" /> {{$t('settings.eventLog.autoScroll')}}</label>
           </div>
         </div>
       </div>
@@ -58,7 +62,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Event Log',
+    settingsPageTitleKey: 'settings.eventLog.eventLog',
   },
   data: function() {
     return {

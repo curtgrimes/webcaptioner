@@ -1,33 +1,36 @@
 <template>
   <div class="settings-experiments-view">
-    <p>Be sure to help out and give me feedback about experiments! Email me at <a href="mailto:github@curtgrimes.com">github@curtgrimes.com</a> or <a href="https://m.me/webcaptioner">message me on Facebook</a>.</p>
+    <i18n path="settings.experiments.description" tag="p">
+      <a place="email" href="mailto:github@curtgrimes.com">github@curtgrimes.com</a>
+      <a place="messageMeOnFacebook" href="https://m.me/webcaptioner">{{$t('settings.experiments.messageMeOnFacebook')}}</a>
+    </i18n>
     <b-modal ref="invalidExperiment" class="text-center" hide-header @shown="focusInvalidExperimentModalOkButton()">
       <div style="font-size:7rem" class="p-0">&#129300;</div>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="secondary" ref="invalidExperimentModalOkButton" @click="hideInvalidExperimentModal()">Ok</b-btn>
+        <b-btn class="float-right" variant="secondary" ref="invalidExperimentModalOkButton" @click="hideInvalidExperimentModal()">{{$t('common.ok')}}</b-btn>
       </div>
     </b-modal>
     <b-modal ref="experimentConfirmation" hide-header>
-      <h5 class="modal-title">Do you want to add the "{{experimentName}}" experiment?</h5>
+      <h5 class="modal-title">{{$t('settings.experiments.addExperimentConfirmation', {experimentName})}}</h5>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="secondary" @click="addExperiment({withConfirmation: false})">Add Experiment</b-btn>
-        <b-btn class="float-right" variant="link" @click="hideExperimentConfirmationModal()">Cancel</b-btn>
+        <b-btn class="float-right" variant="secondary" @click="addExperiment({withConfirmation: false})">{{$t('settings.experiments.addExperiment')}}</b-btn>
+        <b-btn class="float-right" variant="link" @click="hideExperimentConfirmationModal()">{{$t('common.cancel')}}</b-btn>
       </div>
     </b-modal>
     <b-modal ref="experimentAlreadyAdded" hide-header>
-      <h5 class="modal-title">You've already added the "{{alreadyAddedExperimentName}}" experiment.</h5>
+      <h5 class="modal-title">{{$t('settings.experiments.alreadyAdded', {alreadyAddedExperimentName})}}</h5>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="secondary" @click="hideExperimentAlreadyAddedModal()">Ok</b-btn>
+        <b-btn class="float-right" variant="secondary" @click="hideExperimentAlreadyAddedModal()">{{$t('common.ok')}}</b-btn>
       </div>
     </b-modal>
     <b-input-group size="lg" class="mb-4">
-      <b-form-input @keydown.enter.native="addExperiment({withConfirmation: false})" v-model="experimentName" autofocus placeholder="Experiment Name"></b-form-input>
+      <b-form-input @keydown.enter.native="addExperiment({withConfirmation: false})" v-model="experimentName" autofocus :placeholder="$t('settings.experiments.experimentName')"></b-form-input>
       <b-input-group-append>
-        <b-btn @click="addExperiment({withConfirmation: false})">Add</b-btn>
+        <b-btn @click="addExperiment({withConfirmation: false})">{{$t('common.add')}}</b-btn>
       </b-input-group-append>
     </b-input-group>
     <div v-if="experiments.length">
-      <h4>Added Experiments</h4>
+      <h4>{{$t('settings.experiments.addedExperiments')}}</h4>
       <b-list-group class="mb-4">
         <b-list-group-item v-for="experiment in experiments" :key="experiment">
           <div class="row">
@@ -36,7 +39,7 @@
               <p class="small mb-0">{{getDescription(experiment)}}</p>
             </div>
             <div class="col-4 pr-2">
-              <b-btn class="float-right" variant="danger" size="sm" @click="removeExperiment(experiment)">Remove</b-btn>
+              <b-btn class="float-right" variant="danger" size="sm" @click="removeExperiment(experiment)">{{$t('common.remove')}}</b-btn>
             </div>
           </div>
         </b-list-group-item>
@@ -54,7 +57,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Experiments',
+    settingsPageTitleKey: 'settings.experiments.experiments',
   },
   data: function() {
     return {

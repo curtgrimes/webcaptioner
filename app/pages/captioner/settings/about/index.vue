@@ -36,7 +36,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'About',
+    settingsPageTitleKey: 'settings.about.about',
   },
   components: {
     whatsNew,

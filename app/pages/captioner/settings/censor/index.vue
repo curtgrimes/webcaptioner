@@ -2,19 +2,21 @@
   <div class="settings-about-view">
     <div class="custom-control custom-checkbox mb-2">
       <input v-model="censor" class="custom-control-input" name="word-replacements-censor-profanity" type="checkbox" id="word-replacements-censor-profanity">
-      <label class="custom-control-label" for="word-replacements-censor-profanity">Censor profane language (US English only).</label>
+      <label class="custom-control-label" for="word-replacements-censor-profanity">{{$t('settings.censor.censorProfaneLanguage')}} {{$t('settings.censor.usEnglishOnly')}}</label>
     </div>
 
-    <p class="small">What's considered profane? <a href="https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words" target="_blank">See this list</a> (note: profanity ahead!) If you need to censor additional words not included in this list, use <router-link to="word-replacements">word replacements</router-link>.</p>
-
-    <label class="col-form-label">Replace censored words with:</label>
+    <i18n path="settings.censor.censorProfaneLanguageDescription.text" tag="p" class="small">
+      <a place="seeThisList" href="https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words" target="_blank">{{$t('settings.censor.censorProfaneLanguageDescription.seeThisList')}}</a>
+      <router-link place="useWordReplacements" to="word-replacements">{{$t('settings.censor.censorProfaneLanguageDescription.useWordReplacements')}}</router-link>
+    </i18n>
+    <label class="col-form-label">{{$t('settings.censor.replaceCensoredWordsWith')}}</label>
     <div class="custom-control custom-radio">
       <input type="radio" id="customRadio1" v-model="censorReplaceWith" value="nothing" name="censorReplaceWith" class="custom-control-input">
-      <label class="custom-control-label" for="customRadio1">Nothing &mdash; just omit them.</label>
+      <label class="custom-control-label" for="customRadio1">{{$t('settings.censor.nothing')}}</label>
     </div>
     <div class="custom-control custom-radio">
       <input type="radio" id="customRadio2" v-model="censorReplaceWith" value="asterisks" name="censorReplaceWith" class="custom-control-input">
-      <label class="custom-control-label" for="customRadio2">Asterisks (*****)</label>
+      <label class="custom-control-label" for="customRadio2">{{$t('settings.censor.asterisks')}} (*****)</label>
     </div>
 
     <p class="mt-4"></p>
@@ -32,7 +34,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Censor',
+    settingsPageTitleKey: 'settings.censor.censor',
   },
   computed: {
     censor: {
