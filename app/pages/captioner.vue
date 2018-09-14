@@ -84,7 +84,7 @@ export default {
           self.$router.replace('/captioner');
         })
         .bind('?', function() {
-          self.$router.push('/captioner/settings/keyboard-shortcuts');
+          self.$router.push('/captioner/settings/controls');
         })
         .bind('w x', function() {
           screenfull.toggle();
