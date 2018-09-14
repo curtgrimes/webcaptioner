@@ -1,16 +1,24 @@
 <template>
-    <b-modal ref="modal" title="Incompatible Browser" no-close-on-esc no-close-on-backdrop>
-      <p>Sorry, but currently Web Captioner only works in Google Chrome.</p>
-      <p>You can still look around and play with settings, but in order to start captioning, you'll have to <strong>switch to Google Chrome</strong>.</p>
-      <p class="mb-0">If compatibility with browsers other than Chrome is important to you, <a href="https://feedback.webcaptioner.com/posts/28/make-web-captioner-work-on-browsers-other-than-chrome" target="_blank">cast a vote here</a>.</p>
+    <b-modal ref="modal" :title="$t('incompatibleBrowser.incompatibleBrowser')" no-close-on-esc no-close-on-backdrop>
+      <p>{{$t('incompatibleBrowser.message.0')}}</p>
+      <p>
+        <i18n path="incompatibleBrowser.message.1" tag="span">
+          <strong place="switchToGoogleChrome">{{$t('incompatibleBrowser.message.switchToGoogleChrome')}}</strong>
+        </i18n>
+      </p>
+      <p class="mb-0">
+        <i18n path="incompatibleBrowser.message.2" tag="span">
+          <a place="castAVoteHere" href="https://feedback.webcaptioner.com/posts/28/make-web-captioner-work-on-browsers-other-than-chrome" target="_blank">{{$t('incompatibleBrowser.message.castAVoteHere')}}</a>
+        </i18n>
+      </p>
       <div slot="modal-footer" class="w-100">
         <div class="row">
-          <div class="col-6">
-              <p class="ml-3 mt-2 mb-0"><a href="/help/general/browser-compatibility/" target="_blank">Why just Chrome?</a></p>
+          <div class="col-sm-6">
+              <p class="ml-sm-3 mt-sm-2 mb-sm-0"><a href="/help/general/browser-compatibility/" target="_blank">{{$t('incompatibleBrowser.whyJustChrome')}}</a></p>
           </div>
-          <div class="col-6">
-            <b-btn ref="getStartedButton" class="float-right" variant="secondary" @click="hideModal()">
-              Look Around Anyway
+          <div class="col-sm-6 text-sm-right">
+            <b-btn ref="getStartedButton" variant="secondary" @click="hideModal()">
+              {{$t('incompatibleBrowser.lookAroundAnyway')}}
             </b-btn>
           </div>
         </div>

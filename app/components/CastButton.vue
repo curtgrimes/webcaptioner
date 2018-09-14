@@ -1,6 +1,6 @@
 <template>
   <div v-if="receiversAvailable" :class="largerLayout ? 'mr-3' : 'mr-2'">
-    <b-button v-if="connecting" id="castConnectingButton" v-b-tooltip.hover title="Connecting" variant="info" disabled :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
+    <b-button v-if="connecting" id="castConnectingButton" v-b-tooltip.hover :title="$t('googleCast.connecting')" variant="info" disabled :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
       <svg style="vertical-align:middle" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
           <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
               <g id="ic_cast0_black_24dp" sketch:type="MSArtboardGroup">
@@ -18,17 +18,17 @@
           </g>
       </svg>
     </b-button>
-    <b-button id="cast-connected-button" v-else-if="connected" v-b-tooltip.hover="'Casting to ' + receiverName" variant="secondary" @click="stop()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
+    <b-button id="cast-connected-button" v-else-if="connected" v-b-tooltip.hover="$t('googleCast.castingToReceiver', {receiverName})" variant="secondary" @click="stop()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
       <img src="/static/cast-icons/cast-icon-connected.svg"/>
     </b-button>
-    <b-button v-else variant="info" v-b-tooltip.hover="'Cast'" @click="sendInitMessage()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
+    <b-button v-else variant="info" v-b-tooltip.hover="$t('googleCast.cast')" @click="sendInitMessage()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
       <img src="/static/cast-icons/cast-icon.svg"/>
     </b-button>
-    <b-modal title="Casting Failed" :hide-header="true" ref="castFailedModal" :ok-only="true" ok-variant="secondary" :hide-header-close="true">
+    <b-modal :title="$t('googleCast.castingFailed')" :hide-header="true" ref="castFailedModal" :ok-only="true" ok-variant="secondary" :hide-header-close="true">
       <div class="py-2">
         <div class="pb-2 h4"><fa icon="exclamation-triangle" size="3x" /></div>
-        <h2>Unable to Cast</h2>
-        <p class="lead">Please try again.</p>
+        <h2>{{$t('googleCast.unableToCast')}}</h2>
+        <p class="lead">{{$t('googleCast.pleaseTryAgain')}}</p>
       </div>
     </b-modal>
   </div>

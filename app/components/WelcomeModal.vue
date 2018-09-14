@@ -10,7 +10,7 @@
           <div class="col-lg-9 pl-4">
             <div class="splash-text d-flex align-items-center h-100">
               <div>
-                <h2>What's New in Web Captioner</h2>
+                <h2>{{$t('settings.about.whatsNewInWebCaptioner')}}</h2>
                 <div style="max-height:60vh;overflow-y:auto">
                   <whats-new limit="1" :hide-title="true"></whats-new>
                 </div>
@@ -22,11 +22,11 @@
       <div slot="modal-footer" class="w-100">
         <div class="row">
           <div class="col-6">
-              <p class="ml-3 mt-2 mb-0"><router-link to="/captioner/settings/about" @click.native="hideModal()">Learn more</router-link></p>
+              <p class="ml-3 mt-2 mb-0"><router-link to="/captioner/settings/about" @click.native="hideModal()">{{$t('settings.about.learnMore')}}</router-link></p>
           </div>
           <div class="col-6">
             <b-btn ref="getStartedButton" class="float-right" variant="secondary" @click="hideModal()">
-              Get Started
+              {{$t('settings.about.getStarted')}}
             </b-btn>
           </div>
         </div>

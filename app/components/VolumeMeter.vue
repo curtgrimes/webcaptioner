@@ -4,8 +4,8 @@
       <div class="col text-right mt-1">
         <span class="navbar-text text-white bg-danger px-2 small">
           <fa icon="exclamation-triangle" class="mr-1" />
-          <span v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh">Too quiet</span>
-          <span v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow">Too loud</span>
+          <span v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh">{{$t('captioner.volumeMeter.tooQuiet')}}</span>
+          <span v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow">{{$t('captioner.volumeMeter.tooLoud')}}</span>
         </span>
       </div>
       <div class="col pl-0">

@@ -1,13 +1,15 @@
 <template>
   <div class="settings-language-view">
-    <p>Web Captioner will recognize speech in this language. Learn more about <a href="https://webcaptioner.com/help/general/supported-languages/" target="_blank">supported languages and dialects</a>.</p>
-    <h3>Select a Language</h3>
+    <i18n path="settings.language.description.text" tag="p">
+      <a place="supportedLanguagesAndDialects" href="/help/general/supported-languages/" target="_blank">{{$t('settings.language.description.supportedLanguagesAndDialects')}}</a>
+    </i18n>
+    <h3>{{$t('settings.language.selectALanguage')}}</h3>
     <div class="row mb-3">
       <div class="col-sm-7" :class="{'col-9': showClearButton}">
-        <input ref="search" type="text" v-model="searchQuery" placeholder="Search..." class="form-control" />
+        <input ref="search" type="text" v-model="searchQuery" :placeholder="$t('common.search')" class="form-control" />
       </div>
       <div class="col-3 col-sm-3 col-lg-2 pl-0" v-if="showClearButton">
-        <button v-bind:class="{'show' : showClearButton, 'invisible' : !showClearButton}" class="btn btn-sm btn-outline-dark fade w-100" type="button" @click="clearSearch()">Clear</button>
+        <button v-bind:class="{'show' : showClearButton, 'invisible' : !showClearButton}" class="btn btn-sm btn-outline-dark fade w-100" type="button" @click="clearSearch()">{{$t('common.clear')}}</button>
       </div>
     </div>
     <div class="list-group">
@@ -41,7 +43,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Language',
+    settingsPageTitleKey: 'settings.language.language',
   },
   created: function () {
     if (!this.$store.state.settings.locale.from) {

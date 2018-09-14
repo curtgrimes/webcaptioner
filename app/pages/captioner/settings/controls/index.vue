@@ -2,15 +2,15 @@
   <div class="settings-controls-view">
     <div class="row">
       <div class="col-md-6">
-        <h3>Screen Layout</h3>
+        <h3>{{$t('settings.controls.screenLayout')}}</h3>
         <b-list-group>
           <b-list-group-item button :active="!largerLayout" @click="largerLayout = false" @mouseover="largerPreview = false" @mouseleave="largerPreview = largerLayout">
-            <p class="font-weight-bold mb-0">Default</p>
-            <p class="small mb-0">Regular-sized controls</p>
+            <p class="font-weight-bold mb-0">{{$t('settings.controls.default')}}</p>
+            <p class="small mb-0">{{$t('settings.controls.defaultDescription')}}</p>
           </b-list-group-item>
           <b-list-group-item button :active="largerLayout" @click="largerLayout = true" @mouseover="largerPreview = true" @mouseleave="largerPreview = largerLayout">
-            <p class="font-weight-bold mb-0">Larger</p>
-            <p class="small mb-0">Larger controls and additional buttons for one-click saving and clearing the transcript</p>
+            <p class="font-weight-bold mb-0">{{$t('settings.controls.larger')}}</p>
+            <p class="small mb-0">{{$t('settings.controls.largerDescription')}}</p>
           </b-list-group-item>
         </b-list-group>
       </div>
@@ -22,77 +22,70 @@
           </div>
           <b-navbar variant="dark" class="px-2 py-1 d-flex flex-column" >
             <div v-if="largerPreview" class="d-flex w-100 pb-1">
-              <b-button variant="danger" disabled class="mr-auto">Clear</b-button>
-              <b-button variant="info" disabled>Save to File</b-button>
+              <b-button variant="danger" disabled class="mr-auto">Xxxxx</b-button>
+              <b-button variant="info" disabled>Xxxx xx Xxxx</b-button>
             </div>
             <div class="d-flex w-100 align-items-center">
-              <img src="/static/img/logo.svg" width="8" height="8" alt="Web Captioner" class="align-middle mr-auto" />
-              <b-dropdown variant="primary" split text="Start Captioning" disabled></b-dropdown>
+              <img src="/static/img/logo.svg" width="8" height="8" class="align-middle mr-auto" />
+              <b-dropdown variant="primary" split text="Xxxxx Xxxxxxxx" disabled></b-dropdown>
             </div>
           </b-navbar>
         </div>
-        <!-- <b-card img-src="https://placekitten.com/1000/300"
-                img-alt="Card image"
-                img-bottom>
-            <p class="card-text">
-                Some quick example text to build on the card and make up the bulk of the card's content.
-            </p>
-        </b-card> -->
       </div>
     </div>
-  <h3>Keyboard Shortcuts</h3>
+  <h3>{{$t('settings.controls.keyboardShortcuts')}}</h3>
   <div class="list-group mt-sm-3">
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Toggle captioning on/off</div>
-          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> then <kbd>c</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.toggleCaptioning')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> {{$t('settings.controls.then')}} <kbd>c</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Toggle fullscreen mode on/off</div>
-          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> then <kbd>x</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.toggleFullscreen')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> {{$t('settings.controls.then')}} <kbd>x</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Show captions in new window</div>
-          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> then <kbd>n</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.showNewWindow')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> {{$t('settings.controls.then')}} <kbd>n</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Open Settings</div>
-          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> then <kbd>s</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.openSettings')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> {{$t('settings.controls.then')}} <kbd>s</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Increase text size</div>
-          <div class="col-sm-6 text-sm-right"><kbd v-if="isMac">&#8984;</kbd><kbd v-else>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>&gt;</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.increaseTextSize')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd v-if="isMac">&#8984;</kbd><kbd v-else>{{$t('settings.controls.ctrl')}}</kbd> + <kbd>{{$t('settings.controls.shift')}}</kbd> + <kbd>&gt;</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Decrease text size</div>
-          <div class="col-sm-6 text-sm-right"><kbd v-if="isMac">&#8984;</kbd><kbd v-else>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>&lt;</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.decreaseTextSize')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd v-if="isMac">&#8984;</kbd><kbd v-else>{{$t('settings.controls.ctrl')}}</kbd> + <kbd>{{$t('settings.controls.shift')}}</kbd> + <kbd>&lt;</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Open "Save as File" dialog</div>
-          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> then <kbd>f</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.openSave')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> {{$t('settings.controls.then')}} <kbd>f</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">Clear transcript</div>
-          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> then <kbd>p</kbd> then <kbd>p</kbd></div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.clearTranscript')}}</div>
+          <div class="col-sm-6 text-sm-right"><kbd>w</kbd> {{$t('settings.controls.then')}} <kbd>p</kbd> {{$t('settings.controls.then')}} <kbd>p</kbd></div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">List keyboard shortcuts</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.listKeyboardShortcuts')}}</div>
           <div class="col-sm-6 text-sm-right"><kbd>?</kbd></div>
         </div>
       </div>
@@ -109,7 +102,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Controls',
+    settingsPageTitleKey: 'settings.controls.controls',
   },
   data: function() {
     return {

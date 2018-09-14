@@ -1,26 +1,27 @@
 <template>
   <div>
     <transcript/>
-    <b-modal v-model="showModal" lazy ref="modal" hide-footer title="Save to File" @shown="autofocusElement()" @hide="replaceRouteToParent">
-      <p>Save your current transcript to file.</p>
+    <b-modal v-model="showModal" lazy ref="modal" hide-footer :title="$t('captioner.saveToFile.title')" @shown="autofocusElement()" @hide="replaceRouteToParent">
+      <p>{{$t('captioner.saveToFile.description')}}</p>
       <b-alert v-if="transcriptEmpty" show variant="info" class="small text-center">
-        Psst... you know you don't have anything to save yet, right?
+        {{$t('captioner.saveToFile.transcriptEmptyMessage')}}
+        
       </b-alert>
       <div class="row">
         <div class="col-6">
           <b-button @click="saveAsText()" :disabled="transcriptEmpty" variant="secondary" block class="py-3" ref="textFileButton">
               <div class="mx-auto mb-3 mt-2"><fa icon="file-alt" size="3x" /></div>
-              Text <span class="d-none d-sm-inline">File</span>
+              <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.text')}}</span><span class="d-none d-sm-inline">{{$t('captioner.saveToFile.textFile')}}</span>
           </b-button>
         </div>
         <div class="col-6">
           <b-button @click="saveAsWord()" :disabled="transcriptEmpty" variant="secondary" block class="py-3">
               <div class="mx-auto mb-3 mt-2"><fa icon="file-word" size="3x" /></div>
-              Word <span class="d-none d-sm-inline">Document</span>
+              <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.word')}}</span><span class="d-none d-sm-inline">{{$t('captioner.saveToFile.wordDocument')}}</span>
           </b-button>
         </div>
       </div>
-      <b-btn class="mt-3" variant="outline-info" block to="/captioner" replace>Close</b-btn>
+      <b-btn class="mt-3" variant="outline-info" block to="/captioner" replace>{{$t('common.close')}}</b-btn>
     </b-modal>
   </div>
 </template>

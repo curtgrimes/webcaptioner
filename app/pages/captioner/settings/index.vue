@@ -9,7 +9,7 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Settings',
+    settingsPageTitleKey: 'settings.settings',
   },
 }
 
