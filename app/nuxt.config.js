@@ -123,9 +123,11 @@ module.exports = {
     hook ('render:setupMiddleware', (app) => {
       app.use('/health-check', healthCheckMiddleware);
 
-      app.use(redirectSSL.create({
-        redirectHost: url.parse(process.env.HOSTNAME).hostname,
-      }));
+      if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
+        app.use(redirectSSL.create({
+          redirectHost: url.parse(process.env.HOSTNAME).hostname,
+        }));
+      }
 
       app.use(sourcemapMiddleware);
     })

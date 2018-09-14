@@ -11,12 +11,14 @@ export default {
         on: 'On',
         update: 'Update', // verb, like on an "Update" button
         setup: 'Setup', // noun, as in "Viewing a Setup screen"
+        setUpVerb: 'Set Up', // verb
         showSetup: 'Show Setup',
         hideSetup: 'Hide Setup',
         loading: 'Loading',
         install: 'Install',
         next: 'Next',
         done: 'Done',
+        dismiss: 'Dismiss',
     },
     app: {
         webCaptioner: 'Web Captioner',
@@ -40,6 +42,21 @@ export default {
             wordDocument: 'Word Document', // Microsoft Word
             word: 'Word', // short for "Word Document"
         }
+    },
+    receiver: {
+        splash: {
+            captionsWillBeginShortly: 'Captions will begin shortly.',
+            connected: 'Connected!',
+            useThisCodeToConnect: 'Use this code to connect.',
+        },
+    },
+    googleCast: { // "Google Cast" brand
+        cast: 'Cast',
+        connecting: 'Connecting',
+        castingToReceiver: 'Casting to {receiverName}',
+        castingFailed: 'Casting Failed',
+        unableToCast: 'Unable to Cast',
+        pleaseTryAgain: 'Please try again.',
     },
     navbar: {
         captioner: {
@@ -71,6 +88,8 @@ export default {
             about: 'About',
             learnMore: 'Learn More',
             whatsNew: "What's New",
+            whatsNewInWebCaptioner: "What's New in @:app.webCaptioner",
+            getStarted: 'Get Started',
         },
         eventLog: {
             eventLog: 'Event Log',
@@ -276,5 +295,18 @@ export default {
             export: 'Export',
             exportDescription: 'Your settings will be saved locally as a JSON file.',
         },
+    },
+    incompatibleBrowser: {
+        incompatibleBrowser: 'Incompatible Browser',
+        message: {
+            0: 'Sorry, but currently Web Captioner only works in Google Chrome.',
+            1: 'You can still look around and play with settings, but in order to start captioning, you\'ll have to {switchToGoogleChrome}.',
+            2: 'If compatibility with browsers other than Chrome is important to you, {castAVoteHere}.',
+
+            switchToGoogleChrome: 'switch to Google Chrome',
+            castAVoteHere: 'cast a vote here',
+        },
+        whyJustChrome: 'Why just Chrome?',
+        lookAroundAnyway: 'Look Around Anyway',
     }
 }

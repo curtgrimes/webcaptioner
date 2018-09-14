@@ -7,11 +7,11 @@
                         <transition-group name="connectId" tag="div">
                             <span class="connectId" v-for="(n, $index) in connectIdSplitToArray" :key="$index">{{n}}</span>
                         </transition-group>
-                        <p class="underConnectIdText">Use this code to connect.</p>
+                        <p class="underConnectIdText">{{$t('receiver.splash.useThisCodeToConnect')}}</p>
                     </div>
                 </div>
                 <div v-else class="display-3 w-75">
-                    <span v-if="roomMembershipId">Connected!</span> Captions will begin shortly. 
+                    <span v-if="roomMembershipId">{{$t('receiver.splash.connected')}}</span> {{$t('receiver.splash.captionsWillBeginShortly')}}
                 </div>
             </div>
             <div v-if="false" v-bind:class="{show: loopVideoLoaded}" class="fade d-none d-md-block video-container" style="position:absolute;right:7vw;bottom:10vh;width:43vw;height:65vh;">

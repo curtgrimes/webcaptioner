@@ -26,18 +26,16 @@
                     <span v-if="microphoneName">{{$t('navbar.captioner.listeningToMicrophone', {microphoneName})}}</span>
                     <span v-else>{{$t('navbar.captioner.listening')}}</span>
                 </div>
-                <transition name="fade">
-                    <cast-button></cast-button>
-                </transition>
+                <cast-button></cast-button>
                 <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
                     <span class="navbar-text text-white pr-3 text-primary">
                         <fa icon="exclamation-triangle" /> {{$t('navbar.vmixNotConnected')}}
                     </span>
                     <b-button-group size="sm">
                         <b-btn to="/captioner/settings/vmix" @click="vmixNotFullySetUpMessageDismissed = true" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
-                            Set Up
+                            {{$t('common.setUpVerb')}}
                         </b-btn>
-                        <b-button @click="sendToVmix = false" aria-label="Dismiss"><fa icon="times"/></b-button>
+                        <b-button @click="sendToVmix = false" :aria-label="$t('common.dismiss')"><fa icon="times"/></b-button>
                     </b-button-group>
                 </div>
 
