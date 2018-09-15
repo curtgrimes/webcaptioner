@@ -2,7 +2,7 @@
   <div>
     <div v-if="transcript">
       <transcript></transcript>
-      <nav id="navbar" class="navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
+      <nav class="bg-danger navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
           <span class="navbar-brand mr-auto text-white" style="opacity:.6">
               <img src="/static/img/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
               <span class="d-none d-md-inline">Web Captioner</span>

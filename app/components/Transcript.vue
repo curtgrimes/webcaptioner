@@ -2,7 +2,7 @@
   <div
     class="transcript d-flex"
     v-bind:class="[wrapTextPositionClass, (chromeless ? 'chromeless' : '')]"
-    v-bind:style="{height, color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
+    v-bind:style="{color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
     @click="focusIfInTypingMode()">
     <link type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" />
     <span
@@ -16,19 +16,16 @@
 
 <script>
 import hexToRGB from '~/mixins/hexToRGB'
-import appHeightAdjuster from '~/mixins/appHeightAdjuster'
 import Combokeys from 'combokeys'
 
 export default {
   name: 'transcript',
   props: ['chromeless'],
   mixins: [
-    appHeightAdjuster,
     hexToRGB,
   ],
   data: function() {
     return {
-      height: '100vh',
       transcriptTypedForDisplay: '',
     }
   },
@@ -51,23 +48,11 @@ export default {
   },
   mounted: function() {
     this.scrollToBottom();
-
-    this.$nextTick(() => {
-      setTimeout(() => {
-        // Hacky way to make sure settings view is correct
-        // height after load where it is immediately active
-        this.height = this.adjustAppHeight();
-      },500);
-    });
   
     new Combokeys(this.$refs.typedTranscript)
       .bind('esc', () => {
         this.$store.dispatch('captioner/stopTypingMode');
       })
-
-    this.$watch('largerLayout', () => {
-      this.height = this.adjustAppHeight();
-    });
   },
   watch: {
     typingModeOn: function (on) {

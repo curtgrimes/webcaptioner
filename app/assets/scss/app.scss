@@ -326,7 +326,7 @@ a.nav-link.active {
     }
 
     .transcript {
-      height: calc(100vh - 60px);
+      flex-grow: 1;
       width:100%;
       line-height: 5rem;
       color: #fff;

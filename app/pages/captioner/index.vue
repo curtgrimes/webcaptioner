@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <transcript/>
+  <div class="d-flex flex-grow-1" >
+    <transcript class="flex-grow-1" />
     <nuxt-child/>
   </div>
 </template>

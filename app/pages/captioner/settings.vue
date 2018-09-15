@@ -143,12 +143,10 @@
 
 <script>
 import Combokeys from 'combokeys'
-import appHeightAdjuster from '~/mixins/appHeightAdjuster'
 
 export default {
   name: 'settings-view',
   mixins: [
-    appHeightAdjuster,
   ],
   data: function() {
     return {
@@ -164,10 +162,6 @@ export default {
     this.escShortcut = new Combokeys(document.documentElement);
     this.escShortcut.bind('esc', function() {
       self.$router.push('/captioner');
-    });
-
-    this.$watch('largerLayout', function() {
-      this.height = this.adjustAppHeight();
     });
 
     this.startLogTimer();

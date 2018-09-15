@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="w-100" v-bind:style="{backgroundColor}">
+  <div id="app" class="w-100" v-bind:style="{backgroundColor}" style="display: flex;flex-direction: column;height: 100vh;">
     <nuxt-child/>
     <welcome-modal ref="welcomeModal" />
     <incompatible-browser-modal ref="incompatibleBrowserModal" />

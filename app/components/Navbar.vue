@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- id # is used in util/appHeightAdjuster -->
-        <nav id="navbar" class="navbar fixed-bottom navbar-expand navbar-inverse bg-dark d-flex flex-column" :class="largerLayout ? 'pt-3 pb-4' : 'pr-2'">
+        <nav id="navbar" class="navbar navbar-expand navbar-inverse bg-dark d-flex flex-column" :class="largerLayout ? 'pt-3 pb-4' : 'pr-2'">
             <div class="w-100 pb-3" :class="{'d-flex' : largerLayout, 'd-none': !largerLayout}">
                 <div class="mr-auto">
                     <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">Clear <kbd class="small ml-3">p</kbd></b-button>
