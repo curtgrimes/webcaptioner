@@ -1,11 +1,11 @@
 <template>
   <div class="settings-event-log-view">
     <p>
-      <i18n path="settings.eventLog.instructions.0" tag="span">
+      <i18n path="settings.eventLog.instructions.i0" tag="span">
         <a place="sendItToMeOnFacebook" href="https://m.me/webcaptioner">{{$t('settings.eventLog.instructions.sendItToMeOnFacebook')}}</a>
       </i18n>
     </p>
-    <p>{{$t('settings.eventLog.instructions.1', {loggingDurationMinutes})}}</p>
+    <p>{{$t('settings.eventLog.instructions.i1', {loggingDurationMinutes})}}</p>
     <div class="card bg-white mb-3">
       <div class="card-header px-3">
         <div class="row">

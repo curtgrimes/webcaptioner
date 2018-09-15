@@ -146,27 +146,27 @@
                 <h4 class="mt-0">{{$t('settings.vmix.importTitleTemplateLonger')}}</h4>
                 <ol class="ml-0 mb-2">
                   <li>
-                    <i18n path="settings.vmix.importTitleTemplateInstructions.0" tag="span">
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.i0" tag="span">
                       <strong place="webCaptionerTitleTemplate"><a href="/web-captioner-title.xaml">{{$t('settings.vmix.webCaptionerTitleTemplate')}}<span class="ml-1"><fa icon="external-link-alt" fixed-width /></span></a></strong>
                     </i18n>
                   </li>
                   <li>
-                    <i18n path="settings.vmix.importTitleTemplateInstructions.1" tag="span">
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.i1" tag="span">
                       <strong place="addInputSetting">Add Input > Title/XAML</strong>
                     </i18n>
                   </li>
                   <li>
-                    <i18n path="settings.vmix.importTitleTemplateInstructions.2" tag="span">
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.i2" tag="span">
                       <strong place="inputSelect">Input Select</strong>
                       <strong place="browse">Browse...</strong>
                     </i18n>
                   </li>
                   <li>
-                    <i18n path="settings.vmix.importTitleTemplateInstructions.3" tag="span">
+                    <i18n path="settings.vmix.importTitleTemplateInstructions.i3" tag="span">
                       <strong place="recent">Recent</strong>
                     </i18n>
                   </li>
-                  <li>{{$t('settings.vmix.importTitleTemplateInstructions.4')}}</li>
+                  <li>{{$t('settings.vmix.importTitleTemplateInstructions.i4')}}</li>
                 </ol>
                 <b-alert :show="showCantFindTemplateMessage" dismissible variant="danger">{{$t('settings.vmix.cantFindTemplate')}}</b-alert>
                 <hr class="my-3" />

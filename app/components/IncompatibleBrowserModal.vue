@@ -1,13 +1,13 @@
 <template>
     <b-modal ref="modal" :title="$t('incompatibleBrowser.incompatibleBrowser')" no-close-on-esc no-close-on-backdrop>
-      <p>{{$t('incompatibleBrowser.message.0')}}</p>
+      <p>{{$t('incompatibleBrowser.message.i0')}}</p>
       <p>
-        <i18n path="incompatibleBrowser.message.1" tag="span">
+        <i18n path="incompatibleBrowser.message.i1" tag="span">
           <strong place="switchToGoogleChrome">{{$t('incompatibleBrowser.message.switchToGoogleChrome')}}</strong>
         </i18n>
       </p>
       <p class="mb-0">
-        <i18n path="incompatibleBrowser.message.2" tag="span">
+        <i18n path="incompatibleBrowser.message.i2" tag="span">
           <a place="castAVoteHere" href="https://feedback.webcaptioner.com/posts/28/make-web-captioner-work-on-browsers-other-than-chrome" target="_blank">{{$t('incompatibleBrowser.message.castAVoteHere')}}</a>
         </i18n>
       </p>
