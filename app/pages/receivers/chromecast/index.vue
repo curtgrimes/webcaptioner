@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex w-100 flex-column" style="height: 100vh;">
     <div v-if="transcript" class="d-flex flex-grow-1">
-      <transcript class="bg-secondary"></transcript>
+      <transcript></transcript>
     </div>
     <nav v-if="transcript" class="navbar navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
         <span class="navbar-brand mr-auto text-white" style="opacity:.6">
