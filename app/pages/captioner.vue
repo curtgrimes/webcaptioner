@@ -220,7 +220,7 @@ export default {
     }
 
     let lastWebhookInterimEventDate = 0;
-    RemoteEventBus.$on('sendMutationToReceivers', ({type, payload}) => {
+    RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
       let callWebhook = ({url, method, transcript}) => {
         let body = JSON.stringify({transcript});
 
@@ -269,7 +269,7 @@ export default {
       }
       
       if (
-        type === 'captioner/SET_TRANSCRIPT_INTERIM'
+        mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
         && (Date.now() - lastWebhookInterimEventDate) >= this.$store.state.settings.integrations.webhooks.interim.throttleMs
       ) {
         callWebhook({
@@ -280,7 +280,7 @@ export default {
         lastWebhookInterimEventDate = Date.now();
       }
 
-      if (type === 'captioner/APPEND_TRANSCRIPT_FINAL') {
+      if (mutation === 'captioner/APPEND_TRANSCRIPT_FINAL') {
         callWebhook({
           url: this.$store.state.settings.integrations.webhooks.final.url,
           method: this.$store.state.settings.integrations.webhooks.final.method,
@@ -289,11 +289,11 @@ export default {
       }
     });
 
-    RemoteEventBus.$on('sendMutationToReceivers', throttle(({type, payload}) => {
+    RemoteEventBus.$on('sendMutationToReceivers', throttle(({mutation, payload}) => {
       if (self.remoteDisplays.length) {
           this.$socket.sendObj({
             action: 'sendMessageToRoom',
-            type,
+            type: mutation,
             payload,
           });
       }

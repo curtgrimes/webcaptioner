@@ -47,8 +47,11 @@ export default {
   START_DETACHED_MODE: ({commit, state}) => {
     eventLogger(commit, {action: 'START_DETACHED_MODE'});
 
-    ChromelessWindowManager.methods.start(RemoteEventBus, state.settings, function () {
-      // On close
+    ChromelessWindowManager.methods.start(RemoteEventBus, {
+      settings: state.settings,
+      transcriptInterim: state.captioner.transcript.interim,
+      transcriptFinal: state.captioner.transcript.final,
+    }, () => { // On close
       commit('SET_DETACHED_MODE_OFF');  
     });
     commit('SET_DETACHED_MODE_ON');

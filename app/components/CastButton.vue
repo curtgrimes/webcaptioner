@@ -21,7 +21,7 @@
     <b-button id="cast-connected-button" v-else-if="connected" v-b-tooltip.hover="$t('googleCast.castingToReceiver', {receiverName})" variant="secondary" @click="stop()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
       <img src="/static/cast-icons/cast-icon-connected.svg"/>
     </b-button>
-    <b-button v-else variant="info" v-b-tooltip.hover="$t('googleCast.cast')" @click="sendInitMessage()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
+    <b-button v-else variant="info" v-b-tooltip.hover="$t('googleCast.cast')" @click="initConnection()" :size="largerLayout ? 'lg' : ''" :class="largerLayout ? 'px-4 py-3' : ''">
       <img src="/static/cast-icons/cast-icon.svg"/>
     </b-button>
     <b-modal :title="$t('googleCast.castingFailed')" :hide-header="true" ref="castFailedModal" :ok-only="true" ok-variant="secondary" :hide-header-close="true">
@@ -60,7 +60,7 @@
 import loadScript from 'load-script'
 import RemoteEventBus from '~/mixins/RemoteEventBus'
 
-const namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
+const namespace = 'urn:x-cast:com.webcaptioner.cast.captioner';
 
 export default {
   name: 'castButton',
@@ -75,8 +75,8 @@ export default {
       let self = this;
       let sessionRequest = new chrome.cast.SessionRequest(this.$env.GOOGLE_CAST_APP_ID);
       const onReceivedMessage = function(namespace, message) {
-        console.log('Received message:');
-        console.log(namespace, message);
+        // console.log('Received message:');
+        // console.log(namespace, message);
       }
 
       const sessionListener = function (e) {
@@ -124,25 +124,10 @@ export default {
         // console.log(e);
       });
     },
-    sendInitMessage: function() {
-      this.sendMessage({
-        type: 'RESTORE_SETTINGS',
-        payload: {
-          settings: this.$store.state.settings,
-          verstion: this.$store.state.version,
-        }
-      });
+    initConnection: function() {
+      this.initWithMessage();
     },
-    sendMessage: function (message) {
-      if (this.session != null) {
-        this.session.sendMessage(namespace, message, function() {
-        },
-          function(e) {
-          // console.log("error: ");
-          // console.log(e);
-        });
-      }
-      else {
+    initWithMessage: function(message) {
         let self = this;
         self.connecting = true;
         chrome.cast.requestSession(
@@ -151,7 +136,30 @@ export default {
             self.connected = true;
             self.session = e;
             self.receiverName = self.session.receiver.friendlyName;
-            self.sendMessage(message);
+
+            // Restore settings and current transcript
+            self.sendMessage({
+              action: 'RESTORE_SETTINGS',
+              payload: {
+                settings: self.$store.state.settings,
+              }
+            });
+            self.sendMessage({
+              mutation: 'captioner/SET_TRANSCRIPT_INTERIM',
+              payload: {
+                transcriptInterim: self.transcriptInterim,
+              }
+            });
+            self.sendMessage({
+              mutation: 'captioner/SET_TRANSCRIPT_FINAL',
+              payload: {
+                transcriptFinal: self.transcriptFinal,
+              }
+            });
+
+            if (message) {
+              this.sendMessage(message);
+            }
           },
           function(e) {
             self.connecting = false;
@@ -163,6 +171,13 @@ export default {
               self.$refs.castFailedModal.show();
             }
         });
+    },
+    sendMessage: function (message) {
+      if (this.session != null) {
+        this.session.sendMessage(namespace, message, function() {}, function(e) {});
+      }
+      else {
+        this.initWithMessage(message);
       }
     },
     stop: function() {
@@ -250,9 +265,9 @@ export default {
       // else {}
     });
 
-    RemoteEventBus.$on('sendMutationToReceivers', ({type, payload}) => {
+    RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
       if (this.session) {
-        this.sendMessage({type, payload});
+        this.sendMessage({mutation, payload});
       }
     });
   },

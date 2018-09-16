@@ -248,6 +248,10 @@ const mutations = {
         state.transcript.interim = transcriptInterim;
         state.transcript.lastUpdate = Date.now();
     },
+    SET_TRANSCRIPT_FINAL (state, { transcriptFinal }) {
+        state.transcript.final = transcriptFinal;
+        state.transcript.lastUpdate = Date.now();
+    },
     SET_TRANSCRIPT_TYPED (state, { transcriptTyped }) {
         state.transcript.typed = transcriptTyped;
     },

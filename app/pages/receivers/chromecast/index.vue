@@ -25,6 +25,7 @@ export default {
   },
   data: function() {
     return {
+      test2: '',
       message: null,
       castReceiverManager: null,
       messageBus: null,
@@ -66,7 +67,7 @@ export default {
       // handler for 'senderconnected' event
       this.castReceiverManager.onSenderConnected = function(event) {
         self.message = "Received Sender Connected event: " + event.data;
-        console.log(self.castReceiverManager.getSender(event.data).userAgent);
+        // console.log(self.castReceiverManager.getSender(event.data).userAgent);
       };
 
       // handler for 'senderdisconnected' event
@@ -77,19 +78,9 @@ export default {
         }
       };
 
-      // handler for 'systemvolumechanged' event
-      this.castReceiverManager.onSystemVolumeChanged = function(event) {
-        console.log(
-          "Received System Volume Changed event: " +
-            event.data["level"] +
-            " " +
-            event.data["muted"]
-        );
-      };
-
       // create a CastMessageBus to handle messages for a custom namespace
       this.messageBus = this.castReceiverManager.getCastMessageBus(
-        "urn:x-cast:com.google.cast.sample.helloworld"
+        "urn:x-cast:com.webcaptioner.cast.captioner"
       );
 
       // handler for the CastMessageBus message event
@@ -97,10 +88,9 @@ export default {
 
       // initialize the CastReceiverManager with an application status message
       this.castReceiverManager.start({
-        statusText: "Application is starting2"
+        statusText: "Web Captioner is loading"
       });
-      console.log("Receiver Manager started");
-      this.message = "Receiver Manager started";
+      this.message = "Web Captioner started";
 
       window.onerror = function(error, url, line) {
         this.message = {
@@ -111,10 +101,17 @@ export default {
     },
 
     processMessage: function({ type, senderId, data }) {
+      this.test2 += data;
       this.castReceiverManager.setApplicationState("Captioning");
 
-      let { type: mutationType, payload } = JSON.parse(data);
-      this.$store.commit(mutationType, payload);
+      let { mutation, action, payload } = JSON.parse(data);
+      if (mutation) {
+        this.$store.commit(mutation, payload);
+      }
+      else if (action) {
+        this.$store.dispatch(action, payload);
+      }
+      
 
       // inform all senders on the CastMessageBus of the incoming message event
       // sender message listener will be invoked

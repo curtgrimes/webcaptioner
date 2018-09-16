@@ -7,7 +7,7 @@ function actionToWindow(windowInstance, type, payload) {
 
 export default {
     methods: {
-        start(RemoteEventBus, settings, onClose) {
+        start(RemoteEventBus, {settings, transcriptInterim, transcriptFinal}, onClose) {
             let chromelessWindow = window.open('/receivers/chromeless', 'WebCaptionerChild', 'height=700,width=900,toolbar=0,location=0,menubar=0');
         
             if (!chromelessWindow) {
@@ -15,12 +15,14 @@ export default {
                 return;
             }
         
-            RemoteEventBus.$on('sendMutationToReceivers', ({type, payload}) => {
-                commitToWindow(chromelessWindow, type, payload);
+            RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
+                commitToWindow(chromelessWindow, mutation, payload);
             });
 
             function restoreSettings() {
                 actionToWindow(chromelessWindow, 'RESTORE_SETTINGS', { settings });
+                commitToWindow(chromelessWindow, 'captioner/SET_TRANSCRIPT_INTERIM', { transcriptInterim });
+                commitToWindow(chromelessWindow, 'captioner/SET_TRANSCRIPT_FINAL', { transcriptFinal });
 
                 // Only do it once for this window
                 window.removeEventListener('receiverIsReadyToReceiveMutations', restoreSettings);

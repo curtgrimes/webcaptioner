@@ -3,13 +3,11 @@
 </template>
 
 <script>
-import ChromelessReceiver from '~/components/ChromelessReceiver.vue';
 import Transcript from '~/components/Transcript.vue';
 
 export default {
   name: "chromeless-receiver",
   components: {
-    ChromelessReceiver,
     Transcript,
   },
   mounted: function() {
