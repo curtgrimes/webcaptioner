@@ -21,7 +21,7 @@
           </b-button>
         </div>
       </div>
-      <b-btn class="mt-3" variant="outline-info" block to="/captioner" replace>{{$t('common.close')}}</b-btn>
+      <b-btn class="mt-3" variant="outline-info" block :to="localePath('captioner')" replace>{{$t('common.close')}}</b-btn>
     </b-modal>
   </div>
 </template>
@@ -75,7 +75,7 @@ export default {
       // if e.trigger isn't set, the dialog closing is due to a route change already
       // in progress, (keyboard shortcuts, etc.) so we don't want to change the route.
       if (e.trigger) {
-        this.$router.replace('/captioner');
+        this.$router.replace(this.localePath('captioner'));
       }
     },
     autofocusElement () {
@@ -87,7 +87,7 @@ export default {
         transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
         dateFormatter: this.dateFormat,
         onDone: function() {
-          self.$router.replace('/captioner'); // Close dialog
+          self.$router.replace(this.localePath('captioner')); // Close dialog
         },
       });
     },
@@ -97,7 +97,7 @@ export default {
         transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
         dateFormatter: this.dateFormat,
         onDone: function() {
-          self.$router.replace('/captioner'); // Close dialog
+          self.$router.replace(this.localePath('captioner')); // Close dialog
         },
       });
     },

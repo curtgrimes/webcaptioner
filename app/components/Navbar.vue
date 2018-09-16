@@ -94,8 +94,8 @@
                         <div class="dropdown-divider"></div>
                         <b-dropdown-item @click="startDetachedMode" class="dropdown-item" v-b-tooltip.left :title="$t('navbar.menu.newWindowDescription')"><fa icon="external-link-alt" fixed-width class="mr-1" /> {{$t('navbar.menu.newWindow')}}</b-dropdown-item>
                         <div class="dropdown-divider"></div>
-                        <b-dropdown-item to="/captioner/save-to-file" replace><fa icon="save" class="mr-1" fixed-width /> {{$t('navbar.menu.saveToFile')}}</b-dropdown-item>
-                        <b-dropdown-item to="/captioner/clear" replace><fa icon="trash-alt" class="mr-1" fixed-width /> {{$t('common.clear')}}...</b-dropdown-item>
+                        <b-dropdown-item :to="localePath('captioner-save-to-file')" replace><fa icon="save" class="mr-1" fixed-width /> {{$t('navbar.menu.saveToFile')}}</b-dropdown-item>
+                        <b-dropdown-item :to="localePath('captioner-clear')" replace><fa icon="trash-alt" class="mr-1" fixed-width /> {{$t('common.clear')}}...</b-dropdown-item>
                         <div class="dropdown-divider"></div>
                         <b-dropdown-item :to="localePath('captioner-settings')" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> {{$t('navbar.menu.settings')}}</b-dropdown-item>
                     </b-dropdown>

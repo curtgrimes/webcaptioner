@@ -52,7 +52,7 @@ export default {
       // if e.trigger isn't set, the dialog closing is due to a route change already
       // in progress, (keyboard shortcuts, etc.) so we don't want to change the route.
       if (e.trigger) {
-        this.$router.replace('/captioner');
+        this.$router.replace(this.localePath('captioner'));
       }
     },
     showModal () {
@@ -60,7 +60,7 @@ export default {
     },
     cancelModal() {
       this.$refs.modal.hide();
-      this.$router.replace('/captioner');
+      this.$router.replace(this.localePath('captioner'));
     },
     hideModal () {
       this.$refs.modal.hide();
@@ -75,7 +75,7 @@ export default {
       this.$store.commit('captioner/CLEAR_TRANSCRIPT');
 
       // Close dialog
-      this.$router.replace('/captioner');
+      this.$router.replace(this.localePath('captioner'));
     },
   },
 }

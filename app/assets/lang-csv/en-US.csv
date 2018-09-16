@@ -155,6 +155,8 @@ settings.language.contactWebCaptionerOnFacebook,,Contact Web Captioner on Facebo
 settings.language.spoken,,Spoken Language
 settings.language.spokenDescription.text,Do not translate {supportedLanguagesAndDialects}. The text located at settings.language.spokenDescription.supportedLanguagesAndDialects will be placed here.,Web Captioner will recognize speech in this language. Learn more about {supportedLanguagesAndDialects}.
 settings.language.spokenDescription.supportedLanguagesAndDialects,Will link to https://webcaptioner.com/help/general/supported-languages/,supported languages and dialects
+settings.language.list.en-US,,English (United States)
+settings.language.list.pt-BR,,Portuguese (Brazil)
 settings.remoteDisplays.remoteDisplays,,Remote Displays
 settings.wordReplacements.wordReplacements,,Word Replacements
 settings.wordReplacements.description,,Replace or hide specific words or phrases during captioning.

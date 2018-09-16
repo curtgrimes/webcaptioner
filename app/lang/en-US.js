@@ -172,7 +172,10 @@ export default { common:
         spoken: 'Spoken Language',
         spokenDescription: 
          { text: 'Web Captioner will recognize speech in this language. Learn more about {supportedLanguagesAndDialects}.',
-           supportedLanguagesAndDialects: 'supported languages and dialects' } },
+           supportedLanguagesAndDialects: 'supported languages and dialects' },
+        list: 
+         { 'en-US': 'English (United States)',
+           'pt-BR': 'Portuguese (Brazil)' } },
      remoteDisplays: { remoteDisplays: 'Remote Displays' },
      wordReplacements: 
       { wordReplacements: 'Word Replacements',

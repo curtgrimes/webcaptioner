@@ -1,5 +1,5 @@
 ﻿Title,Description,pt-BR
-common.ok,,Certo
+common.ok,,Ok
 common.cancel,,Cancelar
 common.clear,,Limpar
 common.search,,Procurar
@@ -10,98 +10,98 @@ common.off,,Desligar
 common.on,,Ligar
 common.update,"Verb, as in an ""Update"" button",Atualizar
 common.setup,"Noun, as in ""Viewing a Setup screen""",Configuração
-common.setUpVerb,"Verb, as in ""How to Set Up this product""",Configuração
-common.showSetup,Use title case,Visualizar Configuração
-common.hideSetup,Use title case,Ocultar Configuração
+common.setUpVerb,"Verb, as in ""How to Set Up this product""",Configurar
+common.showSetup,Use title case,Visualizar configuração
+common.hideSetup,Use title case,Ocultar configuração
 common.loading,,Carregando
 common.install,,Instalar
 common.next,,Próximo
-common.done,,Feito
+common.done,,Pronto
 common.dismiss,,Dispensar
 app.webCaptioner,,Web Captioner
-app.description,,"Legendas em tempo real para o seu evento, discurso, palestra em sala de aula ou culto na igreja."
+app.description,,"Legendas em tempo real para o seu evento, discurso, palestra em sala-de-aula ou culto na igreja."
 captioner.volumeMeter.tooLoud,,Muito alto
 captioner.volumeMeter.tooQuiet,,Muito baixo
 captioner.clearTranscript.title,Note punctuation,Limpar transcrição? 
-captioner.clearTranscript.ok,Use title case,Transcrição Limpa
+captioner.clearTranscript.ok,Use title case,Limpar transcrição
 captioner.saveToFile.title,Use title case,Salvar em Arquivo
 captioner.saveToFile.description,,Salve sua transcrição atual em um arquivo.
-captioner.saveToFile.transcriptEmptyMessage,,"Psiu ... você sabe que não tem nada para salvar ainda, certo?"
-captioner.saveToFile.textFile,Use title case,Arquivo de Texto
+captioner.saveToFile.transcriptEmptyMessage,,"Psiu... Sabe que você ainda não tem nada para salvar, né?"
+captioner.saveToFile.textFile,Use title case,Arquivo de texto
 captioner.saveToFile.text,"Short for ""Text File""",Texto
 captioner.saveToFile.wordDocument,Use title case,Documento do Word
 captioner.saveToFile.word,"Short for ""Word Document""",Word
 receiver.splash.captionsWillBeginShortly,,As legendas começarão em breve.
 receiver.splash.connected,,Conectado!
-receiver.splash.useThisCodeToConnect,,Use este código para se conectar.
+receiver.splash.useThisCodeToConnect,,Usar este código para se conectar.
 googleCast.cast,Short for the Google Cast brand.,Transmitir
 googleCast.connecting,,Conectando
-googleCast.castingToReceiver,Do not translate {receiverName}. The name of the selected Chromecast receiver will be inserted at that point.,Transmitindo para {receiverName}
+googleCast.castingToReceiver,Do not translate {receiverName}. The name of the selected Chromecast receiver will be inserted at that point.,Transmitindo ao {receiverName}
 googleCast.castingFailed,Use title case,Transmissão Falhou
-googleCast.unableToCast,Use title case,Habilitar Transmissão
+googleCast.unableToCast,Use title case,Incapaz de transmitir
 googleCast.pleaseTryAgain,,"Por favor, tente novamente."
-navbar.captioner.startCaptioning,Use title case,Iniciar Captação
-navbar.captioner.stopCaptioning,Use title case,Parar Captação
-navbar.captioner.listeningToMicrophone,Do not translate {microphoneName}. The microphone name will be inserted at that point.,Capturando de {microphoneName}
-navbar.captioner.listening,,Captando
-navbar.menu.about,Do not translate. This is a reference to another phrase.,
+navbar.captioner.startCaptioning,Use title case,Começar a legendar
+navbar.captioner.stopCaptioning,Use title case,Parar de legendar
+navbar.captioner.listeningToMicrophone,Do not translate {microphoneName}. The microphone name will be inserted at that point.,"Escutando ao ""{microphoneName}"""
+navbar.captioner.listening,,Escutando
+navbar.menu.about,Do not translate. This is a reference to another phrase.,@:settings.about.about
 navbar.menu.blog,Use title case,Blog
-navbar.menu.helpCenter,Use title case,Centro de Ajuda
+navbar.menu.helpCenter,Use title case,Centro de ajuda
 navbar.menu.community,Use title case,Comunidade
 navbar.menu.donate,Use title case,Doar
 navbar.menu.feedback,Use title case,Opiniões
-navbar.menu.newWindow,Use title case,Nova Janela
-navbar.menu.newWindowDescription,Do not translate. This is a reference to another phrase.,
-navbar.menu.saveToFile,Do not translate. This is a reference to another phrase.,
+navbar.menu.newWindow,Use title case,Nova janela
+navbar.menu.newWindowDescription,Do not translate. This is a reference to another phrase.,@:settings.controls.showNewWindow
+navbar.menu.saveToFile,Do not translate. This is a reference to another phrase.,@:captioner.saveToFile.title
 navbar.menu.settings,Use title case,Ajustes
-navbar.vmixNotConnected,"Use title case. ""vMix"" is the name for the vMix streaming software.",vMix Não Conectado
+navbar.vmixNotConnected,"Use title case. ""vMix"" is the name for the vMix streaming software.",vMix não está conectado
 settings.settings,Use title case,Ajustes
 settings.general,Use title case,Geral
 settings.integrations,Use title case,Integrações
 settings.other,"Refers to an ""Other"" category of settings.",Outros
 settings.about.about,Use title case,Sobre
-settings.about.learnMore,Use title case,Saber Mais
-settings.about.whatsNew,Use title case,O que há de novo
-settings.about.whatsNewInWebCaptioner,Do not translate @:app.webCaptioner. The text with the identifier app.webCaptioner will be inserted at that point.,O que há de novo em @:app.webCaptioner
+settings.about.learnMore,Use title case,Saber mais
+settings.about.whatsNew,Use title case,Novidades
+settings.about.whatsNewInWebCaptioner,Do not translate @:app.webCaptioner. The text with the identifier app.webCaptioner will be inserted at that point.,Novidades com @:app.webCaptioner
 settings.about.getStarted,Use title case,Iniciar
 settings.eventLog.eventLog,Use title case,Log de Eventos
-settings.eventLog.instructions.i0,Do not translate {sendItToMeOnFacebook} in this phrase. The text located at settings.eventLog.instructions.sendItToMeOnFacebook will be inserted into this point.,"Reproduza o problema que você estava tendo e copie esse log e {sendItToMeOnFacebook}. O log inclui o conteúdo da sua atual transcrição, se houver. Você pode sair desta página e continuar a usar o Web Captioner como normal."
-settings.eventLog.instructions.i1,Do not translate {loggingDurationMinutes}. A number will be inserted at that point.,"Por motivos de desempenho, o registro será desativado automaticamente após {loggingDurationMinutes}minutos. Você ainda pode copiar o log depois que ele for desligado, desde que você não recarregue a página."
-settings.eventLog.instructions.sendItToMeOnFacebook,,envie para mim no Facebook
+settings.eventLog.instructions.i0,Do not translate {sendItToMeOnFacebook} in this phrase. The text located at settings.eventLog.instructions.sendItToMeOnFacebook will be inserted into this point.,"Reproduza o problema que você teve e copie esse log e {sendItToMeOnFacebook}. O log inclui o conteúdo da sua trancrição atual, se tiver. Você pode deixar esta página e continuar a usar o Web Captioner normalmente."
+settings.eventLog.instructions.i1,Do not translate {loggingDurationMinutes}. A number will be inserted at that point.,"Por motivos de desempenho, o registro será desativado automaticamente após {loggingDurationMinutes} minutos. Você ainda pode copiar o log mesmo depois que ele for desativado, desde que você não recarregue a página."
+settings.eventLog.instructions.sendItToMeOnFacebook,,envie pra mim no Facebook
 settings.eventLog.copyLog,Use title case,Copiar Log
-settings.eventLog.stopLogging,Use title case,Parar de Registrar
-settings.eventLog.restartLogging,Use title case,Reiniciar o Log
-settings.eventLog.loggingTurnsOffIn,Do not translate {timeRemainingMinutes} or {timeRemainingSeconds}. Numbers will be inserted at both of those points.,O registro será desativado em {timeRemainingMinutes}: {timeRemainingSeconds}
-settings.eventLog.loggingOff,"Short for the phrase ""Logging is currently off"". Refers to a system event log used to troubleshoot issues internally in Web Captioner.",Registro Desligado
+settings.eventLog.stopLogging,Use title case,Parar de registrar
+settings.eventLog.restartLogging,Use title case,Reiniciar o log
+settings.eventLog.loggingTurnsOffIn,Do not translate {timeRemainingMinutes} or {timeRemainingSeconds}. Numbers will be inserted at both of those points.,O registro será desativado em {timeRemainingMinutes}:{timeRemainingSeconds}
+settings.eventLog.loggingOff,"Short for the phrase ""Logging is currently off"". Refers to a system event log used to troubleshoot issues internally in Web Captioner.",Registro desligado
 settings.eventLog.eventsHidden,Do not translate {notShowingCount}. A number will be inserted there.,"{notShowingCount} eventos estão ocultos, mas serão incluídos quando você copiar o log."
-settings.eventLog.autoScroll,,Rolagem Automática 
+settings.eventLog.autoScroll,,Rolagem automática 
 settings.eventLog.events,"Separate three phrases by pipe characters (|): A phrase to show when there are no events; a phrase for when there is exactly one event, and a phrase when there is more than one event.",Nenhum evento | 1 evento | {count} eventos
 settings.experiments.experiments,Use title case,Experimentos
-settings.experiments.description,Do not translate {email} or {messageMeOnFacebook}. {email} will be replaced with an email address and {messageMeOnFacebook} will be replaced with the translated phrase located at the key settings.experiments.messageMeOnFacebook.,Certifique-se de ajudar e me dar opiniões sobre experiências! Envie-me um e-mail para {email} ou {messageMeOnFacebook}.
+settings.experiments.description,Do not translate {email} or {messageMeOnFacebook}. {email} will be replaced with an email address and {messageMeOnFacebook} will be replaced with the translated phrase located at the key settings.experiments.messageMeOnFacebook.,Não se esqueça de ajudar e me dar opiniões sobre experimentos! Envie-me um e-mail para {email} ou {messageMeOnFacebook}.
 settings.experiments.messageMeOnFacebook,,me mande mensagem no Facebook
-settings.experiments.addExperimentConfirmation,Do not translate {experimentName}. The name of the experiment being added will be inserted at that point.,"Deseja adicionar a experiência ""{experimentName}""?"
-settings.experiments.addExperiment,Use title case,Adicionar Experiência
-settings.experiments.experimentName,Use title case,Nome da Experiência
-settings.experiments.alreadyAdded,Do not translate {alreadyAddedExperimentName}. The name of the experiment  will be inserted at that point.,"Você já adicionou a experiência ""{alreadyAddedExperimentName}""."
-settings.experiments.addedExperiments,Use title case,Experimentos Adicionados
+settings.experiments.addExperimentConfirmation,Do not translate {experimentName}. The name of the experiment being added will be inserted at that point.,"Deseja adicionar o experimento ""{experimentName}""?"
+settings.experiments.addExperiment,Use title case,Adicionar experimento
+settings.experiments.experimentName,Use title case,Nome do experimento
+settings.experiments.alreadyAdded,Do not translate {alreadyAddedExperimentName}. The name of the experiment  will be inserted at that point.,"Você já adicionou o experimento ""{alreadyAddedExperimentName}""."
+settings.experiments.addedExperiments,Use title case,Experimentos adicionados
 settings.appearance.appearance,Use title case,Aparência
 settings.appearance.preview,Use title case,Pré-visualização
 settings.appearance.text,Use title case,Texto
-settings.appearance.textColor,Use title case,Cor do Texto
-settings.appearance.textColorInterim,Use title case,Cor de Texto Temporária
-settings.appearance.useRegularTextColor,Use title case,Use Cor de Texto Regular
-settings.appearance.interimTextColorDescription,,"Durante a legendagem, as palavras que acabaram de ser reconhecidas podem mudar um pouco, enquanto o Web Captioner determina o contexto da frase atual. Essas palavras serão desta cor."
+settings.appearance.textColor,Use title case,Cor do texto
+settings.appearance.textColorInterim,Use title case,Cor temporária de texto
+settings.appearance.useRegularTextColor,Use title case,Usar a cor de texto padrão
+settings.appearance.interimTextColorDescription,,"Durante as legendas, as palavras que acabaram de ser reconhecidas podem mudar um pouco, enquanto o Web Captioner determina o contexto da frase. Essas palavras serão mostradas nesta cor."
 settings.appearance.fontFamily,Use title case,Família de fontes
-settings.appearance.textSize,Use title case,Tamanho do Texto
-settings.appearance.lineHeight,Use title case,Altura da Linha
-settings.appearance.letterSpacing,Use title case,Espaçamento entre Letras
-settings.appearance.capitalization,Use title case,Capitalização
+settings.appearance.textSize,Use title case,Tamanho do texto
+settings.appearance.lineHeight,Use title case,Altura da linha
+settings.appearance.letterSpacing,Use title case,Espaçamento entre letras
+settings.appearance.capitalization,Use title case,Escrever de letra maiúscula
 settings.appearance.uppercase,This should be UPPERCASE.,MAIÚSCULAS
 settings.appearance.firstLetterOfEachWord,Capitalize the first letter of each word in this text.,Primeira Letra De Cada Palavra
-settings.appearance.properNouns,,Nomes próprios e o começo de sentenças
-settings.appearance.properNounsDescription,,"Frases separadas são detectadas somente quando uma marca de pontuação como ""período"" ou ""ponto de interrogação"" é literalmente dita."
+settings.appearance.properNouns,,Nomes ou substantivos próprios e o começo de sentenças
+settings.appearance.properNounsDescription,,"Frases separadas são detectadas somente quando uma pontuação tipo ""ponto final"" ou ""ponto de interrogação"" são ditos literalmente em voz alta."
 settings.appearance.alignment,Use title case,Alinhamento
-settings.appearance.horizontalAlignment,Use title case,Alinhamento Horizontal
+settings.appearance.horizontalAlignment,Use title case,Alinhamento horizontal
 settings.appearance.verticalAlignment,Use title case,Alinhamento vertical
 settings.appearance.full,Use title case,Cheio
 settings.appearance.left,Use title case,Esquerda
@@ -109,31 +109,31 @@ settings.appearance.middle,Use title case,Meio
 settings.appearance.right,Use title case,Direita
 settings.appearance.top,Use title case,Topo
 settings.appearance.bottom,Use title case,Inferior
-settings.appearance.lowerThird,Use title case,Terço Inferior
+settings.appearance.lowerThird,Use title case,Terço inferior
 settings.appearance.padding,Use title case,Preenchimento
 settings.appearance.background,Use title case,Fundo
-settings.appearance.backgroundColor,Use title case,Cor de Fundo
-settings.appearance.textShadow,Use title case,Sombra de Texto
-settings.appearance.shadowColor,Use title case,Cor da Sombra
+settings.appearance.backgroundColor,Use title case,Cor de fundo
+settings.appearance.textShadow,Use title case,Sombra de texto
+settings.appearance.shadowColor,Use title case,Cor da sombra
 settings.appearance.opacity,Use title case,Opacidade
-settings.appearance.blur,Use title case,Borrão
+settings.appearance.blur,Use title case,Embaçado
 settings.appearance.xPosition,Use title case,Posição X
 settings.appearance.yPosition,Use title case,Posição Y
 settings.censor.censor,Use title case,Censurar
 settings.censor.censorProfaneLanguage,,Censurar linguagem profana.
 settings.censor.usEnglishOnly,,(Atualmente disponível apenas para inglês dos EUA)
-settings.censor.censorProfaneLanguageDescription.text,"Do not translate {seeThisList} or {useWordReplacement}. The text at the key settings.censor.censorProfaneLanguageDescription.seeThisList and settings.censor.censorProfaneLanguageDescription.useWordReplacements will be placed here, respectively.","O que é considerado profano? {seeThisList}(nota: palavrões à frente!) Se você precisar censurar palavras adicionais não incluídas nesta lista, {useWordReplacements}."
+settings.censor.censorProfaneLanguageDescription.text,"Do not translate {seeThisList} or {useWordReplacement}. The text at the key settings.censor.censorProfaneLanguageDescription.seeThisList and settings.censor.censorProfaneLanguageDescription.useWordReplacements will be placed here, respectively.","O que é considerado profano? {seeThisList} (nota: palavrões à frente!) Se você precisar censurar palavras adicionais não incluídas nesta lista, {useWordReplacements}."
 settings.censor.censorProfaneLanguageDescription.seeThisList,Will link to https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words,Veja esta lista
 settings.censor.censorProfaneLanguageDescription.useWordReplacements,,usar substituições de palavras
-settings.censor.replaceCensoredWordsWith,,Substitua palavras censuradas por:
-settings.censor.nothing,,Nada - apenas omite-os.
+settings.censor.replaceCensoredWordsWith,,Substitua palavras censuradas com:
+settings.censor.nothing,,Nada — apenas omitem-nas.
 settings.censor.asterisks,Use title case,Asterisco
 settings.controls.controls,Use title case,Controles
-settings.controls.screenLayout,Use title case,Layout da Tela
+settings.controls.screenLayout,Use title case,Layout da tela
 settings.controls.default,Use title case,Padrão
 settings.controls.defaultDescription,,Controles de tamanho normal
 settings.controls.larger,Use title case,Maior
-settings.controls.largerDescription,Use title case,Controles maiores e botões adicionais para salvar e limpar a transcrição com um clique
+settings.controls.largerDescription,Use title case,Controles maiores e botões adicionais para salvar e limpar a transcrição com um só clique
 settings.controls.keyboardShortcuts,,Atalhos do Teclado
 settings.controls.then,"Used in explaining a sequence of key presses to execute a keyboard shortcut. Example: ""w then c""",em seguida
 settings.controls.ctrl,"""Ctrl"" key on keyboard",Ctrl
@@ -141,85 +141,91 @@ settings.controls.shift,"""Shift"" key on keyboard",Shift
 settings.controls.toggleCaptioning,,Ativar / desativar legendas
 settings.controls.toggleFullscreen,,Ativar / desativar o modo de tela cheia
 settings.controls.showNewWindow,,Mostrar legendas em uma nova janela
-settings.controls.openSettings,Use title case,Abrir Configurações
+settings.controls.openSettings,Use title case,Abrir configurações
 settings.controls.increaseTextSize,,Aumentar o tamanho do texto
 settings.controls.decreaseTextSize,,Diminuir o tamanho do texto
 settings.controls.openSave,"The value of captioner.saveToFile.title is inserted between the double quotes. Do not translate ""@:captioner.saveToFile.title""","Abrir ""@:captioner.saveToFile.title"" diálogo"
 settings.controls.clearTranscript,,Limpar transcrição
 settings.controls.listKeyboardShortcuts,,Listar atalhos de teclado
 settings.language.language,Use title case,Idioma
-settings.language.description.text,Do not translate {supportedLanguagesAndDialects}. The text located at settings.language.description.supportedLanguagesAndDialects will be placed here.,O Web Captioner reconhecerá a fala nessa linguagem. Saiba mais sobre {supportedLanguagesAndDialects}.
-settings.language.description.supportedLanguagesAndDialects,Will link to https://webcaptioner.com/help/general/supported-languages/,idiomas e dialetos suportados
-settings.language.selectALanguage,,Selecione um idioma
-settings.remoteDisplays.remoteDisplays,,Displays Remoto
-settings.wordReplacements.wordReplacements,,
-settings.wordReplacements.description,,
-settings.wordReplacements.wordOrPhraseToReplace,,
-settings.wordReplacements.wordOrPhraseToReplaceSentenceCase,,
-settings.wordReplacements.wordOrPhraseToReplaceDescription,,
-settings.wordReplacements.replaceWith,Use title case,
-settings.wordReplacements.replaceWithSentenceCase,Use sentence case,
-settings.wordReplacements.addAnother,Use title case,
-settings.vmix.vmix,Name of the vMix streaming software.,
-settings.vmix.description.text,{vMix} will link to the vMix website. {visitTheHelpCenter} links to https://webcaptioner.com/vmix,
-settings.vmix.description.visitTheHelpCenter,Use title case,
-settings.vmix.connectedToVmix,,
-settings.vmix.connected,,
-settings.vmix.captionsWillAppear,,
-settings.vmix.startCaptioning,,
-settings.vmix.connectToVmix,,
-settings.vmix.sendTestMessage,Use title case,
-settings.vmix.sent,,
-settings.vmix.step1,,
-settings.vmix.step2,,
-settings.vmix.step3,,
-settings.vmix.completeStep1First,,
-settings.vmix.completeStep2First,,
-settings.vmix.completeSteps1And2First,,
-settings.vmix.installChromeExtension,Use title case,
-settings.vmix.installChromeExtensionDescription,,
-settings.vmix.addToChrome,,
-settings.vmix.extensionInstalled,,
-settings.vmix.extensionNotInstalled,,
-settings.vmix.vmixWebController,"Use title case. This refers to a feature called ""Web Controller"" in vMix. Unless vMix has a localized name for Web Controller in the language being translated to, prefer to use ""Web Controller"".",
-settings.vmix.webControllerAddress,Use title case,
-settings.vmix.webController,Use title case,
-settings.vmix.enableVmixWebController,Use title case,
-settings.vmix.enableVmixWebControllerInstructions,,
-settings.vmix.enableVmixWebControllerSettingMenu,,
-settings.vmix.provideAddress,,
-settings.vmix.example,,
-settings.vmix.cannotConnect,,
-settings.vmix.import,,
-settings.vmix.importTitleTemplate,Use title case,
-settings.vmix.webCaptionerTitleTemplate,Use title case,
-settings.vmix.importTitleTemplateLonger,,
-settings.vmix.importTitleTemplateInstructions.i0,,
-settings.vmix.importTitleTemplateInstructions.i1,Do not translate text in curly braces.,
-settings.vmix.importTitleTemplateInstructions.i2,Do not translate text in curly braces.,
-settings.vmix.importTitleTemplateInstructions.i3,Do not translate text in curly braces.,
-settings.vmix.importTitleTemplateInstructions.i4,Do not translate text in curly braces.,
-settings.vmix.cantFindTemplate,,
-settings.vmix.testAndFinishSetup,Use title case,
-settings.webhooks.webhooks,Refers to https://en.wikipedia.org/wiki/Webhook,
-settings.exportRestore.exportRestoreSettings,Use title case,
-settings.exportRestore.restore,Use title case,
-settings.exportRestore.restoreDescription,,
-settings.exportRestore.restoreSettingsQuestion,,
-settings.exportRestore.somethingWrongWithFile,,
-settings.exportRestore.restoredSettings,Use title case,
-settings.exportRestore.reset,Use title case,
-settings.exportRestore.resetDescription,,
-settings.exportRestore.resetSettingsQuestion,,
-settings.exportRestore.settingsWillBeLost,,
-settings.exportRestore.settingsReset,Use title case,
-settings.exportRestore.export,Use title case,
-settings.exportRestore.exportDescription,,
-incompatibleBrowser.incompatibleBrowser,Use title case,
-incompatibleBrowser.message.i0,,
-incompatibleBrowser.message.i1,Do not translate text in curly braces.,
-incompatibleBrowser.message.i2,Do not translate text in curly braces.,
-incompatibleBrowser.message.switchToGoogleChrome,,
-incompatibleBrowser.message.castAVoteHere,,
-incompatibleBrowser.whyJustChrome,,
-incompatibleBrowser.lookAroundAnyway,Use title case,
+settings.language.interface,,Linguagem da interface do Web Captioner
+settings.language.interfaceDescription,,"Selecione um idioma pra interface do Web Captioner (menus, mensagens e páginas de configurações)."
+settings.language.wouldYouLikeYourLanguage,,Você gostaria da sua língua aqui? {contactWebCaptionerOnFacebook} se estiver interessado em ajudar a traduzir o Web Captioner. Obrigado pela ajuda incrível! {heartIcon}
+settings.language.contactWebCaptionerOnFacebook,,Entre em contato com o Web Captioner no Facebook
+settings.language.spoken,,Idioma falado
+settings.language.spokenDescription.text,Do not translate {supportedLanguagesAndDialects}. The text located at settings.language.description.supportedLanguagesAndDialects will be placed here.,O Web Captioner reconhecerá a fala nesse idioma. Saiba mais sobre {supportedLanguagesAndDialects}.
+settings.language.spokenDescription.supportedLanguagesAndDialects,Will link to https://webcaptioner.com/help/general/supported-languages/,idiomas e dialetos suportados
+settings.language.list.en-US,,Inglês (Estados Unidos)
+settings.language.list.pt-BR,,Português (Brasil)
+settings.remoteDisplays.remoteDisplays,,Displays remotos
+settings.wordReplacements.wordReplacements,,Substituimento de palavras
+settings.wordReplacements.description,,Substitua ou oculte palavras ou frases específicas durante as legendas.
+settings.wordReplacements.wordOrPhraseToReplace,,Palavra ou frase a serem substituídos
+settings.wordReplacements.wordOrPhraseToReplaceSentenceCase,,Palavra ou frase para substituir
+settings.wordReplacements.wordOrPhraseToReplaceDescription,,Separe várias palavras ou frases com vírgulas. Não diferencia maiúsculas de minúsculas.
+settings.wordReplacements.replaceWith,Use title case,Substituir com
+settings.wordReplacements.replaceWithSentenceCase,Use sentence case,Substituir com
+settings.wordReplacements.addAnother,Use title case,Adicionar outro
+settings.vmix.vmix,Name of the vMix streaming software.,vMix
+settings.vmix.description.text,{vMix} will link to the vMix website. {visitTheHelpCenter} links to https://webcaptioner.com/vmix,{vMix} é um software misturador e switcher de vídeo popular. Você pode enviar texto diretamente para o vMix e exibi-lo em uma entrada de título. Você pode usar os controles de fonte e cor do vMix para estilizar o texto das legendas. {visitTheHelpCenter} para saber mais.
+settings.vmix.description.visitTheHelpCenter,Use title case,Visite o centro de ajuda
+settings.vmix.connectedToVmix,,Conectado ao vMix!
+settings.vmix.connected,,Conectado
+settings.vmix.captionsWillAppear,,{startCaptioning} e suas legendas aparecerão agora no vMix.
+settings.vmix.startCaptioning,,Comece a legendar
+settings.vmix.connectToVmix,,Conecte-se ao vMix
+settings.vmix.sendTestMessage,Use title case,Enviar mensagem de teste
+settings.vmix.sent,,Enviado!
+settings.vmix.step1,,Passo 1
+settings.vmix.step2,,Passo 2
+settings.vmix.step3,,Passo 3
+settings.vmix.completeStep1First,,Complete o passo 1 primeiro
+settings.vmix.completeStep2First,,Complete o passo 2 primeiro
+settings.vmix.completeSteps1And2First,,Complete as etapas 1 e 2 primeiro
+settings.vmix.installChromeExtension,Use title case,Instalar extensão do Chrome
+settings.vmix.installChromeExtensionDescription,,A extensão do Web Captioner Connector para o Google Chrome permite que o Web Captioner se conecte ao vMix.
+settings.vmix.addToChrome,,Adicionar ao Chrome
+settings.vmix.extensionInstalled,,Extensão instalada
+settings.vmix.extensionNotInstalled,,Extensão não instalada.
+settings.vmix.vmixWebController,"Use title case. This refers to a feature called ""Web Controller"" in vMix. Unless vMix has a localized name for Web Controller in the language being translated to, prefer to use ""Web Controller"".",Controlador vMix Web
+settings.vmix.webControllerAddress,Use title case,Endereço do controlador da Web do vMix
+settings.vmix.webController,Use title case,Controlador Web
+settings.vmix.enableVmixWebController,Use title case,Ativar o controlador da Web vMix
+settings.vmix.enableVmixWebControllerInstructions,,"No vMix, vá para {settingMenu}. Marque a caixa para ativar o {webController}. Especifique um número de porta ou aceite a padrão."
+settings.vmix.enableVmixWebControllerSettingMenu,,Configurações > Controlador da Web
+settings.vmix.provideAddress,,Forneça o endereço que aparece no vMix:
+settings.vmix.example,,Exemplo:
+settings.vmix.cannotConnect,,"Não é possível conectar-se ao vMix em ""{webControllerAddress}"". Lembre-se de que o Web Controller esteja ativado no vMix e que você tenha copiado o endereço do site corretamente. Deve ser algo mais ou menos assim: http://192.168.1.1:8080"
+settings.vmix.import,,Importar
+settings.vmix.importTitleTemplate,Use title case,Importar modelo de template
+settings.vmix.webCaptionerTitleTemplate,Use title case,Modelo de título Web Captioner
+settings.vmix.importTitleTemplateLonger,,Importar o modelo de título do Web Captioner para o vMix
+settings.vmix.importTitleTemplateInstructions.i0,,Faça o download do {webCaptionerTitleTemplate} para o vMix.
+settings.vmix.importTitleTemplateInstructions.i1,Do not translate text in curly braces.,"No vMix, vá para {addInputSetting}."
+settings.vmix.importTitleTemplateInstructions.i2,Do not translate text in curly braces.,"Na janela {inputSelect}, clique em {browse} no canto superior direito e abra o modelo de título do Web Captioner que você baixou."
+settings.vmix.importTitleTemplateInstructions.i3,Do not translate text in curly braces.,O título aparecerá na guia {recent}. Clique duas vezes nela.
+settings.vmix.importTitleTemplateInstructions.i4,Do not translate text in curly braces.,"No editor de títulos que aparece, opcionalmente, personalize o tamanho da fonte e do texto. Feche quando terminar."
+settings.vmix.cantFindTemplate,,"O Web Captioner pode se conectar ao vMix, mas não pode encontrar o modelo de título do Web Captioner em uma entrada."
+settings.vmix.testAndFinishSetup,Use title case,Teste e finalize a instalação
+settings.webhooks.webhooks,Refers to https://en.wikipedia.org/wiki/Webhook,Webhooks
+settings.exportRestore.exportRestoreSettings,Use title case,Exportar/Restaurar configurações
+settings.exportRestore.restore,Use title case,Restaurar
+settings.exportRestore.restoreDescription,,"Restaure as configurações (aparência, configurações do censor, substituições de palavras, configurações do vMix etc.) de um arquivo de configurações que você exportou e salvou anteriormente."
+settings.exportRestore.restoreSettingsQuestion,,Restaurar configurações deste arquivo?
+settings.exportRestore.somethingWrongWithFile,,Parece que algo tá errado com este arquivo.
+settings.exportRestore.restoredSettings,Use title case,Configurações restauradas
+settings.exportRestore.reset,Use title case,Restabelecer
+settings.exportRestore.resetDescription,,Redefinir todas as configurações.
+settings.exportRestore.resetSettingsQuestion,,Redefinir todas as configurações?
+settings.exportRestore.settingsWillBeLost,,Todas as configurações atuais serão perdidas.
+settings.exportRestore.settingsReset,Use title case,Redefinir configurações
+settings.exportRestore.export,Use title case,Exportar
+settings.exportRestore.exportDescription,,Suas configurações serão salvas como um arquivo JSON.
+incompatibleBrowser.incompatibleBrowser,Use title case,Navegador incompatível
+incompatibleBrowser.message.i0,,"Desculpe, mas atualmente o Web Captioner só funciona no Google Chrome."
+incompatibleBrowser.message.i1,Do not translate text in curly braces.,"Ainda é possível explorar opções e fuçar com as configurações, mas para começar as legendas, você terá que {switchToGoogleChrome}."
+incompatibleBrowser.message.i2,Do not translate text in curly braces.,"Se a compatibilidade com navegadores que não sejam o Chrome for importante pra você, {castAVoteHere}."
+incompatibleBrowser.message.switchToGoogleChrome,,mudar para o Google Chrome
+incompatibleBrowser.message.castAVoteHere,,votar aqui
+incompatibleBrowser.whyJustChrome,,Por que só o Chrome?
+incompatibleBrowser.lookAroundAnyway,Use title case,Explore mesmo assim
