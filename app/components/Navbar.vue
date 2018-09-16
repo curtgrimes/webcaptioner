@@ -31,7 +31,7 @@
                         <fa icon="exclamation-triangle" /> {{$t('navbar.vmixNotConnected')}}
                     </span>
                     <b-button-group size="sm">
-                        <b-btn to="/captioner/settings/vmix" @click="vmixNotFullySetUpMessageDismissed = true" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
+                        <b-btn :to="localePath('captioner-settings-vmix')" @click="vmixNotFullySetUpMessageDismissed = true" variant="secondary" v-if="showVmixNotFullySetUpMessage" class="btn-sm">
                             {{$t('common.setUpVerb')}}
                         </b-btn>
                         <b-button @click="sendToVmix = false" :aria-label="$t('common.dismiss')"><fa icon="times"/></b-button>
@@ -97,7 +97,7 @@
                         <b-dropdown-item to="/captioner/save-to-file" replace><fa icon="save" class="mr-1" fixed-width /> {{$t('navbar.menu.saveToFile')}}</b-dropdown-item>
                         <b-dropdown-item to="/captioner/clear" replace><fa icon="trash-alt" class="mr-1" fixed-width /> {{$t('common.clear')}}...</b-dropdown-item>
                         <div class="dropdown-divider"></div>
-                        <b-dropdown-item to="/captioner/settings" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> {{$t('navbar.menu.settings')}}</b-dropdown-item>
+                        <b-dropdown-item :to="localePath('captioner-settings')" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> {{$t('navbar.menu.settings')}}</b-dropdown-item>
                     </b-dropdown>
                 </b-button-group>
             </div> <!-- bottom row in big UI mode -->

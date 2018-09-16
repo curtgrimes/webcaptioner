@@ -165,10 +165,14 @@ export default { common:
         listKeyboardShortcuts: 'List keyboard shortcuts' },
      language: 
       { language: 'Language',
-        description: 
+        interface: 'Web Captioner Interface Language',
+        interfaceDescription: 'Select a language for the Web Captioner interface (menus, messages, and settings pages).',
+        wouldYouLikeYourLanguage: 'Would you like your language here? {contactWebCaptionerOnFacebook} if you\'re interested in helping to translate Web Captioner. Thanks for all of your awesome help! {heartIcon}',
+        contactWebCaptionerOnFacebook: 'Contact Web Captioner on Facebook',
+        spoken: 'Spoken Language',
+        spokenDescription: 
          { text: 'Web Captioner will recognize speech in this language. Learn more about {supportedLanguagesAndDialects}.',
-           supportedLanguagesAndDialects: 'supported languages and dialects' },
-        selectALanguage: 'Select a Language' },
+           supportedLanguagesAndDialects: 'supported languages and dialects' } },
      remoteDisplays: { remoteDisplays: 'Remote Displays' },
      wordReplacements: 
       { wordReplacements: 'Word Replacements',

@@ -153,7 +153,7 @@ export default {
       ;
     }
 
-    this.redirectSettingsRouteOnMobile(this.$route.path); // if navigating to settings page on load
+    this.redirectSettingsRouteOnMobile(this.$route.name); // if navigating to settings page on load
 
     this.$on('navbarChangedHeight', function() {
       // console.log('navbarChangedHeight');
@@ -307,7 +307,7 @@ export default {
       this.sendCastMessage(transcript);
     },
     '$route' (toRoute) {
-      this.redirectSettingsRouteOnMobile(toRoute.path);
+      this.redirectSettingsRouteOnMobile(toRoute.name);
     },
     captioningShouldBeOn: function(shouldBeOn) {
       if (shouldBeOn) {
@@ -409,12 +409,15 @@ export default {
     stopCaptioning: function() {
       this.$store.dispatch('captioner/stopManual');
     },
-    redirectSettingsRouteOnMobile(currentPath) {
+    redirectSettingsRouteOnMobile(currentName) {
       // This is a client-side method because we're
       // doing a redirection based on screen width.
       // xs screen size has a standalone settings menu.
-      if (currentPath === '/captioner/settings' && window.outerWidth > 575) {
-        this.$router.replace('/captioner/settings/about');
+      if (
+        currentName.indexOf('captioner-settings___') === 0 // Route name starts with that
+        && window.outerWidth > 575
+      ) {
+        this.$router.replace(this.localePath('captioner-settings-about'));
       }
     },
     refreshVmixStatus: function() {

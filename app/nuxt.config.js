@@ -17,6 +17,7 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Free, real-time captioning for your event.' },
       { name: 'theme-color', content: '#ffe200' },
+      { name: 'google', content: 'notranslate' },
       { property: 'og:image', content: 'https://webcaptioner.com/static/og-image.jpg' },
       { property: 'og:image:secure_url', content: 'https://webcaptioner.com/static/og-image.jpg' },
       { property: 'og:image:type', content: 'image/jpg' },
@@ -36,12 +37,19 @@ module.exports = {
     }],
     ['bootstrap-vue/nuxt', { css: false }],
     ['nuxt-i18n', {
-      defaultLocale: 'en',
+      defaultLocale: 'en-US',
       locales: [
         {
-          code: 'en',
+          code: 'en-US',
           file: 'en-US.js',
           iso: 'en-US',
+          name: "English (US)",
+        },
+        {
+          code: 'pt-BR',
+          file: 'pt-BR.js',
+          iso: 'pt-BR',
+          name: "Portuguese (Brazil)",
         },
       ],
       lazy: true,
@@ -61,7 +69,7 @@ module.exports = {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronRight', 'faMinusCircle', 'faPlusCircle', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', ],
+          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronRight', 'faMinusCircle', 'faPlusCircle', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart'],
         },
         {
           set: '@fortawesome/free-regular-svg-icons',
