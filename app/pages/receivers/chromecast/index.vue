@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <div v-if="transcript">
-      <transcript></transcript>
-      <nav class="bg-danger navbar fixed-bottom navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
-          <span class="navbar-brand mr-auto text-white" style="opacity:.6">
-              <img src="/static/img/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
-              <span class="d-none d-md-inline">Web Captioner</span>
-          </span>
-      </nav>
+  <div class="d-flex w-100 flex-column" style="height: 100vh;">
+    <div v-if="transcript" class="d-flex flex-grow-1">
+      <transcript class="bg-secondary"></transcript>
     </div>
-    <receiver-splash v-else />
+    <nav v-if="transcript" class="navbar navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
+        <span class="navbar-brand mr-auto text-white" style="opacity:.6">
+            <img src="/static/img/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
+            <span class="d-none d-md-inline">Web Captioner</span>
+        </span>
+    </nav>
+    <receiver-splash  v-if="!transcript" />
   </div>
 </template>
 
