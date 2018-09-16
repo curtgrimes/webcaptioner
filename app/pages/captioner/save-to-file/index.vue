@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex flex-grow-1">
     <transcript/>
     <b-modal v-model="showModal" lazy ref="modal" hide-footer :title="$t('captioner.saveToFile.title')" @shown="autofocusElement()" @hide="replaceRouteToParent">
       <p>{{$t('captioner.saveToFile.description')}}</p>

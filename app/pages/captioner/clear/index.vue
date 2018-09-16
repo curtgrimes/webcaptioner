@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <transcript/>
+  <div class="d-flex flex-grow-1">
+    <transcript />
     <b-modal v-model="modalShow" lazy ref="modal" hide-footer :title="$t('captioner.clearTranscript.title')" @shown="autofocusElement()" @hide="replaceRouteToParent">
       <div class="text-right">
         <b-btn ref="cancelButton" class="mr-2" variant="outline-info" @click="cancelModal()">{{$t('common.cancel')}}</b-btn>

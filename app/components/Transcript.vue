@@ -1,6 +1,6 @@
 <template>
   <div
-    class="transcript d-flex"
+    class="transcript d-flex flex-grow-1"
     v-bind:class="[wrapTextPositionClass, (chromeless ? 'chromeless' : '')]"
     v-bind:style="{color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
     @click="focusIfInTypingMode()">
