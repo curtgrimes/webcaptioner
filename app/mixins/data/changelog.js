@@ -30,35 +30,30 @@ export default [
             },
         ],
     },
-    // {
-    //     version: "2.1.0",
-    //     date: "2018-09-02",
-    //     notes: [
-    //         {
-    //             icon: 'iconmonstr-window-23.svg',
-    //             title: 'Chromecast',
-    //             text: 'Just tap the Cast icon to stream to any connected TV.',
-    //         },
-    //         {
-    //             icon: 'iconmonstr-download-17.svg',
-    //             title: 'Export and Restore Settings',
-    //             text: 'You can now export and restore all of Web Captioner\'s settings from the <a href="/captioner/settings/export-restore">export/restore page</a>.',
-    //         },
-    //         {
-    //             icon: 'iconmonstr-connection-5.svg',
-    //             title: 'Autostart',
-    //             text: 'There\'s now a way for you to <a href="/help/general/autostart/">automatically start captions</a> from a bookmark.',
-    //         },
-    //         {
-    //             icon: 'iconmonstr-share-7.svg',
-    //             title: 'Webhooks',
-    //             text: '<a href="/captioner/settings/webhooks">Webhooks</a> allows you to receive real-time HTTP notifications of captioning events in your application. Events are sent client-side from this browser.',
-    //         },
-    //         {
-    //             icon: 'iconmonstr-window-27.svg',
-    //             title: 'Option for Larger Screen Layout',
-    //             text: 'Turn on an <a href="/captioner/settings/controls">option for larger controls</a>.',
-    //         },
-    //     ],
-    // },
+    {
+        version: "2.1.0",
+        date: "2018-09-16",
+        notes: [
+            {
+                icon: 'iconmonstr-window-23.svg',
+                title: 'Chromecast',
+                text: 'Just tap the Cast icon to stream to any connected TV.',
+            },
+            {
+                icon: 'iconmonstr-download-17.svg',
+                title: 'Export and Restore Settings',
+                text: 'You can now export and restore all of Web Captioner\'s settings from the <a href="/captioner/settings/export-restore">export/restore page</a>.',
+            },
+            {
+                icon: 'iconmonstr-connection-5.svg',
+                title: 'Autostart',
+                text: 'There\'s now a way for you to <a href="/help/general/autostart/">automatically start captions</a> from a bookmark.',
+            },
+            {
+                icon: 'iconmonstr-window-27.svg',
+                title: 'Option for Larger Screen Layout',
+                text: 'Turn on an <a href="/captioner/settings/controls">option for larger controls</a>.',
+            },
+        ],
+    },
 ];
