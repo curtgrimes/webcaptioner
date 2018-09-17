@@ -2,7 +2,7 @@
 common.ok,,Ok
 common.cancel,,Cancelar
 common.clear,,Limpar
-common.search,,Procurar
+common.search,,Procurar...
 common.close,,Fechar
 common.add,,Adicionar
 common.remove,,Remover
@@ -24,7 +24,7 @@ captioner.volumeMeter.tooLoud,,Muito alto
 captioner.volumeMeter.tooQuiet,,Muito baixo
 captioner.clearTranscript.title,Note punctuation,Limpar transcrição? 
 captioner.clearTranscript.ok,Use title case,Limpar transcrição
-captioner.saveToFile.title,Use title case,Salvar em Arquivo
+captioner.saveToFile.title,Use title case,Salvar arquivo
 captioner.saveToFile.description,,Salve sua transcrição atual em um arquivo.
 captioner.saveToFile.transcriptEmptyMessage,,"Psiu... Sabe que você ainda não tem nada para salvar, né?"
 captioner.saveToFile.textFile,Use title case,Arquivo de texto
@@ -148,9 +148,9 @@ settings.controls.openSave,"The value of captioner.saveToFile.title is inserted 
 settings.controls.clearTranscript,,Limpar transcrição
 settings.controls.listKeyboardShortcuts,,Listar atalhos de teclado
 settings.language.language,Use title case,Idioma
-settings.language.interface,,Linguagem da interface do Web Captioner
+settings.language.interface,,Idioma da interface do Web Captioner
 settings.language.interfaceDescription,,"Selecione um idioma pra interface do Web Captioner (menus, mensagens e páginas de configurações)."
-settings.language.wouldYouLikeYourLanguage,,Você gostaria da sua língua aqui? {contactWebCaptionerOnFacebook} se estiver interessado em ajudar a traduzir o Web Captioner. Obrigado pela ajuda incrível! {heartIcon}
+settings.language.wouldYouLikeYourLanguage,,Gostaria de ver sua língua aqui? {contactWebCaptionerOnFacebook} se estiver interessado em ajudar a traduzir o Web Captioner. Obrigado pelo suporte! {heartIcon}
 settings.language.contactWebCaptionerOnFacebook,,Entre em contato com o Web Captioner no Facebook
 settings.language.spoken,,Idioma falado
 settings.language.spokenDescription.text,Do not translate {supportedLanguagesAndDialects}. The text located at settings.language.description.supportedLanguagesAndDialects will be placed here.,O Web Captioner reconhecerá a fala nesse idioma. Saiba mais sobre {supportedLanguagesAndDialects}.
@@ -160,12 +160,12 @@ settings.language.list.pt-BR,,Português (Brasil)
 settings.remoteDisplays.remoteDisplays,,Displays remotos
 settings.wordReplacements.wordReplacements,,Substituimento de palavras
 settings.wordReplacements.description,,Substitua ou oculte palavras ou frases específicas durante as legendas.
-settings.wordReplacements.wordOrPhraseToReplace,,Palavra ou frase a serem substituídos
-settings.wordReplacements.wordOrPhraseToReplaceSentenceCase,,Palavra ou frase para substituir
+settings.wordReplacements.wordOrPhraseToReplace,,Palavra ou frase a serem substituídas
+settings.wordReplacements.wordOrPhraseToReplaceSentenceCase,,@:settings.wordReplacements.wordOrPhraseToReplace
 settings.wordReplacements.wordOrPhraseToReplaceDescription,,Separe várias palavras ou frases com vírgulas. Não diferencia maiúsculas de minúsculas.
 settings.wordReplacements.replaceWith,Use title case,Substituir com
-settings.wordReplacements.replaceWithSentenceCase,Use sentence case,Substituir com
-settings.wordReplacements.addAnother,Use title case,Adicionar outro
+settings.wordReplacements.replaceWithSentenceCase,Use sentence case,@:settings.wordReplacements.replaceWith
+settings.wordReplacements.addAnother,Use title case,Adicionar outra
 settings.vmix.vmix,Name of the vMix streaming software.,vMix
 settings.vmix.description.text,{vMix} will link to the vMix website. {visitTheHelpCenter} links to https://webcaptioner.com/vmix,{vMix} é um software misturador e switcher de vídeo popular. Você pode enviar texto diretamente para o vMix e exibi-lo em uma entrada de título. Você pode usar os controles de fonte e cor do vMix para estilizar o texto das legendas. {visitTheHelpCenter} para saber mais.
 settings.vmix.description.visitTheHelpCenter,Use title case,Visite o centro de ajuda

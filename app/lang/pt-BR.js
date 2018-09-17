@@ -2,7 +2,7 @@ export default { common:
    { ok: 'Ok',
      cancel: 'Cancelar',
      clear: 'Limpar',
-     search: 'Procurar',
+     search: 'Procurar...',
      close: 'Fechar',
      add: 'Adicionar',
      remove: 'Remover',
@@ -25,7 +25,7 @@ export default { common:
    { volumeMeter: { tooLoud: 'Muito alto', tooQuiet: 'Muito baixo' },
      clearTranscript: { title: 'Limpar transcrição? ', ok: 'Limpar transcrição' },
      saveToFile: 
-      { title: 'Salvar em Arquivo',
+      { title: 'Salvar arquivo',
         description: 'Salve sua transcrição atual em um arquivo.',
         transcriptEmptyMessage: 'Psiu... Sabe que você ainda não tem nada para salvar, né?',
         textFile: 'Arquivo de texto',
@@ -165,9 +165,9 @@ export default { common:
         listKeyboardShortcuts: 'Listar atalhos de teclado' },
      language: 
       { language: 'Idioma',
-        interface: 'Linguagem da interface do Web Captioner',
+        interface: 'Idioma da interface do Web Captioner',
         interfaceDescription: 'Selecione um idioma pra interface do Web Captioner (menus, mensagens e páginas de configurações).',
-        wouldYouLikeYourLanguage: 'Você gostaria da sua língua aqui? {contactWebCaptionerOnFacebook} se estiver interessado em ajudar a traduzir o Web Captioner. Obrigado pela ajuda incrível! {heartIcon}',
+        wouldYouLikeYourLanguage: 'Gostaria de ver sua língua aqui? {contactWebCaptionerOnFacebook} se estiver interessado em ajudar a traduzir o Web Captioner. Obrigado pelo suporte! {heartIcon}',
         contactWebCaptionerOnFacebook: 'Entre em contato com o Web Captioner no Facebook',
         spoken: 'Idioma falado',
         spokenDescription: 
@@ -180,12 +180,12 @@ export default { common:
      wordReplacements: 
       { wordReplacements: 'Substituimento de palavras',
         description: 'Substitua ou oculte palavras ou frases específicas durante as legendas.',
-        wordOrPhraseToReplace: 'Palavra ou frase a serem substituídos',
-        wordOrPhraseToReplaceSentenceCase: 'Palavra ou frase para substituir',
+        wordOrPhraseToReplace: 'Palavra ou frase a serem substituídas',
+        wordOrPhraseToReplaceSentenceCase: '@:settings.wordReplacements.wordOrPhraseToReplace',
         wordOrPhraseToReplaceDescription: 'Separe várias palavras ou frases com vírgulas. Não diferencia maiúsculas de minúsculas.',
         replaceWith: 'Substituir com',
-        replaceWithSentenceCase: 'Substituir com',
-        addAnother: 'Adicionar outro' },
+        replaceWithSentenceCase: '@:settings.wordReplacements.replaceWith',
+        addAnother: 'Adicionar outra' },
      vmix: 
       { vmix: 'vMix',
         description: 

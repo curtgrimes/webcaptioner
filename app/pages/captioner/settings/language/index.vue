@@ -3,7 +3,7 @@
     <h3>{{$t('settings.language.interface')}}</h3>
     <p>{{$t('settings.language.interfaceDescription')}}</p>
     <div class="list-group">
-      <router-link tag="button" v-for="locale in $i18n.locales" v-bind:key="locale.code" :to="switchLocalePath(locale.code)" class="list-group-item list-group-item-action p-2" v-bind:class="{'active': locale.code === $i18n.locale}">
+      <router-link tag="button" v-for="locale in $i18n.locales" v-bind:key="locale.code" :to="switchLocalePath(locale.code)" class="list-group-item list-group-item-action" v-bind:class="{'active': locale.code === $i18n.locale}">
         <span class="row m-0">
           <span class="col-1 text-center"><span class="d-block"><fa v-if="locale.code === $i18n.locale" icon="check-circle" /></span></span>
           <span class="col-10 col-sm-9 pl-md-0">
