@@ -43,13 +43,11 @@ module.exports = {
           code: 'en-US',
           file: 'en-US.js',
           iso: 'en-US',
-          name: "English (US)",
         },
         // {
         //   code: 'pt-BR',
         //   file: 'pt-BR.js',
         //   iso: 'pt-BR',
-        //   name: "Portuguese (Brazil)",
         // },
       ],
       lazy: true,
