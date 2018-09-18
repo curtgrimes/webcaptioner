@@ -50,9 +50,6 @@ export default {
   },
   mounted: function() {
     this.scrollToBottom();
-
-    console.log('asdf');
-    console.log(this.showTypedLiveReadOnly);
   
     new Combokeys(this.$refs.typedTranscript)
       .bind('esc', () => {
@@ -147,6 +144,7 @@ export default {
       return this.$store.state.captioner.typingModeOn;
     },
     typedTranscript () {
+      this.scrollToBottom();
       return this.$store.state.captioner.transcript.typed;
     },
 
