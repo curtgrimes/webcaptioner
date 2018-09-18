@@ -1,5 +1,5 @@
 <template>
-  <chromeless-receiver/>
+  <chromeless-receiver style="height:100vh" />
 </template>
 
 <script>

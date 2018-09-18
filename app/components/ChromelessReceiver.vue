@@ -1,5 +1,5 @@
 <template>
-  <transcript :chromeless="true"></transcript>
+  <transcript show-typed-live-read-only></transcript>
 </template>
 
 <script>

@@ -10,21 +10,23 @@ function getVmixPath(webControllerAddress) {
   return (webControllerAddress || '').trim().replace(/\/$/, "") + '/API';
 }
 
-function eventLogger(commit, {action, payload}) {
-  commit('APPEND_EVENT_LOG', {
-    event: {
-      event: 'action',
-      action,
-      payload,
-    },
-    omitFromGoogleAnalytics: true,
-  });
+function eventLogger(commit, state, {action, payload}) {
+  if (Date.now() < state.eventLog.onUntilStopTime) {
+    commit('APPEND_EVENT_LOG', {
+      event: {
+        event: 'action',
+        action,
+        payload,
+      },
+      omitFromGoogleAnalytics: true,
+    });
+  }
 }
 
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
     return new Promise((resolve, reject) => {
-      eventLogger(commit, {action: 'SET_LOCALE_FROM_USER_DEFAULT'});
+      eventLogger(commit, state, {action: 'SET_LOCALE_FROM_USER_DEFAULT'});
   
       commit('SET_LOCALE_USER_DEFAULT', { locale: userLocale });
   
@@ -45,7 +47,7 @@ export default {
   },
 
   START_DETACHED_MODE: ({commit, state}) => {
-    eventLogger(commit, {action: 'START_DETACHED_MODE'});
+    eventLogger(commit, state, {action: 'START_DETACHED_MODE'});
 
     ChromelessWindowManager.methods.start(RemoteEventBus, {
       settings: state.settings,
@@ -135,9 +137,9 @@ export default {
   },
 
 
-  RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, dispatch }) => {
+  RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, state, dispatch }) => {
     return new Promise((resolve, reject) => {
-      eventLogger(commit, {action: 'RESTORE_SETTINGS_FROM_LOCALSTORAGE'});
+      eventLogger(commit, state, {action: 'RESTORE_SETTINGS_FROM_LOCALSTORAGE'});
 
       if (!localStorage) {
         resolve();
@@ -167,7 +169,7 @@ export default {
   },
 
   SAVE_SETTINGS_TO_LOCALSTORAGE: ({state, commit}) => {
-    eventLogger(commit, {action: 'SAVE_SETTINGS_TO_LOCALSTORAGE'});
+    eventLogger(commit, state, {action: 'SAVE_SETTINGS_TO_LOCALSTORAGE'});
 
     if (localStorage) {
       localStorage.setItem('webcaptioner-settings', JSON.stringify({
@@ -177,8 +179,8 @@ export default {
     }
   },
 
-  SHOW_INCOMPATIBLE_BROWSER_MODAL: ({commit}) => {
-    eventLogger(commit, {action: 'SHOW_INCOMPATIBLE_BROWSER_MODAL'});
+  SHOW_INCOMPATIBLE_BROWSER_MODAL: ({commit, state}) => {
+    eventLogger(commit, state, {action: 'SHOW_INCOMPATIBLE_BROWSER_MODAL'});
 
     // Just need to toggle it on for a second for the modal to appear
     commit('SET_INCOMPATIBLE_BROWSER_MODAL_VISIBLE');
@@ -188,7 +190,7 @@ export default {
   },
 
   REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}, {chromeExtensionId}) => {
-    eventLogger(commit, {action: 'REFRESH_VMIX_SETUP_STATUS'});
+    eventLogger(commit, state, {action: 'REFRESH_VMIX_SETUP_STATUS'});
 
     let {
       checkIfExtensionInstalled,
@@ -283,7 +285,7 @@ export default {
   },
 
   SEND_TO_VMIX: ({state, commit}, { text, chromeExtensionId }) => {
-    eventLogger(commit, {action: 'SEND_TO_VMIX', payload: {text}});
+    eventLogger(commit, state, {action: 'SEND_TO_VMIX', payload: {text}});
     let inputGUID = state.integrations.vmix.cachedInputGUID;
     
     if (!inputGUID) {

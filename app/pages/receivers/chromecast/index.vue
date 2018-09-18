@@ -1,15 +1,15 @@
 <template>
   <div class="d-flex w-100 flex-column" style="height: 100vh;">
-    <div v-if="transcript" class="d-flex flex-grow-1">
-      <transcript></transcript>
+    <div v-if="transcriptExists" class="d-flex flex-grow-1">
+      <transcript show-typed-live-read-only></transcript>
     </div>
-    <nav v-if="transcript" class="navbar navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
+    <nav v-if="transcriptExists" class="navbar navbar-expand" style="padding:0.5vw 2vw;background:rgba(0,0,0,.2)">
         <span class="navbar-brand mr-auto text-white" style="opacity:.6">
             <img src="/static/img/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
             <span class="d-none d-md-inline">Web Captioner</span>
         </span>
     </nav>
-    <receiver-splash  v-if="!transcript" />
+    <receiver-splash  v-if="!transcriptExists" />
   </div>
 </template>
 
@@ -25,7 +25,6 @@ export default {
   },
   data: function() {
     return {
-      test2: '',
       message: null,
       castReceiverManager: null,
       messageBus: null,
@@ -46,8 +45,8 @@ export default {
     );
   },
   computed: {
-    transcript: function() {
-        return this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim;
+    transcriptExists: function() {
+        return this.$store.state.captioner.transcript.final || this.$store.state.captioner.transcript.interim || this.$store.state.captioner.transcript.typed;
     },
   },
   methods: {
@@ -101,7 +100,6 @@ export default {
     },
 
     processMessage: function({ type, senderId, data }) {
-      this.test2 += data;
       this.castReceiverManager.setApplicationState("Captioning");
 
       let { mutation, action, payload } = JSON.parse(data);

@@ -69,36 +69,50 @@ export default {
       this.combokeysDocument = new Combokeys(document.documentElement);
       this.combokeysDocument
         .bind('w s', function() {
-          self.$router.push('/captioner/settings');
+          if (!this.typingModeOn) {
+            self.$router.push('/captioner/settings');
+          }
         })
         .bind('w f', function() {
-          self.$router.push('/captioner');
-          self.$router.replace('/captioner/save-to-file');
+          if (!this.typingModeOn) {
+            self.$router.push('/captioner');
+            self.$router.replace('/captioner/save-to-file');
+          }
         })
         .bind('w p p', function() {
-          if (self.captioningOn) {
-            self.$store.dispatch('captioner/restart');
-          }
-          self.$store.commit('captioner/CLEAR_TRANSCRIPT');
+          if (!this.typingModeOn) {
+            if (self.captioningOn) {
+              self.$store.dispatch('captioner/restart');
+            }
+            self.$store.commit('captioner/CLEAR_TRANSCRIPT');
 
-          self.$router.replace('/captioner');
+            self.$router.replace('/captioner');
+          }
         })
         .bind('?', function() {
-          self.$router.push('/captioner/settings/controls');
+          if (!this.typingModeOn) {
+            self.$router.push('/captioner/settings/controls');
+          }
         })
         .bind('w x', function() {
-          screenfull.toggle();
+          if (!this.typingModeOn) {
+            screenfull.toggle();
+          }
         })
         .bind('w n', function() {
-          self.$store.dispatch('START_DETACHED_MODE');
+          if (!this.typingModeOn) {
+            self.$store.dispatch('START_DETACHED_MODE');
+          }
         })
         .bind('w c', function() {
-          self.$router.push('/captioner');
-          if (!self.captioningOn) {
-            self.startCaptioning();
-          }
-          else {
-            self.stopCaptioning();
+          if (!this.typingModeOn) {
+            self.$router.push('/captioner');
+            if (!self.captioningOn) {
+              self.startCaptioning();
+            }
+            else {
+              self.stopCaptioning();
+            }
           }
         })
         .bind(['ctrl+shift+.', 'command+shift+.'], function() {
@@ -108,8 +122,10 @@ export default {
           self.$store.commit('TEXT_SIZE_DECREASE');
         })
         .bind('t', () => {
-          if (this.experiments.includes('typingMode')) {
-            this.$store.dispatch('captioner/startTypingMode');
+          if (!this.typingModeOn) {
+            if (this.experiments.includes('typingMode')) {
+              this.$store.dispatch('captioner/startTypingMode');
+            }
           }
         })
         .bind('esc', () => {
@@ -354,6 +370,9 @@ export default {
     },
     captioningOn: function() {
       return this.$store.state.captioner.on; 
+    },
+    typingModeOn () {
+      return this.$store.state.captioner.typingModeOn;
     },
     backgroundColor: function() {
       return this.$store.state.settings.appearance.background.color;

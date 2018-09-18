@@ -1,7 +1,7 @@
 <template>
   <div
     class="transcript d-flex flex-grow-1"
-    v-bind:class="[wrapTextPositionClass, (chromeless ? 'chromeless' : '')]"
+    v-bind:class="[wrapTextPositionClass]"
     v-bind:style="{color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
     @click="focusIfInTypingMode()">
     <link type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" />
@@ -9,7 +9,7 @@
       v-bind:class="textPositionClass"
       class="transcript-scroller"
       ref="scroller">
-      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span> <span v-show="typingModeOn" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcriptTyped combokeys" id="test2">Hello world</span></span>
+      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span> <span v-show="typingModeOn && (showTypedLiveReadOnly !== true)" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcriptTyped combokeys"></span><span v-if="showTypedLiveReadOnly">{{typedTranscript}}</span></span>
     </span>
   </div>
 </template>
@@ -20,7 +20,9 @@ import Combokeys from 'combokeys'
 
 export default {
   name: 'transcript',
-  props: ['chromeless'],
+  props: {
+    showTypedLiveReadOnly: Boolean,
+  },
   mixins: [
     hexToRGB,
   ],
@@ -48,6 +50,9 @@ export default {
   },
   mounted: function() {
     this.scrollToBottom();
+
+    console.log('asdf');
+    console.log(this.showTypedLiveReadOnly);
   
     new Combokeys(this.$refs.typedTranscript)
       .bind('esc', () => {
