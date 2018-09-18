@@ -3,15 +3,15 @@
     class="transcript d-flex flex-grow-1"
     v-bind:class="[wrapTextPositionClass]"
     v-bind:style="{color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
-    @click="focusIfInTypingMode()">
-    <link type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" />
-    <span
+    @click="focusIfInTypingMode()"><!--
+    --><link type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" /><!--
+    --><span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
-      ref="scroller">
-      <span class="transcript-scroller-child">{{finalTranscript}} <span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span> <span v-show="typingModeOn && (showTypedLiveReadOnly !== true)" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcriptTyped combokeys"></span><span v-if="showTypedLiveReadOnly">{{typedTranscript}}</span></span>
-    </span>
-  </div>
+      ref="scroller"><!--
+        --><span class="transcript-scroller-child"><span>{{finalTranscript}}</span><span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span><span v-show="typingModeOn && (showTypedLiveReadOnly !== true)" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcriptTyped combokeys"></span><span v-if="showTypedLiveReadOnly">{{typedTranscript}}</span></span><!--
+    --></span><!--
+  --></div>
 </template>
 
 <script>
@@ -61,6 +61,12 @@ export default {
       if (on) {
         // Turned on. Copy the transcript over once.
         this.transcriptTypedForDisplay = this.typedTranscript;
+
+        // Add a space on the end if one doesn't already exist
+        if (this.transcriptTypedForDisplay.length && this.transcriptTypedForDisplay.substr(-1, 1) !== ' ') {
+          this.transcriptTypedForDisplay += ' ';
+        }
+
         this.$nextTick(() => {
           this.$refs.typedTranscript.focus();
 
@@ -135,10 +141,7 @@ export default {
     },
     interimTranscript () {
       this.scrollToBottom();
-
-      // Prepend a space if string is not empty
-      return (this.$store.state.captioner.transcript.interim && this.$store.state.captioner.transcript.interim.length ? ' ' : '')
-        + this.$store.state.captioner.transcript.interim;
+      return this.$store.state.captioner.transcript.interim;
     },
     typingModeOn () {
       return this.$store.state.captioner.typingModeOn;

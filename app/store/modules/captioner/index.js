@@ -245,7 +245,12 @@ const mutations = {
         state.microphonePermission.denied = microphonePermissionDenied;
     },
     SET_TRANSCRIPT_INTERIM (state, { transcriptInterim }) {
-        state.transcript.interim = transcriptInterim;
+        let shouldPrependSpace =
+            state.transcript.final !== '' // final string isn't empty
+            && state.transcript.final.substr(-1, 1) !== ' ' // final doesn't end with a space
+            && transcriptInterim.substr(0, 1) !== ' '; // interim didn't come in starting with its own space
+        
+        state.transcript.interim = (shouldPrependSpace ? ' ' : '') + transcriptInterim;
         state.transcript.lastUpdate = Date.now();
     },
     SET_TRANSCRIPT_FINAL (state, { transcriptFinal }) {
@@ -270,12 +275,12 @@ const mutations = {
         state.transcript.typed = '';
     },
     APPEND_TRANSCRIPT_FINAL (state, { transcriptFinal }) {
-        if (state.transcript.final.length && state.transcript.final.charAt(state.transcript.final.length - 1) != ' ') {
-            // Current final string is not empty and doesn't end in a 
-            // space. Prepend a space to the incoming string.
-            transcriptFinal = ' ' + transcriptFinal;
-        }
-        state.transcript.final += transcriptFinal;
+        let shouldPrependSpace =
+            state.transcript.final !== '' // Existing final string isn't empty
+            && state.transcript.final.substr(-1, 1) !== ' ' // Existing final string doesn't end with a space
+            && transcriptFinal.substr(0, 1) !== ' '; // Incoming final string doesn't start with its own space
+        
+        state.transcript.final += (shouldPrependSpace ? ' ' : '') + transcriptFinal;
         state.transcript.lastUpdate = Date.now();
     },
 

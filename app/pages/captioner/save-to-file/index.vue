@@ -82,22 +82,20 @@ export default {
       this.$refs.textFileButton.focus();
     },
     saveAsText () {
-      let self = this;
       this.saveToTextFile({
         transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
         dateFormatter: this.dateFormat,
-        onDone: function() {
-          self.$router.replace(this.localePath('captioner')); // Close dialog
+        onDone: () => {
+          this.$router.replace(this.localePath('captioner')); // Close dialog
         },
       });
     },
     saveAsWord () {
-      let self = this;
       this.saveToWordFile({
         transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
         dateFormatter: this.dateFormat,
-        onDone: function() {
-          self.$router.replace(this.localePath('captioner')); // Close dialog
+        onDone: () => {
+          thiis.$router.replace(this.localePath('captioner')); // Close dialog
         },
       });
     },
