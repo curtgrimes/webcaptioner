@@ -103,7 +103,7 @@ export default {
           case 'remoteDisplays':
             return 'Send captions to other phones or tablets.';
           case 'webhooks':
-            return 'Use webhooks to integration your application with Web Captioner.';
+            return 'Use webhooks to integrate your application with Web Captioner.';
           default:
             return '';
       }
