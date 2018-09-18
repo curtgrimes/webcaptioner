@@ -43,7 +43,6 @@ export default {
     };
   },
   mounted: function() {
-    let self = this;
     this.$store.dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE')
       .then(() => {
         return this.$store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
@@ -60,66 +59,66 @@ export default {
         );
       
         if (this.hasntSeenWelcomeModalForCurrentVersionYet() && !this.shouldAutostart()) {
-          self.$refs.welcomeModal.showModal();
-          self.$store.commit('SET_LAST_WHATS_NEW_VERSION_SEEN', { version: getCurrentVersionNumber() });
+          this.$refs.welcomeModal.showModal();
+          this.$store.commit('SET_LAST_WHATS_NEW_VERSION_SEEN', { version: getCurrentVersionNumber() });
         }
       });
 
     if (!this.$route.meta.disableShortcutKeys) {
       this.combokeysDocument = new Combokeys(document.documentElement);
       this.combokeysDocument
-        .bind('w s', function() {
+        .bind('w s', () => {
           if (!this.typingModeOn) {
-            self.$router.push('/captioner/settings');
+            this.$router.push('/captioner/settings');
           }
         })
-        .bind('w f', function() {
+        .bind('w f', () => {
           if (!this.typingModeOn) {
-            self.$router.push('/captioner');
-            self.$router.replace('/captioner/save-to-file');
+            this.$router.push('/captioner');
+            this.$router.replace('/captioner/save-to-file');
           }
         })
-        .bind('w p p', function() {
+        .bind('w p p', () => {
           if (!this.typingModeOn) {
-            if (self.captioningOn) {
-              self.$store.dispatch('captioner/restart');
+            if (this.captioningOn) {
+              this.$store.dispatch('captioner/restart');
             }
-            self.$store.commit('captioner/CLEAR_TRANSCRIPT');
+            this.$store.commit('captioner/CLEAR_TRANSCRIPT');
 
-            self.$router.replace('/captioner');
+            this.$router.replace('/captioner');
           }
         })
-        .bind('?', function() {
+        .bind('?', () => {
           if (!this.typingModeOn) {
-            self.$router.push('/captioner/settings/controls');
+            this.$router.push('/captioner/settings/controls');
           }
         })
-        .bind('w x', function() {
+        .bind('w x', () => {
           if (!this.typingModeOn) {
             screenfull.toggle();
           }
         })
-        .bind('w n', function() {
+        .bind('w n', () => {
           if (!this.typingModeOn) {
-            self.$store.dispatch('START_DETACHED_MODE');
+            this.$store.dispatch('START_DETACHED_MODE');
           }
         })
-        .bind('w c', function() {
+        .bind('w c', () => {
           if (!this.typingModeOn) {
-            self.$router.push('/captioner');
-            if (!self.captioningOn) {
-              self.startCaptioning();
+            this.$router.push('/captioner');
+            if (!this.captioningOn) {
+              this.startCaptioning();
             }
             else {
-              self.stopCaptioning();
+              this.stopCaptioning();
             }
           }
         })
-        .bind(['ctrl+shift+.', 'command+shift+.'], function() {
-          self.$store.commit('TEXT_SIZE_INCREASE');
+        .bind(['ctrl+shift+.', 'command+shift+.'], () => {
+          this.$store.commit('TEXT_SIZE_INCREASE');
         })
-        .bind(['ctrl+shift+,', 'command+shift+,'], function() {
-          self.$store.commit('TEXT_SIZE_DECREASE');
+        .bind(['ctrl+shift+,', 'command+shift+,'], () => {
+          this.$store.commit('TEXT_SIZE_DECREASE');
         })
         .bind('t', () => {
           if (!this.typingModeOn) {
@@ -134,14 +133,14 @@ export default {
 
 
         // Larger layout mode
-        .bind('c', function() {
-          if (self.largerLayout) {
-            self.$router.push('/captioner');
-            if (!self.captioningOn) {
-              self.startCaptioning();
+        .bind('c', () => {
+          if (this.largerLayout) {
+            this.$router.push('/captioner');
+            if (!this.captioningOn) {
+              this.startCaptioning();
             }
             else {
-              self.stopCaptioning();
+              this.stopCaptioning();
             }
           }
         })
@@ -156,14 +155,14 @@ export default {
             });
           }
         })
-        .bind('p', function() {
-          if (self.largerLayout) {
-            if (self.captioningOn) {
-              self.$store.dispatch('captioner/restart');
+        .bind('p', () => {
+          if (this.largerLayout) {
+            if (this.captioningOn) {
+              this.$store.dispatch('captioner/restart');
             }
-            self.$store.commit('captioner/CLEAR_TRANSCRIPT');
+            this.$store.commit('captioner/CLEAR_TRANSCRIPT');
 
-            self.$router.replace('/captioner');
+            this.$router.replace('/captioner');
           }
         })
       ;
@@ -305,6 +304,7 @@ export default {
       }
     });
 
+    let self = this;
     RemoteEventBus.$on('sendMutationToReceivers', throttle(({mutation, payload}) => {
       if (self.remoteDisplays.length) {
           this.$socket.sendObj({
@@ -440,14 +440,13 @@ export default {
       }
     },
     refreshVmixStatus: function() {
-      let self = this;
       if (this.vmixOn) {
         this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS', {
           chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
         })
-          .then(function() {
-            if (!self.$store.state.integrations.vmix.cachedInputGUID) {
-              self.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
+          .then(() => {
+            if (!this.$store.state.integrations.vmix.cachedInputGUID) {
+              this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
             }
           })
       }
