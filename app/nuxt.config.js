@@ -35,6 +35,7 @@ module.exports = {
         'CHROME_EXTENSION_ID',
       ],
     }],
+    'nuxt-trailingslash-module',
     ['bootstrap-vue/nuxt', { css: false }],
     ['nuxt-i18n', {
       defaultLocale: 'en-US',
