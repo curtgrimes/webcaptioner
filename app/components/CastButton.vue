@@ -147,13 +147,19 @@ export default {
             self.sendMessage({
               mutation: 'captioner/SET_TRANSCRIPT_INTERIM',
               payload: {
-                transcriptInterim: self.transcriptInterim,
+                transcriptInterim: self.$store.state.captioner.transcript.interim,
               }
             });
             self.sendMessage({
               mutation: 'captioner/SET_TRANSCRIPT_FINAL',
               payload: {
-                transcriptFinal: self.transcriptFinal,
+                transcriptFinal: self.$store.state.captioner.transcript.final,
+              }
+            });
+            self.sendMessage({
+              mutation: 'captioner/SET_TRANSCRIPT_TYPED',
+              payload: {
+                transcriptTyped: self.$store.state.captioner.transcript.typed,
               }
             });
 
@@ -193,12 +199,6 @@ export default {
     },
   },
   computed: {
-    transcriptFinal () {
-      return this.$store.state.captioner.transcript.final;
-    },
-    transcriptInterim () {
-      return this.$store.state.captioner.transcript.interim;
-    },
     connected: {
       get () {
         return this.$store.state.receivers.chromecast.connected;

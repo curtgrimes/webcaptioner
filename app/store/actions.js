@@ -53,6 +53,7 @@ export default {
       settings: state.settings,
       transcriptInterim: state.captioner.transcript.interim,
       transcriptFinal: state.captioner.transcript.final,
+      transcriptTyped: state.captioner.transcript.typed,
     }, () => { // On close
       commit('SET_DETACHED_MODE_OFF');  
     });
