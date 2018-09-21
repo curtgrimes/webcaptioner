@@ -247,8 +247,8 @@ const mutations = {
     SET_TRANSCRIPT_INTERIM (state, { transcriptInterim }) {
         let shouldPrependSpace =
             state.transcript.final !== '' // final string isn't empty
-            && state.transcript.final.substr(-1, 1) !== ' ' // final doesn't end with a space
-            && transcriptInterim.substr(0, 1) !== ' '; // interim didn't come in starting with its own space
+            && [' ', '\n'].indexOf(state.transcript.final.substr(-1, 1)) === -1 // final doesn't end with a space or newline
+            && [' ', '\n'].indexOf(transcriptInterim.substr(0, 1)) === -1; // interim didn't come in starting with its own space or newline
         
         state.transcript.interim = (shouldPrependSpace ? ' ' : '') + transcriptInterim;
         state.transcript.lastUpdate = Date.now();
@@ -258,7 +258,9 @@ const mutations = {
         state.transcript.lastUpdate = Date.now();
     },
     SET_TRANSCRIPT_TYPED (state, { transcriptTyped }) {
-        state.transcript.typed = transcriptTyped;
+        // The contenteditable seems to always add a newline at the end. We don't want that.
+        let removedLastNewline = transcriptTyped.substr(-1, 1) === '\n' ? transcriptTyped.substr(0, transcriptTyped.length -1) : transcriptTyped;
+        state.transcript.typed = removedLastNewline;
     },
     CLEAR_TRANSCRIPT (state) {
         state.transcript.interim = '';
@@ -277,9 +279,8 @@ const mutations = {
     APPEND_TRANSCRIPT_FINAL (state, { transcriptFinal }) {
         let shouldPrependSpace =
             state.transcript.final !== '' // Existing final string isn't empty
-            && state.transcript.final.substr(-1, 1) !== ' ' // Existing final string doesn't end with a space
-            && transcriptFinal.substr(0, 1) !== ' '; // Incoming final string doesn't start with its own space
-        
+            && [' ', '\n'].indexOf(state.transcript.final.substr(-1, 1)) === -1 // Existing final string doesn't end with a space or newline
+            && [' ', '\n'].indexOf(transcriptFinal.substr(0, 1)) === -1; // Incoming final string doesn't start with its own space or newline
         state.transcript.final += (shouldPrependSpace ? ' ' : '') + transcriptFinal;
         state.transcript.lastUpdate = Date.now();
     },
