@@ -83,6 +83,7 @@ module.exports = {
   ],
   plugins: [
     '~/node_modules/vue-contenteditable-directive',
+    '~/plugins/performance.js',
   ],
   css: [
     '@/assets/scss/app.scss',
