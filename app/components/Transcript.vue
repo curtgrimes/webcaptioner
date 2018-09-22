@@ -9,7 +9,7 @@
       v-bind:class="textPositionClass"
       class="transcript-scroller"
       ref="scroller"><!--
-        --><span class="transcript-scroller-child"><span :class="{'d-block w-100': finalTranscriptEndsInNewline}">{{finalTranscript}}</span><br v-if="finalTranscriptEndsInNewline && !interimTranscript" /><span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span><span v-show="typingModeOn && (showTypedLiveReadOnly !== true)" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcript-typed combokeys"></span><span v-if="showTypedLiveReadOnly">{{typedTranscript}}</span></span><!--
+        --><span class="transcript-scroller-child"><span :class="{'d-block w-100': finalTranscriptEndsInNewline}">{{finalTranscript}}</span><span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span><span v-show="typingModeOn && (showTypedLiveReadOnly !== true)" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcript-typed combokeys"></span><span v-if="showTypedLiveReadOnly && typedTranscript" class="d-block">{{typedTranscript}}</span><br v-if="finalTranscriptEndsInNewline && !interimTranscript" /><br v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"/></span><!--
     --></span><!--
   --></div>
 </template>
@@ -154,6 +154,9 @@ export default {
       // Used to determine if we need to display the final transcript inline-block
       // instead of inline so that we see the newlines (they don't take up space when inline)
       return this.$store.state.captioner.transcript.final.substr(-1) === '\n';
+    },
+    typedTranscriptEndsInNewline () {
+      return this.$store.state.captioner.transcript.typed.substr(-1) === '\n';
     },
     textPositionClass: function () {
       return {
