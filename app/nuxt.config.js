@@ -36,6 +36,7 @@ module.exports = {
       ],
     }],
     'nuxt-trailingslash-module',
+    '@nuxtjs/axios',
     ['bootstrap-vue/nuxt', { css: false }],
     ['nuxt-i18n', {
       defaultLocale: 'en-US',

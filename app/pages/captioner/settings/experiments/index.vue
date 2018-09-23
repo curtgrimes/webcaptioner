@@ -98,6 +98,8 @@ export default {
       switch(experiment) {
           case 'science':
             return 'This will do something someday I think';
+          case 'demo':
+            return 'Enter a demo mode when you start captioning.';
           case 'typingMode':
             return 'Add a manual typing mode.';
           case 'remoteDisplays':
@@ -109,7 +111,7 @@ export default {
       }
     },
     isValidExperiment: function() {
-      return ['typingMode','remoteDisplays','science','','webhooks',].includes(this.experimentName);
+      return ['demo', 'typingMode','remoteDisplays','science','','webhooks',].includes(this.experimentName);
     },
     addExperiment: function({withConfirmation}) {
       if (this.isValidExperiment()) {

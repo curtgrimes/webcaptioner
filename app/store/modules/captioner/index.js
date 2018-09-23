@@ -8,6 +8,7 @@ const SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING = (2.5 * 1000);
 
 let speechRecognizer,
     keepAliveInterval,
+    demoInterval,
     microphonePermissionNeededTimeout;
 
 const state = {
@@ -42,6 +43,10 @@ const actions = {
 
         if (rootState.incompatibleBrowser) {
             dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL', {}, { root: true });
+        }
+        else if (rootState.settings.exp.includes('demo')) {
+            commit('SET_SHOULD_BE_ON', { shouldBeOn: true });
+            dispatch('startDemo');
         }
         else {
             commit('SET_SHOULD_BE_ON', { shouldBeOn: true });
@@ -164,12 +169,57 @@ const actions = {
         };      
     },
 
+    async startDemo ({}) {
+        const demoTimings = await this.$axios.$get('/static/demo-transcript.json')
+
+        let startPlaybackTime = Date.now();
+        let lastPlayedIndex = 0;
+        let playDemoTimings = () => {
+            var currentPlaybackTime = Date.now() - startPlaybackTime;
+            
+            if (!demoTimings[lastPlayedIndex]) {
+                // Demo finished. Restart it
+                clearInterval(demoInterval);
+                setTimeout(() => {
+                    lastPlayedIndex = 0;
+                    startPlaybackTime = Date.now() + 1000;
+        
+                    demoInterval = setInterval(playDemoTimings, 100);
+                }, 700);
+    
+                return;
+            }
+    
+            for (; demoTimings[lastPlayedIndex] && demoTimings[lastPlayedIndex].t < currentPlaybackTime; lastPlayedIndex++) {
+                if (demoTimings[lastPlayedIndex].iText) {
+                    this.commit('captioner/SET_TRANSCRIPT_INTERIM', {
+                        transcriptInterim: demoTimings[lastPlayedIndex].iText,
+                        omitFromGoogleAnalytics: true,
+                    });
+                }
+                else if (demoTimings[lastPlayedIndex].fText) {
+                    this.commit('captioner/CLEAR_TRANSCRIPT_INTERIM', {omitFromGoogleAnalytics: true,});
+                    this.commit('captioner/APPEND_TRANSCRIPT_FINAL', {
+                        transcriptFinal: demoTimings[lastPlayedIndex].fText,
+                        omitFromGoogleAnalytics: true,
+                    });
+                }
+            }
+        }
+
+        demoInterval = setInterval(playDemoTimings, 100);
+    },
+
     stopManual ({commit, state, rootState}) {
         commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
         commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
 
         if (speechRecognizer) {
             speechRecognizer.stop();
+        }
+        else if (demoInterval) {
+            // Demo was running
+            clearInterval(demoInterval);
         }
     },
 
