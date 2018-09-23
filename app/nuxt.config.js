@@ -97,6 +97,9 @@ module.exports = {
       environment: process.env.HOSTNAME,
     },
   },
+  axios: {
+    proxy: true,
+  },
   /*
   ** Customize the progress bar color
   */
