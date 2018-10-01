@@ -69,7 +69,7 @@ module.exports = {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronRight', 'faMinusCircle', 'faPlusCircle', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart'],
+          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronRight', 'faMinusCircle', 'faPlusCircle', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faShareSquare',],
         },
         {
           set: '@fortawesome/free-regular-svg-icons',
@@ -77,12 +77,15 @@ module.exports = {
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
-          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome'],
+          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome', 'faTwitter'],
         },
       ]
     }],
   ],
   plugins: [
+    { src: '~/plugins/websocket', ssr: false },
+    '~/plugins/vue-timeago',
+    '~/plugins/socket.io.js',
     '~/node_modules/vue-contenteditable-directive',
     '~/plugins/performance.js',
   ],
@@ -132,7 +135,10 @@ module.exports = {
     }
   },
   hooks(hook) {
-    hook ('render:setupMiddleware', (app) => {
+    hook('listen', (server) => {
+      require('./socket.io/server').createSocket(server);
+    }),
+    hook('render:setupMiddleware', (app) => {
       app.use('/health-check', healthCheckMiddleware);
 
       if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
@@ -145,6 +151,7 @@ module.exports = {
     })
   },
   serverMiddleware: [
+    '~/api/index.js',
     { path: '/feedback', handler: '~/middleware/server/feedback.js' },
     { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
   ],

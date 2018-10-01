@@ -170,7 +170,7 @@ const actions = {
     },
 
     async startDemo ({}) {
-        const demoTimings = await this.$axios.$get('/static/demo-transcript.json')
+        const demoTimings = await this.$axios.$get('/static/demo-transcript.json');
 
         let startPlaybackTime = Date.now();
         let lastPlayedIndex = 0;

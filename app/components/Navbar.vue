@@ -26,6 +26,7 @@
                     <span v-else>{{$t('navbar.captioner.listening')}}</span>
                 </div>
                 <cast-button></cast-button>
+                <share-button></share-button>
                 <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
                     <span class="navbar-text text-white pr-3 text-primary">
                         <fa icon="exclamation-triangle" /> {{$t('navbar.vmixNotConnected')}}
@@ -68,7 +69,7 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </transition>
-                <b-button-group :size="largerLayout ? 'lg' : ''">
+                <b-button-group :size="largerLayout ? 'lg' : ''" class="captioning-split-button">
                     <b-button id="startCaptioningDropdown" :class="incompatibleBrowser ? 'button-only-disabled' : ''" :variant="captioningToggleButtonVariant" @click="captioningToggleButtonClick">
                         <div :class="{'px-4 py-2' : largerLayout}">
                             <span v-if="!this.captioningOn">
@@ -117,6 +118,7 @@
 <script>
 import VolumeMeter from './VolumeMeter.vue'
 import CastButton from '../components/CastButton.vue'
+import ShareButton from '../components/ShareButton.vue'
 import saveToFile from '~/mixins/saveToFile'
 import dateFormat from '~/mixins/dateFormat'
 
@@ -129,6 +131,7 @@ export default {
   components: {
     VolumeMeter,
     CastButton,
+    ShareButton,
   },
   data: function() {
       return {
