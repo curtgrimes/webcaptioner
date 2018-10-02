@@ -20,7 +20,8 @@
                placement="auto"
                container="myContainer"
                ref="popover"
-               @show="onShow">
+               @show="onShow"
+               @hidden="onHidden">
       <template slot="title">
         <b-btn @click="onClose" class="close" aria-label="Close" variant="link">
           <span class="d-inline-block" aria-hidden="true">&times;</span>
@@ -177,6 +178,9 @@ export default {
         this.$refs.shareLinkInput.focus();
         this.$refs.shareLinkInput.select();
       }
+    },
+    onHidden() {
+      this.somethingWentWrong = false;
     },
   },
   watch: {

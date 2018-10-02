@@ -4,12 +4,18 @@ const redis = require('./../api/redis');
 module.exports = {
     createSocket(server) {
       const redisSharedClient = redis.getSharedClient();
+
       const wss = new WebSocket.Server({server});
       wss.on('connection', (socket) => {
         let redisStandaloneClient;
         socket._wc = {};
 
         socket.on('message', async (message) => {
+          if (!redisSharedClient || !redisSharedClient.connected) {
+            console.log('Redis shared client not connected.');
+            return;
+          }
+
           let json;
           try {
             json = JSON.parse(message);

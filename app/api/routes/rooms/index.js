@@ -6,6 +6,11 @@ const expireHours = 6;
 
 rooms.post('/', async (req, res, next) => {
     let redisClient = redis.getSharedClient();
+    if (!redisClient || !redisClient.connected) {
+        res.sendStatus(500);
+        return;
+    }
+
     let roomKey, roomId, roomKeyAlreadyExists;
     do {
         roomId = nanoid(8);
@@ -32,6 +37,10 @@ rooms.post('/', async (req, res, next) => {
 
 rooms.delete('/:roomId', async (req, res) => {
     let redisClient = redis.getSharedClient();
+    if (!redisClient || !redisClient.connected) {
+        res.sendStatus(500);
+        return;
+    }
 
     const {roomId} = req.params;
     const {ownerKey} = req.query;
