@@ -101,6 +101,7 @@ module.exports = {
   },
   axios: {
     proxy: true,
+    timeout: 7000, // ms
   },
   /*
   ** Customize the progress bar color
