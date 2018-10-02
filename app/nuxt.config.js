@@ -6,7 +6,7 @@ const redirectSSL = require('redirect-ssl')
 const healthCheckMiddleware = require('./middleware/server/health-check.js')
 const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 const url = require('url');
-// const packageVersion = require('./package.json').version;
+const wsServer = require('./socket.io/server');
 const gitRevision = require('git-rev-sync');
 
 module.exports = {
@@ -85,7 +85,6 @@ module.exports = {
   plugins: [
     { src: '~/plugins/websocket', ssr: false },
     '~/plugins/vue-timeago',
-    '~/plugins/socket.io.js',
     '~/node_modules/vue-contenteditable-directive',
     '~/plugins/performance.js',
   ],
@@ -136,7 +135,7 @@ module.exports = {
   },
   hooks(hook) {
     hook('listen', (server) => {
-      require('./socket.io/server').createSocket(server);
+      wsServer.createSocket(server);
     }),
     hook('render:setupMiddleware', (app) => {
       app.use('/health-check', healthCheckMiddleware);

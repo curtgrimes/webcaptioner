@@ -1,10 +1,9 @@
 const WebSocket = require('ws');
 const redis = require('./../api/redis');
-const redisSharedClient = redis.getSharedClient();
 
 module.exports = {
     createSocket(server) {
-
+      const redisSharedClient = redis.getSharedClient();
       const wss = new WebSocket.Server({server});
       wss.on('connection', (socket) => {
         let redisStandaloneClient;

@@ -14,6 +14,6 @@ else {
 }
 
 module.exports = {
-   path: '/api',
-   handler: app
-};
+    path: '/api',
+    handler: app,
+}

@@ -1,22 +1,23 @@
 const rooms = require('express').Router();
-const redis = require('./../../redis').getSharedClient();
+const redis = require('./../../redis');
 const nanoid = require('nanoid');
 
 const expireHours = 6;
 
 rooms.post('/', async (req, res, next) => {
+    let redisClient = redis.getSharedClient();
     let roomKey, roomId, roomKeyAlreadyExists;
     do {
         roomId = nanoid(8);
         roomKey = 'rooms:' + roomId;
-        roomKeyAlreadyExists = await redis.existsAsync(roomKey) === 1;
+        roomKeyAlreadyExists = await redisClient.existsAsync(roomKey) === 1;
     }
     while (roomKeyAlreadyExists); // repeat roomkey generation on collision
 
     const ownerKey = nanoid(50);
 
-    redis.hmset(roomKey, 'ownerKey', ownerKey);
-    redis.expire(roomKey, 60 * 60 * expireHours);
+    redisClient.hmset(roomKey, 'ownerKey', ownerKey);
+    redisClient.expire(roomKey, 60 * 60 * expireHours);
 
     res.send(JSON.stringify(
         {
@@ -30,6 +31,8 @@ rooms.post('/', async (req, res, next) => {
 });
 
 rooms.delete('/:roomId', async (req, res) => {
+    let redisClient = redis.getSharedClient();
+
     const {roomId} = req.params;
     const {ownerKey} = req.query;
 
@@ -38,7 +41,7 @@ rooms.delete('/:roomId', async (req, res) => {
         return;
     }
     const roomKey = 'rooms:' + roomId;
-    const ownerKeyForRoom = await redis.hgetAsync(roomKey, 'ownerKey');
+    const ownerKeyForRoom = await redisClient.hgetAsync(roomKey, 'ownerKey');
 
     if (!ownerKeyForRoom) {
         // That room ID doesn't exist (or for some reason it doesn't have an owner key)
@@ -46,7 +49,7 @@ rooms.delete('/:roomId', async (req, res) => {
     }
     else if (ownerKeyForRoom === ownerKey) {
         // Delete this room
-        await redis.delAsync(roomKey);
+        await redisClient.delAsync(roomKey);
         res.sendStatus(200);
     }
     else {
