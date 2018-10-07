@@ -152,6 +152,7 @@ module.exports = {
   },
   serverMiddleware: [
     '~/api/index.js',
+    { path: '/admin', handler: '~/middleware/server/admin.js'},
     { path: '/feedback', handler: '~/middleware/server/feedback.js' },
     { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
   ],

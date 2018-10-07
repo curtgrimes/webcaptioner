@@ -4,6 +4,52 @@ const nanoid = require('nanoid');
 
 const expireHours = 6;
 
+rooms.get('/', async (req, res, next) => {
+    if (!req.query.token || !process.env.ADMIN_TOKEN || req.query.token !== process.env.ADMIN_TOKEN) {
+        // Require admin token
+        res.sendStatus(404);
+        return;
+    }
+
+    let redisClient = redis.getSharedClient();
+    if (!redisClient || !redisClient.connected) {
+        res.sendStatus(500);
+        return;
+    }
+
+    let cursor = '0';
+    let rooms = [];
+    let scanAsync = function() {
+        redisClient.scanAsync(cursor, 'MATCH', 'rooms:*')
+            .then(async ([newCursor, newResults]) => {
+                let resultsWithTTLs = newResults.map(async (roomKey) => {
+
+                    // Get the TTL
+                    let ttl = await new Promise((resolve, reject) => {
+                        redisClient.ttlAsync(roomKey)
+                            .then(ttl => resolve(ttl));
+                    });
+                    
+                    return {
+                        id: roomKey.replace('rooms:', ''), // was "rooms:rPWoIvAy"
+                        expireDate: Date.now() + (ttl * 1000),
+                    };
+                });
+
+                rooms = rooms.concat(await Promise.all(resultsWithTTLs));
+
+                if (cursor !== '0') {
+                    // Scan again until cursor === '0'
+                    scanAsync();
+                }
+                else {
+                    res.send(JSON.stringify({rooms}));
+                    return;
+                }
+            });
+        }();
+});
+
 rooms.post('/', async (req, res, next) => {
     let redisClient = redis.getSharedClient();
     if (!redisClient || !redisClient.connected) {

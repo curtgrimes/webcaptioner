@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const routes = require('./routes');
 
-app.use(function(req,res,next){setTimeout(next,1000)}); // Simulate latency
+// app.use(function(req,res,next){setTimeout(next,1000)}); // Simulate latency
 
 if (process.env.DEBUG_API_ONLY === 'true') {
     require('dotenv').config();
