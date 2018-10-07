@@ -37,7 +37,7 @@ function getNewClient() {
 }
 
 function getSharedClient() {
-    if (!sharedClient) {
+    if (!sharedClient || !sharedClient.connected) {
         sharedClient = getNewClient();
     }
     return sharedClient;
