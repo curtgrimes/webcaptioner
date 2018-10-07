@@ -90,10 +90,10 @@ export default {
         }
     },
     initConnectId: function() {
-        this.$socket.sendObj({
-            action: 'getMyConnectId',
-            deviceInfo: this.getDeviceInfo(),
-        });
+        // this.$socket.sendObj({
+        //     action: 'getMyConnectId',
+        //     deviceInfo: this.getDeviceInfo(),
+        // });
     },
     getDeviceInfo: function() {
         let userAgent = navigator.userAgent || navigator.vendor || window.opera;

@@ -51,6 +51,8 @@ let taskDefinition = {
                 'CHROME_EXTENSION_ID',
                 'GOOGLE_CAST_APP_ID',
                 'SENTRY_SECURITY_TOKEN',
+                'REDIS_URL',
+                'ADMIN_TOKEN',
             ]),
             {
                 name: "HOSTNAME",

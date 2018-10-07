@@ -61,6 +61,19 @@ export default {
   },
 
 
+  SET_SHARE_ROOM_ID: (state, { roomId }) => {
+    state.settings.share.roomId = roomId;
+  },
+  SET_SHARE_OWNER_KEY: (state, { ownerKey }) => {
+    state.settings.share.ownerKey = ownerKey;
+  },
+  SET_SHARE_URL: (state, { url }) => {
+    state.settings.share.url = url;
+  },
+  SET_SHARE_EXPIRE_DATE: (state, { expireDate }) => {
+    state.settings.share.expireDate = expireDate;
+  },
+
   SET_CONNECT_ID: (state, { connectId }) => {
     state.connectId = connectId;
   },
@@ -166,6 +179,10 @@ export default {
     state.settings.exp = state.settings.exp.filter((e) => {
       return e != experiment;
     });
+  },
+
+  'SOCKET_captioner/SET_TRANSCRIPT_INTERIM' (state) {
+    console.log('hello');
   },
 
 

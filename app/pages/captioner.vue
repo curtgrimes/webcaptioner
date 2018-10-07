@@ -168,45 +168,11 @@ export default {
       ;
     }
 
+    if (this.socketConnected) {
+      this.initRoom();
+    }
+
     this.redirectSettingsRouteOnMobile(this.$route.name); // if navigating to settings page on load
-
-    this.$on('navbarChangedHeight', function() {
-      // console.log('navbarChangedHeight');
-    });
-
-    this.$nextTick(() => {
-      if (this.$store.state.settings.roomMembershipId) {
-        if (!this.socketConnected) {
-            this.$watch('socketConnected', function(socketConnected) {
-              this.$socket.sendObj({
-                action: 'restoreMyRoomMembership',
-                roomMembershipId: this.$store.state.settings.roomMembershipId,
-              });
-            });
-        }
-        else {
-          this.$socket.sendObj({
-            action: 'restoreMyRoomMembership',
-            roomMembershipId: this.$store.state.settings.roomMembershipId,
-          });
-        }
-      }
-    });
-
-    // Set up remote displays websocket
-    // socket.on("remoteDisplays", function ({ remoteDisplays }) {
-    //     self.remoteDisplays = remoteDisplays;
-    // });
-    this.$nextTick(() => {
-      if (!this.socketConnected) {
-          this.$watch('socketConnected', function(socketConnected) {
-              this.initRoom();
-          });
-      }
-      else {
-          this.initRoom();
-      }
-    });
 
     function isChromium() { 
       for (var i = 0, u="Chromium", l =u.length; i < navigator.plugins.length; i++) {
@@ -278,49 +244,58 @@ export default {
           });
         });
       }
-
-      if (!this.$store.state.settings.integrations.webhooks.on) {
-        return;
-      }
       
       if (
         mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
         && (Date.now() - lastWebhookInterimEventDate) >= this.$store.state.settings.integrations.webhooks.interim.throttleMs
       ) {
-        callWebhook({
-          url: this.$store.state.settings.integrations.webhooks.interim.url,
-          method: this.$store.state.settings.integrations.webhooks.interim.method,
-          transcript: payload.transcriptInterim || '',
-        });
-        lastWebhookInterimEventDate = Date.now();
-      }
 
-      if (mutation === 'captioner/APPEND_TRANSCRIPT_FINAL') {
-        callWebhook({
-          url: this.$store.state.settings.integrations.webhooks.final.url,
-          method: this.$store.state.settings.integrations.webhooks.final.method,
-          transcript: payload.transcriptFinal || '',
-        });
-      }
-    });
-
-    let self = this;
-    RemoteEventBus.$on('sendMutationToReceivers', throttle(({mutation, payload}) => {
-      if (self.remoteDisplays.length) {
+        if (this.$store.state.settings.share.roomId) {
           this.$socket.sendObj({
-            action: 'sendMessageToRoom',
-            type: mutation,
+            action: 'mutation',
+            mutation,
             payload,
           });
+          lastWebhookInterimEventDate = Date.now();
+        }
+
+        if (this.$store.state.settings.integrations.webhooks.on) {
+          callWebhook({
+            url: this.$store.state.settings.integrations.webhooks.interim.url,
+            method: this.$store.state.settings.integrations.webhooks.interim.method,
+            transcript: payload.transcriptInterim || '',
+          });
+          lastWebhookInterimEventDate = Date.now();
+        }
       }
-      else {
-        // console.log("no remote displays to send to");
+
+      if ([
+        'captioner/APPEND_TRANSCRIPT_FINAL',
+        'captioner/CLEAR_TRANSCRIPT_INTERIM'
+      ].includes(mutation)) {
+        if (this.$store.state.settings.integrations.webhooks.on) {
+          callWebhook({
+            url: this.$store.state.settings.integrations.webhooks.final.url,
+            method: this.$store.state.settings.integrations.webhooks.final.method,
+            transcript: payload.transcriptFinal || '',
+          });
+        }
+
+        if (this.$store.state.settings.share.roomId) {
+          this.$socket.sendObj({
+            action: 'mutation',
+            mutation,
+            payload,
+          });
+        }
       }
-    }, 0, {leading: true}));
+    });
   },
   watch: {
-    transcript: function(transcript) {
-      this.sendCastMessage(transcript);
+    socketConnected: function(isConnected) {
+      if (isConnected) {
+        this.initRoom();
+      }
     },
     '$route' (toRoute) {
       this.redirectSettingsRouteOnMobile(toRoute.name);
@@ -398,14 +373,6 @@ export default {
     vmixOn: function() {
       return this.$store.state.settings.integrations.vmix.on;
     },
-    remoteDisplays: {
-      get () {
-        return this.$store.state.remoteDisplays;
-      },
-      set (remoteDisplays) {
-        this.$store.commit('SET_REMOTE_DISPLAYS', {remoteDisplays});
-      },
-    },
   },
   methods: {
     hasntSeenWelcomeModalForCurrentVersionYet: function() {
@@ -452,15 +419,11 @@ export default {
       }
     },
     initRoom: function() {
-      if (this.$store.state.settings.roomLeaderToken) {
-        this.$socket.sendObj({
-          action: 'restoreMyRoomIdFromRoomLeaderToken',
-          roomLeaderToken: this.$store.state.settings.roomLeaderToken,
-        });
-      }
-      else {
-        this.$socket.sendObj({action: 'getMyRoomLeaderToken'});
-      }
+      this.$socket.sendObj({
+        action: 'authenticateRoomOwner',
+        roomId: this.$store.state.settings.share.roomId,
+        ownerKey: this.$store.state.settings.share.ownerKey,
+      });
     },
     shouldAutostart: function() {
       return this.$route && this.$route.query && Object.keys(this.$route.query).includes('autostart');

@@ -2,6 +2,12 @@ import fontChoices from '~/mixins/data/fontChoices'
 
 export default () => {
     return {
+        share: {
+            roomId: null,
+            ownerKey: null,
+            url: null,
+            expireDate: null,
+        },
         roomMembershipId: null,
         roomLeaderToken: null,
         controls: {
@@ -54,7 +60,7 @@ export default () => {
                 interim: {
                     url: '',
                     method: 'POST',
-                    throttleMs: 500,
+                    throttleMs: 200,
                 },
                 final: {
                     url: '',

@@ -6,7 +6,7 @@ const redirectSSL = require('redirect-ssl')
 const healthCheckMiddleware = require('./middleware/server/health-check.js')
 const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
 const url = require('url');
-// const packageVersion = require('./package.json').version;
+const wsServer = require('./socket.io/server');
 const gitRevision = require('git-rev-sync');
 
 module.exports = {
@@ -69,7 +69,7 @@ module.exports = {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronRight', 'faMinusCircle', 'faPlusCircle', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart'],
+          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronRight', 'faMinusCircle', 'faPlusCircle', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faShareSquare',],
         },
         {
           set: '@fortawesome/free-regular-svg-icons',
@@ -77,12 +77,14 @@ module.exports = {
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
-          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome'],
+          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome', 'faTwitter'],
         },
       ]
     }],
   ],
   plugins: [
+    { src: '~/plugins/websocket', ssr: false },
+    '~/plugins/vue-timeago',
     '~/node_modules/vue-contenteditable-directive',
     '~/plugins/performance.js',
   ],
@@ -99,6 +101,7 @@ module.exports = {
   },
   axios: {
     proxy: true,
+    timeout: 7000, // ms
   },
   /*
   ** Customize the progress bar color
@@ -132,7 +135,10 @@ module.exports = {
     }
   },
   hooks(hook) {
-    hook ('render:setupMiddleware', (app) => {
+    hook('listen', (server) => {
+      wsServer.createSocket(server);
+    }),
+    hook('render:setupMiddleware', (app) => {
       app.use('/health-check', healthCheckMiddleware);
 
       if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
@@ -145,6 +151,8 @@ module.exports = {
     })
   },
   serverMiddleware: [
+    '~/api/index.js',
+    { path: '/admin', handler: '~/middleware/server/admin.js'},
     { path: '/feedback', handler: '~/middleware/server/feedback.js' },
     { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
   ],

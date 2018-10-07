@@ -102,8 +102,8 @@ export default {
             return 'Enter a demo mode when you start captioning.';
           case 'typingMode':
             return 'Add a manual typing mode.';
-          case 'remoteDisplays':
-            return 'Send captions to other phones or tablets.';
+          case 'share':
+            return 'Get a link you can use to share captions.';
           case 'webhooks':
             return 'Use webhooks to integrate your application with Web Captioner.';
           default:
@@ -111,7 +111,7 @@ export default {
       }
     },
     isValidExperiment: function() {
-      return ['demo', 'typingMode','remoteDisplays','science','','webhooks',].includes(this.experimentName);
+      return ['demo', 'typingMode','share','science','','webhooks',].includes(this.experimentName);
     },
     addExperiment: function({withConfirmation}) {
       if (this.isValidExperiment()) {

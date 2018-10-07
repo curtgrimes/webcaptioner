@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development nuxt",
+    "dev:api": "NODE_ENV=development DEBUG_API_ONLY=true nodemon ./api/index.js",
     "build": "nuxt build",
     "start": "NODE_ENV=production nuxt start",
     "generate": "nuxt generate",
@@ -22,8 +23,13 @@
   },
   "dependencies": {
     "dotenv": "^6.0.0",
+    "fastify": "^1.12.1",
+    "nanoid": "^1.2.5",
     "nuxt": "^1.4.2",
-    "redirect-ssl": "^1.3.0"
+    "redirect-ssl": "^1.3.0",
+    "redis": "^2.8.0",
+    "vue-timeago": "^5.0.0",
+    "ws": "^6.0.0"
   },
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.2.0",
@@ -54,6 +60,7 @@
     "lodash.set": "^4.3.2",
     "lodash.throttle": "^4.1.1",
     "node-sass": "^4.9.3",
+    "nodemon": "^1.18.4",
     "normalize-strings": "^1.1.0",
     "nuxt-env": "0.0.3",
     "nuxt-fontawesome": "^0.3.0",
@@ -64,6 +71,7 @@
     "screenfull": "^3.3.2",
     "semver-compare": "^1.0.0",
     "vue-contenteditable-directive": "^1.2.0",
+    "vue-native-websocket": "^2.0.12",
     "whatwg-fetch": "^2.0.4"
   }
 }

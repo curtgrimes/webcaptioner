@@ -166,11 +166,12 @@ input[type="color"] {
   padding:.575rem 1rem .425rem 1rem;
 }
 
-.btn-group > * {
+.btn-group.captioning-split-button > * {
   border-left:1px solid rgba(0,0,0,.2);
 }
 
-.btn-group .btn:first-child, .btn-group .btn:first-child:hover {
+.btn-group.captioning-split-button .btn:first-child,
+.btn-group.captioning-split-button .btn:first-child:hover {
   border-left:none;
 }
 
