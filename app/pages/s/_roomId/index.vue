@@ -16,11 +16,13 @@
 
 <script>
 import transcript from '~/components/Transcript.vue'
+import ReceiverSplash from '~/components/ReceiverSplash.vue';
 import navbar from '~/components/Navbar.vue'
 
 export default {
   components: {
     transcript,
+    ReceiverSplash,
     navbar,
   },
   mounted: function () {
