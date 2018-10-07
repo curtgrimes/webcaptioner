@@ -1,7 +1,8 @@
 <template>
   <div class="d-flex flex-grow-1">
     <transcript/>
-    <b-modal v-model="showModal" lazy ref="modal" hide-footer :title="'Customize Share Link'" @hide="replaceRouteToParent">
+    <b-modal v-model="showModal" lazy ref="modal" hide-footer :title="'Customize Link'" @hide="replaceRouteToParent">
+      <!--
       <div v-if="shareLink">
         <input @focus="shareLinkSelect()" @click="shareLinkSelect()" ref="shareLinkInput" type="text" class="form-control small mb-3" style="font-size:.7rem" readonly :value="shareLink"/>
         <b-form-checkbox v-model="link.hideNavbar" class="mb-3">
@@ -16,6 +17,7 @@
       <div v-else>
         You don't have a link to share right now.
       </div>
+      -->
       <div class="text-right">
         <b-btn class="mt-3" variant="outline-info" :to="localePath('captioner')" replace>{{$t('common.done')}}</b-btn>
       </div>

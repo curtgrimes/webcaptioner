@@ -26,7 +26,7 @@
                     <span v-else>{{$t('navbar.captioner.listening')}}</span>
                 </div>
                 <cast-button></cast-button>
-                <share-button></share-button>
+                <share-button v-if="experiments.includes('share')"></share-button>
                 <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
                     <span class="navbar-text text-white pr-3 text-primary">
                         <fa icon="exclamation-triangle" /> {{$t('navbar.vmixNotConnected')}}
