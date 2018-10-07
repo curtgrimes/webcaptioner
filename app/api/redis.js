@@ -3,6 +3,7 @@ const redis = require('redis');
 let sharedClient;
 
 function getNewClient() {
+    console.log('Creating new Redis client for target ' + process.env.REDIS_URL);
     let client = redis.createClient(process.env.REDIS_URL, {
         retry_strategy: function (options) {
             if (options.error && options.error.code === 'ECONNREFUSED') {
