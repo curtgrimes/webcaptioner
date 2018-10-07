@@ -3,21 +3,27 @@ import escapeRegExp from 'lodash.escaperegexp'
 export default class {
     constructor ({wordReplacements}) {
         this.wordReplacements = wordReplacements || [];
+
+        // Generate Regex for each replacement
+        this.wordReplacements = this.wordReplacements.map((replacement) => {
+            let stringsToCensor = (replacement.from || '').split(',');
+            stringsToCensor = stringsToCensor.map((stringToCensor) => {
+                return escapeRegExp(stringToCensor);
+            });
+            
+            replacement.fromRegex = new RegExp('\\b(' + stringsToCensor.join('|') + ')\\b', 'gi');
+            return replacement;
+        });
     }
 
     getTranscript(recognitionResultEvent) {
         let transcriptInterim = '',
             transcriptFinal = '';
 
-        let self = this;
-        const makeReplacements = function(text) {
-            for (let i = 0; i < self.wordReplacements.length; i++) {
-                let fromStrings = self.wordReplacements[i].from.split(',');
-                for (let j = 0; j < fromStrings.length; j++) {
-                    text = text.replace(new RegExp(escapeRegExp(fromStrings[j]), 'gi'), self.wordReplacements[i].to);
-                }
+        const makeReplacements = (text) => {
+            for (let i = 0; i < this.wordReplacements.length; i++) {
+                text = text.replace(this.wordReplacements[i].fromRegex, this.wordReplacements[i].to);
             }
-            
             return text;
         }
         
