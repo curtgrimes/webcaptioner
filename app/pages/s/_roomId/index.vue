@@ -52,7 +52,7 @@ export default {
   },
   watch: {
       socketConnected: function() {
-          this.initSubscription;
+          this.initSubscription();
       },
   }
 }
