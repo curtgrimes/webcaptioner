@@ -247,9 +247,9 @@ export default {
       
       if (
         mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
-        && (Date.now() - lastWebhookInterimEventDate) >= this.$store.state.settings.integrations.webhooks.interim.throttleMs
+        && (Date.now() - lastWebhookInterimEventDate) >= 100
       ) {
-
+        // this.$store.state.settings.integrations.webhooks.interim.throttleMs
         if (this.$store.state.settings.share.roomId) {
           this.$socket.sendObj({
             action: 'mutation',
