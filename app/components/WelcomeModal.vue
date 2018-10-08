@@ -102,7 +102,7 @@ export default {
       if (this.incompatibleBrowser) {
         this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
       }
-      document.querySelector('#startCaptioningDropdown button').focus();
+      document.querySelector('#startCaptioningDropdown').focus();
     },
     focusOkButton () {
       this.$refs.getStartedButton.focus();

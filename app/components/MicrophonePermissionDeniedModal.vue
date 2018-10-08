@@ -22,7 +22,7 @@ export default {
     },
     hideModal () {
       this.$refs.modal.hide();
-      document.querySelector('#startCaptioningDropdown button').focus();
+      document.querySelector('#startCaptioningDropdown').focus();
     },
     focusButton () {
       this.$refs.closeButton.focus();
