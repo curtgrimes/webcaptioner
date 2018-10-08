@@ -1,21 +1,41 @@
 <template>
-  <div class="volumeMeter" v-if="captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)">
-    <div class="row mr-1" style="width:350px">
-      <div class="col text-right mt-1">
-        <span class="navbar-text text-white bg-danger px-2 small">
+  <div v-if="captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)">
+    <b-btn variant="white" class="meter-outer mr-2 border-0 text-left text-danger px-2">
+      <fa icon="exclamation-triangle" class="mr-1" />
+      <span v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh">{{$t('captioner.volumeMeter.tooQuiet')}}</span>
+      <span v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow">{{$t('captioner.volumeMeter.tooLoud')}}</span>
+      <b-btn variant="danger" class="meter-inner border-0 px-0 text-left rounded-0"
+          v-bind:style="{width: (volumeLevel * 100) + '%'}">
+        <span class="px-2">
           <fa icon="exclamation-triangle" class="mr-1" />
           <span v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh">{{$t('captioner.volumeMeter.tooQuiet')}}</span>
           <span v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow">{{$t('captioner.volumeMeter.tooLoud')}}</span>
         </span>
-      </div>
-      <div class="col pl-0">
-        <div class="progress bg-light" style="margin-top:.8rem" ref="volumeBar">
-          <div style="transition-duration:75ms" class="progress-bar bg-danger" role="progressbar" v-bind:style="{width: volumeBarWidth() * volumeLevel + 'px'}"></div>
-        </div>
-      </div>
-    </div>
+      </b-btn>
+    </b-btn>
   </div>
 </template>
+
+<style scoped>
+  .meter-outer {
+    width:150px;
+    position:relative;
+    overflow:hidden;
+    cursor:default !important;
+  }
+
+  .meter-inner {
+    width:20px;
+    overflow:hidden;
+    position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    transition: width 100ms;
+    cursor:default !important;
+  }
+</style>
+
 
 <script>
 import AudioStreamMeter from "audio-stream-meter";
@@ -166,9 +186,6 @@ export default {
 
       return sum / this.latestVolumeLevelReadings.length;
     },
-    volumeBarWidth: function() {
-      return this.$refs.volumeBar ? this.$refs.volumeBar.clientWidth : 0;
-    }
   },
   computed: {
     microphoneName: {
