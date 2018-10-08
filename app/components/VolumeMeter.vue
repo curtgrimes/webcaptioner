@@ -31,8 +31,7 @@
     top:0;
     left:0;
     bottom:0;
-    transition: width 75ms;
-    transform: translateZ(0);
+    transition: width 100ms;
     cursor:default !important;
   }
 </style>
