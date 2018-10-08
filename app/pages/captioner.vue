@@ -263,7 +263,7 @@ export default {
           callWebhook({
             url: this.$store.state.settings.integrations.webhooks.interim.url,
             method: this.$store.state.settings.integrations.webhooks.interim.method,
-            transcript: payload.transcriptInterim || '',
+            transcript: (payload ? payload.transcriptInterim : ''),
           });
           lastWebhookInterimEventDate = Date.now();
         }
@@ -277,7 +277,7 @@ export default {
           callWebhook({
             url: this.$store.state.settings.integrations.webhooks.final.url,
             method: this.$store.state.settings.integrations.webhooks.final.method,
-            transcript: payload.transcriptFinal || '',
+            transcript: (payload ? payload.transcriptFinal : ''),
           });
         }
 
