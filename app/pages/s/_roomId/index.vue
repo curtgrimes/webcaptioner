@@ -8,6 +8,10 @@
             <img src="/static/img/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
             <span class="d-none d-md-inline">Web Captioner</span>
         </span>
+        <b-button-group>
+            <b-btn variant="primary" class="px-4" @click="decreaseTextSize()"><fa icon="minus" v-b-tooltip.hover title="Smaller" /></b-btn>
+            <b-btn variant="primary" class="px-4" @click="increaseTextSize()"><fa icon="plus" v-b-tooltip.hover title="Larger" /></b-btn>
+        </b-button-group>
     </nav>
     <receiver-splash  v-if="!transcriptExists" />
   </div>
@@ -40,6 +44,12 @@ export default {
                 roomId,
             });
         }
+    },
+    increaseTextSize: function() {
+        this.$store.commit('TEXT_SIZE_INCREASE');
+    },
+    decreaseTextSize: function() {
+        this.$store.commit('TEXT_SIZE_DECREASE');
     },
   },
   computed: {
