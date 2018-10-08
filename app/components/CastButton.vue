@@ -252,11 +252,9 @@ export default {
     },
   },
   mounted: function() {
-    let self = this;
-    
-    window['__onGCastApiAvailable'] = function(isAvailable) {
+    window['__onGCastApiAvailable'] = (isAvailable) => {
       if (isAvailable) {
-        self.initializeCastApi();
+        this.initializeCastApi();
       }
     };
     
