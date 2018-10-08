@@ -95,7 +95,7 @@ export default {
         transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
         dateFormatter: this.dateFormat,
         onDone: () => {
-          thiis.$router.replace(this.localePath('captioner')); // Close dialog
+          this.$router.replace(this.localePath('captioner')); // Close dialog
         },
       });
     },
