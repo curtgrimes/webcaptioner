@@ -5,7 +5,7 @@
             <transition name="fade">
               <div v-if="rooms !== null">
                 <h3>Rooms ({{rooms.length}})</h3>
-                <div class="row px-4 small font-weight-bold mb-2">
+                <div class="row px-4 small font-weight-bold mb-2" v-if="rooms.length">
                   <div class="col-4">
                     ID
                   </div>
@@ -52,6 +52,7 @@ export default {
   },
   mounted: function () {
     this.updateRooms();
+    setInterval(this.updateRooms, 7000);
   },
   methods: {
     updateRooms: async function() {
