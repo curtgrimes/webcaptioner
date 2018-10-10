@@ -70,6 +70,9 @@ const createStore = () => {
       version: '2.0.0',
       settings: getSettingsState(),
       receivers: {
+        share: {
+          subscriberCount: 0,
+        },
         chromecast: {
           connected: false,
           connecting: false,

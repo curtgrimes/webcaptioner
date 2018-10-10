@@ -9,8 +9,8 @@
             <span class="d-none d-md-inline">Web Captioner</span>
         </span>
         <b-button-group>
-            <b-btn variant="primary" class="px-4" @click="decreaseTextSize()"><fa icon="minus" v-b-tooltip.hover title="Smaller" /></b-btn>
-            <b-btn variant="primary" class="px-4" @click="increaseTextSize()"><fa icon="plus" v-b-tooltip.hover title="Larger" /></b-btn>
+            <b-btn variant="primary" class="px-4" @click="decreaseTextSize()" v-b-tooltip.hover title="Smaller"><fa icon="minus" /></b-btn>
+            <b-btn variant="primary" class="px-4" @click="increaseTextSize()" v-b-tooltip.hover title="Larger"><fa icon="plus" /></b-btn>
         </b-button-group>
     </nav>
     <receiver-splash  v-if="!transcriptExists" />
@@ -37,11 +37,14 @@ export default {
   methods: {
     initSubscription: function() {
         let {roomId} = this.$route.params;
+        let {s} = this.$route.query; // s = stealth; don't increment subscriber count
+        s = s !== undefined;
 
         if (roomId) {
             this.$socket.sendObj({
                 action: 'subscribeToRoom',
                 roomId,
+                s,
             });
         }
     },

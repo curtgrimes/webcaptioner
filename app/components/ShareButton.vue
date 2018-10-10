@@ -2,13 +2,13 @@
   <div>
     <b-button
       v-b-tooltip.hover
-      title="Share"
+      :title="hasValidShareLink && subscriberCount > 0 ? ('Sharing with ' + subscriberCount + ' viewer' + (subscriberCount != 1 ? 's' : '')) : 'Share'"
       :disabled="showPopover"
       :variant="hasValidShareLink ? 'secondary' : 'info'"
       class="mr-2"
       ref="shareButton"
     >
-      <fa icon="share-square"/>
+      <fa icon="share-square"/> <span v-if="hasValidShareLink && subscriberCount > 0" class="ml-2">{{subscriberCount}}</span>
     </b-button>
     <!-- Our popover title and content render container -->
     <!-- We use placement 'auto' so popover fits in the best spot on viewport -->
@@ -35,6 +35,7 @@
         </p>
       </div>
       <div v-else style="width:500px; min-width:200px; max-width:100%">
+        <div class="alert alert-warning">I hope you enjoy this preview of this new feature! Please send me feedback on <a href="https://facebook.com/webcaptioner" target="_blank">Facebook</a> or <a href="https://twitter.com/webcaptioner" target="_blank">Twitter</a> about how well it works for you and your viewers.</div>
         <p class="mb-2">Use this link to share live captions with others.</p>
         <input @focus="shareLinkSelect()" @click="shareLinkSelect()" ref="shareLinkInput" type="text" class="form-control small mb-2" style="font-size:.7rem" readonly :value="shareLink"  :disabled="expiringLink"/>
         <p class="small text-muted mb-2">Link expires <timeago :datetime="expireDate"></timeago></p>
@@ -84,6 +85,9 @@ export default {
     this.mounted = true;
   },
   computed: {
+    subscriberCount: function() {
+      return this.$store.state.receivers.share.subscriberCount;
+    },
     shareLink: function() {
       return this.$store.state.settings.share.url;
     },
@@ -186,6 +190,10 @@ export default {
   watch: {
     'hasValidShareLink': function () {
       this.shareLinkSelect();
+    },
+    subscriberCount: function() {
+        // Hide any tooltips that may be open on the cast button
+        this.$root.$emit('bv::hide::tooltip');
     },
   },
 }

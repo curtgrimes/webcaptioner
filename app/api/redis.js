@@ -30,6 +30,7 @@ function getNewClient() {
     client.delAsync = promisify(client.del).bind(client);
     client.scanAsync = promisify(client.scan).bind(client);
     client.ttlAsync = promisify(client.ttl).bind(client);
+    client.pubsubAsync = promisify(client.pubsub).bind(client);
 
     client.on('error', function (err) {
         console.log('Redis: ' + err);

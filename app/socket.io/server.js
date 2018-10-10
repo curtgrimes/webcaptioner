@@ -1,11 +1,15 @@
 const WebSocket = require('ws');
 const redis = require('./../api/redis');
+const getSubscriberCount = require('./getSubscriberCount');
 
 module.exports = {
     createSocket(server) {
       const redisSharedClient = redis.getSharedClient();
 
-      const wss = new WebSocket.Server({server});
+      const wss = new WebSocket.Server({
+        server,
+        maxPayload: 1024 * 100, // bytes
+      });
       wss.on('connection', (socket) => {
         let redisStandaloneClient;
         socket._wc = {};
@@ -35,9 +39,24 @@ module.exports = {
             else if (ownerKeyForRoom === json.ownerKey) {
                 // Successfully authenticated
                 socket._wc.room = {
-                  roomKey,
+                  ownerRoomKey: roomKey,
                 }
                 redisStandaloneClient = redis.getNewClient();
+                redisStandaloneClient.subscribe(roomKey + ':owner');
+
+                socket.send(JSON.stringify({
+                  mutation: 'SET_SHARE_SUBSCRIBER_COUNT',
+                  subscriberCount: await getSubscriberCount(roomKey),
+                }));
+
+                redisStandaloneClient.on("message", async (channel, message) => {
+                  if (message === 'updateSubscribers') {
+                    socket.send(JSON.stringify({
+                      mutation: 'SET_SHARE_SUBSCRIBER_COUNT',
+                      subscriberCount: await getSubscriberCount(roomKey),
+                    }));
+                  }
+                });
             }
             else {
                 // Room exists, but correct ownerKey wasn't given
@@ -45,8 +64,8 @@ module.exports = {
           }
           else if (json.action === 'mutation') {
             // If a roomKey is set, they've authenticated successfully before
-            if (socket._wc.room && socket._wc.room.roomKey) {
-              redisStandaloneClient.publish(socket._wc.room.roomKey, JSON.stringify({
+            if (socket._wc.room && socket._wc.room.ownerRoomKey) {
+              redisSharedClient.publish(socket._wc.room.ownerRoomKey, JSON.stringify({
                 mutation: json.mutation,
                 payload: json.payload,
               }));
@@ -60,38 +79,59 @@ module.exports = {
             // TODO handle multiple subscriptions from same client??
             if (json.roomId) {
               redisStandaloneClient = redis.getNewClient();
-              redisStandaloneClient.subscribe('rooms:' + json.roomId);
+              const roomKey = 'rooms:' + json.roomId;
+              const stealth = json.s;
+
+              // Save reference that we will use when closing this socket to notify
+              // owner that subscriptions have changed
+              socket._wc.room = {
+                subscriberRoomKey: roomKey,
+                stealth,
+              }
+
+              if (stealth) {
+                redisSharedClient.hincrby(socket._wc.room.subscriberRoomKey, 'stealthSubscribers', 1);
+              }
+
+              redisStandaloneClient.subscribe(roomKey);
+              redisSharedClient.publish(roomKey + ':owner', 'updateSubscribers');
               redisStandaloneClient.on("message", (channel, message) => {
-                // TODO Add try/catch for json parse
-                // AND use ws max payload option
-                let {mutation, payload} = JSON.parse(message);
-                if (socket.readyState === socket.OPEN) {
-                  socket.send(JSON.stringify({
-                    mutation,
-                    ...payload,
-                  }));
-                }
-                else {
-                  // TODO unsubscribe
+                if (message !== 'updateSubscribers') {
+                  try {
+                    let {mutation, payload} = JSON.parse(message);
+                    if (socket.readyState === socket.OPEN) {
+                      socket.send(JSON.stringify({
+                        mutation,
+                        ...payload,
+                      }));
+                    }
+                    else {
+                      // TODO unsubscribe
+                    }
+                  }
+                  catch (e) {
+                    // Unable to parse message
+                  }
                 }
               });
             }
           }
         });
-      });
-        // let io = socketio().attach(server);
-        // io
-        //   .on('connection', function (socket) {
-        //   console.log('connection');
-        //   socket.emit('news', { hello: 'world' });
-        //   socket.on('my other event', function (data) {
-        //     console.log(data);
-        //   });
 
-        //   socket.on('error', (error) => {
-        //     console.log('socket error');
-        //     console.log(error);
-        //   });
-        // });
+        socket.on('close', function () {
+          if (socket._wc.room && socket._wc.room.subscriberRoomKey) {
+            redisSharedClient.publish(socket._wc.room.subscriberRoomKey + ':owner', 'updateSubscribers');
+
+
+            if (socket._wc.room.stealth) {
+              redisSharedClient.hincrby(socket._wc.room.subscriberRoomKey, 'stealthSubscribers', -1);
+            }
+          }
+          
+          if (redisStandaloneClient && redisStandaloneClient.connected) {
+            redisStandaloneClient.quit();
+          }
+        });        
+      });
     },
 };

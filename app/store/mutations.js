@@ -60,6 +60,9 @@ export default {
     state.settings.appearance.text.textSize = parseFloat(state.settings.appearance.text.textSize) - 0.1;
   },
 
+  SET_SHARE_SUBSCRIBER_COUNT: (state, { subscriberCount }) => {
+    state.receivers.share.subscriberCount = subscriberCount;
+  },
 
   SET_SHARE_ROOM_ID: (state, { roomId }) => {
     state.settings.share.roomId = roomId;
