@@ -17,7 +17,7 @@
                   </div>
                 </div>
                 <b-list-group>
-                  <b-list-group-item v-for="room in rooms" :key="room.id" :href="'/s/' + room.id" target="_blank">
+                  <b-list-group-item v-for="room in rooms" :key="room.id" :href="'/s/' + room.id + '?s'" target="_blank">
                     <div class="row">
                       <div class="col-4">
                         {{room.id}}
