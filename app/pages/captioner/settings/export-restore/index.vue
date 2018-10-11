@@ -16,7 +16,7 @@
       </div>
       <div slot="modal-footer">
         <b-btn class="float-right ml-2" variant="secondary" ref="confirmRestoreModalOkButton" @click="restoreSettings()">{{$t('settings.exportRestore.restore')}}</b-btn>
-        <b-btn class="float-right" variant="primary" @click="cancelConfirmRestoreModal()">{{$t('common.cancel')}}</b-btn>
+        <b-btn class="float-right" variant="link" @click="cancelConfirmRestoreModal()">{{$t('common.cancel')}}</b-btn>
       </div>
     </b-modal>
     <b-modal ref="confirmReset" hide-header @shown="focusConfirmResetModalOkButton()">
@@ -26,14 +26,14 @@
       </div>
       <div slot="modal-footer">
         <b-btn class="float-right ml-2" variant="danger" ref="confirmResetModalOkButton" @click="resetSettings()">{{$t('settings.exportRestore.reset')}}</b-btn>
-        <b-btn class="float-right" variant="primary" @click="cancelConfirmResetModal()">{{$t('common.cancel')}}</b-btn>
+        <b-btn class="float-right" variant="link" @click="cancelConfirmResetModal()">{{$t('common.cancel')}}</b-btn>
       </div>
     </b-modal>
-    <b-modal class="text-center" ref="restoreSuccessModal" ok-only hide-header>
+    <b-modal class="text-center" ref="restoreSuccessModal" ok-only hide-header ok-variant="secondary">
       <div class="pb-2 h4"><fa icon="check-circle" size="3x" /></div>
       <h2>{{$t('settings.exportRestore.restoredSettings')}}</h2>
     </b-modal>
-    <b-modal class="text-center" ref="resetSuccessModal" ok-only hide-header>
+    <b-modal class="text-center" ref="resetSuccessModal" ok-only hide-header ok-variant="secondary">
       <div class="pb-2 h4"><fa icon="check-circle" size="3x" /></div>
       <h2>{{$t('settings.exportRestore.settingsReset')}}</h2>
     </b-modal>

@@ -63,6 +63,15 @@ module.exports = {
         amount: 2,
         delay: 400, // ms
       },
+      autoTracking: {
+        pageviewTemplate: function(route) {
+          return {
+            page: route.path.replace(/\/$/, ''), // path with trailing slash removed
+            title: document.title,
+            location: window.location.href,
+          };
+        }
+      },
     }],
     ['nuxt-fontawesome', {
       component: 'fa', 

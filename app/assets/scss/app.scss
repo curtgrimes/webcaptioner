@@ -26,11 +26,11 @@ $link-color: theme-color("secondary");
 $border-radius: .2rem;
 $border-radius-lg: .3rem;
 $border-radius-sm: .2rem;
-$modal-content-bg: theme-color("primary");
-$modal-header-border-color: darken(theme-color("primary"), 10%);
+$modal-content-bg: theme-color("light");
+$modal-header-border-color: darken(theme-color("light"), 10%);
 $modal-header-border-width: 1px;
 $modal-content-border-width: 0;
-$modal-content-border-color: theme-color("primary")y;
+$modal-content-border-color: theme-color("light");
 $modal-title-line-height: 1.2;
 
 $component-active-color: #fff;

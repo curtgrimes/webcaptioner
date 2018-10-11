@@ -1,5 +1,5 @@
 <template>
-    <b-modal lazy size="lg" ref="modal" hide-header no-close-on-esc no-close-on-backdrop @shown="focusOkButton()">
+    <b-modal body-bg-variant="primary" footer-bg-variant="primary" lazy size="lg" ref="modal" hide-header no-close-on-esc no-close-on-backdrop @shown="focusOkButton()">
       <div class="p-3 logo-animated-wrap" ref="logoAnimatedWrap">
         <div class="row">
           <div class="d-none d-lg-block col-lg-3 text-center splash-logo-wrap" style="overflow:hidden">
@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-      <div slot="modal-footer" class="w-100">
+      <div slot="modal-footer" style="overflow:hidden" class="w-100">
         <div class="row">
           <div class="col-6">
               <p class="ml-3 mt-2 mb-0"><router-link to="/captioner/settings/about" @click.native="hideModal()">{{$t('settings.about.learnMore')}}</router-link></p>

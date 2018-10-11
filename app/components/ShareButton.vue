@@ -51,17 +51,6 @@
       </div>
       <p v-if="somethingWentWrong" class="text-danger small mt-2 mb-1 font-weight-bold">Something went wrong.</p>
     </b-popover>
-
-
-
-
-    <b-modal :title="$t('googleCast.castingFailed')" :hide-header="true" ref="castFailedModal" :ok-only="true" ok-variant="secondary" :hide-header-close="true">
-      <div class="py-2">
-        <div class="pb-2 h4"><fa icon="exclamation-triangle" size="3x" /></div>
-        <h2>{{$t('googleCast.unableToCast')}}</h2>
-        <p class="lead">{{$t('googleCast.pleaseTryAgain')}}</p>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -192,7 +181,7 @@ export default {
       this.shareLinkSelect();
     },
     subscriberCount: function() {
-        // Hide any tooltips that may be open on the cast button
+        // Hide any tooltips that may be open
         this.$root.$emit('bv::hide::tooltip');
     },
   },
