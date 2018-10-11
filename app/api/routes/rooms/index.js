@@ -1,6 +1,7 @@
 const rooms = require('express').Router();
 const redis = require('./../../redis');
 const nanoid = require('nanoid');
+const getSubscriberCount = require('./getSubscriberCount');
 
 const expireHours = 48;
 
@@ -29,19 +30,11 @@ rooms.get('/', async (req, res, next) => {
                         redisClient.ttlAsync(roomKey)
                             .then(ttl => resolve(ttl));
                     });
-
-                    // Get subscriber count for corresponding channel
-                    let subscriberCount = await new Promise((resolve, reject) => {
-                        redisClient.pubsubAsync('NUMSUB', roomKey)
-                            .then((result) => {
-                                resolve(result && result.length > 1 ? result[1] : 0);
-                            })
-                    });
                     
                     return {
                         id: roomKey.replace('rooms:', ''), // was "rooms:rPWoIvAy"
                         expireDate: Date.now() + (ttl * 1000),
-                        subscriberCount,
+                        subscriberCount: await getSubscriberCount(roomKey),
                     };
                 });
 

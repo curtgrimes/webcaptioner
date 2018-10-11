@@ -1,4 +1,4 @@
-const redis = require('./../api/redis');
+const redis = require('../../redis');
 
 module.exports = async function(roomKey) {
     const redisSharedClient = redis.getSharedClient();

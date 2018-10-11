@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const redis = require('./../api/redis');
-const getSubscriberCount = require('./getSubscriberCount');
+const getSubscriberCount = require('../api/routes/rooms/getSubscriberCount');
 
 module.exports = {
     createSocket(server) {
