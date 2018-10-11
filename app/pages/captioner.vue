@@ -271,7 +271,8 @@ export default {
 
       if ([
         'captioner/APPEND_TRANSCRIPT_FINAL',
-        'captioner/CLEAR_TRANSCRIPT_INTERIM'
+        'captioner/CLEAR_TRANSCRIPT_INTERIM',
+        'captioner/CLEAR_TRANSCRIPT',
       ].includes(mutation)) {
         if (this.$store.state.settings.integrations.webhooks.on) {
           callWebhook({
