@@ -8,9 +8,11 @@
     --><span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
+      @scroll="onManualScroll"
       ref="scroller"><!--
         --><span class="transcript-scroller-child"><span :class="{'d-block w-100': finalTranscriptEndsInNewline}">{{finalTranscript}}</span><span v-if="interimTranscript" v-bind:style="{color: interimColor}">{{interimTranscript}}</span><span v-show="typingModeOn && (showTypedLiveReadOnly !== true)" contenteditable v-text="transcriptTypedForDisplay" @input="typedTranscriptDidChange()" ref="typedTranscript" class="transcript-typed combokeys"></span><span v-if="showTypedLiveReadOnly && typedTranscript" class="d-block">{{typedTranscript}}</span><br v-if="finalTranscriptEndsInNewline && !interimTranscript" /><br v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"/></span><!--
     --></span><!--
+    --><transition name="fade"><b-btn class="autoscroll-button" v-if="!scrollerIsAtBottom() && !autoScrollEnabled" @click="autoScrollEnabled = true"><fa icon="chevron-down" class="back-to-latest-icon mr-2"/>Back to Latest</b-btn></transition><!--
   --></div>
 </template>
 
@@ -22,6 +24,10 @@ export default {
   name: 'transcript',
   props: {
     showTypedLiveReadOnly: Boolean,
+    allowDisableAutoScroll: {
+      type: Boolean,
+      default: false,
+    }
   },
   mixins: [
     hexToRGB,
@@ -29,15 +35,40 @@ export default {
   data: function() {
     return {
       transcriptTypedForDisplay: '',
+      autoScrollEnabled: true,
+      autoScrolling: false,
     }
   },
   methods: {
-    scrollToBottom: function () {
-      this.$nextTick(function () {
-        if (this.$refs.scroller) {
-          this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight;
-        }
-      });
+    scrollToBottom: async function () {
+      if (!this.$refs.scroller) {
+        return;
+      }
+
+      if (
+        this.autoScrollEnabled
+        || this.scrollerIsAtBottom() // Start autoscrolling again if we were already at the bottom
+      ) {
+        await this.$nextTick();
+        this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight;
+      }
+    },
+    onManualScroll: function() {
+      if (!this.autoScrollEnabled && this.scrollerIsAtBottom()) {
+        // Was previously enabled, but scrolled to bottom. Enable again.
+        this.autoScrollEnabled = true;
+      }
+      else if (!this.scrollerIsAtBottom() && this.allowDisableAutoScroll) {
+        this.autoScrollEnabled = false;
+      }
+    },
+    scrollerIsAtBottom: function() {
+      if (this.$refs.scroller) {
+        return this.$refs.scroller.scrollTop + this.$refs.scroller.offsetHeight >= this.$refs.scroller.scrollHeight;
+      }
+      else {
+        return true;
+      }
     },
     typedTranscriptDidChange: function() {
       this.$store.commit('captioner/SET_TRANSCRIPT_TYPED', {transcriptTyped: this.$refs.typedTranscript.innerText})
@@ -195,5 +226,21 @@ export default {
     outline:none;
     min-width:5px;
     display:inline-block;
+  }
+
+  .autoscroll-button {
+    position:absolute;
+    right:20px;
+    bottom:20px;
+    overflow:hidden;
+  }
+
+  .back-to-latest-icon {
+    animation:hover 1s infinite;
+  }
+
+  @keyframes hover {
+    0%, 100% { transform: translateY(0) }
+    50% { transform: translateY(5px) }
   }
 </style>

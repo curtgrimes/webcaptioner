@@ -93,6 +93,9 @@ $carousel-control-opacity: .8;
 }
 
 $hr-margin-y: 0.5rem;
+$enable-shadows: false;
+$modal-content-box-shadow-sm-up:    0 .25rem 2rem rgba(0, 0, 0, .5);
+$modal-content-box-shadow-xs:       $modal-content-box-shadow-sm-up;
 
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
@@ -234,23 +237,25 @@ input[type="color"] {
 
 /* Custom modal animation */
 
-.modal.fade .modal-dialog {
-  -webkit-transform: scale(0.9);
-  -moz-transform: scale(0.9);
-  -ms-transform: scale(0.9);
-  transform: scale(0.9);
+.modal.fade .modal-dialog, .corner-modal.fade {
+  transition: 0.3s cubic-bezier(0, 0, 0, 1);
+  transform: scale(0.8) translate(50px, 50px);
   opacity: 0;
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  transition: all 0.2s;
 }
 
-.modal.fade.show .modal-dialog {
-  -webkit-transform: scale(1);
-  -moz-transform: scale(1);
-  -ms-transform: scale(1);
+.modal.fade.show .modal-dialog, .corner-modal.fade.show {
   transform: scale(1);
   opacity: 1;
+}
+
+.corner-modal h2 {
+  font-size:1.5rem;
+  margin-bottom:0.2rem;
+}
+
+.corner-modal p {
+  font-size:0.9rem;
+  margin-bottom:0.5rem;
 }
 
 .caption-wrap.caption-wrap-preview {
@@ -443,6 +448,13 @@ a.nav-link.active {
   -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
   transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
 }
+
+.corner-modal {
+  box-shadow: $modal-content-box-shadow-xs;
+}
+
+
+
 
 
 
