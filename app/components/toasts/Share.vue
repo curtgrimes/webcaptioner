@@ -172,6 +172,9 @@ export default {
         },
     },
     watch: {
+        show: function(show) {
+            this.$parent.$emit('toastChange', show);
+        },
         hasValidShareLink: function () {
             this.shareLinkSelect();
         },

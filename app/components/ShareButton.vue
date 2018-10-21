@@ -19,7 +19,7 @@ export default {
   methods: {
     showShareSettings() {
       this.$router.push('/captioner');
-      this.$store.commit('share/SET_SHOW_SETTINGS', { on: true });
+      this.$store.commit('share/SET_SHOW_SETTINGS', { toggle: true });
     },
   },
   computed: {

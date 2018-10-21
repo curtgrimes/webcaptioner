@@ -3,7 +3,7 @@
     <div class="d-flex flex-grow-1 position-relative">
       <transcript :allow-disable-auto-scroll="true" />
       <toast-group>
-        <toast-donation/>
+        <toast-donation />
         <toast-share/>
       </toast-group>
     </div>

@@ -20,8 +20,13 @@ const actions = {
 };
 
 const mutations = {
-    SET_SHOW_SETTINGS (state, { on }) {
-        state.settings.show = on;
+    SET_SHOW_SETTINGS (state, { on, toggle }) {
+        if (toggle) {
+            state.settings.show = !state.settings.show;    
+        }
+        else {
+            state.settings.show = on;
+        }
     },
     SET_EXPIRED (state, { expired }) {
         state.expired = expired;
