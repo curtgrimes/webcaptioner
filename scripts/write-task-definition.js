@@ -53,6 +53,8 @@ let taskDefinition = {
                 'SENTRY_SECURITY_TOKEN',
                 'REDIS_URL',
                 'ADMIN_TOKEN',
+                'TWITCH_APP_CLIENT_ID',
+                'TWITCH_APP_CLIENT_SECRET',
             ]),
             {
                 name: "HOSTNAME",
