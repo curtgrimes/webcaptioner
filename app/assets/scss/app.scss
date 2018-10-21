@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
 @import "~bootstrap/scss/functions";
 
+@font-face {
+  font-family: "Redacted";
+  src: url("~/static/static/redacted-regular.ttf");
+}
+
 $font-family-sans-serif: 'Roboto', sans-serif;
 $headings-font-family: 'Cousine', monopsace;
 $headings-font-weight: 700;
@@ -167,6 +172,12 @@ input[type="color"] {
   text-transform:uppercase;
   cursor:pointer;
   padding:.575rem 1rem .425rem 1rem;
+}
+
+.btn .normal-text {
+  font-family:$font-family-sans-serif;
+  font-weight:normal;
+  text-transform:none;
 }
 
 .btn-group.captioning-split-button > * {
@@ -373,6 +384,29 @@ a.nav-link.active {
   display:inline-block;
 }
 
+.text-preview-mockup-wrap {
+  border:1px solid rgba(0,0,0,.2);
+  height: 65px;
+  overflow:hidden;
+}
+
+.text-preview-mockup-wrap.main-preview {
+  height:200px;
+}
+
+.text-preview-mockup {
+  font-family:'Redacted';
+  white-space: normal;
+  font-size: 5px;
+  line-height:8px;
+  overflow: hidden;
+}
+
+.text-preview-mockup-wrap.main-preview .text-preview-mockup {
+  font-size:9px;
+  line-height:14px;
+}
+
 /* Loading spinner */
 @keyframes lds-message {
   0% {
@@ -451,6 +485,7 @@ a.nav-link.active {
 
 .corner-modal {
   box-shadow: $modal-content-box-shadow-xs;
+  margin: 15px;
 }
 
 

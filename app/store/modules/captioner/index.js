@@ -9,7 +9,8 @@ const SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING = (2.5 * 1000);
 let speechRecognizer,
     keepAliveInterval,
     demoInterval,
-    microphonePermissionNeededTimeout;
+    microphonePermissionNeededTimeout,
+    lastManualStart;
 
 const state = {
     on: false,
@@ -25,10 +26,11 @@ const state = {
         interim: '',
         final: '',
         typed: '',
-        lastStart: null,
-        lastUpdate: null,
         waitingForInitial: false,
     },
+    totalCaptioningSeconds: 0,
+    lastStart: null,
+    lastUpdate: null,
     volume: {
         tooLow: false,
         tooHigh: false,
@@ -37,6 +39,8 @@ const state = {
 
 const actions = {
     startManual ({commit, dispatch, state, rootState}) {
+        lastManualStart = new Date();
+
         if (state.typingModeOn) {
             dispatch('stopTypingMode');
         }
@@ -100,8 +104,8 @@ const actions = {
                         // Currently captioning
                         let now = Date.now();
                         
-                        const timeSinceLastResult = now - state.transcript.lastUpdate;
-                        const timeSinceLastStart = now - state.transcript.lastStart;
+                        const timeSinceLastResult = now - state.lastUpdate;
+                        const timeSinceLastStart = now - state.lastStart;
                         
                         if (timeSinceLastResult >= SILENT_RESTART_AFTER_NO_RESULTS_MS
                             && timeSinceLastStart > SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING
@@ -210,10 +214,10 @@ const actions = {
         demoInterval = setInterval(playDemoTimings, 100);
     },
 
-    stopManual ({commit, state, rootState}) {
+    stopManual ({commit, state, dispatch, rootState}) {
         commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
         commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
-
+        
         if (speechRecognizer) {
             speechRecognizer.stop();
         }
@@ -221,6 +225,9 @@ const actions = {
             // Demo was running
             clearInterval(demoInterval);
         }
+
+        state.totalCaptioningSeconds += (Date.now() - lastManualStart.getTime())/1000;
+        dispatch('donation/SHOW_DONATION_MESSAGE_IF_ELIGIBLE', null, {root:true});
     },
 
     restart ({commit, state, rootState, dispatch}) {
@@ -274,7 +281,7 @@ const actions = {
 const mutations = {
     SET_CAPTIONER_ON (state) {
         state.on = true;
-        state.transcript.lastStart = Date.now();
+        state.lastStart = Date.now();
     },
     SET_SHOULD_BE_ON (state, { shouldBeOn }) {
         state.shouldBeOn = shouldBeOn;
@@ -301,11 +308,11 @@ const mutations = {
             && [' ', '\n'].indexOf(transcriptInterim.substr(0, 1)) === -1; // interim didn't come in starting with its own space or newline
         
         state.transcript.interim = (shouldPrependSpace ? ' ' : '') + transcriptInterim;
-        state.transcript.lastUpdate = Date.now();
+        state.lastUpdate = Date.now();
     },
     SET_TRANSCRIPT_FINAL (state, { transcriptFinal }) {
         state.transcript.final = transcriptFinal;
-        state.transcript.lastUpdate = Date.now();
+        state.lastUpdate = Date.now();
     },
     SET_TRANSCRIPT_TYPED (state, { transcriptTyped }) {
         // The contenteditable seems to always add a newline at the end. We don't want that.
@@ -332,7 +339,7 @@ const mutations = {
             && [' ', '\n'].indexOf(state.transcript.final.substr(-1, 1)) === -1 // Existing final string doesn't end with a space or newline
             && [' ', '\n'].indexOf(transcriptFinal.substr(0, 1)) === -1; // Incoming final string doesn't start with its own space or newline
         state.transcript.final += (shouldPrependSpace ? ' ' : '') + transcriptFinal;
-        state.transcript.lastUpdate = Date.now();
+        state.lastUpdate = Date.now();
     },
 
     VOLUME_TOO_LOW (state, { volumeTooLow }) {

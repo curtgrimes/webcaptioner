@@ -4,6 +4,8 @@ import actions from './actions'
 import mutations from './mutations'
 import getters from './getters'
 import captioner from './modules/captioner'
+import donation from './modules/donation'
+import share from './modules/share'
 import remoteMutationBlacklist from '~/mixins/data/remoteMutationBlacklist'
 import RemoteEventBus from '~/mixins/RemoteEventBus'
 import getSettingsState from './settingsState'
@@ -65,6 +67,8 @@ const createStore = () => {
   return new Vuex.Store({
     modules: {
       captioner,
+      donation,
+      share,
     },
     state: {
       version: '2.0.0',

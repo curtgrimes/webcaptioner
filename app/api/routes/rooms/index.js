@@ -2,6 +2,10 @@ const rooms = require('express').Router();
 const redis = require('./../../redis');
 const nanoid = require('nanoid');
 const getSubscriberCount = require('./getSubscriberCount');
+const openGraphScraper = require('open-graph-scraper');
+const vibrant = require('node-vibrant')
+const url = require('url');
+const twitch = require('./twitch');
 
 const expireHours = 48;
 
@@ -34,6 +38,7 @@ rooms.get('/', async (req, res, next) => {
                     return {
                         id: roomKey.replace('rooms:', ''), // was "rooms:rPWoIvAy"
                         expireDate: Date.now() + (ttl * 1000),
+                        backlink: await redisClient.hgetAsync(roomKey, 'backlink'),
                         subscriberCount: await getSubscriberCount(roomKey),
                     };
                 });
@@ -69,7 +74,9 @@ rooms.post('/', async (req, res, next) => {
 
     const ownerKey = nanoid(50);
 
-    redisClient.hmset(roomKey, 'ownerKey', ownerKey);
+    const backlink = req.body.backlink ? ['backlink', req.body.backlink]: [];
+
+    redisClient.hmset(roomKey, 'ownerKey', ownerKey, ...backlink);
     redisClient.expire(roomKey, 60 * 60 * expireHours);
 
     res.send(JSON.stringify(
@@ -81,6 +88,128 @@ rooms.post('/', async (req, res, next) => {
         }
     ));
     return;
+});
+
+rooms.get('/:roomId', async (req, res) => {
+    let redisClient = redis.getSharedClient();
+    if (!redisClient || !redisClient.connected) {
+        res.sendStatus(500);
+        return;
+    }
+
+    const {roomId} = req.params;
+    
+
+    if (!roomId) {
+        res.sendStatus(404);
+        return;
+    }
+
+    const roomKey = 'rooms:' + roomId;
+
+    const roomExists = await redisClient.existsAsync(roomKey) === 1;
+
+    if (roomExists) {
+        res.sendStatus(200);
+    }
+    else {
+        res.sendStatus(404);
+    }
+});
+
+rooms.get('/:roomId/backlink', async (req, res) => {
+    let redisClient = redis.getSharedClient();
+    if (!redisClient || !redisClient.connected) {
+        res.sendStatus(500);
+        return;
+    }
+
+    const {roomId} = req.params;
+    
+
+    if (!roomId) {
+        res.sendStatus(404);
+        return;
+    }
+
+    const roomKey = 'rooms:' + roomId;
+
+    const roomExists = await redisClient.existsAsync(roomKey) === 1;
+
+    if (roomExists) {
+        let backlink = await redisClient.hgetAsync(roomKey, 'backlink'),
+            backlinkData;
+
+        try {
+            if (backlink) {
+                backlinkParts = url.parse(backlink);
+                const isTwitchLink = backlinkParts.host.endsWith('twitch.tv');
+                let twitchUsername;
+                if (isTwitchLink) {
+                    // Use the Twitch API to get info since the open graph tags
+                    // aren't set correctly on initial page request for Twitch links.
+                    twitchUsername = backlinkParts.path.split('/')[1];
+                    try {
+                        let {title, description, imageUrl} = await twitch.getChannel(twitchUsername);
+                        backlinkData = {
+                            title,
+                            description,
+                            imageUrl,
+                            url: backlink,
+                        };
+                    }
+                    catch(e) {
+                        // Could not get Twitch information
+                    }
+                }
+
+                if (!backlinkData) {
+                    // Scrape non-Twitch URL, or scrape Twitch URL that we couldn't use
+                    // the API with.
+                    let openGraph = await openGraphScraper({url: backlink, 'timeout': 5000});
+                    
+                    if (openGraph.data.ogImage.url) {
+                        if (!/^(?:f|ht)tps?\:\/\//.test(openGraph.data.ogImage.url)) {
+                            openGraph.data.ogImage.url = "https:" + openGraph.data.ogImage.url;
+                        }
+                    }
+
+                    backlinkData = {
+                        title: (twitchUsername ? twitchUsername : null) || openGraph.data.ogTitle || openGraph.data.ogSiteName || backlink,
+                        description: (twitchUsername ? 'Twitch.tv' : null) || openGraph.data.ogDescription,
+                        imageUrl: openGraph.data.ogImage.url,
+                        url: backlink,
+                    };
+                }
+                
+                if (backlinkData.imageUrl) {
+                    try {
+                        const palette = await vibrant.from(backlinkData.imageUrl).getPalette();
+                        if (palette.Vibrant) {
+                            backlinkData.colors = {
+                                background: palette.Vibrant.getHex(),
+                                text: palette.Vibrant.getBodyTextColor(),
+                            };
+                        }
+                    }
+                    catch(e) {}
+                }
+            }
+        }
+        catch (error) {
+            // Unable to get info. Send default empty object.
+            backlink = {
+                colors: null,
+            };
+        }
+
+        res.send(JSON.stringify({
+            backlink: backlinkData,
+        }));
+    }
+    else {
+        res.sendStatus(404);
+    }
 });
 
 rooms.delete('/:roomId', async (req, res) => {

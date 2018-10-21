@@ -200,8 +200,8 @@ export default {
   },
   // default handler called for all methods
   SOCKET_ONMESSAGE (state, message)  {
-    console.log('socket onmessage');
-    console.log(message);
+    // console.log('socket onmessage');
+    // console.log(message);
     // state.message = message
   },
   // mutations for reconnect methods

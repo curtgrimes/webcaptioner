@@ -200,51 +200,52 @@ export default {
       this.startCaptioning();
     }
 
-    let lastWebhookInterimEventDate = 0;
-    RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
-      let callWebhook = ({url, method, transcript}) => {
-        let body = JSON.stringify({transcript});
+    this.$store.dispatch('share/CHECK_LINK_EXPIRY');
 
+    let lastWebhookInterimEventDate = 0;
+    let callWebhook = ({url, method, transcript}) => {
+      let body = JSON.stringify({transcript});
+
+      this.$store.commit('APPEND_WEBHOOK_LOG', {
+        event: {
+          type: 'send',
+          title: method + ' ' + url,
+          body,
+          showBody: false,
+        }
+      });
+
+      fetch(url, {
+        method,
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json',
+        },
+        body,
+      })
+      .then((response) => {
+        response.text()
+          .then(() => {
+            this.$store.commit('APPEND_WEBHOOK_LOG', {
+              event: {
+                type: 'receive',
+                title: response.status + ' ' + response.statusText,
+                error: response.status >= 300,
+              }
+            });
+          });
+      })
+      .catch((error) => {
         this.$store.commit('APPEND_WEBHOOK_LOG', {
           event: {
-            type: 'send',
-            title: method + ' ' + url,
-            body,
-            showBody: false,
+            type: 'receive',
+            title: error.message,
+            error: true,
           }
         });
-
-        fetch(url, {
-          method,
-          mode: 'cors',
-          headers: {
-            'Accept': 'application/json',
-          },
-          body,
-        })
-        .then((response) => {
-          response.text()
-            .then(() => {
-              this.$store.commit('APPEND_WEBHOOK_LOG', {
-                event: {
-                  type: 'receive',
-                  title: response.status + ' ' + response.statusText,
-                  error: response.status >= 300,
-                }
-              });
-            });
-        })
-        .catch((error) => {
-          this.$store.commit('APPEND_WEBHOOK_LOG', {
-            event: {
-              type: 'receive',
-              title: error.message,
-              error: true,
-            }
-          });
-        });
-      }
-      
+      });
+    };
+    RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
       if (
         mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
         && (Date.now() - lastWebhookInterimEventDate) >= 100

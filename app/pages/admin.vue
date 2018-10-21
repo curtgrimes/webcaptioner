@@ -6,26 +6,32 @@
               <div v-if="rooms !== null">
                 <h3>Rooms ({{rooms.length}})</h3>
                 <div class="row px-4 small font-weight-bold mb-2" v-if="rooms.length">
-                  <div class="col-4">
+                  <div class="col-3">
                     ID
                   </div>
-                  <div class="col-4">
+                  <div class="col-3">
                     Viewers
                   </div>
-                  <div class="col-4">
+                  <div class="col-3">
+                    Backlink
+                  </div>
+                  <div class="col-3">
                     Expire Date
                   </div>
                 </div>
                 <b-list-group>
                   <b-list-group-item v-for="room in rooms" :key="room.id" :href="'/s/' + room.id + '?s'" target="_blank">
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col-3">
                         {{room.id}}
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         {{room.subscriberCount}}
                       </div>
-                      <div class="col-4">
+                      <div class="col-3" style="overflow:hidden">
+                        {{room.backlink}}
+                      </div>
+                      <div class="col-3" style="overflow:hidden">
                         {{new Date(room.expireDate).toISOString()}}
                       </div>
                     </div>

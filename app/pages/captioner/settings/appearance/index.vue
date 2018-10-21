@@ -474,33 +474,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  @font-face {
-      font-family: "Redacted";
-      src: url("~/static/static/redacted-regular.ttf");
-  }
-
-  .text-preview-mockup-wrap {
-    border:1px solid rgba(0,0,0,.2);
-    height: 65px;
-    overflow:hidden;
-  }
-
-  .text-preview-mockup-wrap.main-preview {
-    height:200px;
-  }
-
-  .text-preview-mockup {
-    font-family:'Redacted';
-    white-space: normal;
-    font-size: 5px;
-    line-height:8px;
-    overflow: hidden;
-  }
-
-  .text-preview-mockup-wrap.main-preview .text-preview-mockup {
-    font-size:9px;
-    line-height:14px;
-  }
-</style>

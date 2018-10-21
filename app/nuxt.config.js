@@ -78,7 +78,7 @@ module.exports = {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower',],
+          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower',],
         },
         {
           set: '@fortawesome/free-regular-svg-icons',
@@ -86,7 +86,7 @@ module.exports = {
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
-          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome', 'faTwitter'],
+          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome', 'faTwitter', 'faFacebook',],
         },
       ]
     }],
