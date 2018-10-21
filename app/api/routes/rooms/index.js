@@ -184,11 +184,23 @@ rooms.get('/:roomId/backlink', async (req, res) => {
                 
                 if (backlinkData.imageUrl) {
                     try {
-                        const palette = await vibrant.from(backlinkData.imageUrl).getPalette();
-                        if (palette.Vibrant) {
+                        const palettes = await vibrant.from(backlinkData.imageUrl).getPalette();
+
+                        // Some of the palettes returned might be null. Find the first
+                        // non-null one in this order.
+                        const palette = [
+                            palettes.Vibrant,
+                            palettes.LightVibrant,
+                            palettes.DarkVibrant,
+                            palettes.Muted,
+                            palettes.LightMuted,
+                            palettes.DarkMuted,
+                        ].find((p) => p);
+
+                        if (palette) {
                             backlinkData.colors = {
-                                background: palette.Vibrant.getHex(),
-                                text: palette.Vibrant.getBodyTextColor(),
+                                background: palette.getHex(),
+                                text: palette.getBodyTextColor(),
                             };
                         }
                     }
