@@ -83,7 +83,7 @@ module.exports = {
         return {
             title: user.display_name + ' on Twitch',
             description: stream ? stream.title : user.description,
-            imageUrl: stream ? stream.thumbnail_url.replace('{width}', '45').replace('{height}', '45') : user.profile_image_url,
+            imageUrl: user.profile_image_url,
         };
     },
 }
