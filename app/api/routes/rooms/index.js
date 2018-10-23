@@ -150,9 +150,10 @@ rooms.get('/:roomId/backlink', async (req, res) => {
                     // aren't set correctly on initial page request for Twitch links.
                     twitchUsername = backlinkParts.path.split('/')[1];
                     try {
-                        let {title, description, imageUrl} = await twitch.getChannel(twitchUsername);
+                        let {title, author, description, imageUrl} = await twitch.getChannel(twitchUsername);
                         backlinkData = {
                             title,
+                            author,
                             description,
                             imageUrl,
                             url: backlink,
@@ -166,7 +167,7 @@ rooms.get('/:roomId/backlink', async (req, res) => {
                 if (!backlinkData) {
                     // Scrape non-Twitch URL, or scrape Twitch URL that we couldn't use
                     // the API with.
-                    let openGraph = await openGraphScraper({url: backlink, 'timeout': 5000});
+                    let openGraph = await openGraphScraper({url: backlink, 'timeout': 4000});
                     
                     if (openGraph.data.ogImage.url) {
                         if (!/^(?:f|ht)tps?\:\/\//.test(openGraph.data.ogImage.url)) {

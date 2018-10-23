@@ -78,11 +78,11 @@ module.exports = {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower',],
+          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faCircleNotch', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower',],
         },
         {
           set: '@fortawesome/free-regular-svg-icons',
-          icons: ['faThumbsUp'],
+          icons: ['faThumbsUp', 'faTimesCircle'],
         },
         {
           set: '@fortawesome/free-brands-svg-icons',

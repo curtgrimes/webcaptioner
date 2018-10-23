@@ -82,6 +82,7 @@ module.exports = {
         
         return {
             title: user.display_name + ' on Twitch',
+            author: user.display_name,
             description: stream ? stream.title : user.description,
             imageUrl: user.profile_image_url,
         };
