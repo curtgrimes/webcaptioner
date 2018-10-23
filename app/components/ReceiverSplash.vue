@@ -1,7 +1,7 @@
 <template>
     <div class="bg-primary bg-zigzag" style="height:100%;min-height:100%;background-attachment: fixed;overflow:hidden;">
         <div class="d-flex py-3 py-md-5" style="height:100%;overflow:auto">
-            <div class="container m-auto pb-md-5">
+            <div class="container m-auto">
                 <div class="row">
                     <div class="col-md-10 col-lg-9 mx-auto">
                         <div class="card bg-light">
@@ -43,11 +43,18 @@
                                         </div>
                                         <div v-else>
                                             <h3 class="font-weight-normal" style="font-size:2rem">
-                                                <span v-if="backlinkData && backlinkData.author">{{backlinkData.author}} is live captioning with Web Captioner.</span>
-                                                <span v-else>You've been invited to watch live captions with Web Captioner.</span>
+                                                <span v-if="message">
+                                                    {{message}}
+                                                </span>
+                                                <span v-else>
+                                                    <span v-if="backlinkData && backlinkData.author">{{backlinkData.author}} is live captioning with Web Captioner.</span>
+                                                    <span v-else>You've been invited to watch live captions with Web Captioner.</span>
+                                                </span>
                                             </h3>
-                                            <p class="lead text-muted mb-0"><fa icon="circle-notch" spin/> You'll start seeing captions soon.</p>
-                                            <backlink :backlink-data="backlinkData" :inline="true" :always-expanded="true" class="mt-3" />
+                                            <div v-if="!message">
+                                                <p class="lead text-muted mb-0"><fa icon="circle-notch" spin/> You'll start seeing captions soon.</p>
+                                                <backlink :backlink-data="backlinkData" :inline="true" :always-expanded="true" class="mt-3" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +90,11 @@ export default {
     props: {
         roomId: String,
         backlinkData: Object,
-        notFound: Boolean,
+        notFound: {
+            type: Boolean,
+            default: false,
+        },
+        message: String,
     },
     data: function() {
         return {

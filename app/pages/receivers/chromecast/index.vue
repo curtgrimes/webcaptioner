@@ -9,7 +9,7 @@
             <span class="d-none d-md-inline">Web Captioner</span>
         </span>
     </nav>
-    <receiver-splash  v-if="!transcriptExists" />
+    <receiver-splash message="Live captioning will begin soon." v-if="!transcriptExists" />
   </div>
 </template>
 
