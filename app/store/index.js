@@ -111,6 +111,7 @@ const createStore = () => {
         onUntilStopTime: null,
         log: [],
       },
+      delayedEvents: [],
     },
     actions,
     mutations,

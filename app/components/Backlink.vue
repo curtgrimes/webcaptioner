@@ -1,6 +1,6 @@
 <template>
     <transition :name="inline ? 'expand' : 'fade'">
-        <b-btn v-if="backlink" @mouseover="backlinkHovering = true" @mouseleave="backlinkHovering = false" :href="backlink.url" target="_blank" rel="noopener noreferrer" class="text-left d-flex align-items-center backlink-button p-2 border border-0" :style="backlinkStyle" variant="dark">
+        <b-btn v-if="show && backlink" @mouseover="backlinkHovering = true" @mouseleave="backlinkHovering = false" :href="backlink.url" target="_blank" rel="noopener noreferrer" class="text-left d-flex align-items-center backlink-button p-2 border border-0" :style="backlinkStyle" variant="dark">
             <div v-if="backlink.imageUrl" class="og-image flex-shrink-0" :style="{backgroundImage: 'url(\''+ backlink.imageUrl +'\')'}"></div>
             <fa v-else icon="info-circle" class="m-1" size="2x" />
             <transition name="fade">
@@ -25,7 +25,11 @@ export default {
         alwaysExpanded: {
             type: Boolean,
             default: false,
-        }
+        },
+        show: {
+            type: Boolean,
+            default: true,
+        },
     },
     data: function() {
         return {

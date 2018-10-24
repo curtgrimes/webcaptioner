@@ -214,6 +214,25 @@ export default {
     // state.socket.reconnectError = true;
   },
 
+  PUSH_DELAYED_EVENT: (state, event) => {
+    // Keep track of delayed events in case the delay interval
+    // changes from a larger number to a smaller number and we
+    // have to fire all of them at once to be able to delay at
+    // the now smaller number.
+    state.delayedEvents.push(event);
+  },
+
+  DELAYED_EVENT_CLEAN_UP: (state) => {
+    state.delayedEvents = state.delayedEvents.filter((delayedEvent) => {
+      // Only return events that would not have fired yet
+      return parseInt(delayedEvent.scheduledTime) > (new Date()).getTime();
+    });
+  },
+
+  CLEAR_DELAYED_EVENTS: (state) => {
+    state.delayedEvents = [];
+  },
+
 
   SET_SEND_TO_VMIX: (state, { on }) => {
     state.settings.integrations.vmix.on = on;

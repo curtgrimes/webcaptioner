@@ -5,6 +5,7 @@ import ChromelessWindowManager from '~/mixins/ChromelessWindowManager'
 import get from 'lodash.get'
 import vmixSetup from '~/mixins/vmixSetup'
 import {normalizeSettings} from '~/mixins/settingsNormalizer'
+import VueNativeWebsocket from 'vue-native-websocket'
 
 function getVmixPath(webControllerAddress) {
   return (webControllerAddress || '').trim().replace(/\/$/, "") + '/API';

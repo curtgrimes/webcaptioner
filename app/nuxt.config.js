@@ -14,7 +14,7 @@ module.exports = {
     title: 'Web Captioner',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' },
       { hid: 'description', name: 'description', content: 'Free, real-time captioning for your event.' },
       { name: 'theme-color', content: '#ffe200' },
       { name: 'google', content: 'notranslate' },

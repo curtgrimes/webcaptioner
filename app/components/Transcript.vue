@@ -27,6 +27,10 @@ export default {
     allowDisableAutoScroll: {
       type: Boolean,
       default: false,
+    },
+    delay: {
+      type: Number,
+      default: 0,
     }
   },
   mixins: [

@@ -27,6 +27,7 @@ const state = {
         final: '',
         typed: '',
         waitingForInitial: false,
+        delay: 0,
     },
     totalCaptioningSeconds: 0,
     lastStart: null,
@@ -318,6 +319,9 @@ const mutations = {
         // The contenteditable seems to always add a newline at the end. We don't want that.
         let removedLastNewline = transcriptTyped.substr(-1, 1) === '\n' ? transcriptTyped.substr(0, transcriptTyped.length -1) : transcriptTyped;
         state.transcript.typed = removedLastNewline;
+    },
+    SET_TRANSCRIPT_DELAY (state, { delay }) {
+        state.transcript.delay = delay; // ms
     },
     CLEAR_TRANSCRIPT (state) {
         state.transcript.interim = '';
