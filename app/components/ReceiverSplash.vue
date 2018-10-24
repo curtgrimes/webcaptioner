@@ -1,9 +1,9 @@
 <template>
     <transition name="fade">
         <div v-if="show">
-            <div :class="minimized ? 'w-100 splash-background-minimized animate-background' : 'bg-primary bg-zigzag splash-background animate-background'">
+            <div :class="minimized ? 'w-100 splash-background-minimized animate-background' : 'bg-primary bg-zigzag splash-background animate-background'" style="pointer-events:none">
                 <div :class="minimized ? 'animate-all pt-4' : 'd-flex py-3 py-md-5 splash-background-child animate-all'">
-                    <div ref="autoMarginContainer" :class="minimized ? 'container animate-all' : 'container m-auto animate-all'">
+                    <div ref="autoMarginContainer" :class="minimized ? 'container animate-all' : 'container m-auto animate-all'" style="pointer-events:auto">
                         <div class="row">
                             <div class="col-md-10 col-lg-9 mx-auto">
                                 <div class="card bg-light">
@@ -36,20 +36,36 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div :class="minimized ? 'card-body p-3 py-lg-4 animate-all' : 'card-body p-4 py-lg-5 animate-all'">
+                                    <div :class="minimized ? 'card-body animate-all p-3' : 'card-body p-4 py-lg-5 animate-all'">
                                         <div class="row">
-                                            <div class="col-md-10 mx-auto">
+                                            <div :class="minimized ? 'col-12' : 'col-md-10 mx-auto'">
                                                 <div v-if="notFound">
                                                     <h3 class="font-weight-normal" style="font-size:2rem">Uh oh &mdash; it looks like that link to live captions is missing or expired.</h3>
                                                     <p class="lead text-muted mb-0">But you can still use <a href="/">Web Captioner</a> to share your own live captions.</p>
                                                 </div>
                                                 <div v-else>
-                                                    <h3 class="animate-all font-weight-normal" :style="{fontSize: minimized ? '1.2rem' : '2rem'}">
+                                                    <h3 :class="minimized ? 'm-0 animate-all font-weight-normal' : 'animate-all font-weight-normal'" :style="{fontSize: minimized ? '1.6rem' : '2rem', marginTop: minimized ? '3px' : '0'}">
                                                         <span v-if="message">
                                                             {{message}}
                                                         </span>
                                                         <span v-else-if="minimized">
-                                                            Live captioning is in progress.
+                                                            <div class="row">
+                                                                <div class="col-8">
+                                                                    Live captioning is in progress.
+                                                                </div>
+                                                                <div class="col-4 d-flex">
+                                                                    <b-btn size="sm" @click="show = false" variant="outline-secondary" class="ml-auto close-btn-outer text-left text-secondary px-4">
+                                                                        Close
+                                                                        <div class="close-btn-inner" v-bind:style="{width: ((closeCountdownCurrentMs/closeCountdownMaxMs)*100) +'%'}">
+                                                                            <b-btn size="sm" @click="show = false" variant="secondary" class="border-0 px-3 text-left rounded-0">
+                                                                                <span class="px-2">
+                                                                                    Close
+                                                                                </span>
+                                                                            </b-btn>
+                                                                        </div>
+                                                                    </b-btn>
+                                                                </div>
+                                                            </div>
                                                         </span>
                                                         <span v-else>
                                                             <span v-if="backlinkData && backlinkData.author">{{backlinkData.author}} is live captioning with Web Captioner.</span>
@@ -66,21 +82,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-footer">
-                                        <transition name="fade-up">
-                                            <div v-if="minimized" class="text-right">
-                                                <b-btn size="sm" @click="show = false" variant="outline-secondary" class="close-btn-outer text-left text-secondary px-4">
-                                                    Close
-                                                    <div class="close-btn-inner" v-bind:style="{width: ((closeCountdownCurrentMs/closeCountdownMaxMs)*100) +'%'}">
-                                                        <b-btn size="sm" @click="show = false" variant="secondary" class="border-0 px-3 text-left rounded-0">
-                                                            <span class="px-2">
-                                                                Close
-                                                            </span>
-                                                        </b-btn>
-                                                    </div>
-                                                </b-btn>
-                                            </div>
-                                            <div v-else class="row">
+                                    <transition name="fade-up">
+                                        <div class="card-footer" v-if="!minimized">
+                                            <div class="row">
                                                 <div class="col-md-12">
                                                     <a href="/" class="navbar-brand text-dark">
                                                         <img src="/static/img/logo-inverse.svg" width="22" height="22" class="d-inline-block align-top" alt="">
@@ -91,8 +95,8 @@
                                                     Free browser-based captioning. Just bring a microphone. 
                                                 </div> -->
                                             </div>
-                                        </transition>
-                                    </div>
+                                        </div>
+                                    </transition>
                                 </div>
                             </div>
                         </div>
@@ -262,7 +266,6 @@ export default {
         bottom:0;
         left:0;
         z-index:10;
-        pointer-events: none; /* allow clicks through it to elements behind */
     }
 
     .screen-frame {

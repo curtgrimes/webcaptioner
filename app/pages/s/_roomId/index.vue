@@ -39,7 +39,7 @@
                 </div>
             </div>
         </b-modal>
-        <b-modal ref="delayProgressModal" v-model="startingDelay" title="Delaying..." hide-footer hide-header-close>
+        <b-modal ref="delayProgressModal" v-model="startingDelay" title="Delaying..." hide-footer hide-header-close hide-backdrop no-close-on-backdrop>
             <div class="row">
                 <div class="col-9">
                     <b-progress height="2rem" class="border" variant="secondary" :max="delay/1000">
