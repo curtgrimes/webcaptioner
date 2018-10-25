@@ -34,7 +34,13 @@
         </div>
         <div v-else style="width:500px; min-width:200px; max-width:100%">
             <p class="mb-2">Share live captions with this link.</p>
-            <input @focus="shareLinkSelect()" @click="shareLinkSelect()" ref="shareLinkInput" type="text" class="form-control mb-2" readonly :value="shareLink"  :disabled="expiringLink"/>
+            <div class="input-group mb-2">
+                <input @focus="shareLinkSelect()" @click="shareLinkSelect()" ref="shareLinkInput" type="text" class="form-control" readonly :value="shareLink"  :disabled="expiringLink"/>
+                <div class="input-group-append">
+                    <b-btn size="sm" class="pt-2" type="button" :href="shareLink" target="_blank"><fa icon="arrow-right"/></b-btn>
+                </div>
+            </div>
+            
             <p class="small text-muted mb-2">Link expires <timeago :datetime="expireDate"></timeago></p>
             <div class="card p-2 bg-primary text-info mb-3">
                 <p class="text-monospace text-uppercase font-weight-bold mb-1"><fa icon="info-circle"/> Enjoy this Preview!</p>
