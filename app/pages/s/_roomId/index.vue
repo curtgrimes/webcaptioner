@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex w-100 flex-column" style="height: 100vh;">
-        <div v-if="showTranscript || this.$route.query.broadcast !== undefined" class="d-flex flex-grow-1">
-            <backlink :roomId="$route.params.roomId"/>
+        <div v-if="showTranscript || $route.query.broadcast !== undefined" class="d-flex flex-grow-1">
+            <backlink v-if="$route.query.broadcast === undefined" :roomId="$route.params.roomId"/>
             <transcript show-typed-live-read-only />
         </div>
         <nav v-if="showTranscript && this.$route.query.broadcast === undefined" class="navbar navbar-expand bg-dark">
