@@ -4,27 +4,6 @@
             <div v-if="expired" class="alert bg-danger small text-white p-2">Your previous link expired, but you can get a new one.</div>
             <p class="mb-2">Get a link to share live captions with others.</p>
             <form ref="shareLinkForm" action="javascript:void(0)" onsubmit="return false">
-                <!--
-                <h5>Appearance</h5>
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <label class="btn btn-light btn-block text-left p-2 m-0" v-bind:class="{ active: shareStyle == 'current' }">
-                            <input v-model="shareStyle" type="radio" name="share-style-current" id="share-style-current" value="current"> Current
-                            <div class="text-preview-mockup-wrap w-100 mt-2" v-bind:style="{backgroundColor: $store.state.settings.appearance.background.color}">
-                            <div class="text-preview-mockup mx-auto p-1" v-bind:style="{color: $store.state.settings.appearance.text.textColor}">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et. </div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="col-6">
-                        <label class="btn btn-light btn-block text-left p-2 m-0" v-bind:class="{ active: shareStyle == 'default' }">
-                            <input v-model="shareStyle" type="radio" name="share-style-default" id="share-style-default" value="default"> Default
-                            <div class="text-preview-mockup-wrap w-100 mt-2" style="background:#000">
-                            <div class="text-preview-mockup p-1 text-white">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et. </div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                -->
                 <div class="custom-control custom-checkbox">
                     <input v-model="showBacklink" class="custom-control-input" name="showBacklink" type="checkbox" id="show-backlink">
                     <label class="custom-control-label" for="show-backlink">Show a link back to my stream or website</label>
@@ -33,20 +12,33 @@
             </form>
         </div>
         <div v-else style="width:500px; min-width:200px; max-width:100%">
-            <p class="mb-2">Share live captions with this link.</p>
-            <div class="input-group mb-2">
-                <input @focus="shareLinkSelect()" @click="shareLinkSelect()" ref="shareLinkInput" type="text" class="form-control" readonly :value="shareLink"  :disabled="expiringLink"/>
-                <div class="input-group-append">
-                    <b-btn size="sm" class="pt-2" type="button" :href="shareLink" target="_blank"><fa icon="arrow-right"/></b-btn>
-                </div>
-            </div>
+            <p class="font-weight-bold">How will you share captions?</p>
             
+            <a href="javascript:void(0)" @click="showViewerLink = !showViewerLink" class="d-block mb-2 font-weight-bold"><fa :icon="showViewerLink ? 'caret-down' : 'caret-right'" fixed-width />Share with viewers</a>
+            <b-collapse id="shareViewerLink" v-model="showViewerLink" accordion="shareLinksAccordion" class="ml-3">
+                <div class="input-group">
+                    <input @focus="shareLinkSelect()" @click="shareLinkSelect()" ref="shareLinkInput" type="text" class="form-control" readonly :value="shareLink"  :disabled="expiringLink"/>
+                    <div class="input-group-append">
+                        <b-btn size="sm" class="pt-2" type="button" :href="shareLink" target="_blank"><fa icon="arrow-right"/></b-btn>
+                    </div>
+                </div>
+                <div class="small mt-2 mb-3"><!--Viewers will be able to set their own appearance settings.--></div>
+            </b-collapse>
+
+            <a href="javascript:void(0)" @click="showBroadcastLink = !showBroadcastLink" class="d-block font-weight-bold"><fa :icon="showBroadcastLink ? 'caret-down' : 'caret-right'" fixed-width />Use in your broadcasting application</a>
+            <b-collapse id="shareBroadcastLink" v-model="showBroadcastLink" accordion="shareLinksAccordion" class="ml-3">
+                <div class="mt-2">
+                    <input @focus="shareLinkSelect()" @click="shareLinkSelect()" ref="shareLinkInput" type="text" class="form-control" readonly :value="shareLinkBroadcast"  :disabled="expiringLink"/>
+                    <div class="small mt-2">Use this link in a browser source in Streamlabs OBS, OBS, or XSplit. Captions will match your current appearance settings. The splash screen, navigation bar, and extra buttons will be hidden. Since this hides Web Captioner branding, consider mentioning Web Captioner when you use this.</div>
+                </div>
+            </b-collapse>
+            <hr class="my-3" />
             <p class="small text-muted mb-2">Link expires <timeago :datetime="expireDate"></timeago></p>
-            <div class="card p-2 bg-primary text-info mb-3">
+            <!-- <div class="card p-2 bg-primary text-info mb-3">
                 <p class="text-monospace text-uppercase font-weight-bold mb-1"><fa icon="info-circle"/> Enjoy this Preview!</p>
                 <span class="small">I hope you enjoy the preview of this new feature! Please send me feedback on <a href="https://facebook.com/webcaptioner" target="_blank">Facebook</a> or <a href="https://twitter.com/webcaptioner" target="_blank">Twitter</a> about how well it works for you and your viewers.</span>
-            </div>
-
+            </div> -->
+            <hr class="my-3" />
             <b-dropdown text="Options" variant="outline-secondary" size="sm" toggle-class="px-2 py-1" :disabled="expiringLink">
             <template slot="button-content">
                 <fa icon="cog"/>
@@ -81,6 +73,8 @@ export default {
             shareStyle: 'current',
             showBacklink: false,
             backlink: '',
+            showViewerLink: false,
+            showBroadcastLink: false,
         };
     },
     mounted: function() {
@@ -121,7 +115,10 @@ export default {
                     ownerKey,
                     url,
                     expireDate,
-                } = await this.$axios.$post('/api/rooms', {backlink: this.backlink});
+                } = await this.$axios.$post('/api/rooms', {
+                    backlink: this.backlink,
+                    appearance: JSON.stringify(this.$store.state.settings.appearance),
+                });
 
                 this.$store.commit('SET_SHARE_ROOM_ID', { roomId });
                 this.$store.commit('SET_SHARE_OWNER_KEY', { ownerKey });
@@ -179,10 +176,23 @@ export default {
     },
     watch: {
         show: function(show) {
-            this.$parent.$emit('toastChange', show);
+
+            if (show && this.hasValidShareLink) {
+                setTimeout(() => {
+                    this.showViewerLink = true;
+                }, 250); // after toast animation
+            }
+
+            if (!show) {
+                this.showViewerLink = false;
+            }
         },
         hasValidShareLink: function () {
             this.shareLinkSelect();
+            setTimeout(() => {
+                // this.showViewerLink = true;
+            },100);
+            
         },
         showBacklink: function(showBacklink) {
             if (!showBacklink) {
@@ -210,6 +220,9 @@ export default {
         },
         shareLink: function() {
             return this.$store.state.settings.share.url;
+        },
+        shareLinkBroadcast: function() {
+            return this.$store.state.settings.share.url + '?broadcast';
         },
         roomId: function() {
             return this.$store.state.settings.share.roomId;

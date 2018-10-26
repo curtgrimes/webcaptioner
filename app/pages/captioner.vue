@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="w-100" v-bind:style="{backgroundColor}" style="display: flex;flex-direction: column;height: 100vh;">
+  <div id="app" class="w-100" style="display: flex;flex-direction: column;height: 100vh;">
     <nuxt-child/>
     <welcome-modal ref="welcomeModal" />
     <incompatible-browser-modal ref="incompatibleBrowserModal" />
@@ -274,6 +274,24 @@ export default {
         'captioner/APPEND_TRANSCRIPT_FINAL',
         'captioner/CLEAR_TRANSCRIPT_INTERIM',
         'captioner/CLEAR_TRANSCRIPT',
+
+        'SET_TEXT_COLOR',
+        'SET_TEXT_COLOR_INTERIM',
+        'SET_FONT_FAMILY',
+        'SET_TEXT_SIZE',
+        'SET_LINE_HEIGHT',
+        'SET_LETTER_SPACING',
+        'SET_TEXT_TRANSFORM',
+        'SET_SHADOW_COLOR',
+        'SET_SHADOW_OPACITY',
+        'SET_SHADOW_BLUR_RADIUS',
+        'SET_SHADOW_OFFSET_X',
+        'SET_SHADOW_OFFSET_Y',
+        'SET_BACKGROUND_COLOR',
+        'SET_BACKGROUND_OPACITY',
+        'SET_ALIGNMENT_HORIZONTAL',
+        'SET_ALIGNMENT_VERTICAL',
+        'SET_ALIGNMENT_PADDING',
       ].includes(mutation)) {
         if (this.$store.state.settings.integrations.webhooks.on) {
           callWebhook({
@@ -334,6 +352,17 @@ export default {
         this.$refs.microphonePermissionDeniedModal.showModal();
       }
     },
+    '$store.state.settings.appearance': {
+      handler: function(appearance) {
+        if (this.$store.state.settings.share.roomId) {
+          this.$socket.sendObj({
+            action: 'updateAppearance',
+            appearance,
+          });
+        }
+      },
+      deep: true,
+    }
   },
   beforeDestroy: function() {
     this.combokeysDocument.detach();
@@ -351,8 +380,10 @@ export default {
     typingModeOn () {
       return this.$store.state.captioner.typingModeOn;
     },
-    backgroundColor: function() {
-      return this.$store.state.settings.appearance.background.color;
+    backgroundColor () {
+      const {r, g, b} = this.hexToRGB(this.$store.state.settings.appearance.background.color);
+      const opacity = parseInt(this.$store.state.settings.appearance.background.opacity) / 100;
+      return 'rgba('+ r +', '+ g +', '+ b +', '+ opacity +')';
     },
     incompatibleBrowserModalVisible: function() {
       return this.$store.state.incompatibleBrowserModalVisible;

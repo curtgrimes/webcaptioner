@@ -83,9 +83,6 @@ export default {
         },
     },
     watch: {
-        show: function(show) {
-            this.$parent.$emit('toastChange', show);
-        },
         showOtherAmountField: function() {
             this.customDonationAmount = null;
             this.$nextTick(() => {

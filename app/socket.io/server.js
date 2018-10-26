@@ -78,18 +78,43 @@ module.exports = {
               }));
             }
           }
+          else if (json.action == 'updateAppearance') {
+
+            // The broadcaster has an updated appearance object to save
+            // for this room.
+            try {
+              const appearanceJSON = JSON.stringify(json.appearance);
+
+              if (appearanceJSON.length <= 1000) {
+                redisSharedClient.hsetAsync(
+                  socket._wc.room.ownerRoomKey,
+                  'appearance',
+                  appearanceJSON
+                );
+                }
+            }
+            catch(e) {
+              console.log(e);
+            }
+          }
           else if (json.action == 'subscribeToRoom') {
             // TODO handle multiple subscriptions from same client??
             if (json.roomId) {
               redisStandaloneClient = redis.getNewClient();
-              const roomKey = 'rooms:' + json.roomId;
-              const stealth = json.s;
+              const {
+                roomId,
+                s: stealth,
+                broadcast: wantsAppearanceUpdates
+              } = json;
+
+              const roomKey = 'rooms:' + roomId;
 
               // Save reference that we will use when closing this socket to notify
               // owner that subscriptions have changed
               socket._wc.room = {
                 subscriberRoomKey: roomKey,
-                stealth,
+                stealth: Boolean(stealth),
+                wantsAppearanceUpdates: Boolean(wantsAppearanceUpdates),
               }
 
               if (stealth) {
@@ -102,7 +127,16 @@ module.exports = {
                 if (message !== 'updateSubscribers') {
                   try {
                     let {mutation, payload} = JSON.parse(message);
-                    if (socket.readyState === socket.OPEN) {
+                    if (
+                      socket.readyState === socket.OPEN
+                      && (
+                        // we want to pass on all captioner events
+                        mutation.startsWith('captioner/') 
+
+                        // pass on appearance events only if this client wants them
+                        || !mutation.startsWith('captioner/') && socket._wc.room.wantsAppearanceUpdates
+                      )
+                    ) {
                       socket.send(JSON.stringify({
                         mutation,
                         ...payload,

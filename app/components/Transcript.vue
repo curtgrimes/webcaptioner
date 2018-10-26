@@ -137,7 +137,9 @@ export default {
       return this.$store.state.settings.appearance.text.textColorInterim;
     },
     backgroundColor () {
-      return this.$store.state.settings.appearance.background.color;
+      const {r, g, b} = this.hexToRGB(this.$store.state.settings.appearance.background.color);
+      const opacity = parseInt(this.$store.state.settings.appearance.background.opacity) / 100;
+      return 'rgba('+ r +', '+ g +', '+ b +', '+ opacity +')';
     },
     fontFamily () {
       return this.$store.state.settings.appearance.text.fontFamily;

@@ -11,7 +11,7 @@
                                         <div class="row">
                                             <div class="col-md-10 mx-auto">
                                                 <div class="bg-dark pt-4 pl-4 pr-4 screen-frame">
-                                                    <div class="h-100 p-2 px-3 text-white bg-black">
+                                                    <div class="h-100 p-2 px-3" :style="{color: $store.state.settings.appearance.text.textColor || '#ffffff', backgroundColor: $store.state.settings.appearance.background.color || '#000000'}">
                                                         <div v-if="notFound" class="h-100">
                                                             <transition-group name="drop">
                                                                 <span v-for="(word, index) in this.sampleTextArrayTimed" :key="index" class="fade-up-initial text-danger redacted-text-wrap">

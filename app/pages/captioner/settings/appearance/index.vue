@@ -200,6 +200,17 @@
         <p class="small mb-0 mt-1">RGB ({{backgroundColorRGBValues.r}}, {{backgroundColorRGBValues.g}}, {{backgroundColorRGBValues.b}})</p>
       </div>
     </div>
+    <div class="form-group row">
+      <label for="background-opacity" class="col-sm-6 col-form-label">Background Opacity</label>
+      <div class="col-sm-6">
+        <div class="input-group">
+          <input v-model="backgroundOpacity" class="form-control" name="background-opacity" type="number" min="0" max="100" step="5">
+          <span class="input-group-append">
+              <span class="input-group-text">%</span>
+          </span>
+        </div>
+      </div>
+    </div>
 
     <hr class="my-4" />
 
@@ -420,6 +431,14 @@ export default {
           this.$store.commit('SET_BACKGROUND_COLOR', {backgroundColor});
         }
       }, 200, {leading: true}),
+    },
+    backgroundOpacity: {
+      get () {
+        return this.$store.state.settings.appearance.background.opacity;
+      },
+      set (backgroundOpacity) {
+        this.$store.commit('SET_BACKGROUND_OPACITY', {backgroundOpacity});
+      },
     },
     backgroundColorRGBValues: function() {
       return this.hexToRGB(this.$store.state.settings.appearance.background.color);

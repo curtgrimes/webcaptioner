@@ -96,6 +96,8 @@ export default {
       commitPropertySetting('SET_SHADOW_OFFSET_Y', 'shadowOffsetY', 'appearance.shadow.offsetY');
 
       commitPropertySetting('SET_BACKGROUND_COLOR', 'backgroundColor', 'appearance.background.color');
+      commitPropertySetting('SET_BACKGROUND_OPACITY', 'backgroundOpacity', 'appearance.background.opacity');
+
       commitPropertySetting('SET_ALIGNMENT_HORIZONTAL', 'alignmentHorizontal', 'appearance.text.alignment.horizontal');
       commitPropertySetting('SET_ALIGNMENT_VERTICAL', 'alignmentVertical', 'appearance.text.alignment.vertical');
       commitPropertySetting('SET_ALIGNMENT_PADDING', 'alignmentPadding', 'appearance.text.alignment.padding');

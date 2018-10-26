@@ -1,5 +1,5 @@
 <template>
-    <div class="corner-modal card fade mt-1 rounded w-100 flex-shrink-0" v-if="displayElement" :class="isVisible ? 'show' : ''" style="max-width: calc(100% - 30px)">
+    <div class="corner-modal card fade mt-1 rounded w-100 flex-shrink-0" v-if="displayElement" :class="isVisible ? 'show' : ''" style="pointer-events:auto;max-width: calc(100% - 30px)">
         <div class="card-header py-2 pr-0">
             <button type="button" class="close px-4 py-1 float-right" aria-label="Close" @click="closeButtonClick()">
                 <span aria-hidden="true">&times;</span>

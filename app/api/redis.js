@@ -27,6 +27,7 @@ function getNewClient() {
     client.getAsync = promisify(client.get).bind(client);
     client.existsAsync = promisify(client.exists).bind(client);
     client.hgetAsync = promisify(client.hget).bind(client);
+    client.hsetAsync = promisify(client.hset).bind(client);
     client.delAsync = promisify(client.del).bind(client);
     client.scanAsync = promisify(client.scan).bind(client);
     client.ttlAsync = promisify(client.ttl).bind(client);

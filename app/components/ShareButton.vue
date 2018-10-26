@@ -18,8 +18,16 @@
 export default {
   methods: {
     showShareSettings() {
-      this.$router.push('/captioner');
-      this.$store.commit('share/SET_SHOW_SETTINGS', { toggle: true });
+      if (this.$router.currentRoute.name.startsWith('captioner___')) {
+        // We're on the main captioner screen; toggle settings
+        this.$store.commit('share/SET_SHOW_SETTINGS', { toggle: true });
+      }
+      else {
+        // We're not. Go to that route and then force them to show.
+        this.$router.push('/captioner');
+        this.$store.commit('share/SET_SHOW_SETTINGS', { on: true });
+      }
+      
     },
   },
   computed: {

@@ -76,7 +76,10 @@ rooms.post('/', async (req, res, next) => {
 
     const backlink = req.body.backlink ? ['backlink', req.body.backlink]: [];
 
-    redisClient.hmset(roomKey, 'ownerKey', ownerKey, ...backlink);
+    // Limit to 1000 characters for safety; currently length is around 350-400 characters
+    const appearance = req.body.appearance && req.body.appearance.length <= 1000 ? ['appearance', req.body.appearance]: [];
+
+    redisClient.hmset(roomKey, 'ownerKey', ownerKey, ...backlink, ...appearance);
     redisClient.expire(roomKey, 60 * 60 * expireHours);
 
     res.send(JSON.stringify(
@@ -110,7 +113,20 @@ rooms.get('/:roomId', async (req, res) => {
     const roomExists = await redisClient.existsAsync(roomKey) === 1;
 
     if (roomExists) {
-        res.sendStatus(200);
+        let appearance;
+        
+        try {
+            appearance = await redisClient.hgetAsync(roomKey, 'appearance');
+            appearance = JSON.parse(appearance);
+        }
+        catch (e) {
+            // couldn't parse
+            appearance = null;
+        } 
+
+        res.send(JSON.stringify({
+            appearance,
+        }));
     }
     else {
         res.sendStatus(404);

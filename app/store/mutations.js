@@ -44,6 +44,9 @@ export default {
   SET_BACKGROUND_COLOR: (state, { backgroundColor }) => {
     state.settings.appearance.background.color = backgroundColor
   },
+  SET_BACKGROUND_OPACITY: (state, { backgroundOpacity }) => {
+    state.settings.appearance.background.opacity = backgroundOpacity
+  },
   SET_ALIGNMENT_HORIZONTAL: (state, { alignmentHorizontal }) => {
     state.settings.appearance.text.alignment.horizontal = alignmentHorizontal
   },

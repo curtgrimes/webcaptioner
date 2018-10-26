@@ -1,10 +1,10 @@
 <template>
     <div class="d-flex w-100 flex-column" style="height: 100vh;">
-        <div v-if="showTranscript" class="d-flex flex-grow-1">
+        <div v-if="showTranscript || this.$route.query.broadcast !== undefined" class="d-flex flex-grow-1">
             <backlink :roomId="$route.params.roomId"/>
             <transcript show-typed-live-read-only />
         </div>
-        <nav v-if="showTranscript" class="navbar navbar-expand bg-dark">
+        <nav v-if="showTranscript && this.$route.query.broadcast === undefined" class="navbar navbar-expand bg-dark">
             <span class="navbar-brand mr-auto text-white" style="opacity:.6">
                 <img src="/static/img/logo.svg" width="17" height="17" class="d-inline-block" style="position:relative;top:-1px;margin-right:10px" alt="Web Captioner" />
                 <span class="d-none d-md-inline">Web Captioner</span>
@@ -20,7 +20,7 @@
                 <b-btn variant="primary" class="px-4" @click="increaseTextSize()" @mousedown="startLongPress(increaseTextSize)" @mouseleave="stopLongPress(increaseTextSize)" @mouseup="stopLongPress(increaseTextSize)" @touchstart="startLongPress(increaseTextSize)" @touchend="stopLongPress(increaseTextSize)" @touchcancel="stopLongPress(increaseTextSize)" v-b-tooltip.hover title="Larger"><fa icon="plus" /></b-btn>
             </b-button-group>
         </nav>
-        <receiver-splash :minimized="showTranscript" :notFound="notFound" :backlink-data="backlinkData" :roomId="$route.params.roomId" />
+        <receiver-splash v-if="this.$route.query.broadcast === undefined" :minimized="showTranscript" :notFound="notFound" :backlink-data="backlinkData" :roomId="$route.params.roomId" />
 
         <b-modal ref="delayModal" title="Delay" :ok-title="(delay > 0 && delayUnsavedMs == 0) ? 'Remove Delay' : 'Set Delay'" ok-variant="secondary" cancel-variant="link" @ok="setDelay()" @cancel="resetDelay()">
             <div class="form-group">
@@ -74,9 +74,12 @@ export default {
   },
   async asyncData ({app, params, res}) {
     try {
-        await app.$axios.$get('/api/rooms/' + params.roomId); // if the page doesn't exist, this 404s
+        let {appearance} = await app.$axios.$get('/api/rooms/' + params.roomId); // if the page doesn't exist, this 404s
         let {backlink} = await app.$axios.$get('/api/rooms/' + params.roomId + '/backlink');
-        return {backlinkData: backlink};
+        return {
+            appearance,
+            backlinkData: backlink,
+        };
     }
     catch (error) {
         if (res) {
@@ -87,6 +90,7 @@ export default {
   },
   data: function() {
       return {
+          broadcastLink: true, // Hide splash screen and navbar on broadcast-type links
           notFound: false,
           backlinkData: null,
           showTranscript: false,
@@ -106,20 +110,34 @@ export default {
       };
   },
   mounted: function () {
+      this.broadcastLink = this.$route.query.broadcast !== undefined;
       if (this.socketConnected) {
           this.initSubscription();
+      }
+
+      if (this.appearance && this.$route.query.broadcast !== undefined) {
+          // Only apply the appearance settings if this is a broadcast type link
+          this.$store.state.settings.appearance = this.appearance;
+
+          // Don't use body background color
+          document.querySelector('body').style.backgroundColor = 'transparent';
       }
   },
   methods: {
     initSubscription: function() {
         let {roomId} = this.$route.params;
-        let {s} = this.$route.query; // s = stealth; don't increment subscriber count
+        let {
+            broadcast, // broadcast link - honor appearance settings only if true
+            s, // stealth; don't increment subscriber count
+        } = this.$route.query; 
         s = s !== undefined;
+        broadcast = broadcast !== undefined;
 
         if (roomId) {
             this.$socket.sendObj({
                 action: 'subscribeToRoom',
                 roomId,
+                broadcast,
                 s,
             });
         }

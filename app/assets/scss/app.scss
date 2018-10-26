@@ -304,9 +304,12 @@ a.nav-link.active {
 .screen-preview .screen {
   max-width:100%;
 }
-    html,body {
-      background: #000;
+    html, body {
       height: 100%;
+    }
+
+    body {
+      background:#000;
     }
 
     html.static-site, html.static-site body {
