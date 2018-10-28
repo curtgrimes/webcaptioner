@@ -33,6 +33,7 @@ module.exports = {
       keys: [
         'GOOGLE_CAST_APP_ID',
         'CHROME_EXTENSION_ID',
+        'STRIPE_API_KEY_PUBLIC',
       ],
     }],
     'nuxt-trailingslash-module',

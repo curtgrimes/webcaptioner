@@ -58,6 +58,9 @@ export default {
       }
     },
     onManualScroll: function() {
+      return; // issue where this is happening when not manually scrolling. temporarily disable
+
+      
       if (!this.autoScrollEnabled && this.scrollerIsAtBottom()) {
         // Was previously enabled, but scrolled to bottom. Enable again.
         this.autoScrollEnabled = true;

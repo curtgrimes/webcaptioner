@@ -55,6 +55,8 @@ let taskDefinition = {
                 'ADMIN_TOKEN',
                 'TWITCH_APP_CLIENT_ID',
                 'TWITCH_APP_CLIENT_SECRET',
+                'STRIPE_API_KEY_PUBLIC',
+                'STRIPE_API_KEY_SECRET',
             ]),
             {
                 name: "HOSTNAME",

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import CircularJson from 'circular-json'
+import donation from './modules/donation';
 
 export default {
   SET_SETTINGS_PAGE_TITLE: (state, { settingsPageTitle }) => {
@@ -185,6 +186,10 @@ export default {
     state.settings.exp = state.settings.exp.filter((e) => {
       return e != experiment;
     });
+  },
+
+  SET_DONATION_DATE: (state, { donationDate }) => {
+    state.settings.donationDate = donationDate;
   },
 
   'SOCKET_captioner/SET_TRANSCRIPT_INTERIM' (state) {
