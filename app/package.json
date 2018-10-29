@@ -24,6 +24,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "dotenv": "^6.1.0",
+    "dropbox": "^4.0.12",
     "fastify": "^1.12.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash.delay": "^4.1.1",
