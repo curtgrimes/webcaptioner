@@ -36,6 +36,7 @@
         </b-list-group>
         <h3 class="text-muted pl-3 pt-2 small">{{$t('settings.integrations')}}</h3>
         <b-list-group flush>
+          <b-list-group-item :to="localePath('captioner-settings-dropbox')">Dropbox</b-list-group-item>
           <b-list-group-item :to="localePath('captioner-settings-vmix')">{{$t('settings.vmix.vmix')}}</b-list-group-item>
           <b-list-group-item v-if="experiments.includes('webhooks')" :to="localePath('captioner-settings-webhooks')">{{$t('settings.webhooks.webhooks')}}</b-list-group-item>
         </b-list-group>
@@ -74,6 +75,7 @@
                 </b-nav>
                 <hr/>
                 <b-nav vertical pills>
+                  <b-nav-item :to="localePath('captioner-settings-dropbox')">Dropbox</b-nav-item>
                   <b-nav-item :to="localePath('captioner-settings-vmix')">{{$t('settings.vmix.vmix')}}</b-nav-item>
                   <b-nav-item v-if="experiments.includes('webhooks')" :to="localePath('captioner-settings-webhooks')">{{$t('settings.webhooks.webhooks')}}</b-nav-item>
                 </b-nav>

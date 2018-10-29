@@ -96,6 +96,9 @@ const createStore = () => {
       },
       settingsPageTitle: '',
       integrations: {
+        storage: {
+          sessionStartDate: null,
+        },
         vmix: {
           showNotFullySetUpMessage: false,
           webControllerAddress: '',
