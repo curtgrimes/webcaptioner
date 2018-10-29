@@ -95,7 +95,6 @@ module.exports = {
   plugins: [
     { src: '~/plugins/websocket', ssr: false },
     '~/plugins/vue-timeago',
-    '~/node_modules/vue-contenteditable-directive',
     '~/plugins/performance.js',
   ],
   css: [

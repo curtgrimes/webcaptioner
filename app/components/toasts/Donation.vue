@@ -78,33 +78,35 @@ export default {
         onShow: function() {
             if (!this.stripeCheckout) {
                 loadScript('https://checkout.stripe.com/checkout.js', { async: false }, (err, script) => {
-                    this.stripeCheckout = StripeCheckout.configure({
-                        key: this.$env.STRIPE_API_KEY_PUBLIC,
-                        image: '/logo-solid-bg.png',
-                        locale: 'auto',
-                        panelLabel: 'Donate',
-                        token: async (token) => { // on finish
-                            // You can access the token ID with `token.id`.
-                            // Get the token ID to your server-side code for use.
-                            this.loading = true;
-                            this.$axios.$post('/api/charges', {
-                                amount: this.amount,
-                                email: token.email,
-                                token: token.id,
-                            })
-                            .then(response => {
-                                this.$store.commit('SET_DONATION_DATE', {donationDate: new Date().getTime()});
-                                this.$nextTick(() => {
-                                    window.location.href = '/donate/thank-you/';
-                                });
-                            })
-                            .catch(error => {
-                                this.loading = false;
+                    setTimeout(() => { // add delay because StripeCheckout might not be available yet
+                        this.stripeCheckout = StripeCheckout.configure({
+                            key: this.$env.STRIPE_API_KEY_PUBLIC,
+                            image: '/logo-solid-bg.png',
+                            locale: 'auto',
+                            panelLabel: 'Donate',
+                            token: async (token) => { // on finish
+                                // You can access the token ID with `token.id`.
+                                // Get the token ID to your server-side code for use.
+                                this.loading = true;
+                                this.$axios.$post('/api/charges', {
+                                    amount: this.amount,
+                                    email: token.email,
+                                    token: token.id,
+                                })
+                                .then(response => {
+                                    this.$store.commit('SET_DONATION_DATE', {donationDate: new Date().getTime()});
+                                    this.$nextTick(() => {
+                                        window.location.href = '/donate/thank-you/';
+                                    });
+                                })
+                                .catch(error => {
+                                    this.loading = false;
 
-                                alert(error && error.response && error.response.data && error.response.data.message ? error.response.data.message : 'Something went wrong. If your donation was successful, you\'ll receive an email confirmation.')
-                            });
-                        }
-                    });
+                                    alert(error && error.response && error.response.data && error.response.data.message ? error.response.data.message : 'Something went wrong. If your donation was successful, you\'ll receive an email confirmation.')
+                                });
+                            }
+                        });
+                    }, 500);
                 });
             }
         },
