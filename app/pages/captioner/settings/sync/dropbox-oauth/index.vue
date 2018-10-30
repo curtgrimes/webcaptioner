@@ -57,6 +57,11 @@ export default {
       if (accessToken && accountId) {
         this.accessToken = accessToken;
         this.accountId = accountId;
+
+        this.$ga.event({
+          eventCategory: 'sync-dropbox',
+          eventAction: 'connect',
+        });
         this.redirectBackToSyncSettings({somethingWentWrong: false});
       }
       else {

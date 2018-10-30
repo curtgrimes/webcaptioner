@@ -147,6 +147,10 @@ export default {
       return bytesUtility(bytes, {unitSeparator: ' '});
     },
     revokeAuthToken: async function() {
+      this.$ga.event({
+        eventCategory: 'sync-dropbox',
+        eventAction: 'disconnect',
+      });
       this.revoking = true;
       try {
         await this.$axios.$post('/api/storage/dropbox/auth-revoke', {
