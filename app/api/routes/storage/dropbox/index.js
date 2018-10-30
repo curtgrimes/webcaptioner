@@ -11,7 +11,7 @@ function getDropboxClient() {
 dropboxRoute.get('/auth', async (req, res, next) => {
     // Redirect to login page
     const dropboxClient = getDropboxClient();
-    res.redirect(302, dropboxClient.getAuthenticationUrl(process.env.HOSTNAME + '/captioner/settings/dropbox'));
+    res.redirect(302, dropboxClient.getAuthenticationUrl(process.env.HOSTNAME + '/captioner/settings/sync/dropbox-oauth'));
 });
 
 dropboxRoute.post('/auth-revoke', async (req, res, next) => {
@@ -73,6 +73,7 @@ dropboxRoute.post('/push', async (req, res) => {
         path: '/Transcripts/' + dateFormat(sessionStartDate, 'YYYY-MM-DD HH.mm.ss') + '.txt',
         contents,
         mode: 'overwrite',
+        mute: true, // don't trigger notification
     })
         .then(function(response) {
             res.sendStatus(200);

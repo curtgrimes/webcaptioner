@@ -1,5 +1,8 @@
 <template>
   <div>
+    <b-alert variant="danger" dismissible :show="somethingWentWrong">
+      Something went wrong. Please try again.
+    </b-alert>
     <p>Automatically save transcripts to Dropbox. Transcripts will be saved as text files in the folder <strong>Apps › Web Captioner</strong> in your Dropbox.</p>
     <b-alert variant="danger" dismissible :show="showHowToFinishDisconnectMessage">
       To finish disconnecting your Dropbox account, <a href="https://www.dropbox.com/account/connected_apps">visit your connected apps in Dropbox</a> and remove Web Captioner.
@@ -9,10 +12,10 @@
         <div class="card mb-4">
           <div class="card-body">
             <div class="row">
-              <div class="col-sm-2">
+              <div class="col-sm-3 col-lg-2">
                 <fa :icon="['fab', 'dropbox']" size="5x" style="color:#007ee5" />
               </div>
-              <div class="col-sm-8">
+              <div class="col-sm-9 col-lg-10">
                 <h4>Connected to Dropbox</h4>
                 <p class="mb-0">{{profile.name}}</p>
                 <p class="mb-0">{{profile.email}}</p>
@@ -23,12 +26,15 @@
             <b-btn variant="danger" size="sm" class="ml-auto" @click="revokeAuthToken()" :disabled="revoking"><fa v-if="revoking" icon="spinner" spin/> Disconnect</b-btn>
           </div>
         </div>
-        <h3>Recent</h3>
+        <h3>Recent Transcripts</h3>
         <b-alert variant="info" :show="reachedFileCountLimit">
           You have a lot of files in your transcripts folder and you might not see all of them here. Go to your Dropbox to see them all.
         </b-alert>
         <div v-if="loadingTranscripts">
           <fa icon="spinner" spin class="text-muted" size="2x" />
+        </div>
+        <div v-else-if="transcripts && transcripts.length === 0">
+          <b-alert show variant="light">Start captioning and transcripts will automatically be saved to your Dropbox.</b-alert>
         </div>
         <b-list-group v-else>
           <b-list-group-item
@@ -72,16 +78,17 @@ export default {
     'settings-meta',
   ],
   meta: {
-    settingsPageTitle: 'Dropbox',
+    settingsPageTitle: 'Sync',
   },
   data: function() {
     return {
       loading: true,
+      somethingWentWrong: false,
       loadingTranscripts: false,
       reachedFileCountLimit: false,
       revoking: false,
       showHowToFinishDisconnectMessage: false,
-      transcripts: [],
+      transcripts: null,
       profile: {
         email: null,
         name: null,
@@ -90,14 +97,16 @@ export default {
     };
   },
   mounted: function() {
+    if (this.$route.query.somethingWentWrong) {
+      // Came back from oauth and something went wrong
+      this.somethingWentWrong = true;
+    }
+
     // delay allows localStorage state to be restored
     // TODO figure out better way to handle this
     setTimeout(() => {
       this.$nextTick(() => {
-        if (this.oauthResponseExists()) {
-          this.parseOauthResponse();
-        }
-        else if (this.accessToken && this.accountId) {
+        if (this.accessToken && this.accountId) {
           this.updateProfile({
             accessToken: this.accessToken,
             accountId: this.accountId,
@@ -136,23 +145,6 @@ export default {
   methods: {
     bytesToString: function(bytes) {
       return bytesUtility(bytes, {unitSeparator: ' '});
-    },
-    oauthResponseExists: function() {
-      let {access_token: accessToken, account_id: accountId} = queryString.parse(location.hash);
-      return accessToken && accountId;
-    },
-    parseOauthResponse: function() {
-      // We might be returning from an oauth flow; parse incoming data
-      let {access_token: accessToken, account_id: accountId} = queryString.parse(location.hash);
-      if (accessToken && accountId) {
-        this.accessToken = accessToken;
-        this.accountId = accountId;
-        this.updateProfile({accessToken, accountId});
-        this.getTranscripts({accessToken});
-      }
-
-      // Remove hash
-      window.history.replaceState(null, null, ' ');
     },
     revokeAuthToken: async function() {
       this.revoking = true;
@@ -204,7 +196,7 @@ export default {
       let {files, reachedFileCountLimit} = await this.$axios.$get('/api/storage/dropbox/transcripts', {params: {accessToken, cursor}});
 
       if (files) {
-        this.transcripts = this.transcripts.concat(files);
+        this.transcripts = files;
         this.loadingTranscripts = false;
         this.reachedFileCountLimit = reachedFileCountLimit;
       }
