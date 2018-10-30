@@ -29,10 +29,8 @@ dropboxRoute.post('/auth-revoke', async (req, res, next) => {
         .then(response => {
             res.sendStatus(200);
         })
-        .catch(error => {
-            console.log('error revoking token');
-            console.log(error);
-            res.sendStatus(400);
+        .catch(({error}) => {
+            res.status(400).send(JSON.stringify({error}));
         });
 });
 
@@ -53,8 +51,8 @@ dropboxRoute.get('/profile', async (req, res, next) => {
         .then(response => {
             res.json(response);
         })
-        .catch(error => {
-            res.send(400);
+        .catch(({error}) => {
+            res.status(400).send(JSON.stringify({error}));
         });
     
 });
@@ -86,6 +84,7 @@ dropboxRoute.post('/push', async (req, res) => {
 
 dropboxRoute.get('/transcripts', async (req, res, next) => {
     const {accessToken, cursor} = req.query;
+    const MAX_FILE_COUNT = 3000; // stop fetching files if there's over this many
 
     if (!accessToken) {
         // Missing required param
@@ -95,55 +94,69 @@ dropboxRoute.get('/transcripts', async (req, res, next) => {
 
     const dropboxClient = getDropboxClient();
     dropboxClient.setAccessToken(accessToken);
-    
-    if (!cursor) {
-        // First check
-        dropboxClient.filesListFolder({
-            path: '/Transcripts',
-            recursive: false,
-            include_media_info: false,
-            include_deleted: false,
-        })
-        .then(result => {
+
+    let files = [];
+
+    async function getFiles(cursor) {
+        let filesResult;
+        
+        try {
+            if (!cursor) {
+                filesResult = await dropboxClient.filesListFolder({
+                    path: '/Transcripts',
+                    recursive: false,
+                    include_media_info: false,
+                    include_deleted: false,
+                });
+            }
+            else {
+                filesResult = await dropboxClient.filesListFolderContinue({
+                    cursor,
+                });
+            }
+        }
+        catch({e}) {
+            res.status(400).send(JSON.stringify({error}));
+            return;
+        }
+
+        files = files.concat((filesResult.entries || []).map(entry => {
+            return {
+                name: entry.name,
+                size: entry.size,
+                modified: new Date(entry.client_modified).getTime(),
+            };
+        }));
+
+        if (filesResult.has_more && filesResult.cursor && files.length <= MAX_FILE_COUNT) {
+            getFiles(filesResult.cursor);
+        }
+        else {
             res.json({
-                has_more: result.has_more,
-                cursor: result.cursor,
-                files: (result.entries || []).map(entry => {
-                    return {
-                        name: entry.name,
-                        size: entry.size,
-                    };
-                }),
+                reachedFileCountLimit: files.length > MAX_FILE_COUNT,
+                files: files.sort(function (a, b) {
+                        // Sort by modified date descending
+                        if (a.modified < b.modified) {
+                            return 1;
+                        }
+                        else if (a.modified > b.modified) {
+                            return -1;
+                        }
+                        else {
+                            return 0;
+                        }
+                    }).map(file => { // remove modified property
+                        return {
+                            name: file.name,
+                            size: file.size,
+                        }
+                    }).slice(0, 500), // return first x only
             });
-        })
-        .catch(error => {
-            console.log(error);
-            res.sendStatus(400);
-        });
-    }
-    else {
-        // Additional check with given cursor
-        dropboxClient.filesListFolderContinue({
-            cursor,
-        })
-        .then(result => {
-            res.json({
-                has_more: result.has_more,
-                cursor: result.cursor,
-                files: (result.entries || []).map(entry => {
-                    return {
-                        name: entry.name,
-                        size: entry.size,
-                    };
-                }),
-            });
-        })
-        .catch(error => {
-            console.log(error);
-            res.sendStatus(400);
-        });
+            return;
+        }
     }
 
+    getFiles();
 });
 
 dropboxRoute.get('/transcripts/:fileName', async (req, res, next) => {
@@ -171,9 +184,8 @@ dropboxRoute.get('/transcripts/:fileName', async (req, res, next) => {
                 res.sendStatus(400);
             }
         })
-        .catch(error => {
-            console.log(error);
-            res.sendStatus(400);
+        .catch(({error}) => {
+            res.status(400).send(JSON.stringify({error}));
         });
 
 });
