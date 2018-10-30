@@ -163,7 +163,7 @@ export default {
 <style>
   @font-face {
       font-family: "Redacted";
-      src: url("~/static/static/redacted-regular.ttf");
+      src: url("~/static/redacted-regular.ttf");
   }
 
   .preview * {

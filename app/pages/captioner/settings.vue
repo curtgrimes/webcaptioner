@@ -30,6 +30,7 @@
           <b-list-group-item :to="localePath('captioner-settings-censor')">{{$t('settings.censor.censor')}}</b-list-group-item>
           <b-list-group-item :to="localePath('captioner-settings-controls')">{{$t('settings.controls.controls')}}</b-list-group-item>
           <b-list-group-item :to="localePath('captioner-settings-language')">{{$t('settings.language.language')}}</b-list-group-item>
+          <b-list-group-item :to="localePath('captioner-settings-sync')">Sync</b-list-group-item>
           <b-list-group-item v-if="experiments.includes('remoteDisplays')" :to="localePath('captioner-settings-remote-displays')">{{$t('settings.remoteDisplays.remoteDisplays')}}</b-list-group-item>
           <b-list-group-item :to="localePath('captioner-settings-word-replacements')">{{$t('settings.wordReplacements.wordReplacements')}}</b-list-group-item>
           <!-- <b-list-group-item :to="localePath('captioner-settings-title-cards">Title Cards</b-list-group-item> -->
@@ -69,6 +70,7 @@
                   <b-nav-item :to="localePath('captioner-settings-controls')">{{$t('settings.controls.controls')}}</b-nav-item>
                   <b-nav-item :to="localePath('captioner-settings-language')">{{$t('settings.language.language')}}</b-nav-item>
                   <b-nav-item v-if="experiments.includes('remoteDisplays')" :to="localePath('captioner-settings-remote-displays')">{{$t('settings.remoteDisplays.remoteDisplays')}}</b-nav-item>
+                  <b-nav-item :to="localePath('captioner-settings-sync')">Sync</b-nav-item>
                   <b-nav-item :to="localePath('captioner-settings-word-replacements')">{{$t('settings.wordReplacements.wordReplacements')}}</b-nav-item>
                   <!-- <b-nav-item :to="localePath('captioner-settings-title-cards">Title Cards</b-nav-item> -->
                 </b-nav>

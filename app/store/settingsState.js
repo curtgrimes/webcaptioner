@@ -52,6 +52,10 @@ export default () => {
             userDefault: null,
         },
         integrations: {
+            dropbox: {
+                accessToken: null,
+                accountId: null,
+            },
             vmix: {
                 on: false,
                 webControllerAddress: '',

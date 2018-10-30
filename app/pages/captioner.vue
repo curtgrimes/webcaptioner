@@ -309,6 +309,17 @@ export default {
           });
         }
       }
+
+      if ([
+        'captioner/APPEND_TRANSCRIPT_FINAL',
+        'captioner/CLEAR_TRANSCRIPT_INTERIM',
+        'captioner/CLEAR_TRANSCRIPT',
+      ].includes(mutation)
+        && this.$store.state.settings.integrations.dropbox.accessToken
+        && this.$store.state.captioner.transcript.final
+      ) {
+        this.$store.dispatch('SAVE_TO_DROPBOX');
+      }
     });
   },
   watch: {

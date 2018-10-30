@@ -65,6 +65,12 @@ export default {
             }
         },
         donate: function(amount) {
+            this.$ga.event({
+                eventCategory: 'donation',
+                eventAction: 'start',
+                eventLabel: amount,
+            });
+            
             this.amount = amount;
             this.customAmountInvalid = false;
 

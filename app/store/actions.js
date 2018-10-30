@@ -6,6 +6,7 @@ import get from 'lodash.get'
 import vmixSetup from '~/mixins/vmixSetup'
 import {normalizeSettings} from '~/mixins/settingsNormalizer'
 import VueNativeWebsocket from 'vue-native-websocket'
+import axios from 'axios'
 
 function getVmixPath(webControllerAddress) {
   return (webControllerAddress || '').trim().replace(/\/$/, "") + '/API';
@@ -117,6 +118,9 @@ export default {
 
       commitPropertySetting('SET_ROOM_LEADER_TOKEN', 'roomLeaderToken', 'roomLeaderToken');
       commitPropertySetting('SET_ROOM_MEMBERSHIP_ID', 'roomMembershipId', 'roomMembershipId');
+
+      commitPropertySetting('SET_DROPBOX_ACCESS_TOKEN', 'accessToken', 'integrations.dropbox.accessToken');
+      commitPropertySetting('SET_DROPBOX_ACCOUNT_ID', 'accountId', 'integrations.dropbox.accountId');
 
       commitPropertySetting('SET_SEND_TO_VMIX', 'on', 'integrations.vmix.on');
       commitPropertySetting('SET_VMIX_WEB_CONTROLLER_ADDRESS', 'webControllerAddress', 'integrations.vmix.webControllerAddress');
@@ -291,6 +295,24 @@ export default {
       testConnectionWithTimeout,
       testVmixTemplateWithTimeout,
     ]);
+  },
+
+  SAVE_TO_DROPBOX: ({state, commit}) => {
+    if (!state.captioner.transcript.final) {
+      return;
+    }
+    
+    let sessionStartDate = state.integrations.storage.sessionStartDate;
+    if (!sessionStartDate) {
+      commit('INIT_STORAGE_SESSION_DATE');
+      sessionStartDate = state.integrations.storage.sessionStartDate
+    }
+
+    axios.post('/api/storage/dropbox/push', {
+      accessToken: state.settings.integrations.dropbox.accessToken,
+      sessionStartDate,
+      contents: state.captioner.transcript.final,
+    });
   },
 
   SEND_TO_VMIX: ({state, commit}, { text, chromeExtensionId }) => {
