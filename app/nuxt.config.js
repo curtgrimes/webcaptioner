@@ -87,7 +87,7 @@ module.exports = {
         },
         {
           set: '@fortawesome/free-brands-svg-icons',
-          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome', 'faTwitter', 'faFacebook',],
+          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome', 'faTwitter', 'faFacebook', 'faDropbox'],
         },
       ]
     }],
@@ -124,8 +124,8 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
-    extend (config, { isDev, isClient, isServer }) {
-      if (isDev && isClient) {
+    extend (config, { isDev }) {
+      if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -134,11 +134,11 @@ module.exports = {
         })
       }
 
-      if (isClient) {
+      if (process.client) {
         config.devtool = '#source-map';
       }
 
-      if (isServer) {
+      if (process.server) {
 
       }
     }

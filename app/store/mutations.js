@@ -241,6 +241,15 @@ export default {
     state.delayedEvents = [];
   },
 
+  SET_DROPBOX_ACCESS_TOKEN: (state, { accessToken }) => {
+    state.settings.integrations.dropbox.accessToken = accessToken;
+  },
+  SET_DROPBOX_ACCOUNT_ID: (state, { accountId }) => {
+    state.settings.integrations.dropbox.accountId = accountId;
+  },
+  INIT_STORAGE_SESSION_DATE: (state) => {
+    state.integrations.storage.sessionStartDate = new Date();
+  },
 
   SET_SEND_TO_VMIX: (state, { on }) => {
     state.settings.integrations.vmix.on = on;

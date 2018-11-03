@@ -57,6 +57,8 @@ const actions = {
             commit('SET_SHOULD_BE_ON', { shouldBeOn: true });
             dispatch('start');
         }
+
+        commit('INIT_STORAGE_SESSION_DATE', null, {root:true});
     },
     start ({commit, state, rootState, getters, dispatch}) {
         let parser = new RecognitionResultParser({
