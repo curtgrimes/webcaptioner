@@ -4,7 +4,7 @@
     v-bind:class="[wrapTextPositionClass]"
     v-bind:style="{color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
     @click="focusIfInTypingMode()"><!--
-    --><link type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" /><!--
+    --><link v-if="isGoogleFont" type="text/css" rel="stylesheet" :href="'https://fonts.googleapis.com/css?family=' + fontFamily" /><!--
     --><span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
@@ -16,9 +16,20 @@
   --></div>
 </template>
 
+<style>
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff2') format('woff2'),
+         url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
+
 <script>
 import hexToRGB from '~/mixins/hexToRGB'
 import Combokeys from 'combokeys'
+import fontChoices from '~/mixins/data/fontChoices'
 
 export default {
   name: 'transcript',
@@ -146,6 +157,11 @@ export default {
     },
     fontFamily () {
       return this.$store.state.settings.appearance.text.fontFamily;
+    },
+    isGoogleFont() {
+        return fontChoices.find((choice) => {
+          return choice.fontNameKey === this.fontFamily
+        }).googleFont;
     },
     fontSize () {
       return this.$store.state.settings.appearance.text.textSize + 'em';

@@ -1,38 +1,52 @@
 export default [
     { // This list must have at least one and the default must be first
-        googleFontNameKey: 'Cousine',
+        fontNameKey: 'Cousine',
         displayName: 'Cousine',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Roboto',
+        fontNameKey: 'Roboto',
         displayName: 'Roboto',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Oswald',
+        fontNameKey: 'Oswald',
         displayName: 'Oswald',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Lato',
+        fontNameKey: 'Lato',
         displayName: 'Lato',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Archivo Black',
+        fontNameKey: 'Archivo Black',
         displayName: 'Archivo Black',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Bree Serif',
+        fontNameKey: 'Bree Serif',
         displayName: 'Bree Serif',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Arvo',
+        fontNameKey: 'Arvo',
         displayName: 'Arvo',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Concert One',
+        fontNameKey: 'Concert One',
         displayName: 'Concert One',
+        googleFont: true,
     },
     {
-        googleFontNameKey: 'Boogaloo',
+        fontNameKey: 'Boogaloo',
         displayName: 'Boogaloo',
+        googleFont: true,
+    },
+    {
+        fontNameKey: 'OpenDyslexic',
+        displayName: 'OpenDyslexic',
+        googleFont: false,
     },
 ];

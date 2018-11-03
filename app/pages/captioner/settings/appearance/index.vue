@@ -6,20 +6,20 @@
       <div class="col-sm-6">
         <b-dropdown class="d-block w-100" toggle-class="w-100">
           <template slot="button-content">
-            <span :style="{fontFamily: fontFamilyDisplayName}">
+            <span :style="{fontFamily: fontFamilyDisplayName, textTransform: 'none'}">
               {{fontFamilyDisplayName}}
             </span>
           </template>
           <b-dropdown-item
             v-for="fontChoice in getFontChoices()"
-            :key="fontChoice.googleFontNameKey"
-            :style="{fontFamily: fontChoice.googleFontNameKey }"
-            @click="fontFamily = fontChoice.googleFontNameKey"
+            :key="fontChoice.fontNameKey"
+            :style="{fontFamily: fontChoice.fontNameKey }"
+            @click="fontFamily = fontChoice.fontNameKey"
           >{{fontChoice.displayName}}</b-dropdown-item>
         </b-dropdown>
+        <p class="mt-2 mb-0 small text-muted" v-if="fontFamily === 'OpenDyslexic'">Learn more about <a href="https://www.opendyslexic.org/" target="_blank">OpenDyslexic</a>.</p>
       </div>
     </div>
-
 
     
     <div class="form-group row">
@@ -270,6 +270,17 @@
   </div>
 </template>
 
+<style>
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff2') format('woff2'),
+         url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
+
+
 <script>
 import debounce from 'lodash.debounce'
 import fontChoices from '~/mixins/data/fontChoices.js'
@@ -285,9 +296,19 @@ if (typeof window !== 'undefined') {
   link.rel = 'stylesheet';
   headID.appendChild(link);
 
-  let fontChoicesString = fontChoices.map(function (choice) { return choice.googleFontNameKey.replace(/ /g, '+'); }).join('|');;
+  let fontChoicesString = fontChoices.filter(f => { return f.googleFont; }).map(function (choice) { return choice.fontNameKey.replace(/ /g, '+'); }).join('|');;
 
   link.href = 'https://fonts.googleapis.com/css?family=' + fontChoicesString;
+
+
+  // Add non-Google fonts
+  // fontChoices.filter(f => { return !f.googleFont; }).forEach(f => {
+  //   var link = document.createElement('link');
+  //   link.type = 'text/css';
+  //   link.rel = 'stylesheet';
+  //   headID.appendChild(link);
+  //   link.href = 'https://fonts.googleapis.com/css?family=' + fontChoicesString;
+  // });
 }
 
 export default {
@@ -344,7 +365,7 @@ export default {
     fontFamilyDisplayName: { // get the displayName according to the store key
       get () {
         return fontChoices.find((choice) => {
-          return choice.googleFontNameKey === this.$store.state.settings.appearance.text.fontFamily
+          return choice.fontNameKey === this.$store.state.settings.appearance.text.fontFamily
         }).displayName;
       },
     },
