@@ -56,4 +56,20 @@ export default [
             },
         ],
     },
+    {
+        version: "2.2.0",
+        date: "2018-11-11",
+        notes: [
+            {
+                icon: 'dropbox.svg',
+                title: 'Sync with Dropbox',
+                text: 'Automatically <a href="/captioner/settings/sync">sync transcripts with Dropbox</a> for safe keeping.',
+            },
+            {
+                icon: 'iconmonstr-text-3.svg',
+                title: 'OpenDyslexic Font',
+                text: 'Use OpenDyslexic, a typeface designed for those experiencing some common symptoms of dyslexia, as a <a href="/captioner/settings/appearance">font choice</a>.',
+            },
+        ],
+    },
 ];

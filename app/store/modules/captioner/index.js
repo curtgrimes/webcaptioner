@@ -40,7 +40,7 @@ const state = {
 
 const actions = {
     startManual ({commit, dispatch, state, rootState}) {
-        lastManualStart = new Date();
+        lastManualStart = Date.now();
 
         if (state.typingModeOn) {
             dispatch('stopTypingMode');
@@ -93,7 +93,7 @@ const actions = {
         let self = this;
 
         speechRecognizer.onstart = function () {
-            commit('SET_CAPTIONER_ON');
+            commit('SET_CAPTIONER_ON', {omitFromGoogleAnalytics: true});
 
             clearTimeout(microphonePermissionNeededTimeout);
             
@@ -128,7 +128,7 @@ const actions = {
         };
 
         speechRecognizer.onend = function (e) {
-            commit('SET_CAPTIONER_OFF');
+            commit('SET_CAPTIONER_OFF', {omitFromGoogleAnalytics: true});
 
             if (!state.shouldBeOn) {
                 clearInterval(keepAliveInterval);
@@ -164,7 +164,7 @@ const actions = {
             // console.log('speechRecognizer error');
             // console.log(error);
             if (event.error == 'not-allowed') {
-                commit('SET_CAPTIONER_OFF');
+                commit('SET_CAPTIONER_OFF', {omitFromGoogleAnalytics: true});
                 commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
                 commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
                 commit('SET_MICROPHONE_PERMISSION_DENIED', { microphonePermissionDenied: true });
@@ -229,7 +229,7 @@ const actions = {
             clearInterval(demoInterval);
         }
 
-        state.totalCaptioningSeconds += (Date.now() - lastManualStart.getTime())/1000;
+        state.totalCaptioningSeconds += (Date.now() - lastManualStart)/1000;
         dispatch('donation/SHOW_DONATION_MESSAGE_IF_ELIGIBLE', null, {root:true});
     },
 

@@ -19,7 +19,7 @@ const actions = {
             hasRecentDonation = dateIsWithinPastXDays(pastDonationDate, 14);
         }
 
-        if (!hasRecentDonation && rootState.captioner.totalCaptioningSeconds >= 240) {
+        if (!hasRecentDonation && rootState.captioner.totalCaptioningSeconds >= 5) {
             commit('SET_MESSAGE_SHOW', {on: true});
         }
     },

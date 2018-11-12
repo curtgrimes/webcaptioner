@@ -160,10 +160,6 @@ export default {
     state.detached = false;
   },
 
-  SET_LAST_WHATS_NEW_VERSION_SEEN: (state, { version }) => {
-    state.settings.lastWhatsNewVersionSeen = version;
-  },
-
   SET_INCOMPATIBLE_BROWSER_ON: (state) => {
     state.incompatibleBrowser = true;
   },

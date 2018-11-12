@@ -5,7 +5,7 @@ const fetch = require('isomorphic-fetch');
 const {format: dateFormat} = require('date-fns');
 
 function getDropboxClient() {
-    return new Dropbox({clientId: 'v7642g8xms9wmlf', fetch});
+    return new Dropbox({clientId: process.env.DROPBOX_CLIENT_ID, fetch});
 }
 
 dropboxRoute.get('/auth', async (req, res, next) => {

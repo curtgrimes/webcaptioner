@@ -27,7 +27,7 @@ export default class {
             return text;
         }
         
-        for (var i = recognitionResultEvent.resultIndex; i < recognitionResultEvent.results.length; ++i) {
+        for (let i = recognitionResultEvent.resultIndex; i < recognitionResultEvent.results.length; ++i) {
             if (recognitionResultEvent.results[i].isFinal) {
                 transcriptFinal += recognitionResultEvent.results[i][0].transcript;
             } else {

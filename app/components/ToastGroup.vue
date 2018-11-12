@@ -13,14 +13,18 @@ export default {
     data: function() {
         return {
             shouldAcceptPointerEvents: false,
+            shouldAcceptPointerEventsInterval: null,
         };
     },
     mounted: function() {
-        setInterval(() => {
+        this.shouldAcceptPointerEventsInterval = setInterval(() => {
             // Check if overflowed, and therefore has toasts, and therefore should
             // accept pointer events
             this.shouldAcceptPointerEvents = this.$refs.toastGroup && this.$refs.toastGroup.scrollHeight > this.$refs.toastGroup.clientHeight;
         }, 1000);
+    },
+    beforeDestroy: function() {
+        clearInterval(this.shouldAcceptPointerEventsInterval);
     },
 }
 </script>

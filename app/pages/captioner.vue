@@ -1,7 +1,6 @@
 <template>
   <div id="app" class="w-100" style="display: flex;flex-direction: column;height: 100vh;">
     <nuxt-child/>
-    <welcome-modal ref="welcomeModal" />
     <incompatible-browser-modal ref="incompatibleBrowserModal" />
     <microphone-permission-needed-modal ref="microphonePermissionNeededModal" />
     <microphone-permission-denied-modal ref="microphonePermissionDeniedModal" />
@@ -15,7 +14,6 @@ import screenfull from 'screenfull'
 import saveToFile from '~/mixins/saveToFile.js'
 import dateFormat from '~/mixins/dateFormat'
 import navbar from '~/components/Navbar.vue'
-import WelcomeModal from '~/components/WelcomeModal.vue'
 import IncompatibleBrowserModal from '~/components/IncompatibleBrowserModal.vue'
 import MicrophonePermissionNeededModal from '~/components/MicrophonePermissionNeededModal.vue'
 import MicrophonePermissionDeniedModal from '~/components/MicrophonePermissionDeniedModal.vue'
@@ -32,7 +30,6 @@ export default {
   ],
   components: {
     navbar,
-    WelcomeModal,
     IncompatibleBrowserModal,
     MicrophonePermissionNeededModal,
     MicrophonePermissionDeniedModal,
@@ -58,10 +55,9 @@ export default {
           {deep: true}
         );
       
-        if (this.hasntSeenWelcomeModalForCurrentVersionYet() && !this.shouldAutostart()) {
-          this.$refs.welcomeModal.showModal();
-          this.$store.commit('SET_LAST_WHATS_NEW_VERSION_SEEN', { version: getCurrentVersionNumber() });
-        }
+        // if (!this.shouldAutostart()) {
+        //   this.$refs.welcomeModal.showModal();
+        // }
       });
 
     if (!this.$route.meta.disableShortcutKeys) {
@@ -175,7 +171,7 @@ export default {
     this.redirectSettingsRouteOnMobile(this.$route.name); // if navigating to settings page on load
 
     function isChromium() { 
-      for (var i = 0, u="Chromium", l =u.length; i < navigator.plugins.length; i++) {
+      for (let i = 0, u="Chromium", l =u.length; i < navigator.plugins.length; i++) {
         if (navigator.plugins[i].name != null && navigator.plugins[i].name.substr(0, l) === u) {
           return true;
         }
@@ -419,11 +415,6 @@ export default {
     },
   },
   methods: {
-    hasntSeenWelcomeModalForCurrentVersionYet: function() {
-      const lastWhatsNewVersionSeen = this.$store.state.settings.lastWhatsNewVersionSeen;
-      const currentVersion = getCurrentVersionNumber();
-      return versionSort(lastWhatsNewVersionSeen || '0', currentVersion) < 0;
-    },
     hideLoadingScreen: function() {
       let loadingScreen = document.getElementById('full-screen-loading');
       if (loadingScreen) {

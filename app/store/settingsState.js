@@ -73,7 +73,6 @@ export default () => {
                 },
             },
         },
-        lastWhatsNewVersionSeen: '',
         donationDate: null,
         exp: [],
     };

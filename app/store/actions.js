@@ -132,7 +132,6 @@ export default {
       commitPropertySetting('SET_WEBHOOKS_FINAL_URL', 'url', 'integrations.webhooks.final.url');
       commitPropertySetting('SET_WEBHOOKS_FINAL_METHOD', 'method', 'integrations.webhooks.final.method');
       
-      commitPropertySetting('SET_LAST_WHATS_NEW_VERSION_SEEN', 'version', 'lastWhatsNewVersionSeen');
       commitPropertySetting('SET_DONATION_DATE', 'donationDate', 'donationDate');
 
       (get(settings, 'exp') || []).forEach((experiment) => {
