@@ -22,9 +22,10 @@ rooms.get('/', async (req, res, next) => {
         return;
     }
 
-    let cursor = '0';
     let rooms = [];
-    let scanAsync = function() {
+    let cursor = '0'; // initial value for redis SCAN cursor
+    
+    function getRooms(cursor) {
         redisClient.scanAsync(cursor, 'MATCH', 'rooms:*')
             .then(async ([newCursor, newResults]) => {
                 let resultsWithTTLs = newResults.map(async (roomKey) => {
@@ -45,16 +46,18 @@ rooms.get('/', async (req, res, next) => {
 
                 rooms = rooms.concat(await Promise.all(resultsWithTTLs));
 
-                if (cursor !== '0') {
+                if (newCursor !== '0') {
                     // Scan again until cursor === '0'
-                    scanAsync();
+                    getRooms(newCursor);
                 }
                 else {
                     res.send(JSON.stringify({rooms}));
                     return;
                 }
             });
-        }();
+        }
+        
+        getRooms(cursor);
 });
 
 rooms.post('/', async (req, res, next) => {

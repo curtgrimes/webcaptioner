@@ -362,10 +362,12 @@ export default {
     '$store.state.settings.appearance': {
       handler: function(appearance) {
         if (this.$store.state.settings.share.roomId) {
-          this.$socket.sendObj({
-            action: 'updateAppearance',
-            appearance,
-          });
+          setTimeout(() => { // TODO: timeout to attempt to avoid sending this before socket connected; do proper socket connection watch
+            this.$socket.sendObj({
+              action: 'updateAppearance',
+              appearance,
+            });
+          }, 1000);
         }
       },
       deep: true,
