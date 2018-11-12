@@ -57,6 +57,7 @@ let taskDefinition = {
                 'TWITCH_APP_CLIENT_SECRET',
                 'STRIPE_API_KEY_PUBLIC',
                 'STRIPE_API_KEY_SECRET',
+                'DROPBOX_CLIENT_ID',
             ]),
             {
                 name: "HOSTNAME",
