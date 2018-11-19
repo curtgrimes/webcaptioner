@@ -118,6 +118,7 @@ const actions = {
 
         speechRecognizer.onend = function (e) {
             commit('SET_CAPTIONER_OFF', {omitFromGoogleAnalytics: true});
+            parser.stop();
 
             if (!state.shouldBeOn) {
                 clearInterval(keepAliveInterval);
@@ -126,26 +127,27 @@ const actions = {
         };
 
         speechRecognizer.onresult = function(event) {
-            let {transcriptInterim, transcriptFinal} = parser.getTranscript(event);
-            
-            // Set flag false once we're receiving a transcript
-            // for the first time
-            if (state.transcript.waitingForInitial) {
-                commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
-            }
-            
-
-            if (transcriptInterim) {
-                commit('SET_TRANSCRIPT_INTERIM', { transcriptInterim, omitFromGoogleAnalytics: true, });
-            }
-            if (transcriptFinal) {
-                // Clear the interim transcript because its content is now
-                // returned in the final transcript
-                commit('CLEAR_TRANSCRIPT_INTERIM', {omitFromGoogleAnalytics: true,});
-                commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal, omitFromGoogleAnalytics: true, });
+            parser.getTranscript(event, ({transcriptInterim, transcriptFinal}) => {
+                // Set flag false once we're receiving a transcript
+                // for the first time
+                if (state.transcript.waitingForInitial) {
+                    commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
+                }
                 
-                dispatch('trackWordCount', { wordCount: transcriptFinal.split(' ').length });
-            }
+
+                if (transcriptInterim) {
+                    commit('SET_TRANSCRIPT_INTERIM', { transcriptInterim, omitFromGoogleAnalytics: true, });
+                }
+                if (transcriptFinal) {
+                    // Clear the interim transcript because its content is now
+                    // returned in the final transcript
+                    commit('CLEAR_TRANSCRIPT_INTERIM', {omitFromGoogleAnalytics: true,});
+                    commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal, omitFromGoogleAnalytics: true, });
+                    
+                    // TODO: batch these
+                    dispatch('trackWordCount', { wordCount: transcriptFinal.split(' ').length });
+                }
+            });
         };
 
         speechRecognizer.onerror = function(error) {
