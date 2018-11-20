@@ -101,7 +101,12 @@ export default {
     initAudioStream: function() {
       let self = this;
       
-      let constraints = {audio: true, video: false};
+      let constraints = {
+        audio: {
+          autoGainControl: false,
+        },
+        video: false,
+      };
       let streamHandler = function (stream) {
         self.stream = stream; // save reference to stream so we can close it later
 
