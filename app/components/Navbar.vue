@@ -38,45 +38,27 @@
                         <b-button @click="sendToVmix = false" :aria-label="$t('common.dismiss')"><fa icon="times"/></b-button>
                     </b-button-group>
                 </div>
-
-                <transition name="fade">
-                    <b-dropdown v-if="remoteDisplays.length > 0" variant="secondary" dropup no-caret right class="mr-2" toggle-class="rounded">
-                        <template slot="button-content">
-                            <fa icon="desktop" /> {{remoteDisplays.length}} <span class="sr-only">Screens</span>
-                        </template>
-                        <b-dropdown-item disabled class="text-white" style="cursor:default" v-for="remoteDisplay in remoteDisplays" v-bind:key="remoteDisplay.remoteDisplayId">
-                            <span v-if="remoteDisplay.device.isAndroid">
-                                <fa :icon="['fab', 'android']" /> Android
-                            </span>
-                            <span v-else-if="remoteDisplay.device.isIosPhone">
-                                <fa :icon="['fab', 'apple']" /> iPhone
-                            </span>
-                            <span v-else-if="remoteDisplay.device.isIosTablet">
-                                <fa :icon="['fab', 'apple']" /> iPad
-                            </span>
-                            <span v-else-if="remoteDisplay.device.isMac">
-                                <fa :icon="['fab', 'apple']" /> Mac
-                            </span>
-                            <span v-else-if="remoteDisplay.device.isLinux">
-                                Linux Device
-                            </span>
-                            <span v-else-if="remoteDisplay.device.isWindows">
-                                <fa :icon="['fab', 'windows']" /> Windows Device
-                            </span>
-                            <span v-else>
-                                Device
-                            </span>
-                        </b-dropdown-item>
-                    </b-dropdown>
-                </transition>
                 <b-button-group :size="largerLayout ? 'lg' : ''" class="captioning-split-button">
-                    <b-button id="startCaptioningDropdown" :class="incompatibleBrowser ? 'button-only-disabled' : ''" :variant="captioningToggleButtonVariant" @click="captioningToggleButtonClick">
+                    <b-button
+                        id="startCaptioningDropdown"
+                        :class="incompatibleBrowser ? 'button-only-disabled' : ''"
+                        :variant="captioningToggleButtonVariant"
+                        @click="captioningToggleButtonClick"
+                    >
                         <div :class="{'px-4 py-2' : largerLayout}">
                             <span v-if="!this.captioningOn">
                                 <fa icon="microphone" /> <span v-show="!typingModeOn"> {{$t('navbar.captioner.startCaptioning')}}</span>
                             </span>
                             <span v-else>{{$t('navbar.captioner.stopCaptioning')}}</span> <kbd v-show="largerLayout" class="small ml-3">c</kbd>
                         </div>
+
+                        <!-- <b-popover
+                            id="captioningPreviewPopover"
+                            target="startCaptioningDropdown"
+                            placement="top"
+                        >
+                            {{transcriptExcerpt}}
+                        </b-popover> -->
                     </b-button>
                     <b-button v-show="experiments.includes('typingMode') && !typingModeOn" variant="primary" v-b-tooltip.top title="Start Typing (t)" @click="startTypingMode">
                         <fa icon="keyboard"/>
@@ -101,7 +83,7 @@
                         <b-dropdown-item :to="localePath('captioner-settings')" class="dropdown-item"><fa icon="cog" class="mr-1" fixed-width /> {{$t('navbar.menu.settings')}}</b-dropdown-item>
                     </b-dropdown>
                 </b-button-group>
-            </div> <!-- bottom row in big UI mode -->
+            </div>
         </nav>
     </div>
 </template>
@@ -148,6 +130,12 @@ export default {
     microphoneName: function() {
         return this.$store.state.captioner.microphoneName;
     },
+    transcriptExcerpt: function() {
+        return (this.$store.state.captioner.transcript.final + ' ' + this.$store.state.captioner.transcript.interim).slice(-60);
+    },
+    showCaptioningPreviewPopover: function() {
+        return this.transcriptExcerpt.length > 0;
+    },
     waitingForInitialTranscript: function() {
         return this.$store.state.captioner.transcript.waitingForInitial;
     },
@@ -184,6 +172,18 @@ export default {
             this.$store.commit('SET_SEND_TO_VMIX', {on: false});
         },
     },
+  },
+  watch: {
+    //   transcriptExcerpt: function(transcriptExcerpt) {
+    //       if (this.$router.currentRoute.name.startsWith('captioner-settings')) {
+    //         if (transcriptExcerpt) {
+    //             this.$root.$emit('bv::show::popover', 'startCaptioningDropdown');
+    //         }
+    //         else {
+    //             this.$root.$emit('bv::hide::popover', 'startCaptioningDropdown');
+    //         }
+    //       }
+    //   },
   },
   methods: {
     captioningToggleButtonClick: function() {
