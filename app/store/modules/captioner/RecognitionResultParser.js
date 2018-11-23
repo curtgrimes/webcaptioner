@@ -1,19 +1,8 @@
 import escapeRegExp from 'lodash.escaperegexp'
 
 export default class {
-    constructor ({wordReplacements}) {
-        this.wordReplacements = wordReplacements || [];
-
-        // Generate Regex for each replacement
-        this.wordReplacements = this.wordReplacements.map((replacement) => {
-            let stringsToCensor = (replacement.from || '').split(',');
-            stringsToCensor = stringsToCensor.map((stringToCensor) => {
-                return escapeRegExp(stringToCensor);
-            });
-            
-            replacement.fromRegex = new RegExp('(^|\\b|\\s)(' + stringsToCensor.join('|') + ')(\\b|\\s|$)', 'gi');
-            return replacement;
-        });
+    constructor () {
+        this.wordReplacements = [];
     }
 
     getTranscript(recognitionResultEvent) {
@@ -40,5 +29,18 @@ export default class {
             transcriptInterim: transcriptInterim ? makeReplacements(transcriptInterim) : null,
             transcriptFinal: transcriptFinal ? makeReplacements(transcriptFinal) : null,
         }
+    }
+
+    setWordReplacements ({wordReplacements}) {
+        // Generate Regex for each replacement
+        this.wordReplacements = (wordReplacements || []).map((replacement) => {
+            let stringsToCensor = (replacement.from || '').split(',');
+            stringsToCensor = stringsToCensor.map((stringToCensor) => {
+                return escapeRegExp(stringToCensor);
+            });
+            
+            replacement.fromRegex = new RegExp('(^|\\b|\\s)(' + stringsToCensor.join('|') + ')(\\b|\\s|$)', 'gi');
+            return replacement;
+        });
     }
 };

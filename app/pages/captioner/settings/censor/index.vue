@@ -44,9 +44,7 @@ export default {
   watch: {
     censor: function () {
       if (this.$store.state.captioner.on) {
-        this.$nextTick(() => {
-          this.$store.dispatch('captioner/restartAndReinitializeSpeechRecognizer');
-        });
+        this.$store.dispatch('captioner/loadWordReplacements');
       }
     },
   },

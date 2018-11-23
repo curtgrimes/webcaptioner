@@ -11,7 +11,8 @@ let speechRecognizer,
     keepAliveInterval,
     demoInterval,
     microphonePermissionNeededTimeout,
-    lastManualStart;
+    lastManualStart,
+    parser;
 
 const state = {
     on: false,
@@ -62,27 +63,8 @@ const actions = {
         commit('INIT_STORAGE_SESSION_DATE', null, {root:true});
     },
     start ({commit, state, rootState, getters, dispatch}) {
-        const CENSOR_ON = rootState.settings.censor.on;
-        
-        let parser = new RecognitionResultParser({
-            wordReplacements: [
-                ...rootState.settings.wordReplacements,
-                ...internalWordReplacements,
-
-                ...(CENSOR_ON
-                    // Add profanity censor
-                    ? [{
-                        from: censoredProfanity.join(','),
-                        to: (rootState.settings.censor.replaceWith === 'nothing'
-                            ? ''
-                            : '******' // 'asterisks',
-                        )
-                    }]
-                    // Apply a heuristic to attempt to fully uncensor speech
-                    : profanityUncensor
-                ),
-            ],
-        });
+        parser = new RecognitionResultParser();
+        dispatch('loadWordReplacements');
 
         speechRecognizer = new webkitSpeechRecognition();
         speechRecognizer.continuous = true;
@@ -263,9 +245,30 @@ const actions = {
         }
     },
 
-    restartAndReinitializeSpeechRecognizer ({commit, state, rootState, dispatch}) {
-        state.on = false;
-        dispatch('restart');
+    loadWordReplacements({commit, state, rootState, dispatch}) {
+        const CENSOR_ON = rootState.settings.censor.on;
+
+        setTimeout(() => {
+            parser.setWordReplacements({
+                wordReplacements: [
+                    ...rootState.settings.wordReplacements,
+                    ...internalWordReplacements,
+    
+                    ...(CENSOR_ON
+                        // Add profanity censor
+                        ? [{
+                            from: censoredProfanity.join(','),
+                            to: (rootState.settings.censor.replaceWith === 'nothing'
+                                ? ''
+                                : '******' // 'asterisks',
+                            )
+                        }]
+                        // Apply a heuristic to attempt to fully uncensor speech
+                        : profanityUncensor
+                    ),
+                ],
+            });
+        },0);
     },
 
     trackWordCount ({}, {wordCount}) {

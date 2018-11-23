@@ -89,9 +89,7 @@ export default {
     },
     restartCaptioning: debounce(function () {
       if (this.$store.state.captioner.on) {
-        this.$nextTick(() => {
-          this.$store.dispatch('captioner/restartAndReinitializeSpeechRecognizer');
-        });
+        this.$store.dispatch('captioner/loadWordReplacements');
       }
     }, 1500),
   },
