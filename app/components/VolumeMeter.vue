@@ -105,8 +105,8 @@ export default {
         audio: {
           autoGainControl: false,
         },
-        video: false,
       };
+
       let streamHandler = function (stream) {
         self.stream = stream; // save reference to stream so we can close it later
 
@@ -167,6 +167,9 @@ export default {
       }, 300);
     },
     closeAudioStream: function() {
+      clearInterval(this.dateUpdateInterval);
+      clearInterval(this.recordVolumeReadingsInterval);
+
       // Stop audio meter
       if (this.audioMeter) {
         this.audioMeter.close();
@@ -174,14 +177,8 @@ export default {
               
       // Close all the media stream tracks (should just be one)
       if (this.stream) {
-        let tracks = this.stream.getTracks();
-        for (let i = 0; i < tracks.length; i++) {
-          tracks[i].stop();
-        }
+        this.stream.getTracks().forEach(track => track.stop());
       }
-
-      clearInterval(this.dateUpdateInterval);
-      clearInterval(this.recordVolumeReadingsInterval);
     },
     averageVolumeReading: function() {
       let sum = 0;
