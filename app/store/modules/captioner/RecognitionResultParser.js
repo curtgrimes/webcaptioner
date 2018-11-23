@@ -21,7 +21,6 @@ export default class {
             transcriptFinal = '';
 
         const makeReplacements = (text) => {
-            console.log(this.wordReplacements);
             for (let i = 0; i < this.wordReplacements.length; i++) {
                 // $1 and $3 are the leading and trailing whitespace, if any
                 text = text.replace(this.wordReplacements[i].fromRegex, '$1' + this.wordReplacements[i].to + '$3');

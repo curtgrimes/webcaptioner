@@ -178,7 +178,6 @@ dropboxRoute.get('/transcripts/:fileName', async (req, res, next) => {
     })
         .then(result => {
             if (result.link) {
-                console.log(result);
                 res.redirect(result.link);
             }
             else {

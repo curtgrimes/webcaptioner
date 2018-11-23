@@ -61,22 +61,24 @@ export default {
       return this.wordReplacements.length > 1;
     },
   },
-
   methods: {
     addWordReplacement: function (wordReplacement) {
       this.$store.commit('ADD_WORD_REPLACEMENT', { wordReplacement });
-      var self = this;
-      setTimeout(function () {
-        if (self.$refs.lastWordReplacement && self.$refs.lastWordReplacement.length) {
-          self.$refs.lastWordReplacement[0].focus();
+      this.restartCaptioning();
+
+      setTimeout(() => {
+        if (this.$refs.lastWordReplacement && this.$refs.lastWordReplacement.length) {
+          this.$refs.lastWordReplacement[0].focus();
         }
       }, 0);
     },
     removeWordReplacement: function (index) {
       this.$store.commit('REMOVE_WORD_REPLACEMENT', { index });
+      this.restartCaptioning();
     },
     updateWordReplacement: debounce(function (wordReplacement, index) {
       this.$store.commit('UPDATE_WORD_REPLACEMENT', { wordReplacement, index });
+      this.restartCaptioning();
     }, 200),
     removeEmptyReplacements: function() {
       this.wordReplacements.forEach((replacement, index) => {
@@ -85,6 +87,13 @@ export default {
         }
       });
     },
+    restartCaptioning: debounce(function () {
+      if (this.$store.state.captioner.on) {
+        this.$nextTick(() => {
+          this.$store.dispatch('captioner/restartAndReinitializeSpeechRecognizer');
+        });
+      }
+    }, 1500),
   },
 }
 </script>
