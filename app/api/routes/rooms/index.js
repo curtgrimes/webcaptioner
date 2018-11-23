@@ -39,6 +39,7 @@ rooms.get('/', async (req, res, next) => {
                     return {
                         id: roomKey.replace('rooms:', ''), // was "rooms:rPWoIvAy"
                         expireDate: Date.now() + (ttl * 1000),
+                        ttl,
                         backlink: await redisClient.hgetAsync(roomKey, 'backlink'),
                         subscriberCount: await getSubscriberCount(roomKey),
                     };
