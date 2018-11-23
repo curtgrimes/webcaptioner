@@ -2,6 +2,7 @@ import Vue from 'vue'
 import RecognitionResultParser from './RecognitionResultParser.js'
 import internalWordReplacements from '~/mixins/data/internalWordReplacements'
 import censoredProfanity from '~/mixins/data/profanity-en'
+import profanityUncensor from '~/mixins/data/profanity-uncensor-en'
 
 const SILENT_RESTART_AFTER_NO_RESULTS_MS = (2 * 1000);
 const SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING = (2.5 * 1000);
@@ -61,19 +62,25 @@ const actions = {
         commit('INIT_STORAGE_SESSION_DATE', null, {root:true});
     },
     start ({commit, state, rootState, getters, dispatch}) {
+        const CENSOR_ON = rootState.settings.censor.on;
+        
         let parser = new RecognitionResultParser({
             wordReplacements: [
                 ...rootState.settings.wordReplacements,
                 ...internalWordReplacements,
 
-                // Add profanity
-                {
-                    from: censoredProfanity.join(','),
-                    to: (rootState.settings.censor.replaceWith === 'nothing'
-                        ? ''
-                        : '******' // 'asterisks',
-                    )
-                },
+                ...(CENSOR_ON
+                    // Add profanity censor
+                    ? [{
+                        from: censoredProfanity.join(','),
+                        to: (rootState.settings.censor.replaceWith === 'nothing'
+                            ? ''
+                            : '******' // 'asterisks',
+                        )
+                    }]
+                    // Apply a heuristic to attempt to fully uncensor speech
+                    : profanityUncensor
+                ),
             ],
         });
 
@@ -161,8 +168,7 @@ const actions = {
 
         speechRecognizer.onerror = function(error) {
             clearTimeout(microphonePermissionNeededTimeout);
-            // console.log('speechRecognizer error');
-            // console.log(error);
+
             if (event.error == 'not-allowed') {
                 commit('SET_CAPTIONER_OFF', {omitFromGoogleAnalytics: true});
                 commit('SET_SHOULD_BE_ON', { shouldBeOn: false });
@@ -233,6 +239,8 @@ const actions = {
         dispatch('donation/SHOW_DONATION_MESSAGE_IF_ELIGIBLE', null, {root:true});
     },
 
+
+    // Fast restart if possible
     restart ({commit, state, rootState, dispatch}) {
         if (state.transcript.interim) {
             commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal: state.transcript.interim });
@@ -253,6 +261,11 @@ const actions = {
             // Need to init speechRecognizer again for some reason
             dispatch('start');
         }
+    },
+
+    restartAndReinitializeSpeechRecognizer ({commit, state, rootState, dispatch}) {
+        state.on = false;
+        dispatch('restart');
     },
 
     trackWordCount ({}, {wordCount}) {

@@ -135,7 +135,7 @@ export default { common:
      censor: 
       { censor: 'Censor',
         censorProfaneLanguage: 'Censor profane language.',
-        usEnglishOnly: '(Currently available for US English only.)',
+        usEnglishOnly: 'Currently available for US English only.',
         censorProfaneLanguageDescription: 
          { text: 'What\'s considered profane? {seeThisList} (note: profanity ahead!) If you need to censor additional words not included in this list, {useWordReplacements}.',
            seeThisList: 'See this list',

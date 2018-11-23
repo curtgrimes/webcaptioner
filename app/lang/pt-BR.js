@@ -135,7 +135,7 @@ export default { common:
      censor: 
       { censor: 'Censurar',
         censorProfaneLanguage: 'Censurar linguagem profana.',
-        usEnglishOnly: '(Atualmente disponível apenas para inglês dos EUA)',
+        usEnglishOnly: 'Atualmente disponível apenas para inglês dos EUA.',
         censorProfaneLanguageDescription: 
          { text: 'O que é considerado profano? {seeThisList} (nota: palavrões à frente!) Se você precisar censurar palavras adicionais não incluídas nesta lista, {useWordReplacements}.',
            seeThisList: 'Veja esta lista',

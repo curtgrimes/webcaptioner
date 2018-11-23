@@ -121,7 +121,7 @@ settings.appearance.xPosition,Use title case,X Position
 settings.appearance.yPosition,Use title case,Y Position
 settings.censor.censor,Use title case,Censor
 settings.censor.censorProfaneLanguage,,Censor profane language.
-settings.censor.usEnglishOnly,,(Currently available for US English only.)
+settings.censor.usEnglishOnly,,Currently available for US English only.
 settings.censor.censorProfaneLanguageDescription.text,"Do not translate {seeThisList} or {useWordReplacement}. The text at the key settings.censor.censorProfaneLanguageDescription.seeThisList and settings.censor.censorProfaneLanguageDescription.useWordReplacements will be placed here, respectively.","What's considered profane? {seeThisList} (note: profanity ahead!) If you need to censor additional words not included in this list, {useWordReplacements}."
 settings.censor.censorProfaneLanguageDescription.seeThisList,Will link to https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words,See this list
 settings.censor.censorProfaneLanguageDescription.useWordReplacements,,use word replacements

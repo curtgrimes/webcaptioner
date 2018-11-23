@@ -121,7 +121,7 @@ settings.appearance.xPosition,Use title case,Posição X
 settings.appearance.yPosition,Use title case,Posição Y
 settings.censor.censor,Use title case,Censurar
 settings.censor.censorProfaneLanguage,,Censurar linguagem profana.
-settings.censor.usEnglishOnly,,(Atualmente disponível apenas para inglês dos EUA)
+settings.censor.usEnglishOnly,,Atualmente disponível apenas para inglês dos EUA.
 settings.censor.censorProfaneLanguageDescription.text,"Do not translate {seeThisList} or {useWordReplacement}. The text at the key settings.censor.censorProfaneLanguageDescription.seeThisList and settings.censor.censorProfaneLanguageDescription.useWordReplacements will be placed here, respectively.","O que é considerado profano? {seeThisList} (nota: palavrões à frente!) Se você precisar censurar palavras adicionais não incluídas nesta lista, {useWordReplacements}."
 settings.censor.censorProfaneLanguageDescription.seeThisList,Will link to https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words,Veja esta lista
 settings.censor.censorProfaneLanguageDescription.useWordReplacements,,usar substituições de palavras

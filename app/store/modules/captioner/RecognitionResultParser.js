@@ -11,7 +11,7 @@ export default class {
                 return escapeRegExp(stringToCensor);
             });
             
-            replacement.fromRegex = new RegExp('\\b(' + stringsToCensor.join('|') + ')\\b', 'gi');
+            replacement.fromRegex = new RegExp('(^|\\b|\\s)(' + stringsToCensor.join('|') + ')(\\b|\\s|$)', 'gi');
             return replacement;
         });
     }
@@ -21,8 +21,10 @@ export default class {
             transcriptFinal = '';
 
         const makeReplacements = (text) => {
+            console.log(this.wordReplacements);
             for (let i = 0; i < this.wordReplacements.length; i++) {
-                text = text.replace(this.wordReplacements[i].fromRegex, this.wordReplacements[i].to);
+                // $1 and $3 are the leading and trailing whitespace, if any
+                text = text.replace(this.wordReplacements[i].fromRegex, '$1' + this.wordReplacements[i].to + '$3');
             }
             return text;
         }
