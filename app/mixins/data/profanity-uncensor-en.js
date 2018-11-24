@@ -12,6 +12,10 @@ export default [
         to: 'fucked',
     },
     {
+        from: 'f*******',
+        to: 'fuckfest',
+    },
+    {
         from: 's***',
         to: 'shit', // "slut" conflicts
     },
