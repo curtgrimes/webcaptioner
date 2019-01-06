@@ -108,6 +108,14 @@ export default {
     state.settings.controls.layout.larger = Boolean(on);
   },
 
+  SET_VOLUME_METER_SHOW: (state, { on }) => {
+    state.settings.controls.volumeMeter.show = Boolean(on);
+  },
+
+  SET_VOLUME_METER_SENSITIVITY: (state, { sensitivity }) => {
+    state.settings.controls.volumeMeter.sensitivity = sensitivity;
+  },
+
   ADD_WORD_REPLACEMENT (state, { wordReplacement }) {
     state.settings.wordReplacements.push(wordReplacement);
   },

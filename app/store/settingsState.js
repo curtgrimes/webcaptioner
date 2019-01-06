@@ -14,6 +14,10 @@ export default () => {
             layout: {
                 larger: false,
             },
+            volumeMeter: {
+                show: true,
+                sensitivity: 'high',
+            },
         },
         appearance: {
             text: {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)">
+  <div v-if="$store.state.settings.controls.volumeMeter.show && captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)">
     <b-btn variant="white" class="meter-outer mr-2 border-0 text-left text-danger px-2">
       <fa icon="exclamation-triangle" class="mr-1" />
       <span v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh">{{$t('captioner.volumeMeter.tooQuiet')}}</span>
@@ -40,9 +40,6 @@
 <script>
 import AudioStreamMeter from "audio-stream-meter";
 import clamp from 'lodash.clamp'
-
-const VOLUME_TOO_LOW_THRESHOLD = 0.25; // in the range 0 - 1
-const VOLUME_TOO_HIGH_THRESHOLD = 0.92; // in the range 0 - 1
 
 export default {
   name: "volumeMeter",
@@ -202,10 +199,18 @@ export default {
       return this.$store.state.captioner.on;
     },
     volumeTooLow: function () {
-      return this.averageVolumeReading() < VOLUME_TOO_LOW_THRESHOLD;
+      let volumeTooLowThreshold = this.$store.state.settings.controls.volumeMeter.sensitivity === 'high'
+                                    ? 0.25 // high sensitivity setting
+                                    : 0.05 // low sensitivity setting
+                                  ;
+      return this.averageVolumeReading() < volumeTooLowThreshold;
     },
     volumeTooHigh: function () {
-      return this.averageVolumeReading() > VOLUME_TOO_HIGH_THRESHOLD;
+      let volumeTooHighThreshold = this.$store.state.settings.controls.volumeMeter.sensitivity === 'high'
+                                    ? 0.92 // high sensitivity setting
+                                    : 0.98 // low sensitivity setting
+                                  ;
+      return this.averageVolumeReading() > volumeTooHighThreshold;
     },
     lastVolumeTooLowEventIsRecent: function () {
       // Last volume too low event was < x seconds ago

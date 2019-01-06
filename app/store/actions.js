@@ -107,6 +107,8 @@ export default {
       commitPropertySetting('SET_CENSOR_REPLACE_WITH', 'replaceWith', 'censor.replaceWith');
 
       commitPropertySetting('SET_LAYOUT_LARGER', 'on', 'controls.layout.larger');
+      commitPropertySetting('SET_VOLUME_METER_SHOW', 'on', 'controls.volumeMeter.show');
+      commitPropertySetting('SET_VOLUME_METER_SENSITIVITY', 'sensitivity', 'controls.volumeMeter.sensitivity');
 
       commitPropertySetting('SET_LOCALE_USER_DEFAULT', 'locale', 'locale.userDefault');
       commitPropertySetting('SET_LOCALE_FROM', 'locale', 'locale.from');
