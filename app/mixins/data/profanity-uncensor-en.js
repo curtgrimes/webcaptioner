@@ -20,8 +20,16 @@ export default [
         to: 'shit', // "slut" conflicts
     },
     {
+        from: 's*****',
+        to: 'slutty',
+    },
+    {
         from: 'a******',
         to: 'asshole',
+    },
+    {
+        from: 'c***',
+        to: 'cunt',
     },
     {
         from: 'b****',
