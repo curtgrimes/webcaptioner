@@ -1,6 +1,7 @@
 const rooms = require('express').Router();
 const redis = require('./../../redis');
 const nanoid = require('nanoid');
+const nanoidGenerate = require('nanoid/generate')
 const getSubscriberCount = require('./getSubscriberCount');
 const openGraphScraper = require('open-graph-scraper');
 const vibrant = require('node-vibrant')
@@ -70,7 +71,7 @@ rooms.post('/', async (req, res, next) => {
 
     let roomKey, roomId, roomKeyAlreadyExists;
     do {
-        roomId = nanoid(8);
+        roomId = nanoidGenerate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ_abcdefghjkmnpqrstuvwxyz-', 8);
         roomKey = 'rooms:' + roomId;
         roomKeyAlreadyExists = await redisClient.existsAsync(roomKey) === 1;
     }
