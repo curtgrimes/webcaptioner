@@ -179,6 +179,7 @@ const actions = {
 
         speechRecognizer.onend = function (e) {
             commit('SET_CAPTIONER_OFF', {omitFromGoogleAnalytics: true});
+            parser.stop();
 
             if (!state.shouldBeOn) {
                 clearInterval(keepAliveInterval);
