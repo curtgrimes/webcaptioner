@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import RecognitionResultParser from './RecognitionResultParser.js'
 import internalWordReplacements from '~/mixins/data/internalWordReplacements'
 import censoredProfanity from '~/mixins/data/profanity-en'
 import profanityUncensor from '~/mixins/data/profanity-uncensor-en'
+import escapeRegExp from 'lodash.escaperegexp'
 
 const SILENT_RESTART_AFTER_NO_RESULTS_MS = (2 * 1000);
 const SILENT_RESTART_WAIT_MS_AFTER_STARTING_CAPTIONING = (2.5 * 1000);
@@ -12,7 +12,7 @@ let speechRecognizer,
     demoInterval,
     microphonePermissionNeededTimeout,
     lastManualStart,
-    parser;
+    cursorInterval;
 
 const state = {
     on: false,
@@ -30,6 +30,8 @@ const state = {
         typed: '',
         waitingForInitial: false,
         delay: 0,
+        cursorable: [],
+        stabilized: '',
     },
     totalCaptioningSeconds: 0,
     lastStart: null,
@@ -38,6 +40,66 @@ const state = {
         tooLow: false,
         tooHigh: false,
     },
+    wordReplacements: [],
+}
+
+function getTranscriptsFromRecognitionEvent(event) {
+    let transcriptInterim = '', transcriptFinal = '';
+
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+            transcriptFinal += event.results[i][0].transcript;
+        } else {
+            transcriptInterim += event.results[i][0].transcript;
+        }
+    }
+
+    return {transcriptInterim, transcriptFinal};
+}
+
+function makeWordReplacements(text, wordReplacements) {
+    let replacedText = text;
+
+    for (let i = 0; i < wordReplacements.length; i++) {
+        // $1 and $3 are the leading and trailing whitespace, if any
+        replacedText = replacedText.replace(wordReplacements[i].fromRegex, '$1' + wordReplacements[i].to + '$3');
+    }
+    
+    return replacedText;
+}
+
+function getPhraseWithTimings({newPhrase = '', previousPhraseWithTimings}) {
+    let newPhraseSplitByWord = newPhrase.trim().split(' ');
+    let firstSeen = Date.now();
+    let newPhraseWithTimings = previousPhraseWithTimings;
+
+    for (let i = 0, length = newPhraseSplitByWord.length; i < length; i++) {
+        if (
+            // nothing exists at this index yet in our previous phrase with timings
+            typeof newPhraseWithTimings[i] === 'undefined' 
+            || (
+                // or a word exists in previous phrase and it doesn't match this new incoming word
+                newPhraseWithTimings[i].word
+                && newPhraseWithTimings[i].word !== newPhraseSplitByWord[i]
+                && !newPhraseWithTimings[i].stable // and the word wasn't already stable
+            )
+        ) {
+            // Set the word in our stabilized array with new timing
+            newPhraseWithTimings[i] = {
+                word: newPhraseSplitByWord[i],
+                firstSeen,
+                stable: false,
+            }
+        }
+    }
+
+    if (previousPhraseWithTimings.length > newPhraseSplitByWord.length) {
+        let lengthDifference = previousPhraseWithTimings.length - newPhraseSplitByWord.length;
+        // Remove "lengthDifference" amount from the end of the array (by multiplying by -1)
+        newPhraseWithTimings.splice(lengthDifference * -1);
+    }
+
+    return newPhraseWithTimings;
 }
 
 const actions = {
@@ -63,7 +125,6 @@ const actions = {
         commit('INIT_STORAGE_SESSION_DATE', null, {root:true});
     },
     start ({commit, state, rootState, getters, dispatch}) {
-        parser = new RecognitionResultParser();
         dispatch('loadWordReplacements');
 
         speechRecognizer = new webkitSpeechRecognition();
@@ -118,7 +179,6 @@ const actions = {
 
         speechRecognizer.onend = function (e) {
             commit('SET_CAPTIONER_OFF', {omitFromGoogleAnalytics: true});
-            parser.stop();
 
             if (!state.shouldBeOn) {
                 clearInterval(keepAliveInterval);
@@ -127,27 +187,39 @@ const actions = {
         };
 
         speechRecognizer.onresult = function(event) {
-            parser.getTranscript(event, ({transcriptInterim, transcriptFinal}) => {
-                // Set flag false once we're receiving a transcript
-                // for the first time
-                if (state.transcript.waitingForInitial) {
-                    commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
-                }
-                
+            if (state.transcript.waitingForInitial) {
+                // Set flag false once we're receiving a transcript for the first time
+                commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: false });
+            }
 
-                if (transcriptInterim) {
-                    commit('SET_TRANSCRIPT_INTERIM', { transcriptInterim, omitFromGoogleAnalytics: true, });
-                }
-                if (transcriptFinal) {
-                    // Clear the interim transcript because its content is now
-                    // returned in the final transcript
-                    commit('CLEAR_TRANSCRIPT_INTERIM', {omitFromGoogleAnalytics: true,});
-                    commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal, omitFromGoogleAnalytics: true, });
-                    
-                    // TODO: batch these
-                    dispatch('trackWordCount', { wordCount: transcriptFinal.split(' ').length });
-                }
-            });
+            let {transcriptInterim, transcriptFinal} = getTranscriptsFromRecognitionEvent(event);
+
+            if (transcriptInterim) {
+                transcriptInterim = makeWordReplacements(transcriptInterim, state.wordReplacements);
+                commit('SET_TRANSCRIPT_INTERIM', { transcriptInterim, omitFromGoogleAnalytics: true, });
+                commit('SET_TRANSCRIPT_CURSORABLE', {
+                    transcript: transcriptInterim,
+                    omitFromGoogleAnalytics: true,
+                });
+
+                dispatch('cursorThroughTranscript');
+            }
+            if (transcriptFinal) {
+                transcriptFinal = makeWordReplacements(transcriptFinal, state.wordReplacements);
+
+                // Clear the interim transcript because its content is now
+                // returned in the final transcript
+                commit('CLEAR_TRANSCRIPT_INTERIM', {omitFromGoogleAnalytics: true,});
+                commit('APPEND_TRANSCRIPT_FINAL', { transcriptFinal, omitFromGoogleAnalytics: true, });
+                commit('SET_TRANSCRIPT_CURSORABLE', {
+                    transcript: transcriptFinal,
+                    isFinal: true,
+                    omitFromGoogleAnalytics: true,
+                });
+
+                // TODO: batch these
+                dispatch('trackWordCount', { wordCount: transcriptFinal.split(' ').length });
+            }
         };
 
         speechRecognizer.onerror = function(error) {
@@ -247,30 +319,97 @@ const actions = {
         }
     },
 
-    loadWordReplacements({commit, state, rootState, dispatch}) {
-        const CENSOR_ON = rootState.settings.censor.on;
+    cursorThroughTranscript({state, commit}) {
+        // this.interimTranscriptArray = [];
+        // this.interimFirstUnstableWordIndex = 0;
+        // this.firstUnsentWordIndex = 0;
 
-        setTimeout(() => {
-            parser.setWordReplacements({
-                wordReplacements: [
-                    ...rootState.settings.wordReplacements,
-                    ...internalWordReplacements,
-    
-                    ...(CENSOR_ON
-                        // Add profanity censor
-                        ? [{
-                            from: censoredProfanity.join(','),
-                            to: (rootState.settings.censor.replaceWith === 'nothing'
-                                ? ''
-                                : '******' // 'asterisks',
-                            )
-                        }]
-                        // Apply a heuristic to attempt to fully uncensor speech
-                        : profanityUncensor
-                    ),
-                ],
+        // word must be unchaged for this many MS before being considered stable
+        let stabilizedThresholdMs = 2500;
+        
+        if (!cursorInterval) {
+            cursorInterval = setInterval(() => {
+                console.log('cursorInterval');
+                const now = Date.now();
+
+                phraseLoop:
+                    for (let i = 0; i < state.transcript.cursorable.length; i++) {
+                        for (let j = 0; j < state.transcript.cursorable[i].length; j++) {
+                            if (state.transcript.cursorable[i][j].stable) {
+                                continue;
+                            }
+
+                            if (now > (state.transcript.cursorable[i][j].firstSeen + stabilizedThresholdMs)) {
+                                // This word is stable
+                                Vue.set(state.transcript.cursorable[i][j], 'stable', true);
+                                commit('APPEND_TRANSCRIPT_STABILIZED', {
+                                    transcript: state.transcript.cursorable[i][j].word,
+                                });
+                            }
+                            else {
+                                // End checking. We only want to mark consecutive words as stabilized,
+                                // and if this word isn't stable, none of the words after it should be deemed
+                                // stable yet.
+                                break phraseLoop;
+                            }
+                        }
+                    }
+
+                // // Go through the array and put the cursor up to the last word that's stabilized
+                // let now = Date.now();
+                // for (let i = this.firstUnsentWordIndex, length = this.interimTranscriptArray.length; i < length; i++) {
+                //     if (now < (this.interimTranscriptArray[i].firstSeen + this.stabilizedThresholdMs)) {
+                //         // word i is the first unstable word
+                //         this.interimFirstUnstableWordIndex = i;
+                //         break;
+                //     }
+
+                //     if (i === length - 1) {
+                //         // We reached the end of the array and it's all stable
+                //         this.interimFirstUnstableWordIndex = length;
+                //     }
+                // }
+                
+                // if (this.interimFirstUnstableWordIndex > this.firstUnsentWordIndex) {
+                //     console.log(this.interimFirstUnstableWordIndex, this.firstUnsentWordIndex);
+                //     // console.log('Cursor up to '+ this.interimFirstUnstableWordIndex + ': ' + this.interimTranscriptArray[this.interimFirstUnstableWordIndex].word);
+                //     onResult({
+                //         transcriptFinal: getStableTranscript()
+                //     });
+                // }
+            }, 300);
+        }
+    },
+
+    loadWordReplacements({commit, state, rootState, dispatch}) {
+        state.wordReplacements = [
+            ...rootState.settings.wordReplacements,
+            ...internalWordReplacements,
+
+            ...(rootState.settings.on
+                // Add profanity censor
+                ? [{
+                    from: censoredProfanity.join(','),
+                    to: (rootState.settings.censor.replaceWith === 'nothing'
+                        ? ''
+                        : '******' // 'asterisks',
+                    )
+                }]
+                // Apply a heuristic to attempt to fully uncensor speech
+                : profanityUncensor
+            ),
+        ];
+
+        // Generate regex
+        state.wordReplacements = state.wordReplacements.map((replacement) => {
+            let fromReplacementSplit = (replacement.from || '').split(',');
+            fromReplacementSplit = fromReplacementSplit.map((fromString) => {
+                return escapeRegExp(fromString);
             });
-        },0);
+            
+            replacement.fromRegex = new RegExp('(^|\\b|\\s)(' + fromReplacementSplit.join('|') + ')(\\b|\\s|$)', 'gi');
+            return replacement;
+        });
     },
 
     trackWordCount ({}, {wordCount}) {
@@ -331,6 +470,51 @@ const mutations = {
         state.transcript.interim = (shouldPrependSpace ? ' ' : '') + transcriptInterim;
         state.lastUpdate = Date.now();
     },
+    SET_TRANSCRIPT_CURSORABLE (state, { transcript, isFinal = false }) {
+        // let currentPhraseIndex = state.transcript.cursorable.find((phrase) => {
+        //     return !phrase.complete
+        // });
+        
+        // let previousPhraseWithTimings = state.transcript.cursorable[0];
+        let previousPhraseWithTimings = state.transcript.cursorable[0] ? state.transcript.cursorable[0] : [];
+
+        if (!state.transcript.cursorable.length) {
+            // First run; init first phrase
+            state.transcript.cursorable.push([]);
+        }
+
+        const lastIndex = state.transcript.cursorable.length - 1;
+        
+        state.transcript.cursorable[lastIndex] = getPhraseWithTimings({
+            newPhrase: transcript,
+            previousPhraseWithTimings: state.transcript.cursorable[lastIndex],
+        });
+
+        if (isFinal) {
+            // Start a new phrase
+            state.transcript.cursorable.push([]);
+
+            function phraseIsCompletelyStable(phrase) {
+                return phrase.length && !phrase.some((word) => { return !word.stable });
+            }
+
+            // Clean up any past phrases
+            let lastCompletelyStablePhraseIndex = -1;
+
+            for (let i = 0; i < state.transcript.cursorable.length; i++) {
+                if (phraseIsCompletelyStable(state.transcript.cursorable[i])) {
+                    lastCompletelyStablePhraseIndex = i;
+                }
+                else {
+                    break;
+                }
+            }
+
+            if (lastCompletelyStablePhraseIndex >= 0) {
+                state.transcript.cursorable = state.transcript.cursorable.splice(lastCompletelyStablePhraseIndex + 1);
+            }
+        }
+    },
     SET_TRANSCRIPT_FINAL (state, { transcriptFinal }) {
         state.transcript.final = transcriptFinal;
         state.lastUpdate = Date.now();
@@ -364,6 +548,9 @@ const mutations = {
             && [' ', '\n'].indexOf(transcriptFinal.substr(0, 1)) === -1; // Incoming final string doesn't start with its own space or newline
         state.transcript.final += (shouldPrependSpace ? ' ' : '') + transcriptFinal;
         state.lastUpdate = Date.now();
+    },
+    APPEND_TRANSCRIPT_STABILIZED (state, { transcript }) {
+        state.transcript.stabilized += transcript + ' ';
     },
 
     VOLUME_TOO_LOW (state, { volumeTooLow }) {

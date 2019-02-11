@@ -198,71 +198,80 @@ export default {
 
     this.$store.dispatch('share/CHECK_LINK_EXPIRY');
 
-    let lastWebhookInterimEventDate = 0;
+    let lastWebhookEventDate = 0;
     let callWebhook = ({url, method, transcript}) => {
-      let body = JSON.stringify({transcript});
 
       this.$store.commit('APPEND_WEBHOOK_LOG', {
         event: {
           type: 'send',
           title: method + ' ' + url,
-          body,
+          body: JSON.stringify({transcript}),
           showBody: false,
         }
       });
 
-      fetch(url, {
+      this.$socket.sendObj({
+        action: 'callWebhook',
+        url,
         method,
-        mode: 'cors',
-        headers: {
-          'Accept': 'application/json',
-        },
-        body,
-      })
-      .then((response) => {
-        response.text()
-          .then(() => {
-            this.$store.commit('APPEND_WEBHOOK_LOG', {
-              event: {
-                type: 'receive',
-                title: response.status + ' ' + response.statusText,
-                error: response.status >= 300,
-              }
-            });
-          });
-      })
-      .catch((error) => {
-        this.$store.commit('APPEND_WEBHOOK_LOG', {
-          event: {
-            type: 'receive',
-            title: error.message,
-            error: true,
-          }
-        });
+        transcript,
       });
+
+      // fetch(url, {
+      //   method,
+      //   mode: 'cors',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //   },
+      //   body,
+      // })
+      // .then((response) => {
+      //   response.text()
+      //     .then(() => {
+      //       this.$store.commit('APPEND_WEBHOOK_LOG', {
+      //         event: {
+      //           type: 'receive',
+      //           title: response.status + ' ' + response.statusText,
+      //           error: response.status >= 300,
+      //         }
+      //       });
+      //     });
+      // })
+      // .catch((error) => {
+      //   this.$store.commit('APPEND_WEBHOOK_LOG', {
+      //     event: {
+      //       type: 'receive',
+      //       title: error.message,
+      //       error: true,
+      //     }
+      //   });
+      // });
     };
     RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
       if (
-        mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
-        && (Date.now() - lastWebhookInterimEventDate) >= 100
+        this.$store.state.settings.integrations.webhooks.on
+        && mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
+        // && (Date.now() - lastWebhookEventDate) >= this.$store.state.settings.integrations.webhooks.throttleMs
       ) {
-        // this.$store.state.settings.integrations.webhooks.interim.throttleMs
+        callWebhook({
+          url: this.$store.state.settings.integrations.webhooks.url,
+          method: this.$store.state.settings.integrations.webhooks.method,
+          transcript: (payload ? payload.transcript : ''),
+        });
+        lastWebhookEventDate = Date.now();
+      }
+
+      if (
+        mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
+        && (Date.now() - lastWebhookEventDate) >= 100
+      ) {
         if (this.$store.state.settings.share.roomId) {
           this.$socket.sendObj({
             action: 'mutation',
             mutation,
             payload,
           });
-          lastWebhookInterimEventDate = Date.now();
-        }
-
-        if (this.$store.state.settings.integrations.webhooks.on) {
-          callWebhook({
-            url: this.$store.state.settings.integrations.webhooks.interim.url,
-            method: this.$store.state.settings.integrations.webhooks.interim.method,
-            transcript: (payload ? payload.transcriptInterim : ''),
-          });
-          lastWebhookInterimEventDate = Date.now();
+          lastWebhookEventDate = Date.now();
         }
       }
 
@@ -289,14 +298,6 @@ export default {
         'SET_ALIGNMENT_VERTICAL',
         'SET_ALIGNMENT_PADDING',
       ].includes(mutation)) {
-        if (this.$store.state.settings.integrations.webhooks.on) {
-          callWebhook({
-            url: this.$store.state.settings.integrations.webhooks.final.url,
-            method: this.$store.state.settings.integrations.webhooks.final.method,
-            transcript: (payload ? payload.transcriptFinal : ''),
-          });
-        }
-
         if (this.$store.state.settings.share.roomId) {
           this.$socket.sendObj({
             action: 'mutation',

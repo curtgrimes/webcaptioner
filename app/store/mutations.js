@@ -280,15 +280,15 @@ export default {
   SET_WEBHOOKS_ON: (state, { onOrOff }) => {
     state.settings.integrations.webhooks.on = onOrOff;
   },
-  SET_WEBHOOKS_INTERIM_URL: (state, { url }) => {
-    state.settings.integrations.webhooks.interim.url = url;
+  SET_WEBHOOKS_URL: (state, { url }) => {
+    state.settings.integrations.webhooks.url = url;
   },
-  SET_WEBHOOKS_INTERIM_METHOD: (state, { method }) => {
+  SET_WEBHOOKS_METHOD: (state, { method }) => {
     // Should be one of this set of options; otherwise set default
     let methodValidated = ['POST','PUT'].includes(method) ? method : 'POST';
-    state.settings.integrations.webhooks.interim.method = methodValidated;
+    state.settings.integrations.webhooks.method = methodValidated;
   },
-  SET_WEBHOOKS_THROTTLE_INTERIM_MS: (state, { throttleMs }) => {
+  SET_WEBHOOKS_THROTTLE_MS: (state, { throttleMs }) => {
     let throttleMsValidated = Number(throttleMs);
     if (Number.isNaN(throttleMsValidated)) {
       throttleMsValidated = 0;
@@ -297,15 +297,7 @@ export default {
       throttleMsValidated = 60000;
     }
 
-    state.settings.integrations.webhooks.interim.throttleMs = throttleMsValidated;
-  },
-  SET_WEBHOOKS_FINAL_URL: (state, { url }) => {
-    state.settings.integrations.webhooks.final.url = url;
-  },
-  SET_WEBHOOKS_FINAL_METHOD: (state, { method }) => {
-    // Should be one of this set of options; otherwise set default
-    let methodValidated = ['POST','PUT'].includes(method) ? method : 'POST';
-    state.settings.integrations.webhooks.final.method = methodValidated;
+    state.settings.integrations.webhooks.throttleMs = throttleMsValidated;
   },
   APPEND_WEBHOOK_LOG: (state, { event }) => {
     state.integrations.webhooks.log.push(event);

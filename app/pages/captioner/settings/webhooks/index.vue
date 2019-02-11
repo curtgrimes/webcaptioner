@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Webhooks allows you to receive real-time HTTP notifications of captioning events in your application. Events are sent client-side from this browser.</p>
+    <p>Webhooks allows you to receive real-time HTTP notifications of captioning events in your application.</p>
     
     <div class="card bg-white">
       <div class="card-header">
@@ -10,13 +10,12 @@
         </div>
       </div>
       <div class="p-3">
-        <h4>Interim Transcript Event</h4>
         <div class="row mb-2">
           <div class="col-md-9 col-lg-8">
             <div class="row">
               <label for="webhooksUrl" class="col-sm-4 col-md-3 col-form-label">URL</label>
               <div class="col-sm-8 col-md-9 mb-2 mb-md-0">
-                <input id="webhooksUrl" :disabled="!on" name="webhooksUrl" v-model="urlInterim" class="form-control" type="url" placeholder="URL" />
+                <input id="webhooksUrl" :disabled="!on" name="webhooksUrl" v-model="url" class="form-control" type="url" placeholder="URL" />
               </div>
             </div>
           </div>
@@ -24,7 +23,7 @@
             <div class="row">
               <label for="webhooksMethod" class="d-md-none d-lg-flex col-sm-4 col-lg-5 col-form-label">Method</label>
               <div class="col-sm-8 col-md-12 col-lg-7">
-                <select class="form-control" id="webhooksMethod" :disabled="!on" name="webhooksMethod" v-model="methodInterim">
+                <select class="form-control" id="webhooksMethod" :disabled="!on" name="webhooksMethod" v-model="method">
                   <option value="POST" selected>POST</option>
                   <option value="PUT">PUT</option>
                 </select>
@@ -35,44 +34,23 @@
 
         <div class="row">
           <div class="col-md-9 col-lg-8">
+            <!--
             <div class="row">
               <label for="webhooksThrottleMs" class="col-sm-4 col-md-3 col-form-label">Throttle</label>
               <div class="col-sm-8 col-md-9">
                 <div class="input-group">
-                  <input id="webhooksThrottleMs" :disabled="!on" name="webhooksThrottleMs" v-model="throttleInterimMs" type="number" min="0" max="60000" step="5" class="form-control" maxlength="5" />
+                  <input id="webhooksThrottleMs" :disabled="!on" name="webhooksThrottleMs" v-model="throttleMs" type="number" min="0" max="60000" step="5" class="form-control" maxlength="5" />
                   <span class="input-group-append">
                     <span class="input-group-text">ms</span>
                   </span>
                 </div>
                 <p class="small mb-0 mt-1">
-                  Send an interim transcript event, at most, every 
-                  <span v-if="throttleInterimMs >= 1000">{{(throttleInterimMs / 1000).toFixed(1)}} second<span v-if="(throttleInterimMs / 1000).toFixed(1) !== '1.0'">s</span></span>
-                  <span v-else>{{throttleInterimMs}} millisecond<span v-if="throttleInterimMs != 1">s</span></span>.</p>
+                  Call at most every 
+                  <span v-if="throttleMs >= 1000">{{(throttleMs / 1000).toFixed(1)}} second<span v-if="(throttleMs / 1000).toFixed(1) !== '1.0'">s</span></span>
+                  <span v-else>{{throttleMs}} millisecond<span v-if="throttleMs != 1">s</span></span>.</p>
               </div>
             </div>
-          </div>
-        </div>
-        <hr class="my-3" />
-        <h4>Final Transcript Event</h4>
-        <div class="row">
-          <div class="col-md-9 col-lg-8">
-            <div class="row">
-              <label for="webhooksUrl" class="col-sm-4 col-md-3 col-form-label">URL</label>
-              <div class="col-sm-8 col-md-9 mb-2 mb-md-0">
-                <input id="webhooksUrl" :disabled="!on" name="webhooksUrl" v-model="urlFinal" class="form-control" type="url" placeholder="URL" />
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-lg-4">
-            <div class="row">
-              <label for="webhooksMethod" class="d-md-none d-lg-flex col-sm-4 col-lg-5 col-form-label">Method</label>
-              <div class="col-sm-8 col-md-12 col-lg-7">
-                <select class="form-control" id="webhooksMethod" :disabled="!on" name="webhooksMethod" v-model="methodFinal">
-                  <option value="POST" selected>POST</option>
-                  <option value="PUT">PUT</option>
-                </select>
-              </div>
-            </div>
+            -->
           </div>
         </div>
         <hr class="my-3"/>
@@ -97,27 +75,10 @@
       </div>
     </div>
 
-    <h3 class="mt-4">Definitions</h3>
-    <p>The <strong>interim transcript</strong> is a phrase or partial phrase that represents what is currently being spoken. Each interim transcript you receive should invalidate and replace any past interim transcript you have.</p>
-    <p>The interim transcript becomes the <strong>final transcript</strong> after a pause in speech. Whenever you receive a final transcript, any interim transcript you currently have should be discarded, and you should append that final transcript to any past final transcript you have.</p>
-    
-    <h3 class="mt-4">Events</h3>
-    <p>These are the JSON payloads your application should expect to receive.</p>
+    <h3 class="mt-4">Request Body</h3>
+    <p>Your application should expect to receive this.</p>
 
-    <h4>Interim Transcript Event</h4>
-    <p>Triggered when speech is recognized and an interim transcript is created or updated. When you receive this even, invalidate any past interim transcript you have.</p>
     <div class="card bg-white p-3 mb-4">
-      <h5 class="card-title text-muted">Request Body</h5>
-      <pre class="m-0">
-{
-  "transcript": "This is a transcript"
-}</pre>
-    </div>
-
-    <h4>Final Transcript Event</h4>
-    <p>Triggered when there is a pause in speech and a final transcript is created. When you receive this even, invalidate any past interim transcript you have and append this final transcript to any past final transcript you have.</p>
-    <div class="card bg-white p-3">
-      <h5 class="card-title text-muted">Request Body</h5>
       <pre class="m-0">
 {
   "transcript": "This is a transcript"
@@ -155,44 +116,28 @@ export default {
         this.$store.commit('SET_WEBHOOKS_ON', { onOrOff });
       },
     },
-    urlInterim: {
+    url: {
       get () {
-        return this.$store.state.settings.integrations.webhooks.interim.url;
+        return this.$store.state.settings.integrations.webhooks.url;
       },
       set: debounce(function(url) {
-        this.$store.commit('SET_WEBHOOKS_INTERIM_URL', { url });
+        this.$store.commit('SET_WEBHOOKS_URL', { url });
       }, 500, {leading: true})
     },
-    methodInterim: {
+    method: {
       get () {
-        return this.$store.state.settings.integrations.webhooks.interim.method;
+        return this.$store.state.settings.integrations.webhooks.method;
       },
       set: function(method) {
-        this.$store.commit('SET_WEBHOOKS_INTERIM_METHOD', { method });
+        this.$store.commit('SET_WEBHOOKS_METHOD', { method });
       },
     },
-    urlFinal: {
+    throttleMs: {
       get () {
-        return this.$store.state.settings.integrations.webhooks.final.url;
-      },
-      set: debounce(function(url) {
-        this.$store.commit('SET_WEBHOOKS_FINAL_URL', { url });
-      }, 500, {leading: true})
-    },
-    methodFinal: {
-      get () {
-        return this.$store.state.settings.integrations.webhooks.final.method;
-      },
-      set: function(method) {
-        this.$store.commit('SET_WEBHOOKS_FINAL_METHOD', { method });
-      },
-    },
-    throttleInterimMs: {
-      get () {
-        return this.$store.state.settings.integrations.webhooks.interim.throttleMs;
+        return this.$store.state.settings.integrations.webhooks.throttleMs;
       },
       set (throttleMs) {
-        this.$store.commit('SET_WEBHOOKS_THROTTLE_INTERIM_MS', { throttleMs });
+        this.$store.commit('SET_WEBHOOKS_THROTTLE_MS', { throttleMs });
       },
     },
     log: {
