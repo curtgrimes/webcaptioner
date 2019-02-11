@@ -158,17 +158,29 @@ module.exports = {
             let {method, url, transcript} = json;
             method = method === 'PUT' ? 'PUT' : 'POST';
 
-            console.log('sending: ' + transcript)
-            axios({
-              method,
-              url,
-              data: {
-                transcript,
-              }
-            })
-            .then(function(response) {
-              console.log(response.status);
-            });
+            if (!socket._wc.webhookTranscriptQueue) {
+              socket._wc.webhookTranscriptQueue = '';
+            }
+
+            socket._wc.webhookTranscriptQueue += (socket._wc.webhookTranscriptQueue ? ' ' : '') + transcript;
+            console.log('+ ' + transcript);
+
+            if (!socket._wc.webhookThrottleInterval) {
+              socket._wc.webhookThrottleInterval = setInterval(function() {
+                axios({
+                  method,
+                  url,
+                  data: {
+                    transcript: socket._wc.webhookTranscriptQueue,
+                  }
+                });
+                console.log(socket._wc.webhookTranscriptQueue);
+                socket._wc.webhookTranscriptQueue = '';
+
+                clearInterval(socket._wc.webhookThrottleInterval);
+                socket._wc.webhookThrottleInterval = null;
+              }, 350);
+            }
           }
         });
 
