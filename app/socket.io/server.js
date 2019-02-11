@@ -163,7 +163,6 @@ module.exports = {
             }
 
             socket._wc.webhookTranscriptQueue += (socket._wc.webhookTranscriptQueue ? ' ' : '') + transcript;
-            console.log('+ ' + transcript);
 
             if (!socket._wc.webhookThrottleInterval) {
               socket._wc.webhookThrottleInterval = setInterval(function() {
@@ -174,7 +173,6 @@ module.exports = {
                     transcript: socket._wc.webhookTranscriptQueue,
                   }
                 });
-                console.log(socket._wc.webhookTranscriptQueue);
                 socket._wc.webhookTranscriptQueue = '';
 
                 clearInterval(socket._wc.webhookThrottleInterval);

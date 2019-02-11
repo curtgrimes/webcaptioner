@@ -196,10 +196,6 @@ export default {
     state.settings.donationDate = donationDate;
   },
 
-  'SOCKET_captioner/SET_TRANSCRIPT_INTERIM' (state) {
-    console.log('hello');
-  },
-
 
   SOCKET_ONOPEN (state, event)  {
     state.socket.isConnected = true
