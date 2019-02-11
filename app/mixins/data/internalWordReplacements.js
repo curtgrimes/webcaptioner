@@ -12,7 +12,7 @@ export default [
         to: 'Web Captioner',
     },
     {
-        from: 'web captioner. Com',
+        from: 'web captioner. Com,web caption ar.com,web captioner ear.com,web caption air.com',
         to: 'webcaptioner.com',
     },
 ];

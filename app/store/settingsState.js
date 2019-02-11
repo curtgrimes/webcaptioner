@@ -66,15 +66,9 @@ export default () => {
             },
             webhooks: {
                 on: false,
-                interim: {
-                    url: '',
-                    method: 'POST',
-                    throttleMs: 200,
-                },
-                final: {
-                    url: '',
-                    method: 'POST',
-                },
+                url: '',
+                method: 'POST',
+                throttleMs: 200,
             },
         },
         donationDate: null,

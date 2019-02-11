@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 const redis = require('./../api/redis');
 const getSubscriberCount = require('../api/routes/rooms/getSubscriberCount');
+const axios = require('axios');
 
 module.exports = {
     createSocket(server) {
@@ -151,6 +152,34 @@ module.exports = {
                   }
                 }
               });
+            }
+          }
+          else if (json.action === 'callWebhook') {
+            let {method, url, transcript} = json;
+            method = method === 'PUT' ? 'PUT' : 'POST';
+
+            if (!socket._wc.webhookTranscriptQueue) {
+              socket._wc.webhookTranscriptQueue = '';
+            }
+
+            socket._wc.webhookTranscriptQueue += (socket._wc.webhookTranscriptQueue ? ' ' : '') + transcript;
+            console.log('+ ' + transcript);
+
+            if (!socket._wc.webhookThrottleInterval) {
+              socket._wc.webhookThrottleInterval = setInterval(function() {
+                axios({
+                  method,
+                  url,
+                  data: {
+                    transcript: socket._wc.webhookTranscriptQueue,
+                  }
+                });
+                console.log(socket._wc.webhookTranscriptQueue);
+                socket._wc.webhookTranscriptQueue = '';
+
+                clearInterval(socket._wc.webhookThrottleInterval);
+                socket._wc.webhookThrottleInterval = null;
+              }, 350);
             }
           }
         });
