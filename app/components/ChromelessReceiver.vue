@@ -18,9 +18,12 @@ export default {
     }
 
     // When opener window refreshes or closes, close this window
-    window.opener.addEventListener('unload', () => {
-      window.close();
-    });
+    if (window.opener) {
+      window.opener.addEventListener('unload', () => {
+        window.close();
+      });
+    }
+
     setInterval(() => {
       if (!window.opener) {
         window.close();
