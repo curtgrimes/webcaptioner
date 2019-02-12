@@ -320,16 +320,11 @@ const actions = {
     },
 
     cursorThroughTranscript({state, commit}) {
-        // this.interimTranscriptArray = [];
-        // this.interimFirstUnstableWordIndex = 0;
-        // this.firstUnsentWordIndex = 0;
-
         // word must be unchaged for this many MS before being considered stable
         let stabilizedThresholdMs = 2500;
         
         if (!cursorInterval) {
             cursorInterval = setInterval(() => {
-                console.log('cursorInterval');
                 const now = Date.now();
 
                 phraseLoop:
@@ -354,29 +349,6 @@ const actions = {
                             }
                         }
                     }
-
-                // // Go through the array and put the cursor up to the last word that's stabilized
-                // let now = Date.now();
-                // for (let i = this.firstUnsentWordIndex, length = this.interimTranscriptArray.length; i < length; i++) {
-                //     if (now < (this.interimTranscriptArray[i].firstSeen + this.stabilizedThresholdMs)) {
-                //         // word i is the first unstable word
-                //         this.interimFirstUnstableWordIndex = i;
-                //         break;
-                //     }
-
-                //     if (i === length - 1) {
-                //         // We reached the end of the array and it's all stable
-                //         this.interimFirstUnstableWordIndex = length;
-                //     }
-                // }
-                
-                // if (this.interimFirstUnstableWordIndex > this.firstUnsentWordIndex) {
-                //     console.log(this.interimFirstUnstableWordIndex, this.firstUnsentWordIndex);
-                //     // console.log('Cursor up to '+ this.interimFirstUnstableWordIndex + ': ' + this.interimTranscriptArray[this.interimFirstUnstableWordIndex].word);
-                //     onResult({
-                //         transcriptFinal: getStableTranscript()
-                //     });
-                // }
             }, 300);
         }
     },
