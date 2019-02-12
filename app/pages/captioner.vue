@@ -265,7 +265,7 @@ export default {
         mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
         && (Date.now() - lastWebhookEventDate) >= 100
       ) {
-        if (this.$store.state.settings.share.roomId) {
+        if (this.$store.state.settings.share.roomId && this.$store.state.socket.isConnected) {
           this.$socket.sendObj({
             action: 'mutation',
             mutation,
@@ -298,7 +298,7 @@ export default {
         'SET_ALIGNMENT_VERTICAL',
         'SET_ALIGNMENT_PADDING',
       ].includes(mutation)) {
-        if (this.$store.state.settings.share.roomId) {
+        if (this.$store.state.settings.share.roomId && this.$store.state.socket.isConnected) {
           this.$socket.sendObj({
             action: 'mutation',
             mutation,
@@ -363,12 +363,15 @@ export default {
     '$store.state.settings.appearance': {
       handler: function(appearance) {
         if (this.$store.state.settings.share.roomId) {
-          setTimeout(() => { // TODO: timeout to attempt to avoid sending this before socket connected; do proper socket connection watch
-            this.$socket.sendObj({
-              action: 'updateAppearance',
-              appearance,
-            });
-          }, 1000);
+          let socketWaitConnectionInterval = setInterval(() => {
+            if (this.$store.state.socket.isConnected) {
+              this.$socket.sendObj({
+                action: 'updateAppearance',
+                appearance,
+              });
+              clearInterval(socketWaitConnectionInterval);
+            }
+          }, 200);
         }
       },
       deep: true,
