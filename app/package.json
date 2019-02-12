@@ -67,6 +67,7 @@
     "load-script": "^1.0.0",
     "locale2": "^2.3.1",
     "lodash.clamp": "^4.0.3",
+    "lodash.debounce": "^4.0.8",
     "lodash.escaperegexp": "^4.1.2",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
