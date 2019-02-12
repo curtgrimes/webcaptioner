@@ -131,7 +131,10 @@ const actions = {
         speechRecognizer.continuous = true;
         speechRecognizer.interimResults = true;
         speechRecognizer.lang = rootState.settings.locale.from;
-        speechRecognizer.start();
+        try {
+            speechRecognizer.start();
+        }
+        catch (e) {}
         commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', { waitingForInitial: true });
         microphonePermissionNeededTimeout = setTimeout(() => {
             // If we get here and this timeout hasn't been canceled yet,
