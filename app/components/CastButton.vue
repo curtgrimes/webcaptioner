@@ -254,7 +254,13 @@ export default {
   mounted: function() {
     window['__onGCastApiAvailable'] = (isAvailable) => {
       if (isAvailable) {
-        this.initializeCastApi();
+        let initializeCastApiTimeout = setInterval(() => {
+          if (chrome && chrome.cast && chrome.cast.SessionRequest) {
+            // https://sentry.io/web-captioner/web-captioner/issues/833431149
+            this.initializeCastApi();
+            clearTimeout(initializeCastApiTimeout);
+          }
+        },200);
       }
     };
     
