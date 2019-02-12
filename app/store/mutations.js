@@ -1,6 +1,4 @@
-import Vue from 'vue'
 import CircularJson from 'circular-json'
-import donation from './modules/donation';
 
 export default {
   SET_SETTINGS_PAGE_TITLE: (state, { settingsPageTitle }) => {

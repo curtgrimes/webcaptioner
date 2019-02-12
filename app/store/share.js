@@ -1,12 +1,12 @@
 
-const state = {
+export const state = () => ({
     expired: false,
     settings: {
         show: false,
     },
-}
+})
 
-const actions = {
+export const actions = {
     SHOW_SHARE_SETTINGS ({commit, dispatch, state, rootState}) {
         if (rootState.captioner.totalCaptioningSeconds >= 1) {
             commit('SET_MESSAGE_SHOW', {on: true});
@@ -19,7 +19,7 @@ const actions = {
     },
 };
 
-const mutations = {
+export const mutations = {
     SET_SHOW_SETTINGS (state, { on, toggle }) {
         if (toggle) {
             state.settings.show = !state.settings.show;    
@@ -32,10 +32,3 @@ const mutations = {
         state.expired = expired;
     },
 };
-
-export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
-}

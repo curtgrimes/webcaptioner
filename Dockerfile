@@ -22,6 +22,8 @@ COPY ./static-site/package*.json ./static-site/
 
 RUN set -ex \
     && npm install --prefix ./app ./app \
+    && npm update acorn --depth 20 --prefix ./app ./app \
+    && npm dedupe --prefix ./app ./app \
     && npm install --prefix ./static-site ./static-site
 
 # Copy the rest of the files

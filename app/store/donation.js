@@ -3,13 +3,13 @@ function dateIsWithinPastXDays(date, days) {
     return new Date(date) > new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * days));
 }
 
-const state = {
+export const state = () => ({
     message: {
         show: false,
     },
-}
+})
 
-const actions = {
+export const actions = {
     SHOW_DONATION_MESSAGE_IF_ELIGIBLE ({commit, dispatch, state, rootState}) {
         let pastDonationDate = rootState.settings.donationDate,
             hasRecentDonation = false;
@@ -25,15 +25,8 @@ const actions = {
     },
 };
 
-const mutations = {
+export const mutations = {
     SET_MESSAGE_SHOW (state, { on }) {
         state.message.show = on;
     },
 };
-
-export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
-}

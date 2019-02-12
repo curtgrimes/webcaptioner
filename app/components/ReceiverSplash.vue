@@ -14,7 +14,7 @@
                                                     <div class="h-100 p-2 px-3" :style="{color: $store.state.settings.appearance.text.textColor || '#ffffff', backgroundColor: $store.state.settings.appearance.background.color || '#000000'}">
                                                         <div v-if="notFound" class="h-100">
                                                             <transition-group name="drop">
-                                                                <span v-for="(word, index) in this.sampleTextArrayTimed" :key="index" class="fade-up-initial text-danger redacted-text-wrap">
+                                                                <span v-for="(word, index) in this.sampleTextArrayTimed" :key="index + word" class="fade-up-initial text-danger redacted-text-wrap">
                                                                     <span class="redacted-text">{{word}}</span>&nbsp;&nbsp;&nbsp;
                                                                 </span>
                                                             </transition-group>
@@ -27,7 +27,7 @@
                                                             </transition>
                                                         </div>
                                                         <transition-group name="fade-up" v-else>
-                                                            <span v-for="(word, index) in this.sampleTextArrayTimed" :key="index" class="fade-up-initial redacted-text-wrap">
+                                                            <span v-for="(word, index) in this.sampleTextArrayTimed" :key="index + word" class="fade-up-initial redacted-text-wrap">
                                                                 <span class="redacted-text">{{word}}</span>&nbsp;&nbsp;&nbsp;
                                                             </span>
                                                         </transition-group>

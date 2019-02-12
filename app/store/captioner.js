@@ -14,7 +14,7 @@ let speechRecognizer,
     lastManualStart,
     cursorInterval;
 
-const state = {
+export const state = () => ({
     on: false,
     shouldBeOn: false,
     typingModeOn: false,
@@ -41,7 +41,7 @@ const state = {
         tooHigh: false,
     },
     wordReplacements: [],
-}
+})
 
 function getTranscriptsFromRecognitionEvent(event) {
     let transcriptInterim = '', transcriptFinal = '';
@@ -102,7 +102,7 @@ function getPhraseWithTimings({newPhrase = '', previousPhraseWithTimings}) {
     return newPhraseWithTimings;
 }
 
-const actions = {
+export const actions = {
     startManual ({commit, dispatch, state, rootState}) {
         lastManualStart = Date.now();
 
@@ -413,7 +413,7 @@ const actions = {
     },
 }
 
-const mutations = {
+export const mutations = {
     SET_CAPTIONER_ON (state) {
         state.on = true;
         state.lastStart = Date.now();
@@ -550,15 +550,4 @@ const mutations = {
     SET_TYPING_MODE_OFF (state) {
         state.typingModeOn = false;
     },
-}
-
-const getters = {
-}
-
-export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
-    getters
 }

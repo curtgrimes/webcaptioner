@@ -1,16 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import actions from './actions'
-import mutations from './mutations'
-import getters from './getters'
-import captioner from './modules/captioner'
-import donation from './modules/donation'
-import share from './modules/share'
+import allActions from './actions'
+import allMutations from './mutations'
 import remoteMutationBlacklist from '~/mixins/data/remoteMutationBlacklist'
 import RemoteEventBus from '~/mixins/RemoteEventBus'
 import getSettingsState from './settingsState'
 
 Vue.use(Vuex)
+
+export const strict = false;
 
 let mutationInterceptorPlugin = store => {
   store.subscribe(({type, payload}, state) => {
@@ -63,64 +61,53 @@ let mutationInterceptorPlugin = store => {
   })
 };
 
-const createStore = () => {
-  return new Vuex.Store({
-    modules: {
-      captioner,
-      donation,
-      share,
+export const state = () => ({
+  version: '2.0.0',
+  settings: getSettingsState(),
+  receivers: {
+    share: {
+      subscriberCount: 0,
     },
-    state: {
-      version: '2.0.0',
-      settings: getSettingsState(),
-      receivers: {
-        share: {
-          subscriberCount: 0,
-        },
-        chromecast: {
-          connected: false,
-          connecting: false,
-          receiverName: null,
-        },
-      },
-      incompatibleBrowser: false,
-      incompatibleBrowserModalVisible: false,
-      detached: false,
-      remoteDisplays: [],
-      remoteDisplayConnectIdNotFoundError: false,
-      remoteDisplayConnectIdFoundMessage: false,
-      connectId: null,
-      memberOfRoomId: null,
-      socket: {
-        isConnected: false,
-      },
-      settingsPageTitle: '',
-      integrations: {
-        storage: {
-          sessionStartDate: null,
-        },
-        vmix: {
-          showNotFullySetUpMessage: false,
-          webControllerAddress: '',
-          chromeExtensionInstalled: null,
-          webControllerConnected: null,
-          cachedInputGUID: null,
-        },
-        webhooks: {
-          log: [],
-        },
-      },
-      eventLog: {
-        onUntilStopTime: null,
-        log: [],
-      },
-      delayedEvents: [],
+    chromecast: {
+      connected: false,
+      connecting: false,
+      receiverName: null,
     },
-    actions,
-    mutations,
-    getters,
-    plugins: [mutationInterceptorPlugin],
-  })
-}
+  },
+  incompatibleBrowser: false,
+  incompatibleBrowserModalVisible: false,
+  detached: false,
+  remoteDisplays: [],
+  remoteDisplayConnectIdNotFoundError: false,
+  remoteDisplayConnectIdFoundMessage: false,
+  connectId: null,
+  memberOfRoomId: null,
+  socket: {
+    isConnected: false,
+  },
+  settingsPageTitle: '',
+  integrations: {
+    storage: {
+      sessionStartDate: null,
+    },
+    vmix: {
+      showNotFullySetUpMessage: false,
+      webControllerAddress: '',
+      chromeExtensionInstalled: null,
+      webControllerConnected: null,
+      cachedInputGUID: null,
+    },
+    webhooks: {
+      log: [],
+    },
+  },
+  eventLog: {
+    onUntilStopTime: null,
+    log: [],
+  },
+  delayedEvents: [],
+})
 
-export default createStore
+export const mutations = allMutations;
+export const actions = allActions;
+export const plugins = [mutationInterceptorPlugin];

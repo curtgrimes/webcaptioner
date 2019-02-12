@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: "Redacted";
-  src: url("~/static/redacted-regular.ttf");
+  src: url("~static/redacted-regular.ttf");
 }
 
 $font-family-sans-serif: 'Roboto', sans-serif;
@@ -104,7 +104,6 @@ $modal-content-box-shadow-xs:       $modal-content-box-shadow-sm-up;
 
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/print";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
 @import "~bootstrap/scss/images";
@@ -138,6 +137,7 @@ $modal-content-box-shadow-xs:       $modal-content-box-shadow-sm-up;
 @import "~bootstrap/scss/carousel";
 
 @import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/print";
 
 .logo-text {
   font-family:$headings-font-family;
@@ -172,6 +172,7 @@ input[type="color"] {
   text-transform:uppercase;
   cursor:pointer;
   padding:.575rem 1rem .425rem 1rem;
+  white-space:nowrap;
 }
 
 .btn .normal-text {

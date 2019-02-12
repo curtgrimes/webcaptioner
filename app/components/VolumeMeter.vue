@@ -1,6 +1,6 @@
 <template>
   <div v-if="$store.state.settings.controls.volumeMeter.show && captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)">
-    <b-btn variant="white" class="meter-outer mr-2 border-0 text-left text-danger px-2">
+    <b-btn variant="white" class="meter-outer mr-2 border-0 text-left text-danger px-2 bg-white">
       <fa icon="exclamation-triangle" class="mr-1" />
       <span v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh">{{$t('captioner.volumeMeter.tooQuiet')}}</span>
       <span v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow">{{$t('captioner.volumeMeter.tooLoud')}}</span>
