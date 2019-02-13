@@ -200,6 +200,7 @@ export default {
 
     let lastWebhookEventDate = 0;
     let callWebhook = ({url, method, transcript}) => {
+      transcript = (transcript || '').toUpperCase();
 
       // this.$store.commit('APPEND_WEBHOOK_LOG', {
       //   event: {
