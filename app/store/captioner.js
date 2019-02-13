@@ -311,7 +311,10 @@ export const actions = {
         if (speechRecognizer && state.on) {
             const restartSpeechRecognizer = function(event) {
                 speechRecognizer.removeEventListener('end', restartSpeechRecognizer, false); // only do it once
-                speechRecognizer.start();
+                try {
+                    speechRecognizer.start();
+                }
+                catch (e) {}
             };
             speechRecognizer.addEventListener('end', restartSpeechRecognizer, false);
             speechRecognizer.abort();
