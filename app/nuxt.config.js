@@ -79,7 +79,7 @@ module.exports = {
       imports: [
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faCircleNotch', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft','faArrowRight', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower',],
+          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faCircleNotch', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft','faArrowRight', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower', ],
         },
         {
           set: '@fortawesome/free-regular-svg-icons',
