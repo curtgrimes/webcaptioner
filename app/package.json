@@ -22,6 +22,7 @@
     "build-lang": "node util/lang-csv-to-js.js"
   },
   "dependencies": {
+    "@sentry/node": "^4.5.3",
     "body-parser": "^1.18.3",
     "dotenv": "^6.1.0",
     "dropbox": "^4.0.12",

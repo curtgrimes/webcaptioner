@@ -51,6 +51,7 @@ let taskDefinition = {
                 'CHROME_EXTENSION_ID',
                 'GOOGLE_CAST_APP_ID',
                 'SENTRY_SECURITY_TOKEN',
+                'SENTRY_DSN',
                 'REDIS_URL',
                 'ADMIN_TOKEN',
                 'TWITCH_APP_CLIENT_ID',
