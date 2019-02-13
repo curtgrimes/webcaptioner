@@ -29,8 +29,10 @@ export default {
         window.close();
       }
     },250);
-
-    window.opener.dispatchEvent(new CustomEvent('receiverIsReadyToReceiveMutations'));
+    
+    if (window.opener) {
+      window.opener.dispatchEvent(new CustomEvent('receiverIsReadyToReceiveMutations'));
+    }
   },
   methods: {
     processVuexMutation: function ({detail:{type, payload}}) {
