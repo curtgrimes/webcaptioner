@@ -201,51 +201,51 @@ export default {
     let lastWebhookEventDate = 0;
     let callWebhook = ({url, method, transcript}) => {
 
-      this.$store.commit('APPEND_WEBHOOK_LOG', {
-        event: {
-          type: 'send',
-          title: method + ' ' + url,
-          body: JSON.stringify({transcript}),
-          showBody: false,
-        }
-      });
-
-      this.$socket.sendObj({
-        action: 'callWebhook',
-        url,
-        method,
-        transcript,
-      });
-
-      // fetch(url, {
-      //   method,
-      //   mode: 'cors',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //   },
-      //   body,
-      // })
-      // .then((response) => {
-      //   response.text()
-      //     .then(() => {
-      //       this.$store.commit('APPEND_WEBHOOK_LOG', {
-      //         event: {
-      //           type: 'receive',
-      //           title: response.status + ' ' + response.statusText,
-      //           error: response.status >= 300,
-      //         }
-      //       });
-      //     });
-      // })
-      // .catch((error) => {
-      //   this.$store.commit('APPEND_WEBHOOK_LOG', {
-      //     event: {
-      //       type: 'receive',
-      //       title: error.message,
-      //       error: true,
-      //     }
-      //   });
+      // this.$store.commit('APPEND_WEBHOOK_LOG', {
+      //   event: {
+      //     type: 'send',
+      //     title: method + ' ' + url,
+      //     body: JSON.stringify({transcript}),
+      //     showBody: false,
+      //   }
       // });
+
+      // this.$socket.sendObj({
+      //   action: 'callWebhook',
+      //   url,
+      //   method,
+      //   transcript,
+      // });
+
+      fetch(url, {
+        method,
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({transcript}),
+      })
+      .then((response) => {
+        response.text()
+          .then(() => {
+            this.$store.commit('APPEND_WEBHOOK_LOG', {
+              event: {
+                type: 'receive',
+                title: response.status + ' ' + response.statusText,
+                error: response.status >= 300,
+              }
+            });
+          });
+      })
+      .catch((error) => {
+        this.$store.commit('APPEND_WEBHOOK_LOG', {
+          event: {
+            type: 'receive',
+            title: error.message,
+            error: true,
+          }
+        });
+      });
     };
     RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
       if (
