@@ -248,10 +248,6 @@ export default {
         transition:background 0s;
     }
 
-    @keyframes background-fade-in {
-        
-    }
-
     .splash-background {
         height:100%;
         min-height:100%;

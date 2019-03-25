@@ -21,13 +21,7 @@
       </div>
     </div>
 
-    
-    <div class="form-group row">
-      <label for="text-color" class="col-sm-6 col-form-label">{{$t('settings.appearance.textColor')}}</label>
-      <div class="col-sm-6">
-        <input v-model="textColor" class="form-control" type="color" />
-      </div>
-    </div>
+    <form-group-input :label="$t('settings.appearance.textColor')" v-model="textColor" type="color" />
 
     <div class="form-group row">
       <div class="col-sm-6">
@@ -42,41 +36,12 @@
       </div>
     </div>
 
-    <div class="form-group row">
-      <label for="text-size" class="col-sm-6 col-form-label">{{$t('settings.appearance.textSize')}}</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="textSize" class="form-control" name="text-size" type="number" id="text-size" min="0.1" step="0.1">
-          <span class="input-group-append">
-              <span class="input-group-text">em</span>
-          </span>
-        </div>
-      </div>
-    </div>
 
-    <div class="form-group row">
-      <label for="text-size" class="col-sm-6 col-form-label">{{$t('settings.appearance.lineHeight')}}</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="lineHeight" class="form-control" name="text-size" type="number" id="text-size" min="0.1" step="0.1" max="10">
-          <span class="input-group-append">
-              <span class="input-group-text">em</span>
-          </span>
-        </div>
-      </div>
-    </div>
+    <form-group-input :label="$t('settings.appearance.textSize')" v-model="textSize" type="number" min="0.1" step="0.1" append-input-text="em" />
 
-    <div class="form-group row">
-      <label for="text-size" class="col-sm-6 col-form-label">{{$t('settings.appearance.letterSpacing')}}</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="letterSpacing" class="form-control" name="text-size" type="number" id="text-size" min="-10" step="0.025" max="20">
-          <span class="input-group-append">
-              <span class="input-group-text">em</span>
-          </span>
-        </div>
-      </div>
-    </div>
+    <form-group-input :label="$t('settings.appearance.lineHeight')" v-model="lineHeight" type="number" min="0.1" step="0.1" max="10" append-input-text="em" />
+
+    <form-group-input :label="$t('settings.appearance.letterSpacing')" v-model="letterSpacing" type="number" min="-10" step="0.025" max="20" append-input-text="em" />
 
     <div class="form-group row">
       <label for="capitalization-uppercase" class="col-sm-6 col-form-label pt-0">{{$t('settings.appearance.capitalization')}}</label>
@@ -193,80 +158,25 @@
     <hr class="my-4" />
 
     <h3>{{$t('settings.appearance.background')}}</h3>
-    <div class="form-group row">
-      <label for="background-color" class="col-sm-6 col-form-label">{{$t('settings.appearance.backgroundColor')}}</label>
-      <div class="col-sm-6">
-        <input class="form-control" name="background-color" type="color" v-model="backgroundColor">
-        <p class="small mb-0 mt-1">RGB ({{backgroundColorRGBValues.r}}, {{backgroundColorRGBValues.g}}, {{backgroundColorRGBValues.b}})</p>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="background-opacity" class="col-sm-6 col-form-label">Background Opacity</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="backgroundOpacity" class="form-control" name="background-opacity" type="number" min="0" max="100" step="5">
-          <span class="input-group-append">
-              <span class="input-group-text">%</span>
-          </span>
-        </div>
-      </div>
-    </div>
+
+
+    <form-group-input :label="$t('settings.appearance.backgroundColor')" type="color" v-model="backgroundColor" :hint="'RGB ('+ backgroundColorRGBValues.r + ', '+ backgroundColorRGBValues.g +', '+ backgroundColorRGBValues.b +')'" />
+
+    <form-group-input :label="$t('settings.appearance.backgroundOpacity')" v-model="backgroundOpacity" type="number" min="0" max="100" step="5" append-input-text="%" />
 
     <hr class="my-4" />
 
     <h3>{{$t('settings.appearance.textShadow')}}</h3>
 
-    <div class="form-group row">
-      <label for="text-shadow-color" class="col-sm-6 col-form-label">{{$t('settings.appearance.shadowColor')}}</label>
-      <div class="col-sm-6">
-        <input v-model="shadowColor" class="form-control" name="text-shadow-color" type="color" />
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="text-shadow-opacity" class="col-sm-6 col-form-label">{{$t('settings.appearance.opacity')}}</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="shadowOpacity" class="form-control" name="text-shadow-opacity" type="number" min="0" max="100" step="5">
-          <span class="input-group-append">
-              <span class="input-group-text">%</span>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="text-shadow-blur" class="col-sm-6 col-form-label">{{$t('settings.appearance.blur')}}</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="shadowBlurRadius" class="form-control" name="text-shadow-blur" type="number" min="0" step="1">
-          <span class="input-group-append">
-              <span class="input-group-text">px</span>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="text-shadow-x-position" class="col-sm-6 col-form-label">{{$t('settings.appearance.xPosition')}}</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="shadowOffsetX" class="form-control" name="text-shadow-x-position" type="number" step="0.05">
-          <span class="input-group-append">
-              <span class="input-group-text">em</span>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="text-shadow-y-position" class="col-sm-6 col-form-label">{{$t('settings.appearance.yPosition')}}</label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input v-model="shadowOffsetY" class="form-control" name="text-shadow-y-position" type="number" step="0.05">
-          <span class="input-group-append">
-              <span class="input-group-text">em</span>
-          </span>
-        </div>
-      </div>
-    </div>
+    <form-group-input :label="$t('settings.appearance.shadowColor')" v-model="shadowColor" type="color" />
 
+    <form-group-input :label="$t('settings.appearance.opacity')" v-model="shadowOpacity" type="number" min="0" max="100" step="5" append-input-text="%" />
+
+    <form-group-input :label="$t('settings.appearance.blur')" v-model="shadowBlurRadius" type="number" min="0" step="1" append-input-text="px" />
+
+    <form-group-input :label="$t('settings.appearance.xPosition')" v-model="shadowOffsetX" type="number" step="0.05" append-input-text="em" />
+
+    <form-group-input :label="$t('settings.appearance.yPosition')" v-model="shadowOffsetY" type="number" step="0.05" append-input-text="em" />
   </div>
 </template>
 

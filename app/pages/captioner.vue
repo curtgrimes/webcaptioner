@@ -21,6 +21,7 @@ import RemoteEventBus from '~/mixins/RemoteEventBus'
 import throttle from 'lodash.throttle'
 import {getCurrentVersionNumber} from '~/mixins/settingsNormalizer.js'
 import versionSort from 'semver-compare'
+import '~/components/_globals'
 
 export default {
   name: 'app-view',
