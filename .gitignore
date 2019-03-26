@@ -4,6 +4,8 @@ app/dist
 !app/build/.gitkeep
 app/npm-debug.log
 app/.nuxt
+app/tests/e2e/screenshots
+app/tests/e2e/videos
 npm-debug.log
 static-site/public
 static-site/node_modules

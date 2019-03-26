@@ -181,9 +181,12 @@ export default {
     }
 
     if (
-      !('webkitSpeechRecognition' in window)
-      || navigator.userAgent.indexOf("Opera") !== -1
-      || isChromium()
+      (
+        !('webkitSpeechRecognition' in window)
+        || navigator.userAgent.indexOf("Opera") !== -1
+        || isChromium()
+      )
+      && (!window.Cypress)
     ) {
         this.$store.commit('SET_INCOMPATIBLE_BROWSER_ON');
         this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
