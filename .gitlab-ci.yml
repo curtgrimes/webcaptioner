@@ -23,7 +23,7 @@ Build:
 e2e:
   stage: test
   script:
-    - npm run tests --prefix /usr/src/app
+    - source scripts/test.sh
 
 Demo1:
   stage: deploy
