@@ -4,6 +4,7 @@ services:
 
 stages:
 - build
+- test
 - deploy
 
 variables:
@@ -22,7 +23,6 @@ Build:
 e2e:
   stage: test
   script:
-    - npm install --prefix /usr/src/app
     - npm run tests --prefix /usr/src/app
 
 Demo1:
