@@ -19,6 +19,12 @@ Build:
     - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
+e2e:
+  stage: test
+  script:
+    - npm install --prefix /usr/src/app
+    - npm run tests --prefix /usr/src/app
+
 Demo1:
   stage: deploy
   services:
