@@ -22,8 +22,9 @@ Build:
 
 e2e:
   stage: test
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   script:
-    - source scripts/test.sh
+    - npm run tests --prefix /usr/src/app
 
 Demo1:
   stage: deploy
