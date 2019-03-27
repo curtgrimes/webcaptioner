@@ -16,8 +16,6 @@ module.exports = (on, config) => {
     // ===
     env: {
     },
-
-    baseUrl: process.env.HOSTNAME,
     
     // ===
     // Viewport

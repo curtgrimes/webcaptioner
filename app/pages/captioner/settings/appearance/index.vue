@@ -23,19 +23,12 @@
 
     <form-group-input :label="$t('settings.appearance.textColor')" v-model="textColor" type="color" />
 
-    <div class="form-group row">
-      <div class="col-sm-6">
-        <label for="textColorInterim" class="col-form-label">{{$t('settings.appearance.textColorInterim')}}</label>
-      </div>
-      <div class="col-sm-6">
-        <input name="textColorInterim" v-model="textColorInterim" class="form-control mb-1" type="color" />
-        <button class="btn btn-link btn-sm ml-auto d-block pr-0" v-if="textColorInterim !== textColor" @click="textColorInterim = textColor">{{$t('settings.appearance.useRegularTextColor')}}</button>
-      </div>
-      <div class="col-12 mt-1">
-        <p class="small mb-0">{{$t('settings.appearance.interimTextColorDescription')}}</p>
+    <form-group-input :label="$t('settings.appearance.textColorInterim')" v-model="textColorInterim" type="color" :hint="$t('settings.appearance.interimTextColorDescription')" />
+    <div class="row">
+      <div class="col-sm-6 offset-sm-6">
+        <button class="btn btn-info btn-sm ml-auto d-block mb-4" v-if="textColorInterim !== textColor" @click="textColorInterim = textColor">{{$t('settings.appearance.useRegularTextColor')}}</button>
       </div>
     </div>
-
 
     <form-group-input :label="$t('settings.appearance.textSize')" v-model="textSize" type="number" min="0.1" step="0.1" append-input-text="em" />
 

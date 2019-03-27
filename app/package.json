@@ -20,7 +20,10 @@
     "precommit": "npm run lint",
     "build-a": "nuxt build -a",
     "build-lang": "node util/lang-csv-to-js.js",
-    "tests": "cypress run"
+    "tests:cypress": "cypress run",
+    "tests:cypress:watch": "cypress open",
+    "tests": "NUXT_PORT=8228 CYPRESS_baseUrl=http://localhost:8228 start-server-and-test dev http://localhost:8228 tests:cypress",
+    "tests:watch": "NUXT_PORT=8228 CYPRESS_baseUrl=http://localhost:8228 start-server-and-test dev http://localhost:8228 tests:cypress:watch"
   },
   "dependencies": {
     "@sentry/node": "^4.5.3",
@@ -88,6 +91,7 @@
     "sass-loader": "^7.1.0",
     "screenfull": "^3.3.3",
     "semver-compare": "^1.0.0",
+    "start-server-and-test": "^1.7.12",
     "vue-native-websocket": "^2.0.12",
     "webpack-babel-external-helpers": "^0.1.0",
     "whatwg-fetch": "^2.0.4"
