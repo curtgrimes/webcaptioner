@@ -1,11 +1,11 @@
 image: docker:latest
 services:
-- docker:dind
+  - docker:dind
 
 stages:
-- build
-- test
-- deploy
+  - build
+  - test
+  - deploy
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -22,6 +22,8 @@ Build:
 
 e2e:
   stage: test
+  allow_failure: true
+  when: manual
   script:
     - source scripts/test.sh
 
