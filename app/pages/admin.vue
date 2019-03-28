@@ -48,7 +48,6 @@
 
 
 <script>
-
 export default {
   data: function() {
     return {
@@ -56,7 +55,7 @@ export default {
       roomsError: false,
     };
   },
-  mounted: function () {
+  mounted: function() {
     this.updateRooms();
     setInterval(this.updateRooms, 7000);
   },
@@ -64,13 +63,14 @@ export default {
     updateRooms: async function() {
       this.roomsError = false;
       try {
-        let {rooms} = await this.$axios.$get('/api/rooms?token=' + this.$route.query.token);
+        let { rooms } = await this.$axios.$get(
+          "/api/rooms?token=" + this.$route.query.token
+        );
         this.rooms = rooms;
-      }
-      catch (error) {
+      } catch (error) {
         this.roomsError = true;
       }
     },
   },
-}
+};
 </script>
