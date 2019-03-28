@@ -9,26 +9,23 @@
 </template>
 
 <script>
-import Combokeys from 'combokeys'
-import screenfull from 'screenfull'
-import saveToFile from '~/mixins/saveToFile.js'
-import dateFormat from '~/mixins/dateFormat'
-import navbar from '~/components/Navbar.vue'
-import IncompatibleBrowserModal from '~/components/IncompatibleBrowserModal.vue'
-import MicrophonePermissionNeededModal from '~/components/MicrophonePermissionNeededModal.vue'
-import MicrophonePermissionDeniedModal from '~/components/MicrophonePermissionDeniedModal.vue'
-import RemoteEventBus from '~/mixins/RemoteEventBus'
-import throttle from 'lodash.throttle'
-import {getCurrentVersionNumber} from '~/mixins/settingsNormalizer.js'
-import versionSort from 'semver-compare'
-import '~/components/_globals'
+import Combokeys from 'combokeys';
+import screenfull from 'screenfull';
+import saveToFile from '~/mixins/saveToFile.js';
+import dateFormat from '~/mixins/dateFormat';
+import navbar from '~/components/Navbar.vue';
+import IncompatibleBrowserModal from '~/components/IncompatibleBrowserModal.vue';
+import MicrophonePermissionNeededModal from '~/components/MicrophonePermissionNeededModal.vue';
+import MicrophonePermissionDeniedModal from '~/components/MicrophonePermissionDeniedModal.vue';
+import RemoteEventBus from '~/mixins/RemoteEventBus';
+import throttle from 'lodash.throttle';
+import { getCurrentVersionNumber } from '~/mixins/settingsNormalizer.js';
+import versionSort from 'semver-compare';
+import '~/components/_globals';
 
 export default {
   name: 'app-view',
-  mixins: [
-    saveToFile,
-    dateFormat,
-  ],
+  mixins: [saveToFile, dateFormat],
   components: {
     navbar,
     IncompatibleBrowserModal,
@@ -41,21 +38,25 @@ export default {
     };
   },
   mounted: function() {
-    this.$store.dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE')
+    this.$store
+      .dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE')
       .then(() => {
         return this.$store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
       })
-      .then(()=> {
+      .then(() => {
         this.hideLoadingScreen();
 
         // Watch for changes and save to localstorage
-        this.$store.watch((state) => { return state.settings; },
+        this.$store.watch(
+          (state) => {
+            return state.settings;
+          },
           () => {
             this.$store.dispatch('SAVE_SETTINGS_TO_LOCALSTORAGE');
           },
-          {deep: true}
+          { deep: true }
         );
-      
+
         // if (!this.shouldAutostart()) {
         //   this.$refs.welcomeModal.showModal();
         // }
@@ -105,8 +106,7 @@ export default {
             this.$router.push('/captioner');
             if (!this.captioningOn) {
               this.startCaptioning();
-            }
-            else {
+            } else {
               this.stopCaptioning();
             }
           }
@@ -128,25 +128,24 @@ export default {
           this.$store.dispatch('captioner/stopTypingMode');
         })
 
-
         // Larger layout mode
         .bind('c', () => {
           if (this.largerLayout) {
             this.$router.push('/captioner');
             if (!this.captioningOn) {
               this.startCaptioning();
-            }
-            else {
+            } else {
               this.stopCaptioning();
             }
           }
         })
 
-
         .bind('f', () => {
           if (this.largerLayout) {
             this.saveToTextFile({
-              transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
+              transcript:
+                this.$store.state.captioner.transcript.final +
+                this.$store.state.captioner.transcript.interim,
               dateFormatter: this.dateFormat,
               onDone: function() {},
             });
@@ -161,8 +160,7 @@ export default {
 
             this.$router.replace('/captioner');
           }
-        })
-      ;
+        });
     }
 
     if (this.socketConnected) {
@@ -171,9 +169,16 @@ export default {
 
     this.redirectSettingsRouteOnMobile(this.$route.name); // if navigating to settings page on load
 
-    function isChromium() { 
-      for (let i = 0, u="Chromium", l =u.length; i < navigator.plugins.length; i++) {
-        if (navigator.plugins[i].name != null && navigator.plugins[i].name.substr(0, l) === u) {
+    function isChromium() {
+      for (
+        let i = 0, u = 'Chromium', l = u.length;
+        i < navigator.plugins.length;
+        i++
+      ) {
+        if (
+          navigator.plugins[i].name != null &&
+          navigator.plugins[i].name.substr(0, l) === u
+        ) {
           return true;
         }
       }
@@ -181,15 +186,13 @@ export default {
     }
 
     if (
-      (
-        !('webkitSpeechRecognition' in window)
-        || navigator.userAgent.indexOf("Opera") !== -1
-        || isChromium()
-      )
-      && (!window.Cypress)
+      (!('webkitSpeechRecognition' in window) ||
+        navigator.userAgent.indexOf('Opera') !== -1 ||
+        isChromium()) &&
+      !window.Cypress
     ) {
-        this.$store.commit('SET_INCOMPATIBLE_BROWSER_ON');
-        this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
+      this.$store.commit('SET_INCOMPATIBLE_BROWSER_ON');
+      this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
     }
 
     this.$nextTick(() => {
@@ -203,7 +206,7 @@ export default {
     this.$store.dispatch('share/CHECK_LINK_EXPIRY');
 
     let lastWebhookEventDate = 0;
-    let callWebhook = ({url, method, transcript}) => {
+    let callWebhook = ({ url, method, transcript }) => {
       transcript = (transcript || '').toUpperCase();
 
       // this.$store.commit('APPEND_WEBHOOK_LOG', {
@@ -226,51 +229,53 @@ export default {
         method,
         mode: 'cors',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
-        body: JSON.stringify({transcript}),
+        body: JSON.stringify({ transcript }),
       })
-      .then((response) => {
-        response.text()
-          .then(() => {
+        .then((response) => {
+          response.text().then(() => {
             this.$store.commit('APPEND_WEBHOOK_LOG', {
               event: {
                 type: 'receive',
                 title: response.status + ' ' + response.statusText,
                 error: response.status >= 300,
-              }
+              },
             });
           });
-      })
-      .catch((error) => {
-        this.$store.commit('APPEND_WEBHOOK_LOG', {
-          event: {
-            type: 'receive',
-            title: error.message,
-            error: true,
-          }
+        })
+        .catch((error) => {
+          this.$store.commit('APPEND_WEBHOOK_LOG', {
+            event: {
+              type: 'receive',
+              title: error.message,
+              error: true,
+            },
+          });
         });
-      });
     };
-    RemoteEventBus.$on('sendMutationToReceivers', ({mutation, payload}) => {
+    RemoteEventBus.$on('sendMutationToReceivers', ({ mutation, payload }) => {
       if (
-        this.$store.state.settings.integrations.webhooks.on
-        && mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
+        this.$store.state.settings.integrations.webhooks.on &&
+        mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
         // && (Date.now() - lastWebhookEventDate) >= this.$store.state.settings.integrations.webhooks.throttleMs
       ) {
         callWebhook({
           url: this.$store.state.settings.integrations.webhooks.url,
           method: this.$store.state.settings.integrations.webhooks.method,
-          transcript: (payload ? payload.transcript : ''),
+          transcript: payload ? payload.transcript : '',
         });
         lastWebhookEventDate = Date.now();
       }
 
       if (
-        mutation === 'captioner/SET_TRANSCRIPT_INTERIM'
-        && (Date.now() - lastWebhookEventDate) >= 100
+        mutation === 'captioner/SET_TRANSCRIPT_INTERIM' &&
+        Date.now() - lastWebhookEventDate >= 100
       ) {
-        if (this.$store.state.settings.share.roomId && this.$store.state.socket.isConnected) {
+        if (
+          this.$store.state.settings.share.roomId &&
+          this.$store.state.socket.isConnected
+        ) {
           this.$socket.sendObj({
             action: 'mutation',
             mutation,
@@ -280,30 +285,35 @@ export default {
         }
       }
 
-      if ([
-        'captioner/APPEND_TRANSCRIPT_FINAL',
-        'captioner/CLEAR_TRANSCRIPT_INTERIM',
-        'captioner/CLEAR_TRANSCRIPT',
+      if (
+        [
+          'captioner/APPEND_TRANSCRIPT_FINAL',
+          'captioner/CLEAR_TRANSCRIPT_INTERIM',
+          'captioner/CLEAR_TRANSCRIPT',
 
-        'SET_TEXT_COLOR',
-        'SET_TEXT_COLOR_INTERIM',
-        'SET_FONT_FAMILY',
-        'SET_TEXT_SIZE',
-        'SET_LINE_HEIGHT',
-        'SET_LETTER_SPACING',
-        'SET_TEXT_TRANSFORM',
-        'SET_SHADOW_COLOR',
-        'SET_SHADOW_OPACITY',
-        'SET_SHADOW_BLUR_RADIUS',
-        'SET_SHADOW_OFFSET_X',
-        'SET_SHADOW_OFFSET_Y',
-        'SET_BACKGROUND_COLOR',
-        'SET_BACKGROUND_OPACITY',
-        'SET_ALIGNMENT_HORIZONTAL',
-        'SET_ALIGNMENT_VERTICAL',
-        'SET_ALIGNMENT_PADDING',
-      ].includes(mutation)) {
-        if (this.$store.state.settings.share.roomId && this.$store.state.socket.isConnected) {
+          'SET_TEXT_COLOR',
+          'SET_TEXT_COLOR_INTERIM',
+          'SET_FONT_FAMILY',
+          'SET_TEXT_SIZE',
+          'SET_LINE_HEIGHT',
+          'SET_LETTER_SPACING',
+          'SET_TEXT_TRANSFORM',
+          'SET_SHADOW_COLOR',
+          'SET_SHADOW_OPACITY',
+          'SET_SHADOW_BLUR_RADIUS',
+          'SET_SHADOW_OFFSET_X',
+          'SET_SHADOW_OFFSET_Y',
+          'SET_BACKGROUND_COLOR',
+          'SET_BACKGROUND_OPACITY',
+          'SET_ALIGNMENT_HORIZONTAL',
+          'SET_ALIGNMENT_VERTICAL',
+          'SET_ALIGNMENT_PADDING',
+        ].includes(mutation)
+      ) {
+        if (
+          this.$store.state.settings.share.roomId &&
+          this.$store.state.socket.isConnected
+        ) {
           this.$socket.sendObj({
             action: 'mutation',
             mutation,
@@ -312,13 +322,14 @@ export default {
         }
       }
 
-      if ([
-        'captioner/APPEND_TRANSCRIPT_FINAL',
-        'captioner/CLEAR_TRANSCRIPT_INTERIM',
-        'captioner/CLEAR_TRANSCRIPT',
-      ].includes(mutation)
-        && this.$store.state.settings.integrations.dropbox.accessToken
-        && this.$store.state.captioner.transcript.final
+      if (
+        [
+          'captioner/APPEND_TRANSCRIPT_FINAL',
+          'captioner/CLEAR_TRANSCRIPT_INTERIM',
+          'captioner/CLEAR_TRANSCRIPT',
+        ].includes(mutation) &&
+        this.$store.state.settings.integrations.dropbox.accessToken &&
+        this.$store.state.captioner.transcript.final
       ) {
         this.$store.dispatch('SAVE_TO_DROPBOX');
       }
@@ -330,7 +341,7 @@ export default {
         this.initRoom();
       }
     },
-    '$route' (toRoute) {
+    $route(toRoute) {
       this.redirectSettingsRouteOnMobile(toRoute.name);
     },
     captioningShouldBeOn: function(shouldBeOn) {
@@ -354,8 +365,7 @@ export default {
     microphonePermissionNeeded: function() {
       if (this.microphonePermissionNeeded) {
         this.$refs.microphonePermissionNeededModal.showModal();
-      }
-      else {
+      } else {
         this.$refs.microphonePermissionNeededModal.hideModal();
       }
     },
@@ -380,34 +390,42 @@ export default {
         }
       },
       deep: true,
-    }
+    },
   },
   beforeDestroy: function() {
     this.combokeysDocument.detach();
   },
   computed: {
     experiments: function() {
-        return this.$store.state.settings.exp;
+      return this.$store.state.settings.exp;
     },
     largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },
     captioningOn: function() {
-      return this.$store.state.captioner.on; 
+      return this.$store.state.captioner.on;
     },
-    typingModeOn () {
+    typingModeOn() {
       return this.$store.state.captioner.typingModeOn;
     },
-    backgroundColor () {
-      const {r, g, b} = this.hexToRGB(this.$store.state.settings.appearance.background.color);
-      const opacity = parseInt(this.$store.state.settings.appearance.background.opacity) / 100;
-      return 'rgba('+ r +', '+ g +', '+ b +', '+ opacity +')';
+    backgroundColor() {
+      const { r, g, b } = this.hexToRGB(
+        this.$store.state.settings.appearance.background.color
+      );
+      const opacity =
+        parseInt(this.$store.state.settings.appearance.background.opacity) /
+        100;
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + opacity + ')';
     },
     incompatibleBrowserModalVisible: function() {
       return this.$store.state.incompatibleBrowserModalVisible;
     },
     transcript: function() {
-      return this.$store.state.captioner.transcript.final + ' ' + this.$store.state.captioner.transcript.interim;
+      return (
+        this.$store.state.captioner.transcript.final +
+        ' ' +
+        this.$store.state.captioner.transcript.interim
+      );
     },
     captioningShouldBeOn: function() {
       return this.$store.state.captioner.shouldBeOn;
@@ -446,22 +464,25 @@ export default {
       // doing a redirection based on screen width.
       // xs screen size has a standalone settings menu.
       if (
-        currentName.indexOf('captioner-settings___') === 0 // Route name starts with that
-        && window.outerWidth > 575
+        currentName.indexOf('captioner-settings___') === 0 && // Route name starts with that
+        window.outerWidth > 575
       ) {
         this.$router.replace(this.localePath('captioner-settings-about'));
       }
     },
     refreshVmixStatus: function() {
       if (this.vmixOn) {
-        this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS', {
-          chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
-        })
+        this.$store
+          .dispatch('REFRESH_VMIX_SETUP_STATUS', {
+            chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
+          })
           .then(() => {
             if (!this.$store.state.integrations.vmix.cachedInputGUID) {
-              this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
+              this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
+                on: true,
+              });
             }
-          })
+          });
       }
     },
     initRoom: function() {
@@ -472,8 +493,12 @@ export default {
       });
     },
     shouldAutostart: function() {
-      return this.$route && this.$route.query && Object.keys(this.$route.query).includes('autostart');
+      return (
+        this.$route &&
+        this.$route.query &&
+        Object.keys(this.$route.query).includes('autostart')
+      );
     },
-  }
-}
+  },
+};
 </script>
