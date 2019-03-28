@@ -1,3 +1,10 @@
 {
-    "git.ignoreLimitWarning": true
+  // https://github.com/prettier/prettier-vscode#format-on-save
+  "git.ignoreLimitWarning": true,
+  "editor.formatOnSave": true,
+
+  // https://github.com/shinnn/vscode-stylelint#optional-but-recommended-setup
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false
 }

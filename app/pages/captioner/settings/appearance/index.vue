@@ -178,8 +178,8 @@
     font-family: 'OpenDyslexic';
     src: url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff2') format('woff2'),
          url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff') format('woff');
-    font-weight: normal;
     font-style: normal;
+    font-weight: normal;
 }
 </style>
 
