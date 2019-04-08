@@ -4,7 +4,9 @@ import RemoteEventBus from '~/mixins/RemoteEventBus'
 import ChromelessWindowManager from '~/mixins/ChromelessWindowManager'
 import get from 'lodash.get'
 import vmixSetup from '~/mixins/vmixSetup'
-import {normalizeSettings} from '~/mixins/settingsNormalizer'
+import {
+  normalizeSettings
+} from '~/mixins/settingsNormalizer'
 import VueNativeWebsocket from 'vue-native-websocket'
 import axios from 'axios'
 
@@ -12,7 +14,10 @@ function getVmixPath(webControllerAddress) {
   return (webControllerAddress || '').trim().replace(/\/$/, "") + '/API';
 }
 
-function eventLogger(commit, state, {action, payload}) {
+function eventLogger(commit, state, {
+  action,
+  payload
+}) {
   if (Date.now() < state.eventLog.onUntilStopTime) {
     commit('APPEND_EVENT_LOG', {
       event: {
@@ -26,19 +31,27 @@ function eventLogger(commit, state, {action, payload}) {
 }
 
 export default {
-  SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
+  SET_LOCALE_FROM_USER_DEFAULT: ({
+    commit,
+    dispatch,
+    state
+  }) => {
     return new Promise((resolve, reject) => {
-      eventLogger(commit, state, {action: 'SET_LOCALE_FROM_USER_DEFAULT'});
-  
-      commit('SET_LOCALE_USER_DEFAULT', { locale: userLocale });
-  
+      eventLogger(commit, state, {
+        action: 'SET_LOCALE_FROM_USER_DEFAULT'
+      });
+
+      commit('SET_LOCALE_USER_DEFAULT', {
+        locale: userLocale
+      });
+
       if (!state.settings.locale.from) {
         // 'from' locale hasn't been set yet
         // Find closest match for locale from supported locales
         const matchingSupportedLocale = supportedLocales.find((l) => {
           return l.code.toUpperCase() == userLocale.toUpperCase();
         });
-        
+
         commit('SET_LOCALE_FROM', {
           locale: (matchingSupportedLocale ? matchingSupportedLocale.code : 'en-US')
         });
@@ -48,8 +61,13 @@ export default {
     });
   },
 
-  START_DETACHED_MODE: ({commit, state}) => {
-    eventLogger(commit, state, {action: 'START_DETACHED_MODE'});
+  START_DETACHED_MODE: ({
+    commit,
+    state
+  }) => {
+    eventLogger(commit, state, {
+      action: 'START_DETACHED_MODE'
+    });
 
     ChromelessWindowManager.methods.start(RemoteEventBus, {
       settings: state.settings,
@@ -57,27 +75,29 @@ export default {
       transcriptFinal: state.captioner.transcript.final,
       transcriptTyped: state.captioner.transcript.typed,
     }, () => { // On close
-      commit('SET_DETACHED_MODE_OFF');  
+      commit('SET_DETACHED_MODE_OFF');
     });
     commit('SET_DETACHED_MODE_ON');
   },
 
-  RESTORE_SETTINGS: ({ commit }, { settings }) => {
+  RESTORE_SETTINGS: ({
+    commit
+  }, {
+    settings
+  }) => {
     return new Promise((resolve, reject) => {
       function commitPropertySetting(mutationName, mutationDataPropertyName, settingsKey) {
         let value = get(settings, settingsKey);
         if (typeof value !== 'undefined') {
           commit(
-            mutationName,
-            {
+            mutationName, {
               [mutationDataPropertyName]: value,
 
               // because otherwise we have a huge amount of events on every initial load
               omitFromGoogleAnalytics: true,
             }
           );
-        }
-        else {
+        } else {
           // It's already set to the default in the store, so just leave that
         }
       }
@@ -85,6 +105,7 @@ export default {
       commitPropertySetting('SET_TEXT_COLOR', 'textColor', 'appearance.text.textColor');
       commitPropertySetting('SET_TEXT_COLOR_INTERIM', 'textColorInterim', 'appearance.text.textColorInterim');
       commitPropertySetting('SET_FONT_FAMILY', 'fontFamily', 'appearance.text.fontFamily');
+      commitPropertySetting('SET_FONT_VARIANT', 'fontVariant', 'appearance.text.fontVariant');
       commitPropertySetting('SET_TEXT_SIZE', 'textSize', 'appearance.text.textSize');
       commitPropertySetting('SET_LINE_HEIGHT', 'lineHeight', 'appearance.text.lineHeight');
       commitPropertySetting('SET_LETTER_SPACING', 'letterSpacing', 'appearance.text.letterSpacing');
@@ -131,27 +152,39 @@ export default {
       commitPropertySetting('SET_WEBHOOKS_URL', 'url', 'integrations.webhooks.url');
       commitPropertySetting('SET_WEBHOOKS_METHOD', 'method', 'integrations.webhooks.method');
       commitPropertySetting('SET_WEBHOOKS_THROTTLE_MS', 'throttleMs', 'integrations.webhooks.throttleMs');
-      
+
       commitPropertySetting('SET_DONATION_DATE', 'donationDate', 'donationDate');
 
       (get(settings, 'exp') || []).forEach((experiment) => {
-        commit('ADD_EXPERIMENT', { experiment, omitFromGoogleAnalytics: true });
+        commit('ADD_EXPERIMENT', {
+          experiment,
+          omitFromGoogleAnalytics: true
+        });
       });
 
       (get(settings, 'wordReplacements') || []).forEach((wordReplacement) => {
         if (wordReplacement.from) {
-          commit('ADD_WORD_REPLACEMENT', { wordReplacement, omitFromGoogleAnalytics: true });
+          commit('ADD_WORD_REPLACEMENT', {
+            wordReplacement,
+            omitFromGoogleAnalytics: true
+          });
         }
       });
-      
+
       resolve();
     });
   },
 
 
-  RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, state, dispatch }) => {
+  RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({
+    commit,
+    state,
+    dispatch
+  }) => {
     return new Promise((resolve, reject) => {
-      eventLogger(commit, state, {action: 'RESTORE_SETTINGS_FROM_LOCALSTORAGE'});
+      eventLogger(commit, state, {
+        action: 'RESTORE_SETTINGS_FROM_LOCALSTORAGE'
+      });
 
       if (!localStorage) {
         resolve();
@@ -159,7 +192,7 @@ export default {
       }
 
       const localStorageParsed = JSON.parse(localStorage.getItem('webcaptioner-settings'));
-      
+
       if (!localStorageParsed || !localStorageParsed.version) {
         resolve();
         return;
@@ -175,13 +208,20 @@ export default {
         return;
       }
 
-      dispatch('RESTORE_SETTINGS', {settings})
+      dispatch('RESTORE_SETTINGS', {
+          settings
+        })
         .then(resolve);
     });
   },
 
-  SAVE_SETTINGS_TO_LOCALSTORAGE: ({state, commit}) => {
-    eventLogger(commit, state, {action: 'SAVE_SETTINGS_TO_LOCALSTORAGE'});
+  SAVE_SETTINGS_TO_LOCALSTORAGE: ({
+    state,
+    commit
+  }) => {
+    eventLogger(commit, state, {
+      action: 'SAVE_SETTINGS_TO_LOCALSTORAGE'
+    });
 
     if (localStorage) {
       localStorage.setItem('webcaptioner-settings', JSON.stringify({
@@ -191,18 +231,31 @@ export default {
     }
   },
 
-  SHOW_INCOMPATIBLE_BROWSER_MODAL: ({commit, state}) => {
-    eventLogger(commit, state, {action: 'SHOW_INCOMPATIBLE_BROWSER_MODAL'});
+  SHOW_INCOMPATIBLE_BROWSER_MODAL: ({
+    commit,
+    state
+  }) => {
+    eventLogger(commit, state, {
+      action: 'SHOW_INCOMPATIBLE_BROWSER_MODAL'
+    });
 
     // Just need to toggle it on for a second for the modal to appear
     commit('SET_INCOMPATIBLE_BROWSER_MODAL_VISIBLE');
-    setTimeout(function(){
+    setTimeout(function () {
       commit('SET_INCOMPATIBLE_BROWSER_MODAL_INVISIBLE');
-    },1000);
+    }, 1000);
   },
 
-  REFRESH_VMIX_SETUP_STATUS: ({commit, dispatch, state}, {chromeExtensionId}) => {
-    eventLogger(commit, state, {action: 'REFRESH_VMIX_SETUP_STATUS'});
+  REFRESH_VMIX_SETUP_STATUS: ({
+    commit,
+    dispatch,
+    state
+  }, {
+    chromeExtensionId
+  }) => {
+    eventLogger(commit, state, {
+      action: 'REFRESH_VMIX_SETUP_STATUS'
+    });
 
     let {
       checkIfExtensionInstalled,
@@ -219,76 +272,84 @@ export default {
     }
 
 
-    
+
     let extensionCheck = checkIfExtensionInstalled(chromeExtensionId)
-      .then(function(installed) {
-        commit('SET_VMIX_CHROME_EXTENSION_INSTALLED', {installed});
+      .then(function (installed) {
+        commit('SET_VMIX_CHROME_EXTENSION_INSTALLED', {
+          installed
+        });
       });
-    
+
     let testConnection = new Promise((resolve, reject) => {
       testWebControllerConnectivity(getVmixPath(state.settings.integrations.vmix.webControllerAddress), chromeExtensionId)
-        .then(function(connected) {
+        .then(function (connected) {
           resolve(connected);
         });
     });
 
     let testVmixTemplate = new Promise((resolve, reject) => {
-      
+
       // Reset GUID
-      commit('SET_VMIX_CACHED_INPUT_GUID', {guid: null});
+      commit('SET_VMIX_CACHED_INPUT_GUID', {
+        guid: null
+      });
 
       sendMessage(getVmixPath(state.settings.integrations.vmix.webControllerAddress), chromeExtensionId)
-        .then(function(response) {
+        .then(function (response) {
           if (!response || (response && !response.text)) {
             return resolve(false);
           }
 
           let xml = response.text,
-              textElement;
-          
+            textElement;
+
           // There is an <input></input> element in vMix's response that isn't a proper
           // <input> element. The browser automatically interprets it as a self-closing
           // <input> tag. We need to rename it to something unique so we can get its children.
-          xml = xml.replace(/<input /gi,'<webcaptioner-vmix-input ').replace(/\<\/input\>/gi,'</webcaptioner-vmix-input>');
+          xml = xml.replace(/<input /gi, '<webcaptioner-vmix-input ').replace(/\<\/input\>/gi, '</webcaptioner-vmix-input>');
 
           try {
             const parser = new DOMParser();
             const xmlDOM = parser.parseFromString(xml, "application/xml");
             textElement = xmlDOM.querySelector('text[name="WebCaptionerCaptions"]');
-          }
-          catch (e) {
+          } catch (e) {
             // Unable to parse
             resolve(false);
           }
-          
+
           // Timeout is totally unnecessary here. It usually resolves instantly, but that seems
           // to lead to some confusion on whether it really checked or not -- so introduce a short
           // artifical delay.
-          setTimeout(function() {
+          setTimeout(function () {
             if (textElement) {
               let parent = textElement.parentElement;
-              commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: false});
+              commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
+                on: false
+              });
               resolve(parent.getAttribute('key'));
-            }
-            else {
+            } else {
               resolve(false);
             }
-          },200);
+          }, 200);
         });
     });
 
     let testConnectionWithTimeout = Promise.race([testConnection, getConnectionTimeoutPromise()])
       .then((connected) => {
-        commit('SET_VMIX_WEB_CONTROLLER_CONNECTED', {connected});
+        commit('SET_VMIX_WEB_CONTROLLER_CONNECTED', {
+          connected
+        });
       });
-    
+
     let testVmixTemplateWithTimeout = Promise.race([testVmixTemplate, getConnectionTimeoutPromise()])
       .then((guid) => {
         if (guid) {
-          commit('SET_VMIX_CACHED_INPUT_GUID', {guid});
+          commit('SET_VMIX_CACHED_INPUT_GUID', {
+            guid
+          });
         }
       });
-      
+
     return Promise.all([
       extensionCheck,
       testConnectionWithTimeout,
@@ -296,11 +357,14 @@ export default {
     ]);
   },
 
-  SAVE_TO_DROPBOX: ({state, commit}) => {
+  SAVE_TO_DROPBOX: ({
+    state,
+    commit
+  }) => {
     if (!state.captioner.transcript.final) {
       return;
     }
-    
+
     let sessionStartDate = state.integrations.storage.sessionStartDate;
     if (!sessionStartDate) {
       commit('INIT_STORAGE_SESSION_DATE');
@@ -314,26 +378,43 @@ export default {
     });
   },
 
-  SEND_TO_VMIX: ({state, commit}, { text, chromeExtensionId }) => {
-    eventLogger(commit, state, {action: 'SEND_TO_VMIX', payload: {text}});
+  SEND_TO_VMIX: ({
+    state,
+    commit
+  }, {
+    text,
+    chromeExtensionId
+  }) => {
+    eventLogger(commit, state, {
+      action: 'SEND_TO_VMIX',
+      payload: {
+        text
+      }
+    });
     let inputGUID = state.integrations.vmix.cachedInputGUID;
-    
+
     if (!inputGUID) {
-      commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
+      commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
+        on: true
+      });
       return;
     }
-    
-    let {sendMessage} = vmixSetup;
+
+    let {
+      sendMessage
+    } = vmixSetup;
     sendMessage(
-      getVmixPath(state.settings.integrations.vmix.webControllerAddress) +
-        '/?Function=SetText&Input='+ inputGUID +'&SelectedName=WebCaptionerCaptions&Value='+encodeURIComponent(text.slice(-1000)),
+        getVmixPath(state.settings.integrations.vmix.webControllerAddress) +
+        '/?Function=SetText&Input=' + inputGUID + '&SelectedName=WebCaptionerCaptions&Value=' + encodeURIComponent(text.slice(-1000)),
         chromeExtensionId
-    )
-      .then(function(response) {
+      )
+      .then(function (response) {
         if (!response && !response.success) {
-          commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {on: true});
+          commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
+            on: true
+          });
         }
       });
   },
-  
+
 }

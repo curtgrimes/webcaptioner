@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="w-100" style="display: flex;flex-direction: column;height: 100vh;">
     <nuxt-child/>
-    <incompatible-browser-modal ref="incompatibleBrowserModal" />
-    <microphone-permission-needed-modal ref="microphonePermissionNeededModal" />
-    <microphone-permission-denied-modal ref="microphonePermissionDeniedModal" />
+    <incompatible-browser-modal ref="incompatibleBrowserModal"/>
+    <microphone-permission-needed-modal ref="microphonePermissionNeededModal"/>
+    <microphone-permission-denied-modal ref="microphonePermissionDeniedModal"/>
     <navbar></navbar>
   </div>
 </template>
@@ -294,6 +294,7 @@ export default {
           'SET_TEXT_COLOR',
           'SET_TEXT_COLOR_INTERIM',
           'SET_FONT_FAMILY',
+          'SET_FONT_VARIANT',
           'SET_TEXT_SIZE',
           'SET_LINE_HEIGHT',
           'SET_LETTER_SPACING',

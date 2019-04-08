@@ -7,19 +7,12 @@
         class="col-sm-6 col-form-label"
       >{{$t('settings.appearance.fontFamily')}}</label>
       <div class="col-sm-6">
-        <b-dropdown class="d-block w-100" toggle-class="w-100">
-          <template slot="button-content">
-            <span
-              :style="{fontFamily: fontFamilyDisplayName, textTransform: 'none'}"
-            >{{fontFamilyDisplayName}}</span>
-          </template>
-          <b-dropdown-item
-            v-for="fontChoice in getFontChoices()"
-            :key="fontChoice.fontNameKey"
-            :style="{fontFamily: fontChoice.fontNameKey }"
-            @click="fontFamily = fontChoice.fontNameKey"
-          >{{fontChoice.displayName}}</b-dropdown-item>
-        </b-dropdown>
+        <Font-Selector
+          :fontFamily="fontFamily"
+          @update:fontFamily="value => fontFamily = value"
+          :fontVariant="fontVariant"
+          @update:fontVariant="value => fontVariant = value"
+        ></Font-Selector>
         <p class="mt-2 mb-0 small text-muted" v-if="fontFamily === 'OpenDyslexic'">
           Learn more about
           <a href="https://www.opendyslexic.org/" target="_blank">OpenDyslexic</a>.
@@ -484,6 +477,7 @@
 import debounce from 'lodash.debounce';
 import fontChoices from '~/mixins/data/fontChoices.js';
 import hexToRGB from '~/mixins/hexToRGB';
+import FontSelector from '~/components/FontSelector.vue';
 
 // Add fonts dynamically
 if (typeof window !== 'undefined') {
@@ -523,6 +517,9 @@ export default {
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.appearance.appearance',
+  },
+  components: {
+    FontSelector,
   },
   methods: {
     getFontChoices: () => {
@@ -582,15 +579,13 @@ export default {
         this.$store.commit('SET_FONT_FAMILY', { fontFamily });
       },
     },
-    fontFamilyDisplayName: {
-      // get the displayName according to the store key
+    fontVariant: {
+      // get/set the key from the store
       get() {
-        return fontChoices.find((choice) => {
-          return (
-            choice.fontNameKey ===
-            this.$store.state.settings.appearance.text.fontFamily
-          );
-        }).displayName;
+        return this.$store.state.settings.appearance.text.fontVariant;
+      },
+      set(fontVariant) {
+        this.$store.commit('SET_FONT_VARIANT', { fontVariant });
       },
     },
     textSize: {

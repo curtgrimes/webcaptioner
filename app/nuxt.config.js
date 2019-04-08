@@ -12,20 +12,52 @@ const gitRevision = require('git-rev-sync');
 module.exports = {
   head: {
     title: 'Web Captioner',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' },
-      { hid: 'description', name: 'description', content: 'Free, real-time captioning for your event.' },
-      { name: 'theme-color', content: '#ffe200' },
-      { name: 'google', content: 'notranslate' },
-      { property: 'og:image', content: 'https://webcaptioner.com/static/og-image.jpg' },
-      { property: 'og:image:secure_url', content: 'https://webcaptioner.com/static/og-image.jpg' },
-      { property: 'og:image:type', content: 'image/jpg' },
-      { property: 'og:image:width', content: '1200' },
-      { property: 'og:image:height', content: '630' },
+    meta: [{
+        charset: 'utf-8'
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Free, real-time captioning for your event.'
+      },
+      {
+        name: 'theme-color',
+        content: '#ffe200'
+      },
+      {
+        name: 'google',
+        content: 'notranslate'
+      },
+      {
+        property: 'og:image',
+        content: 'https://webcaptioner.com/static/og-image.jpg'
+      },
+      {
+        property: 'og:image:secure_url',
+        content: 'https://webcaptioner.com/static/og-image.jpg'
+      },
+      {
+        property: 'og:image:type',
+        content: 'image/jpg'
+      },
+      {
+        property: 'og:image:width',
+        content: '1200'
+      },
+      {
+        property: 'og:image:height',
+        content: '630'
+      },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=2' }, // https://github.com/nuxt/nuxt.js/issues/1204
+    link: [{
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico?v=2'
+      }, // https://github.com/nuxt/nuxt.js/issues/1204
     ],
   },
   modules: [
@@ -38,11 +70,12 @@ module.exports = {
     }],
     'nuxt-trailingslash-module',
     '@nuxtjs/axios',
-    ['bootstrap-vue/nuxt', { css: false }],
+    ['bootstrap-vue/nuxt', {
+      css: false
+    }],
     ['nuxt-i18n', {
       defaultLocale: 'en-US',
-      locales: [
-        {
+      locales: [{
           code: 'en-US',
           file: 'en-US.js',
           iso: 'en-US',
@@ -65,7 +98,7 @@ module.exports = {
         delay: 400, // ms
       },
       autoTracking: {
-        pageviewTemplate: function(route) {
+        pageviewTemplate: function (route) {
           return {
             page: route.path.replace(/\/$/, ''), // path with trailing slash removed
             title: document.title,
@@ -75,11 +108,10 @@ module.exports = {
       },
     }],
     ['nuxt-fontawesome', {
-      component: 'fa', 
-      imports: [
-        {
+      component: 'fa',
+      imports: [{
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faCircleNotch', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft','faArrowRight', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower', ],
+          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faCircleNotch', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft', 'faArrowRight', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower', ],
         },
         {
           set: '@fortawesome/free-regular-svg-icons',
@@ -92,8 +124,10 @@ module.exports = {
       ]
     }],
   ],
-  plugins: [
-    { src: '~/plugins/websocket', ssr: false },
+  plugins: [{
+      src: '~/plugins/websocket',
+      ssr: false
+    },
     '~/plugins/vue-timeago',
     '~/plugins/performance.js',
   ],
@@ -113,18 +147,21 @@ module.exports = {
     timeout: 7000, // ms
   },
   /*
-  ** Customize the progress bar color
-  */
+   ** Customize the progress bar color
+   */
   loading: false,
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     // analyze: true,
     /*
-    ** Run ESLint on save
-    */
-    extend (config, { isDev }) {
+     ** Run ESLint on save
+     */
+    extend(config, {
+      isDev,
+      loaders
+    }) {
       if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
@@ -141,29 +178,39 @@ module.exports = {
       if (process.server) {
 
       }
-    }
+
+      loaders.css.modules = true;
+    },
   },
   hooks(hook) {
     hook('listen', (server) => {
-      wsServer.createSocket(server);
-    }),
-    hook('render:setupMiddleware', (app) => {
-      app.use('/health-check', healthCheckMiddleware);
+        wsServer.createSocket(server);
+      }),
+      hook('render:setupMiddleware', (app) => {
+        app.use('/health-check', healthCheckMiddleware);
 
-      if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
-        app.use(redirectSSL.create({
-          redirectHost: url.parse(process.env.HOSTNAME).hostname,
-        }));
-      }
+        if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
+          app.use(redirectSSL.create({
+            redirectHost: url.parse(process.env.HOSTNAME).hostname,
+          }));
+        }
 
-      app.use(sourcemapMiddleware);
-    })
+        app.use(sourcemapMiddleware);
+      })
   },
   serverMiddleware: [
     '~/api/index.js',
-    { path: '/admin', handler: '~/middleware/server/admin.js'},
-    { path: '/feedback', handler: '~/middleware/server/feedback.js' },
-    { path: '/', handler: serveStatic(path.resolve(__dirname + '/../static-site/public')) },
+    {
+      path: '/admin',
+      handler: '~/middleware/server/admin.js'
+    },
+    {
+      path: '/feedback',
+      handler: '~/middleware/server/feedback.js'
+    },
+    {
+      path: '/',
+      handler: serveStatic(path.resolve(__dirname + '/../static-site/public'))
+    },
   ],
 }
-
