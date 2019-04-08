@@ -163,11 +163,11 @@
                 <hr>
                 <b-nav vertical pills>
                   <b-nav-item
-                  active-class="active"
+                    active-class="active"
                     :to="localePath('captioner-settings-vmix')"
                   >{{$t('settings.vmix.vmix')}}</b-nav-item>
                   <b-nav-item
-                  active-class="active"
+                    active-class="active"
                     v-if="experiments.includes('webhooks')"
                     :to="localePath('captioner-settings-webhooks')"
                   >{{$t('settings.webhooks.webhooks')}}</b-nav-item>
@@ -175,7 +175,7 @@
                 <hr>
                 <b-nav vertical pills>
                   <b-nav-item
-                  active-class="active"
+                    active-class="active"
                     class="small"
                     :to="localePath('captioner-settings-export-restore')"
                   >{{$t('settings.exportRestore.exportRestoreSettings')}}</b-nav-item>
