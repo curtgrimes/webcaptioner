@@ -6,6 +6,9 @@ export default {
   }) => {
     state.settingsPageTitle = settingsPageTitle;
   },
+  SET_SETTINGS_LOADED: (state, loaded) => {
+    state.settings.loaded = loaded;
+  },
   SET_TEXT_COLOR: (state, {
     textColor
   }) => {

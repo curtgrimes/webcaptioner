@@ -11,15 +11,21 @@ Vue.use(Vuex)
 export const strict = false;
 
 let mutationInterceptorPlugin = store => {
-  store.subscribe(({type, payload}, state) => {
+  store.subscribe(({
+    type,
+    payload
+  }, state) => {
     if (remoteMutationBlacklist.indexOf(type) === -1) {
       // This mutation type is not in the blacklist. Send it to remotely listening devices.
-      RemoteEventBus.$emit('sendMutationToReceivers', {mutation: type, payload});
+      RemoteEventBus.$emit('sendMutationToReceivers', {
+        mutation: type,
+        payload
+      });
     }
 
     function shouldTrackMutation(type, payload) {
-      return ((payload && !payload.omitFromGoogleAnalytics) || !payload)
-        && !type.includes('route/');
+      return ((payload && !payload.omitFromGoogleAnalytics) || !payload) &&
+        !type.includes('route/');
     }
 
     // Track mutations with Google Analytics
@@ -30,7 +36,7 @@ let mutationInterceptorPlugin = store => {
         // Use the first value of the payload
         eventLabel = payload[Object.keys(payload)[0]] ? payload[Object.keys(payload)[0]].toString() : null;
       }
-      
+
       if (Vue.$ga && Vue.$ga.event) {
         Vue.$ga.event({
           eventCategory: 'captioner',
@@ -47,12 +53,12 @@ let mutationInterceptorPlugin = store => {
           event: {
             event: 'mutation',
             type,
-            payload: type === 'route/ROUTE_CHANGED'
-                      ? {
-                        from: payload.from.path,
-                        to: payload.to.path,
-                      }
-                      : payload,
+            payload: type === 'route/ROUTE_CHANGED' ?
+              {
+                from: payload.from.path,
+                to: payload.to.path,
+              } :
+              payload,
           },
           omitFromGoogleAnalytics: true,
         });
@@ -63,7 +69,10 @@ let mutationInterceptorPlugin = store => {
 
 export const state = () => ({
   version: '2.0.0',
-  settings: getSettingsState(),
+  settings: {
+    loaded: false,
+    ...getSettingsState(),
+  },
   receivers: {
     share: {
       subscriberCount: 0,

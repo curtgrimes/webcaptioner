@@ -58,7 +58,7 @@
     "babel-eslint": "^8.2.1",
     "babel-helpers": "^6.24.1",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.16",
+    "bootstrap-vue": "^2.0.0-rc.18",
     "bytes": "^3.0.0",
     "combokeys": "^3.0.0",
     "csv-parse": "^3.1.3",

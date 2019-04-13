@@ -7,11 +7,7 @@
   >
     <!--
     -->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      :href="'https://fonts.googleapis.com/css?family=' + fontFamily"
-    >
+    <font-stylesheet v-if="$store.state.settings.loaded" :fontFamily="fontFamily"/>
     <!--
     -->
     <span
@@ -60,24 +56,16 @@
   </div>
 </template>
 
-<style>
-@font-face {
-  font-family: 'OpenDyslexic';
-  src: url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff2')
-      format('woff2'),
-    url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff') format('woff');
-  font-style: normal;
-  font-weight: normal;
-}
-</style>
-
 <script>
 import hexToRGB from '~/mixins/hexToRGB';
 import Combokeys from 'combokeys';
-import fontChoices from '~/mixins/data/fontChoices';
+import fontStylesheet from '@/components/fontStylesheet';
 
 export default {
   name: 'transcript',
+  components: {
+    fontStylesheet,
+  },
   props: {
     showTypedLiveReadOnly: Boolean,
     allowDisableAutoScroll: {

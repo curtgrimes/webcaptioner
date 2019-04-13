@@ -171,6 +171,8 @@ export default {
         }
       });
 
+      commit('SET_SETTINGS_LOADED', true);
+
       resolve();
     });
   },
@@ -187,6 +189,7 @@ export default {
       });
 
       if (!localStorage) {
+        commit('SET_SETTINGS_LOADED', true);
         resolve();
         return;
       }
@@ -194,6 +197,7 @@ export default {
       const localStorageParsed = JSON.parse(localStorage.getItem('webcaptioner-settings'));
 
       if (!localStorageParsed || !localStorageParsed.version) {
+        commit('SET_SETTINGS_LOADED', true);
         resolve();
         return;
       }
@@ -204,6 +208,7 @@ export default {
       });
 
       if (!settings) {
+        commit('SET_SETTINGS_LOADED', true);
         resolve();
         return;
       }

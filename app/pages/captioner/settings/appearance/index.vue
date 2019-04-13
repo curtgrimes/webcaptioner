@@ -8,12 +8,14 @@
       >{{$t('settings.appearance.fontFamily')}}</label>
       <div class="col-sm-6">
         <Font-Selector
+          v-if="$store.state.settings.loaded"
           :fontFamily="fontFamily"
           @update:fontFamily="value => fontFamily = value"
           :fontVariant="fontVariant"
           @update:fontVariant="value => fontVariant = value"
         ></Font-Selector>
-        <p class="mt-2 mb-0 small text-muted" v-if="fontFamily === 'OpenDyslexic'">
+        <b-spinner v-else></b-spinner>
+        <p class="mt-2 mb-0 small text-muted" v-if="fontFamily.includes('OpenDyslexic')">
           Learn more about
           <a href="https://www.opendyslexic.org/" target="_blank">OpenDyslexic</a>.
         </p>
@@ -461,54 +463,10 @@
   </div>
 </template>
 
-<style>
-@font-face {
-  font-family: 'OpenDyslexic';
-  src: url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff2')
-      format('woff2'),
-    url('/fonts/OpenDyslexic/OpenDyslexic-regular-webfont.woff') format('woff');
-  font-style: normal;
-  font-weight: normal;
-}
-</style>
-
-
 <script>
 import debounce from 'lodash.debounce';
-import fontChoices from '~/mixins/data/fontChoices.js';
 import hexToRGB from '~/mixins/hexToRGB';
 import FontSelector from '~/components/FontSelector.vue';
-
-// Add fonts dynamically
-if (typeof window !== 'undefined') {
-  var headID = document.getElementsByTagName('head')[0];
-
-  // Add Google fonts
-  var link = document.createElement('link');
-  link.type = 'text/css';
-  link.rel = 'stylesheet';
-  headID.appendChild(link);
-
-  let fontChoicesString = fontChoices
-    .filter((f) => {
-      return f.googleFont;
-    })
-    .map(function(choice) {
-      return choice.fontNameKey.replace(/ /g, '+');
-    })
-    .join('|');
-
-  link.href = 'https://fonts.googleapis.com/css?family=' + fontChoicesString;
-
-  // Add non-Google fonts
-  // fontChoices.filter(f => { return !f.googleFont; }).forEach(f => {
-  //   var link = document.createElement('link');
-  //   link.type = 'text/css';
-  //   link.rel = 'stylesheet';
-  //   headID.appendChild(link);
-  //   link.href = 'https://fonts.googleapis.com/css?family=' + fontChoicesString;
-  // });
-}
 
 export default {
   name: 'settings-appearance-view',
@@ -520,11 +478,6 @@ export default {
   },
   components: {
     FontSelector,
-  },
-  methods: {
-    getFontChoices: () => {
-      return fontChoices;
-    },
   },
   computed: {
     textColor: {

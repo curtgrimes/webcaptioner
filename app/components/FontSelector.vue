@@ -4,18 +4,31 @@
       <b-btn
         variant="light"
         class="bg-white border"
+        :class="$style.fontPreviewButton"
         id="font-selector-popover-start"
-        :disabled="showFontSelectorPopover"
-        :style="{fontFamily: selectedFontFamily}"
+        :disabled="!selectedFont"
+        :style="{fontFamily: selectedFontFamily, fontWeight, fontStyle}"
         style="text-transform: none"
+        v-b-tooltip.hover
+        :title="selectedFontFamily"
       >{{selectedFontFamily}}</b-btn>
-      <b-dropdown right :text="selectedFontVariant" size="sm" variant="dark">
+      <b-dropdown
+        @show="showFontSelectorPopover = false"
+        :disabled="!selectedFont"
+        right
+        :text="selectedFontVariant"
+        size="sm"
+        variant="dark"
+      >
         <b-dropdown-item
-          v-for="(variant, index) in selectedFont.variants"
+          v-for="(variant, index) in (selectedFont ? selectedFont.variants : [])"
           :key="selectedFont.family + variant + index"
+          @click="selectedFontVariant = variant"
+          style="text-transform: capitalize"
         >{{variant}}</b-dropdown-item>
       </b-dropdown>
     </b-button-group>
+    <font-stylesheet v-if="selectedFont" :fontFamily="selectedFont.fontFamily"/>
 
     <b-popover
       target="font-selector-popover-start"
@@ -24,13 +37,20 @@
       :show.sync="showFontSelectorPopover"
     >
       <template slot="title">
-        <b-button @click="showFontSelectorPopover = false" class="close" aria-label="Close">
-          <span class="d-inline-block" aria-hidden="true">&times;</span>
+        <b-button
+          @click="showFontSelectorPopover = false"
+          size="sm"
+          variant="link"
+          aria-label="Close"
+          class="float-right p-0 text-dark"
+        >
+          <fa icon="times"/>
         </b-button>Font
       </template>
 
       <b-form-input
         class="mb-3"
+        ref="fontSearchInput"
         autofocus
         placeholder="Search all fonts"
         v-model="fontSearch"
@@ -39,11 +59,12 @@
 
       <p
         v-show="!fontSearch && !searching"
-        class="small font-weight-bold text-muted text-uppercase mb-1 text-center"
+        class="small font-weight-bold text-muted text-uppercase mb-1"
       >Popular</p>
 
       <div :class="$style.fontListGroupWrap">
-        <div v-show="!fontResults.length" class="text-muted text-center">No results.</div>
+        <div v-show="!fontResults.length && !loading" class="text-muted text-center">No results.</div>
+        <b-spinner v-if="loading" small class="d-block mx-auto"></b-spinner>
         <b-list-group>
           <b-list-group-item
             v-for="(font, index) in fontResults"
@@ -55,13 +76,16 @@
           >
             <span class="row m-0">
               <span class="col-3 text-center">
-                <span class="d-block">
+                <span
+                  class="d-block"
+                  v-if="selectedFont && selectedFont.fontFamily === font.fontFamily"
+                >
                   <fa icon="check-circle"/>
                 </span>
               </span>
               <span class="col-9 pl-0">{{font.fontFamily}}</span>
             </span>
-            <link :href="getFontHref(font)" rel="stylesheet">
+            <font-stylesheet v-if="selectedFont" :fontFamily="font.fontFamily"/>
           </b-list-group-item>
         </b-list-group>
       </div>
@@ -71,8 +95,12 @@
 
 <script>
 import throttle from 'lodash.throttle';
+import fontStylesheet from '@/components/fontStylesheet';
 
 export default {
+  components: {
+    fontStylesheet,
+  },
   props: {
     fontFamily: {
       type: String,
@@ -93,26 +121,34 @@ export default {
       selectedFont: null,
       selectedFontFamily: null,
       selectedFontVariant: null,
+      loading: true,
     };
   },
-  mounted: function() {
+  created: function() {
     this.selectedFontFamily = this.fontFamily;
     this.selectedFontVariant = this.fontVariant;
+  },
+  mounted: async function() {
+    if (!this.selectedFont) {
+      let fontLookup = await this.$axios.$get('/api/fonts/' + this.fontFamily);
+
+      if (fontLookup) {
+        this.selectedFont = fontLookup;
+      }
+    }
   },
   methods: {
     selectFont: function(font) {
       this.selectedFont = font;
       this.showFontSelectorPopover = false;
     },
-    getFontHref: function(font) {
-      return (
-        'https://fonts.googleapis.com/css?family=' +
-        font.fontFamily +
-        ':' +
-        this.getDefaultVariant(font)
-      );
-    },
-    getDefaultVariant: function(font) {
+    getDefaultOrSelectedVariant: function(font) {
+      if (
+        this.selectedFontVariant &&
+        font.variants.includes(this.selectedFontVariant)
+      ) {
+        return this.selectedFontVariant;
+      }
       if (font.variants.includes('regular')) {
         return 'regular';
       } else if (font.variants.includes('400')) {
@@ -123,11 +159,26 @@ export default {
       }
     },
   },
+  computed: {
+    fontWeight: function() {
+      // If the font variant is something like 'bold 400 italic', return just
+      // the '400'.  Some variants are just 'regular' literally, so replace that
+      // with the 'normal' weight (equivalent to 400)
+      return this.selectedFontVariant.replace(/\D+/g, '') || '400';
+    },
+    fontStyle: function() {
+      return this.selectedFontVariant.includes('italic') ? 'italic' : 'normal';
+    },
+  },
   watch: {
     showFontSelectorPopover: async function() {
+      this.$refs.fontSearchInput.focus();
+
       if (this.showFontSelectorPopover && !this.popularFonts.length) {
         // Hydrate popular fonts
+        this.loading = true;
         this.popularFonts = await this.$axios.$get('/api/fonts?popular');
+        this.loading = false;
       }
 
       if (!this.fontSearch) {
@@ -137,12 +188,17 @@ export default {
     },
     selectedFont: function() {
       this.selectedFontFamily = this.selectedFont.fontFamily;
-      this.selectedFontVariant = this.getDefaultVariant(this.selectedFont);
+      this.selectedFontVariant = this.getDefaultOrSelectedVariant(
+        this.selectedFont
+      );
       this.$emit('update:fontFamily', this.selectedFont.fontFamily);
       this.$emit(
         'update:fontVariant',
-        this.getDefaultVariant(this.selectedFont)
+        this.getDefaultOrSelectedVariant(this.selectedFont)
       );
+    },
+    selectedFontVariant: function() {
+      this.$emit('update:fontVariant', this.selectedFontVariant);
     },
     fontSearch: throttle(async function() {
       this.searching = true;
@@ -159,6 +215,10 @@ export default {
 .fontListGroupWrap {
   height: 40vh;
   overflow: scroll;
+}
+.fontPreviewButton {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
 
