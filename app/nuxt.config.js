@@ -1,138 +1,191 @@
-require('dotenv').config()
+require('dotenv').config();
 
-const serveStatic = require('serve-static')
-const path = require('path')
-const redirectSSL = require('redirect-ssl')
-const healthCheckMiddleware = require('./middleware/server/health-check.js')
-const sourcemapMiddleware = require('./middleware/server/sourcemaps.js')
-const url = require('url');
-const wsServer = require('./socket.io/server');
-const gitRevision = require('git-rev-sync');
+import serveStatic from 'serve-static';
+import path from 'path';
+import redirectSSL from 'redirect-ssl';
+import healthCheckMiddleware from './middleware/server/health-check.js';
+import sourcemapMiddleware from './middleware/server/sourcemaps.js';
+import url from 'url';
+import wsServer from './socket.io/server';
+import gitRevision from 'git-rev-sync';
 
 module.exports = {
   head: {
     title: 'Web Captioner',
     meta: [{
-        charset: 'utf-8'
+        charset: 'utf-8',
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
+        content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
       },
       {
         hid: 'description',
         name: 'description',
-        content: 'Free, real-time captioning for your event.'
+        content: 'Free, real-time captioning for your event.',
       },
       {
         name: 'theme-color',
-        content: '#ffe200'
+        content: '#ffe200',
       },
       {
         name: 'google',
-        content: 'notranslate'
+        content: 'notranslate',
       },
       {
         property: 'og:image',
-        content: 'https://webcaptioner.com/static/og-image.jpg'
+        content: 'https://webcaptioner.com/static/og-image.jpg',
       },
       {
         property: 'og:image:secure_url',
-        content: 'https://webcaptioner.com/static/og-image.jpg'
+        content: 'https://webcaptioner.com/static/og-image.jpg',
       },
       {
         property: 'og:image:type',
-        content: 'image/jpg'
+        content: 'image/jpg',
       },
       {
         property: 'og:image:width',
-        content: '1200'
+        content: '1200',
       },
       {
         property: 'og:image:height',
-        content: '630'
+        content: '630',
       },
     ],
     link: [{
         rel: 'icon',
         type: 'image/x-icon',
-        href: '/favicon.ico?v=2'
+        href: '/favicon.ico?v=2',
       }, // https://github.com/nuxt/nuxt.js/issues/1204
     ],
   },
+  css: [
+    // '~/assets/scss/app.scss',
+  ],
   modules: [
-    ['nuxt-env', {
-      keys: [
-        'GOOGLE_CAST_APP_ID',
-        'CHROME_EXTENSION_ID',
-        'STRIPE_API_KEY_PUBLIC',
-      ],
-    }],
+    [
+      'nuxt-env',
+      {
+        keys: [
+          'GOOGLE_CAST_APP_ID',
+          'CHROME_EXTENSION_ID',
+          'STRIPE_API_KEY_PUBLIC',
+        ],
+      },
+    ],
     'nuxt-trailingslash-module',
     '@nuxtjs/axios',
-    ['bootstrap-vue/nuxt', {
-      css: false
-    }],
-    ['nuxt-i18n', {
-      defaultLocale: 'en-US',
-      locales: [{
-          code: 'en-US',
-          file: 'en-US.js',
-          iso: 'en-US',
-        },
-        // {
-        //   code: 'pt-BR',
-        //   file: 'pt-BR.js',
-        //   iso: 'pt-BR',
-        // },
-      ],
-      lazy: true,
-      langDir: 'lang/'
-    }],
+    [
+      'bootstrap-vue/nuxt',
+      {
+        css: false,
+      },
+    ],
+    [
+      'nuxt-i18n',
+      {
+        defaultLocale: 'en-US',
+        locales: [{
+            code: 'en-US',
+            file: 'en-US.js',
+            iso: 'en-US',
+          },
+          // {
+          //   code: 'pt-BR',
+          //   file: 'pt-BR.js',
+          //   iso: 'pt-BR',
+          // },
+        ],
+        lazy: true,
+        langDir: 'lang/',
+      },
+    ],
     ['@nuxtjs/sentry'],
-    ['@nuxtjs/google-analytics', {
-      id: 'REMOVED',
-      batch: {
-        enabled: true,
-        amount: 2,
-        delay: 400, // ms
+    [
+      '@nuxtjs/google-analytics',
+      {
+        id: 'REMOVED',
+        batch: {
+          enabled: true,
+          amount: 2,
+          delay: 400, // ms
+        },
+        autoTracking: {
+          pageviewTemplate: function (route) {
+            return {
+              page: route.path.replace(/\/$/, ''), // path with trailing slash removed
+              title: document.title,
+              location: window.location.href,
+            };
+          },
+        },
       },
-      autoTracking: {
-        pageviewTemplate: function (route) {
-          return {
-            page: route.path.replace(/\/$/, ''), // path with trailing slash removed
-            title: document.title,
-            location: window.location.href,
-          };
-        }
+    ],
+    [
+      'nuxt-fontawesome',
+      {
+        component: 'fa',
+        imports: [{
+            set: '@fortawesome/free-solid-svg-icons',
+            icons: [
+              'faFileAlt',
+              'faFileWord',
+              'faExclamationTriangle',
+              'faTimes',
+              'faMicrophone',
+              'faDesktop',
+              'faExternalLinkAlt',
+              'faSave',
+              'faTrashAlt',
+              'faCog',
+              'faCheckCircle',
+              'faSpinner',
+              'faCircleNotch',
+              'faChevronLeft',
+              'faChevronDown',
+              'faChevronRight',
+              'faInfoCircle',
+              'faMinusCircle',
+              'faPlusCircle',
+              'faPlus',
+              'faMinus',
+              'faArrowLeft',
+              'faArrowRight',
+              'faFlask',
+              'faCaretRight',
+              'faCaretDown',
+              'faKeyboard',
+              'faHeart',
+              'faBroadcastTower',
+            ],
+          },
+          {
+            set: '@fortawesome/free-regular-svg-icons',
+            icons: ['faThumbsUp', 'faTimesCircle'],
+          },
+          {
+            set: '@fortawesome/free-brands-svg-icons',
+            icons: [
+              'faApple',
+              'faWindows',
+              'faAndroid',
+              'faChrome',
+              'faTwitter',
+              'faFacebook',
+              'faDropbox',
+            ],
+          },
+        ],
       },
-    }],
-    ['nuxt-fontawesome', {
-      component: 'fa',
-      imports: [{
-          set: '@fortawesome/free-solid-svg-icons',
-          icons: ['faFileAlt', 'faFileWord', 'faExclamationTriangle', 'faTimes', 'faMicrophone', 'faDesktop', 'faExternalLinkAlt', 'faSave', 'faTrashAlt', 'faCog', 'faCheckCircle', 'faSpinner', 'faCircleNotch', 'faChevronLeft', 'faChevronDown', 'faChevronRight', 'faInfoCircle', 'faMinusCircle', 'faPlusCircle', 'faPlus', 'faMinus', 'faArrowLeft', 'faArrowRight', 'faFlask', 'faCaretRight', 'faCaretDown', 'faKeyboard', 'faHeart', 'faBroadcastTower', ],
-        },
-        {
-          set: '@fortawesome/free-regular-svg-icons',
-          icons: ['faThumbsUp', 'faTimesCircle'],
-        },
-        {
-          set: '@fortawesome/free-brands-svg-icons',
-          icons: ['faApple', 'faWindows', 'faAndroid', 'faChrome', 'faTwitter', 'faFacebook', 'faDropbox'],
-        },
-      ]
-    }],
+    ],
   ],
   plugins: [{
       src: '~/plugins/websocket',
-      ssr: false
+      ssr: false,
     },
     '~/plugins/vue-timeago',
     '~/plugins/performance.js',
-  ],
-  css: [
-    '@/assets/scss/app.scss',
   ],
   sentry: {
     public_key: 'REMOVED',
@@ -149,37 +202,30 @@ module.exports = {
   /*
    ** Customize the progress bar color
    */
-  loading: false,
+  // loading: false,
   /*
    ** Build configuration
    */
   build: {
-    // analyze: true,
-    /*
-     ** Run ESLint on save
-     */
+    analyze: true,
     extend(config, {
-      isDev,
-      loaders
+      isDev
     }) {
       if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
+          exclude: /(node_modules)/,
+        });
       }
 
       if (process.client) {
         config.devtool = '#source-map';
       }
 
-      if (process.server) {
+      if (process.server) {}
 
-      }
-
-      loaders.css.modules = true;
     },
   },
   hooks(hook) {
@@ -190,27 +236,29 @@ module.exports = {
         app.use('/health-check', healthCheckMiddleware);
 
         if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
-          app.use(redirectSSL.create({
-            redirectHost: url.parse(process.env.HOSTNAME).hostname,
-          }));
+          app.use(
+            redirectSSL.create({
+              redirectHost: url.parse(process.env.HOSTNAME).hostname,
+            })
+          );
         }
 
         app.use(sourcemapMiddleware);
-      })
+      });
   },
   serverMiddleware: [
     '~/api/index.js',
     {
       path: '/admin',
-      handler: '~/middleware/server/admin.js'
+      handler: '~/middleware/server/admin.js',
     },
     {
       path: '/feedback',
-      handler: '~/middleware/server/feedback.js'
+      handler: '~/middleware/server/feedback.js',
     },
     {
       path: '/',
-      handler: serveStatic(path.resolve(__dirname + '/../static-site/public'))
+      handler: serveStatic(path.resolve(__dirname + '/../static-site/public')),
     },
   ],
-}
+};

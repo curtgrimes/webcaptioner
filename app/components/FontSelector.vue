@@ -3,8 +3,7 @@
     <b-button-group class="d-flex">
       <b-btn
         variant="light"
-        class="bg-white border"
-        :class="$style.fontPreviewButton"
+        class="bg-white border fontPreviewButton"
         id="font-selector-popover-start"
         :disabled="!selectedFont"
         :style="{fontFamily: selectedFontFamily, fontWeight, fontStyle}"
@@ -62,7 +61,7 @@
         class="small font-weight-bold text-muted text-uppercase mb-1"
       >Popular</p>
 
-      <div :class="$style.fontListGroupWrap">
+      <div class="fontListGroupWrap">
         <div v-show="!fontResults.length && !loading" class="text-muted text-center">No results.</div>
         <b-spinner v-if="loading" small class="d-block mx-auto"></b-spinner>
         <b-list-group>
@@ -211,7 +210,7 @@ export default {
 };
 </script>
 
-<style module>
+<style scoped>
 .fontListGroupWrap {
   height: 40vh;
   overflow: scroll;

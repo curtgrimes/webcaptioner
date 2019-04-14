@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700');
-@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/_functions.scss';
 
 @font-face {
   font-family: 'Redacted';
@@ -102,43 +102,43 @@ $enable-shadows: false;
 $modal-content-box-shadow-sm-up: 0 0.25rem 2rem rgba(0, 0, 0, 0.5);
 $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/reboot';
-@import '~bootstrap/scss/type';
-@import '~bootstrap/scss/images';
-@import '~bootstrap/scss/code';
-@import '~bootstrap/scss/grid';
-@import '~bootstrap/scss/spinners';
-@import '~bootstrap/scss/tables';
-@import '~bootstrap/scss/forms';
-@import '~bootstrap/scss/buttons';
-@import '~bootstrap/scss/transitions';
-@import '~bootstrap/scss/dropdown';
-@import '~bootstrap/scss/button-group';
-@import '~bootstrap/scss/input-group';
-@import '~bootstrap/scss/custom-forms';
-@import '~bootstrap/scss/nav';
-@import '~bootstrap/scss/navbar';
-@import '~bootstrap/scss/card';
-@import '~bootstrap/scss/breadcrumb';
-@import '~bootstrap/scss/pagination';
-@import '~bootstrap/scss/badge';
-//@import "~bootstrap/scss/jumbotron";
-@import '~bootstrap/scss/alert';
-@import '~bootstrap/scss/progress';
-@import '~bootstrap/scss/media';
-@import '~bootstrap/scss/list-group';
-@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/_variables.scss';
+@import '~bootstrap/scss/_mixins.scss';
+@import '~bootstrap/scss/_reboot.scss';
+@import '~bootstrap/scss/_type.scss';
+@import '~bootstrap/scss/_images.scss';
+@import '~bootstrap/scss/_code.scss';
+@import '~bootstrap/scss/_grid.scss';
+@import '~bootstrap/scss/_spinners.scss';
+@import '~bootstrap/scss/_tables.scss';
+@import '~bootstrap/scss/_forms.scss';
+@import '~bootstrap/scss/_buttons.scss';
+@import '~bootstrap/scss/_transitions.scss';
+@import '~bootstrap/scss/_dropdown.scss';
+@import '~bootstrap/scss/_button-group.scss';
+@import '~bootstrap/scss/_input-group.scss';
+@import '~bootstrap/scss/_custom-forms.scss';
+@import '~bootstrap/scss/_nav.scss';
+@import '~bootstrap/scss/_navbar.scss';
+@import '~bootstrap/scss/_card.scss';
+@import '~bootstrap/scss/_breadcrumb.scss';
+@import '~bootstrap/scss/_pagination.scss';
+@import '~bootstrap/scss/_badge.scss';
+//@import "~bootstrap/scss/_jumbotron.scss";
+@import '~bootstrap/scss/_alert.scss';
+@import '~bootstrap/scss/_progress.scss';
+@import '~bootstrap/scss/_media.scss';
+@import '~bootstrap/scss/_list-group.scss';
+@import '~bootstrap/scss/_close.scss';
 
 // Components w/ JavaScript
-@import '~bootstrap/scss/modal';
-@import '~bootstrap/scss/tooltip';
-@import '~bootstrap/scss/popover';
-@import '~bootstrap/scss/carousel';
+@import '~bootstrap/scss/_modal.scss';
+@import '~bootstrap/scss/_tooltip.scss';
+@import '~bootstrap/scss/_popover.scss';
+@import '~bootstrap/scss/_carousel.scss';
 
-@import '~bootstrap/scss/utilities';
-@import '~bootstrap/scss/print';
+@import '~bootstrap/scss/_utilities.scss';
+@import '~bootstrap/scss/_print.scss';
 
 .logo-text {
   font-family: $headings-font-family;
