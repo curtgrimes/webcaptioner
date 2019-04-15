@@ -59,7 +59,7 @@
 <script>
 import hexToRGB from '~/mixins/hexToRGB';
 import Combokeys from 'combokeys';
-import fontStylesheet from '~/components/fontStylesheet';
+import fontStylesheet from '~/components/FontStylesheet.vue';
 import bBtn from 'bootstrap-vue/es/components/button/button';
 
 export default {

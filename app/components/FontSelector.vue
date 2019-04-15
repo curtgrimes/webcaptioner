@@ -94,7 +94,7 @@
 
 <script>
 import throttle from 'lodash.throttle';
-import fontStylesheet from '~/components/fontStylesheet';
+import fontStylesheet from '~/components/FontStylesheet.vue';
 import bBtn from 'bootstrap-vue/es/components/button/button';
 import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
 import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
