@@ -216,8 +216,6 @@ import saveToFile from '~/mixins/saveToFile';
 import dateFormat from '~/mixins/dateFormat';
 import bBtn from 'bootstrap-vue/es/components/button/button';
 import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
-import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
-import bDropdownItem from 'bootstrap-vue/es/components/dropdown/dropdown-item';
 import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
 import bPopover from 'bootstrap-vue/es/components/popover/popover';
 
@@ -229,8 +227,6 @@ export default {
     ShareButton,
     bBtn,
     bBtnGroup,
-    bDropdown,
-    bDropdownItem,
     bPopover,
   },
   directives: {
