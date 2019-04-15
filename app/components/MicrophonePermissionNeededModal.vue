@@ -1,23 +1,35 @@
 <template>
-    <b-modal lazy ref="modal" size="sm" hide-footer title="Microphone Permission" no-close-on-esc no-close-on-backdrop hide-header-close>
-        Web Captioner needs your permission to use your microphone. It only uses it during captioning.
-    </b-modal>
+  <b-modal
+    lazy
+    ref="modal"
+    size="sm"
+    hide-footer
+    title="Microphone Permission"
+    no-close-on-esc
+    no-close-on-backdrop
+    hide-header-close
+  >Web Captioner needs your permission to use your microphone. It only uses it during captioning.</b-modal>
 </template>
 
 
 
 <script>
+import bModal from 'bootstrap-vue/es/components/modal/modal';
 
 export default {
-  name: 'needs-microphone-permission-modal',
+  components: {
+    bModal,
+  },
   methods: {
     showModal() {
-      this.$refs.modal.show()
+      this.$refs.modal.show();
     },
-    hideModal () {
+    hideModal() {
       this.$refs.modal.hide();
-      this.$store.commit('captioner/SET_MICROPHONE_PERMISSION_NEEDED', { microphonePermissionNeeded: false });
+      this.$store.commit('captioner/SET_MICROPHONE_PERMISSION_NEEDED', {
+        microphonePermissionNeeded: false,
+      });
     },
   },
-}
+};
 </script>

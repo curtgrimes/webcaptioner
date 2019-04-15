@@ -1,9 +1,22 @@
 <template>
   <div class="d-flex flex-grow-1">
-    <transcript />
-    <b-modal v-model="modalShow" lazy ref="modal" hide-footer :title="$t('captioner.clearTranscript.title')" @shown="autofocusElement()" @hide="replaceRouteToParent">
+    <transcript/>
+    <b-modal
+      v-model="modalShow"
+      lazy
+      ref="modal"
+      hide-footer
+      :title="$t('captioner.clearTranscript.title')"
+      @shown="autofocusElement()"
+      @hide="replaceRouteToParent"
+    >
       <div class="text-right">
-        <b-btn ref="cancelButton" class="mr-2" variant="link" @click="cancelModal()">{{$t('common.cancel')}}</b-btn>
+        <b-btn
+          ref="cancelButton"
+          class="mr-2"
+          variant="link"
+          @click="cancelModal()"
+        >{{$t('common.cancel')}}</b-btn>
         <b-btn variant="danger" @click="clearTranscript">{{$t('captioner.clearTranscript.ok')}}</b-btn>
       </div>
     </b-modal>
@@ -11,23 +24,28 @@
 </template>
 
 <script>
-
 const routeName = 'clear-transcript';
-import transcript from '~/components/Transcript.vue'
+import transcript from '~/components/Transcript.vue';
+import bBtn from 'bootstrap-vue/es/components/button/button';
+import bModal from 'bootstrap-vue/es/components/modal/modal';
 
 export default {
   components: {
     transcript,
+    bBtn,
+    bModal,
   },
-    data: function() {
-        return {
-            modalShow: true,
-        };
-    },
+  data: function() {
+    return {
+      modalShow: true,
+    };
+  },
   computed: {
     transcriptEmpty() {
-      return !this.$store.state.captioner.transcript.interim
-        && !this.$store.state.captioner.transcript.final;
+      return (
+        !this.$store.state.captioner.transcript.interim &&
+        !this.$store.state.captioner.transcript.final
+      );
     },
   },
   mounted: function() {
@@ -36,14 +54,13 @@ export default {
     }
   },
   watch: {
-    '$route.name': function (routeTo, routeFrom) {
+    '$route.name': function(routeTo, routeFrom) {
       if (routeTo == routeName) {
         this.$refs.modal.show();
-      }
-      else if (routeFrom == routeName) {
+      } else if (routeFrom == routeName) {
         this.$refs.modal.hide();
       }
-    }
+    },
   },
   methods: {
     replaceRouteToParent(e) {
@@ -55,20 +72,20 @@ export default {
         this.$router.replace(this.localePath('captioner'));
       }
     },
-    showModal () {
+    showModal() {
       this.$refs.modal.show();
     },
     cancelModal() {
       this.$refs.modal.hide();
       this.$router.replace(this.localePath('captioner'));
     },
-    hideModal () {
+    hideModal() {
       this.$refs.modal.hide();
     },
-    autofocusElement () {
+    autofocusElement() {
       this.$refs.cancelButton.focus();
     },
-    clearTranscript () {
+    clearTranscript() {
       if (this.$store.state.captioner.on) {
         this.$store.dispatch('captioner/restart');
       }
@@ -78,5 +95,5 @@ export default {
       this.$router.replace(this.localePath('captioner'));
     },
   },
-}
+};
 </script>

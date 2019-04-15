@@ -467,9 +467,9 @@
 import debounce from 'lodash.debounce';
 import hexToRGB from '~/mixins/hexToRGB';
 import FontSelector from '~/components/FontSelector.vue';
+import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
 
 export default {
-  name: 'settings-appearance-view',
   transition: 'fade',
   mixins: [hexToRGB],
   middleware: ['settings-meta'],
@@ -478,6 +478,7 @@ export default {
   },
   components: {
     FontSelector,
+    bSpinner,
   },
   computed: {
     textColor: {

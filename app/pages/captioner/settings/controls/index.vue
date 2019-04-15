@@ -43,8 +43,8 @@
           </div>
           <b-navbar variant="dark" class="px-2 py-1 d-flex flex-column">
             <div v-if="largerPreview" class="d-flex w-100 pb-1">
-              <b-button variant="danger" disabled class="mr-auto">Xxxxx</b-button>
-              <b-button variant="info" disabled>Xxxx xx Xxxx</b-button>
+              <b-btn variant="danger" disabled class="mr-auto">Xxxxx</b-btn>
+              <b-btn variant="info" disabled>Xxxx xx Xxxx</b-btn>
             </div>
             <div class="d-flex w-100 align-items-center">
               <img src="/static/img/logo.svg" width="8" height="8" class="align-middle mr-auto">
@@ -55,16 +55,34 @@
       </div>
     </div>
     <h3 class="mt-3">Volume Meter</h3>
-    <p class="mb-2">By default, a volume meter appears during captioning if your volume level is low.</p>
+    <p
+      class="mb-2"
+    >By default, a volume meter appears during captioning if your volume level is low.</p>
     <div class="custom-control custom-checkbox">
-      <input v-model="volumeMeterShow" class="custom-control-input" type="checkbox" name="showVolumeMeter" id="showVolumeMeter" value="uppercase">
-      <label class="custom-control-label" for="showVolumeMeter">Show volume meter when volume level is low</label>
+      <input
+        v-model="volumeMeterShow"
+        class="custom-control-input"
+        type="checkbox"
+        name="showVolumeMeter"
+        id="showVolumeMeter"
+        value="uppercase"
+      >
+      <label
+        class="custom-control-label"
+        for="showVolumeMeter"
+      >Show volume meter when volume level is low</label>
     </div>
     <transition name="fade">
       <div class="form-inline" v-if="volumeMeterShow">
         <div class="form-group ml-4 small">
-          <label for="volumeMeterSensitivity" class="mr-2"><strong>Sensitivity</strong></label>
-          <select v-model="volumeMeterSensitivity" class="form-control form-control-sm" id="volumeMeterSensitivity">
+          <label for="volumeMeterSensitivity" class="mr-2">
+            <strong>Sensitivity</strong>
+          </label>
+          <select
+            v-model="volumeMeterSensitivity"
+            class="form-control form-control-sm"
+            id="volumeMeterSensitivity"
+          >
             <option value="high">High sensitivity (default)</option>
             <option value="low">Low sensitivity</option>
           </select>
@@ -170,17 +188,29 @@
 </template>
 
 <script>
+import bBtn from 'bootstrap-vue/es/components/button/button';
+import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
+import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
+import bNavbar from 'bootstrap-vue/es/components/navbar/navbar';
+import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
+
 export default {
-  name: "settings-controls-view",
-  transition: "fade",
-  middleware: ["settings-meta"],
+  components: {
+    bBtn,
+    bListGroup,
+    bListGroupItem,
+    bNavbar,
+    bDropdown,
+  },
+  transition: 'fade',
+  middleware: ['settings-meta'],
   meta: {
-    settingsPageTitleKey: "settings.controls.controls"
+    settingsPageTitleKey: 'settings.controls.controls',
   },
   data: function() {
     return {
       largerPreview: false,
-      isMac: false
+      isMac: false,
     };
   },
   mounted: function() {
@@ -188,7 +218,7 @@ export default {
 
     // Do only client-side
     this.isMac = navigator
-      ? navigator.platform.toUpperCase().indexOf("MAC") >= 0
+      ? navigator.platform.toUpperCase().indexOf('MAC') >= 0
       : false;
   },
   computed: {
@@ -197,23 +227,23 @@ export default {
         return this.$store.state.settings.controls.layout.larger;
       },
       set(on) {
-        this.$store.commit("SET_LAYOUT_LARGER", { on });
-      }
+        this.$store.commit('SET_LAYOUT_LARGER', { on });
+      },
     },
     volumeMeterShow: {
-      get () {
+      get() {
         return this.$store.state.settings.controls.volumeMeter.show;
       },
-      set (on) {
-        this.$store.commit('SET_VOLUME_METER_SHOW', {on});
+      set(on) {
+        this.$store.commit('SET_VOLUME_METER_SHOW', { on });
       },
     },
     volumeMeterSensitivity: {
-      get () {
+      get() {
         return this.$store.state.settings.controls.volumeMeter.sensitivity;
       },
-      set (sensitivity) {
-        this.$store.commit('SET_VOLUME_METER_SENSITIVITY', {sensitivity});
+      set(sensitivity) {
+        this.$store.commit('SET_VOLUME_METER_SENSITIVITY', { sensitivity });
       },
     },
     backgroundColor: function() {
@@ -225,11 +255,11 @@ export default {
     previewWrapTextPositionClass: function() {
       return {
         /* Vertical alignments */
-        "align-items-start": ["full", "top"].includes(this.alignmentVertical),
-        "align-items-center": this.alignmentVertical == "middle",
-        "align-items-end": ["bottom", "lowerThird"].includes(
+        'align-items-start': ['full', 'top'].includes(this.alignmentVertical),
+        'align-items-center': this.alignmentVertical == 'middle',
+        'align-items-end': ['bottom', 'lowerThird'].includes(
           this.alignmentVertical
-        )
+        ),
       };
     },
     textColor: function() {
@@ -238,29 +268,29 @@ export default {
     previewTextPositionClass: function() {
       return {
         /* Horizontal alignments */
-        "w-100 mx-0": this.alignmentHorizontal == "full",
-        "w-50 mr-auto": this.alignmentHorizontal == "left",
-        "w-50 mx-auto": this.alignmentHorizontal == "middle",
-        "w-50 ml-auto": this.alignmentHorizontal == "right",
+        'w-100 mx-0': this.alignmentHorizontal == 'full',
+        'w-50 mr-auto': this.alignmentHorizontal == 'left',
+        'w-50 mx-auto': this.alignmentHorizontal == 'middle',
+        'w-50 ml-auto': this.alignmentHorizontal == 'right',
 
         /* Vertical alignments */
-        "h-100": this.alignmentVertical == "full",
-        "h-50": ["top", "middle", "bottom"].includes(this.alignmentVertical),
-        "h-25": this.alignmentVertical == "lowerThird"
+        'h-100': this.alignmentVertical == 'full',
+        'h-50': ['top', 'middle', 'bottom'].includes(this.alignmentVertical),
+        'h-25': this.alignmentVertical == 'lowerThird',
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
 @font-face {
-  font-family: "Redacted";
-  src: url("~static/redacted-regular.ttf");
+  font-family: 'Redacted';
+  src: url('~static/redacted-regular.ttf');
 }
 
 .preview * {
-  font-family: "Redacted";
+  font-family: 'Redacted';
 }
 
 .preview .btn {
@@ -283,7 +313,7 @@ export default {
 }
 
 .text-preview-mockup {
-  font-family: "Redacted";
+  font-family: 'Redacted';
   white-space: normal;
   font-size: 5px;
   line-height: 8px;

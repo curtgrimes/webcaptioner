@@ -1,12 +1,24 @@
 <template>
   <div>
-    <b-modal ref="invalidSettingsFile" class="text-center" hide-header @shown="focusInvalidSettingsFileModalOkButton()">
+    <b-modal
+      ref="invalidSettingsFile"
+      class="text-center"
+      hide-header
+      @shown="focusInvalidSettingsFileModalOkButton()"
+    >
       <div class="py-2">
-        <div class="pb-2 h4"><fa icon="exclamation-triangle" size="3x" /></div>
+        <div class="pb-2 h4">
+          <fa icon="exclamation-triangle" size="3x"/>
+        </div>
         <p class="lead">{{$t('settings.exportRestore.somethingWrongWithFile')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="secondary" ref="invalidSettingsFileModalOkButton" @click="hideInvalidSettingsFileModal()">{{$t('common.ok')}}</b-btn>
+        <b-btn
+          class="float-right"
+          variant="secondary"
+          ref="invalidSettingsFileModalOkButton"
+          @click="hideInvalidSettingsFileModal()"
+        >{{$t('common.ok')}}</b-btn>
       </div>
     </b-modal>
     <b-modal ref="confirmRestore" hide-header @shown="focusConfirmRestoreModalOkButton()">
@@ -15,8 +27,17 @@
         <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn class="float-right ml-2" variant="secondary" ref="confirmRestoreModalOkButton" @click="restoreSettings()">{{$t('settings.exportRestore.restore')}}</b-btn>
-        <b-btn class="float-right" variant="link" @click="cancelConfirmRestoreModal()">{{$t('common.cancel')}}</b-btn>
+        <b-btn
+          class="float-right ml-2"
+          variant="secondary"
+          ref="confirmRestoreModalOkButton"
+          @click="restoreSettings()"
+        >{{$t('settings.exportRestore.restore')}}</b-btn>
+        <b-btn
+          class="float-right"
+          variant="link"
+          @click="cancelConfirmRestoreModal()"
+        >{{$t('common.cancel')}}</b-btn>
       </div>
     </b-modal>
     <b-modal ref="confirmReset" hide-header @shown="focusConfirmResetModalOkButton()">
@@ -25,58 +46,90 @@
         <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn class="float-right ml-2" variant="danger" ref="confirmResetModalOkButton" @click="resetSettings()">{{$t('settings.exportRestore.reset')}}</b-btn>
-        <b-btn class="float-right" variant="link" @click="cancelConfirmResetModal()">{{$t('common.cancel')}}</b-btn>
+        <b-btn
+          class="float-right ml-2"
+          variant="danger"
+          ref="confirmResetModalOkButton"
+          @click="resetSettings()"
+        >{{$t('settings.exportRestore.reset')}}</b-btn>
+        <b-btn
+          class="float-right"
+          variant="link"
+          @click="cancelConfirmResetModal()"
+        >{{$t('common.cancel')}}</b-btn>
       </div>
     </b-modal>
-    <b-modal class="text-center" ref="restoreSuccessModal" ok-only hide-header ok-variant="secondary">
-      <div class="pb-2 h4"><fa icon="check-circle" size="3x" /></div>
+    <b-modal
+      class="text-center"
+      ref="restoreSuccessModal"
+      ok-only
+      hide-header
+      ok-variant="secondary"
+    >
+      <div class="pb-2 h4">
+        <fa icon="check-circle" size="3x"/>
+      </div>
       <h2>{{$t('settings.exportRestore.restoredSettings')}}</h2>
     </b-modal>
     <b-modal class="text-center" ref="resetSuccessModal" ok-only hide-header ok-variant="secondary">
-      <div class="pb-2 h4"><fa icon="check-circle" size="3x" /></div>
+      <div class="pb-2 h4">
+        <fa icon="check-circle" size="3x"/>
+      </div>
       <h2>{{$t('settings.exportRestore.settingsReset')}}</h2>
     </b-modal>
     <div class="card mb-3">
       <div class="card-body">
         <h3>{{$t('settings.exportRestore.export')}}</h3>
         <p>{{$t('settings.exportRestore.exportDescription')}}</p>
-        <button class="btn btn-secondary d-inline-block" @click="exportSettings()">{{$t('settings.exportRestore.export')}}</button>
+        <button
+          class="btn btn-secondary d-inline-block"
+          @click="exportSettings()"
+        >{{$t('settings.exportRestore.export')}}</button>
       </div>
     </div>
     <div class="card mb-3">
       <div class="card-body">
         <h3>{{$t('settings.exportRestore.restore')}}</h3>
         <p>{{$t('settings.exportRestore.restoreDescription')}}</p>
-        <input ref="settingsFileUpload" type="file" accept=".json" @change="loadSettingsFile($event)" />
+        <input
+          ref="settingsFileUpload"
+          type="file"
+          accept=".json"
+          @change="loadSettingsFile($event)"
+        >
       </div>
     </div>
     <div class="card mb-3">
       <div class="card-body">
         <h3>{{$t('settings.exportRestore.reset')}}</h3>
         <p>{{$t('settings.exportRestore.resetDescription')}}</p>
-        <button class="btn btn-danger d-inline-block" @click="confirmReset()">{{$t('settings.exportRestore.reset')}}</button>
+        <button
+          class="btn btn-danger d-inline-block"
+          @click="confirmReset()"
+        >{{$t('settings.exportRestore.reset')}}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import saveToFile from '~/mixins/saveToFile'
-import getDefaultSettings from '~/store/settingsState'
-import Vue from 'vue'
+import saveToFile from '~/mixins/saveToFile';
+import getDefaultSettings from '~/store/settingsState';
+import Vue from 'vue';
+import bBtn from 'bootstrap-vue/es/components/button/button';
+import bModal from 'bootstrap-vue/es/components/modal/modal';
 
 export default {
+  components: {
+    bBtn,
+    bModal,
+  },
   transition: 'fade',
-  middleware: [
-    'settings-meta',
-  ],
+  middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.exportRestore.exportRestoreSettings',
   },
-  mixins: [
-    saveToFile,
-  ],
+  mixins: [saveToFile],
   data: function() {
     return {
       importedSettings: {},
@@ -85,7 +138,7 @@ export default {
   methods: {
     exportSettings: function() {
       this.saveToJSONFile({
-        settings: JSON.stringify(this.$store.state.settings)
+        settings: JSON.stringify(this.$store.state.settings),
       });
     },
     loadSettingsFile: function(event) {
@@ -97,17 +150,19 @@ export default {
         try {
           this.importedSettings = JSON.parse(reader.result);
           this.$refs.confirmRestore.show();
-        }
-        catch (e) {
+        } catch (e) {
           this.$refs.invalidSettingsFile.show();
         }
       };
       reader.readAsText(input.files[0]);
     },
     restoreSettings: function() {
-      this.$store.dispatch('RESTORE_SETTINGS', {settings: getDefaultSettings() })
+      this.$store
+        .dispatch('RESTORE_SETTINGS', { settings: getDefaultSettings() })
         .then(() => {
-          return this.$store.dispatch('RESTORE_SETTINGS', {settings: this.importedSettings });
+          return this.$store.dispatch('RESTORE_SETTINGS', {
+            settings: this.importedSettings,
+          });
         })
         .then(() => {
           this.cancelConfirmRestoreModal();
@@ -115,7 +170,8 @@ export default {
         });
     },
     resetSettings: function() {
-      this.$store.dispatch('RESTORE_SETTINGS', {settings: getDefaultSettings() })
+      this.$store
+        .dispatch('RESTORE_SETTINGS', { settings: getDefaultSettings() })
         .then(() => {
           this.$refs.confirmReset.hide();
           this.$refs.resetSuccessModal.show();
@@ -144,6 +200,6 @@ export default {
     cancelConfirmResetModal: function() {
       this.$refs.confirmReset.hide();
     },
-  }
-}
+  },
+};
 </script>

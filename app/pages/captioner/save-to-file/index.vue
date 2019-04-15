@@ -1,35 +1,73 @@
 <template>
   <div class="d-flex flex-grow-1">
     <transcript/>
-    <b-modal v-model="showModal" lazy ref="modal" hide-footer :title="$t('captioner.saveToFile.title')" @shown="autofocusElement()" @hide="replaceRouteToParent">
+    <b-modal
+      v-model="showModal"
+      lazy
+      ref="modal"
+      hide-footer
+      :title="$t('captioner.saveToFile.title')"
+      @shown="autofocusElement()"
+      @hide="replaceRouteToParent"
+    >
       <p>{{$t('captioner.saveToFile.description')}}</p>
-      <b-alert v-if="transcriptEmpty" show variant="info" class="small text-center">
-        {{$t('captioner.saveToFile.transcriptEmptyMessage')}}
-        
-      </b-alert>
+      <b-alert
+        v-if="transcriptEmpty"
+        show
+        variant="info"
+        class="small text-center"
+      >{{$t('captioner.saveToFile.transcriptEmptyMessage')}}</b-alert>
       <div class="row">
         <div class="col-6">
-          <b-button @click="saveAsText()" :disabled="transcriptEmpty" variant="secondary" block class="py-3" ref="textFileButton">
-              <div class="mx-auto mb-3 mt-2"><fa icon="file-alt" size="3x" /></div>
-              <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.text')}}</span><span class="d-none d-sm-inline">{{$t('captioner.saveToFile.textFile')}}</span>
-          </b-button>
+          <b-btn
+            @click="saveAsText()"
+            :disabled="transcriptEmpty"
+            variant="secondary"
+            block
+            class="py-3"
+            ref="textFileButton"
+          >
+            <div class="mx-auto mb-3 mt-2">
+              <fa icon="file-alt" size="3x"/>
+            </div>
+            <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.text')}}</span>
+            <span class="d-none d-sm-inline">{{$t('captioner.saveToFile.textFile')}}</span>
+          </b-btn>
         </div>
         <div class="col-6">
-          <b-button @click="saveAsWord()" :disabled="transcriptEmpty" variant="secondary" block class="py-3">
-              <div class="mx-auto mb-3 mt-2"><fa icon="file-word" size="3x" /></div>
-              <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.word')}}</span><span class="d-none d-sm-inline">{{$t('captioner.saveToFile.wordDocument')}}</span>
-          </b-button>
+          <b-btn
+            @click="saveAsWord()"
+            :disabled="transcriptEmpty"
+            variant="secondary"
+            block
+            class="py-3"
+          >
+            <div class="mx-auto mb-3 mt-2">
+              <fa icon="file-word" size="3x"/>
+            </div>
+            <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.word')}}</span>
+            <span class="d-none d-sm-inline">{{$t('captioner.saveToFile.wordDocument')}}</span>
+          </b-btn>
         </div>
       </div>
-      <b-btn class="mt-3" variant="outline-info" block :to="localePath('captioner')" replace>{{$t('common.close')}}</b-btn>
+      <b-btn
+        class="mt-3"
+        variant="outline-info"
+        block
+        :to="localePath('captioner')"
+        replace
+      >{{$t('common.close')}}</b-btn>
     </b-modal>
   </div>
 </template>
 
 <script>
-import saveToFile from '~/mixins/saveToFile'
-import transcript from '~/components/Transcript.vue'
-import dateFormat from '~/mixins/dateFormat'
+import saveToFile from '~/mixins/saveToFile';
+import transcript from '~/components/Transcript.vue';
+import dateFormat from '~/mixins/dateFormat';
+import bBtn from 'bootstrap-vue/es/components/button/button';
+import bAlert from 'bootstrap-vue/es/components/alert/alert';
+import bModal from 'bootstrap-vue/es/components/modal/modal';
 
 const routeName = 'save-to-file';
 
@@ -37,11 +75,11 @@ export default {
   name: 'save-as-file-modal',
   components: {
     transcript,
+    bBtn,
+    bAlert,
+    bModal,
   },
-  mixins: [
-    saveToFile,
-    dateFormat,
-  ],
+  mixins: [saveToFile, dateFormat],
   data: function() {
     return {
       showModal: true,
@@ -49,8 +87,10 @@ export default {
   },
   computed: {
     transcriptEmpty() {
-      return !this.$store.state.captioner.transcript.interim
-        && !this.$store.state.captioner.transcript.final;
+      return (
+        !this.$store.state.captioner.transcript.interim &&
+        !this.$store.state.captioner.transcript.final
+      );
     },
   },
   mounted: function() {
@@ -59,14 +99,13 @@ export default {
     }
   },
   watch: {
-    '$route.name': function (routeTo, routeFrom) {
+    '$route.name': function(routeTo, routeFrom) {
       if (routeTo == routeName) {
         this.$refs.modal.show();
-      }
-      else if (routeFrom == routeName) {
+      } else if (routeFrom == routeName) {
         this.$refs.modal.hide();
       }
-    }
+    },
   },
   methods: {
     replaceRouteToParent(e) {
@@ -78,21 +117,25 @@ export default {
         this.$router.replace(this.localePath('captioner'));
       }
     },
-    autofocusElement () {
+    autofocusElement() {
       this.$refs.textFileButton.focus();
     },
-    saveAsText () {
+    saveAsText() {
       this.saveToTextFile({
-        transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
+        transcript:
+          this.$store.state.captioner.transcript.final +
+          this.$store.state.captioner.transcript.interim,
         dateFormatter: this.dateFormat,
         onDone: () => {
           this.$router.replace(this.localePath('captioner')); // Close dialog
         },
       });
     },
-    saveAsWord () {
+    saveAsWord() {
       this.saveToWordFile({
-        transcript: this.$store.state.captioner.transcript.final + this.$store.state.captioner.transcript.interim,
+        transcript:
+          this.$store.state.captioner.transcript.final +
+          this.$store.state.captioner.transcript.interim,
         dateFormatter: this.dateFormat,
         onDone: () => {
           this.$router.replace(this.localePath('captioner')); // Close dialog
@@ -100,5 +143,5 @@ export default {
       });
     },
   },
-}
+};
 </script>

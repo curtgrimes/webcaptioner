@@ -246,10 +246,21 @@
 
 <script>
 import Combokeys from 'combokeys';
+import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
+import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
+import bNav from 'bootstrap-vue/es/components/nav/nav';
+import bNavItem from 'bootstrap-vue/es/components/nav/nav-item';
+import bBadge from 'bootstrap-vue/es/components/badge/badge';
 
 export default {
-  name: 'settings-view',
   mixins: [],
+  components: {
+    bListGroup,
+    bListGroupItem,
+    bNav,
+    bNavItem,
+    bBadge,
+  },
   data: function() {
     return {
       logTimeRemainingMinutes: '00',

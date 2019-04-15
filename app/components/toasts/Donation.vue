@@ -1,139 +1,185 @@
 <template>
-    <toast title="Help Support Web Captioner" :show="show" :onShow="onShow" :onClose="onClose">
-        <div v-if="loading" class="text-center">
-            <fa icon="circle-notch" spin size="4x" />
+  <toast title="Help Support Web Captioner" :show="show" :onShow="onShow" :onClose="onClose">
+    <div v-if="loading" class="text-center">
+      <fa icon="circle-notch" spin size="4x"/>
+    </div>
+    <div v-else>
+      <p>I hope you've been enjoying Web Captioner!</p>
+      <p>Generous donations keep Web Captioner going. If you've found this helpful, please consider donating.</p>
+      <div v-if="!showOtherAmountField">
+        <b-btn size="sm" variant="outline-info" class="mr-2" @click="donate(100)">$1</b-btn>
+        <b-btn size="sm" variant="outline-info" class="mr-2" @click="donate(500)">$5</b-btn>
+        <b-btn size="sm" variant="outline-info" class="mr-2" @click="donate(1000)">$10</b-btn>
+        <b-btn
+          size="sm"
+          variant="outline-info"
+          class="mr-2"
+          @click="showOtherAmountField = true"
+        >Other amount...</b-btn>
+      </div>
+      <div v-else>
+        <div class="row">
+          <div class="col-xs-3">
+            <b-btn size="sm" variant="link" @click="showOtherAmountField = false">
+              <fa icon="chevron-left" class="mr-2"/>Back
+            </b-btn>
+          </div>
+          <div class="col-xs-9">
+            <b-input-group>
+              <b-form-input
+                autofocus
+                required
+                v-model="customDonationAmount"
+                placeholder="Amount"
+                ref="customDonationAmountInput"
+                type="number"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-btn
+                  variant="outline-info"
+                  size="sm"
+                  @click="donateOtherAmount(customDonationAmount)"
+                >Donate</b-btn>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
         </div>
-        <div v-else>
-            <p>I hope you've been enjoying Web Captioner!</p>
-            <p>Generous donations keep Web Captioner going. If you've found this helpful, please consider donating.</p>
-            <div v-if="!showOtherAmountField">
-                <b-btn size="sm" variant="outline-info" class="mr-2" @click="donate(100)">$1</b-btn>
-                <b-btn size="sm" variant="outline-info" class="mr-2" @click="donate(500)">$5</b-btn>
-                <b-btn size="sm" variant="outline-info" class="mr-2" @click="donate(1000)">$10</b-btn>
-                <b-btn size="sm" variant="outline-info" class="mr-2" @click="showOtherAmountField = true">Other amount...</b-btn>
-            </div>
-            <div v-else>
-                <div class="row">
-                    <div class="col-xs-3">
-                    <b-btn size="sm" variant="link" @click="showOtherAmountField = false"><fa icon="chevron-left" class="mr-2" />Back</b-btn>
-                    </div>
-                    <div class="col-xs-9">
-                    <b-input-group>
-                        <b-form-input autofocus required v-model="customDonationAmount" placeholder="Amount" ref="customDonationAmountInput" type="number"></b-form-input>
-                        <b-input-group-append>
-                        <b-btn variant="outline-info" size="sm" @click="donateOtherAmount(customDonationAmount)">Donate</b-btn>
-                        </b-input-group-append>
-                    </b-input-group>
-                    </div>
-                </div>
-                <div v-if="customAmountInvalid" class="alert bg-danger small mt-3 text-white mb-0">Uh oh - that doesn't look like a valid amount. Please try again.</div>
-            </div>
-        </div>
-    </toast>
+        <div
+          v-if="customAmountInvalid"
+          class="alert bg-danger small mt-3 text-white mb-0"
+        >Uh oh - that doesn't look like a valid amount. Please try again.</div>
+      </div>
+    </div>
+  </toast>
 </template>
 
 <script>
-import toast from '~/components/Toast.vue'
-import loadScript from 'load-script'
+import toast from '~/components/Toast.vue';
+import loadScript from 'load-script';
+import bBtn from 'bootstrap-vue/es/components/button/button';
+import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
+import bInputGroup from 'bootstrap-vue/es/components/input-group/input-group';
+import bInputGroupAppend from 'bootstrap-vue/es/components/input-group/input-group-append';
+import bFormInput from 'bootstrap-vue/es/components/form-input/form-input';
 
 export default {
-    components: {
-        toast,
-    },
-    data: function() {
-        return {
-            stripeCheckout: null,
-            showOtherAmountField: false,
-            customDonationAmount: null,
-            customAmountInvalid: false,
-            amount: null,
-            loading: false,
-        };
-    },
-    methods: {
-        donateOtherAmount: function(amount) {
-            this.customAmountInvalid = false;
+  components: {
+    toast,
+    bBtn,
+    bBtnGroup,
+    bInputGroup,
+    bInputGroupAppend,
+    bFormInput,
+  },
+  data: function() {
+    return {
+      stripeCheckout: null,
+      showOtherAmountField: false,
+      customDonationAmount: null,
+      customAmountInvalid: false,
+      amount: null,
+      loading: false,
+    };
+  },
+  methods: {
+    donateOtherAmount: function(amount) {
+      this.customAmountInvalid = false;
 
-            // Validate the amount
-            amount = amount.replace(/\$/g, '').replace(/\,/g, '') // remove any dollar signs or commas
-            amount = parseFloat(amount);
-            if (isNaN(amount) || amount < 0.01) {
-                this.customAmountInvalid = true;
-            }
-            else {
-                this.donate(amount * 100); // dollars to cents
-            }
-        },
-        donate: function(amount) {
-            this.$ga.event({
-                eventCategory: 'donation',
-                eventAction: 'start',
-                eventLabel: amount,
-            });
-            
-            this.amount = amount;
-            this.customAmountInvalid = false;
+      // Validate the amount
+      amount = amount.replace(/\$/g, '').replace(/\,/g, ''); // remove any dollar signs or commas
+      amount = parseFloat(amount);
+      if (isNaN(amount) || amount < 0.01) {
+        this.customAmountInvalid = true;
+      } else {
+        this.donate(amount * 100); // dollars to cents
+      }
+    },
+    donate: function(amount) {
+      this.$ga.event({
+        eventCategory: 'donation',
+        eventAction: 'start',
+        eventLabel: amount,
+      });
 
-            this.stripeCheckout.open({
-                name: 'Web Captioner',
-                description: 'One-Time Donation',
-                zipCode: true,
-                amount, // in cents
-            });
-        },
-        onShow: function() {
-            if (!this.stripeCheckout) {
-                loadScript('https://checkout.stripe.com/checkout.js', { async: false }, (err, script) => {
-                    setTimeout(() => { // add delay because StripeCheckout might not be available yet
-                        this.stripeCheckout = StripeCheckout.configure({
-                            key: this.$env.STRIPE_API_KEY_PUBLIC,
-                            image: '/logo-solid-bg.png',
-                            locale: 'auto',
-                            panelLabel: 'Donate',
-                            token: async (token) => { // on finish
-                                // You can access the token ID with `token.id`.
-                                // Get the token ID to your server-side code for use.
-                                this.loading = true;
-                                this.$axios.$post('/api/charges', {
-                                    amount: this.amount,
-                                    email: token.email,
-                                    token: token.id,
-                                })
-                                .then(response => {
-                                    this.$store.commit('SET_DONATION_DATE', {donationDate: new Date().getTime()});
-                                    this.$nextTick(() => {
-                                        window.location.href = '/donate/thank-you/';
-                                    });
-                                })
-                                .catch(error => {
-                                    this.loading = false;
+      this.amount = amount;
+      this.customAmountInvalid = false;
 
-                                    alert(error && error.response && error.response.data && error.response.data.message ? error.response.data.message : 'Something went wrong. If your donation was successful, you\'ll receive an email confirmation.')
-                                });
-                            }
-                        });
-                    }, 500);
-                });
-            }
-        },
-        onClose: function() {
-            this.$store.commit('donation/SET_MESSAGE_SHOW', {on: false});
-        },
+      this.stripeCheckout.open({
+        name: 'Web Captioner',
+        description: 'One-Time Donation',
+        zipCode: true,
+        amount, // in cents
+      });
     },
-    watch: {
-        showOtherAmountField: function() {
-            this.customDonationAmount = null;
-            this.$nextTick(() => {
-                if (this.$refs.customDonationAmountInput) {
-                    this.$refs.customDonationAmountInput.focus();
-                }
-            });
-        },
+    onShow: function() {
+      if (!this.stripeCheckout) {
+        loadScript(
+          'https://checkout.stripe.com/checkout.js',
+          { async: false },
+          (err, script) => {
+            setTimeout(() => {
+              // add delay because StripeCheckout might not be available yet
+              this.stripeCheckout = StripeCheckout.configure({
+                key: this.$env.STRIPE_API_KEY_PUBLIC,
+                image: '/logo-solid-bg.png',
+                locale: 'auto',
+                panelLabel: 'Donate',
+                token: async (token) => {
+                  // on finish
+                  // You can access the token ID with `token.id`.
+                  // Get the token ID to your server-side code for use.
+                  this.loading = true;
+                  this.$axios
+                    .$post('/api/charges', {
+                      amount: this.amount,
+                      email: token.email,
+                      token: token.id,
+                    })
+                    .then((response) => {
+                      this.$store.commit('SET_DONATION_DATE', {
+                        donationDate: new Date().getTime(),
+                      });
+                      this.$nextTick(() => {
+                        window.location.href = '/donate/thank-you/';
+                      });
+                    })
+                    .catch((error) => {
+                      this.loading = false;
+
+                      alert(
+                        error &&
+                          error.response &&
+                          error.response.data &&
+                          error.response.data.message
+                          ? error.response.data.message
+                          : "Something went wrong. If your donation was successful, you'll receive an email confirmation."
+                      );
+                    });
+                },
+              });
+            }, 500);
+          }
+        );
+      }
     },
-    computed: {
-        show: function () {
-            return this.$store.state.donation.message.show;
-        },
+    onClose: function() {
+      this.$store.commit('donation/SET_MESSAGE_SHOW', { on: false });
     },
+  },
+  watch: {
+    showOtherAmountField: function() {
+      this.customDonationAmount = null;
+      this.$nextTick(() => {
+        if (this.$refs.customDonationAmountInput) {
+          this.$refs.customDonationAmountInput.focus();
+        }
+      });
+    },
+  },
+  computed: {
+    show: function() {
+      return this.$store.state.donation.message.show;
+    },
+  },
 };
 </script>

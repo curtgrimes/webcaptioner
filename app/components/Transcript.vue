@@ -60,11 +60,13 @@
 import hexToRGB from '~/mixins/hexToRGB';
 import Combokeys from 'combokeys';
 import fontStylesheet from '@/components/fontStylesheet';
+import bBtn from 'bootstrap-vue/es/components/button/button';
 
 export default {
   name: 'transcript',
   components: {
     fontStylesheet,
+    bBtn,
   },
   props: {
     showTypedLiveReadOnly: Boolean,
