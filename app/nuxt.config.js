@@ -152,6 +152,8 @@ module.exports = {
               'faKeyboard',
               'faHeart',
               'faBroadcastTower',
+              'faWindowRestore',
+              'faBars',
             ],
           },
           {
@@ -201,7 +203,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    analyze: true,
+    // analyze: true,
     extend(config, {
       isDev
     }) {

@@ -107,39 +107,92 @@
             <fa icon="keyboard"/>Done Typing
             <kbd>ESC</kbd>
           </b-btn>
-          <b-dropdown dropup right :variant="captioningToggleButtonVariant">
-            <b-dropdown-item href="/" target="_blank">{{$t('navbar.menu.about')}}</b-dropdown-item>
-            <b-dropdown-item href="/blog" target="_blank">{{$t('navbar.menu.blog')}}</b-dropdown-item>
-            <b-dropdown-item href="/help" target="_blank">{{$t('navbar.menu.helpCenter')}}</b-dropdown-item>
-            <b-dropdown-item href="/community" target="_blank">{{$t('navbar.menu.community')}}</b-dropdown-item>
-            <b-dropdown-item href="/donate" target="_blank">{{$t('navbar.menu.donate')}}</b-dropdown-item>
-            <div class="dropdown-divider"></div>
-            <b-dropdown-item href="/feedback" target="_blank">{{$t('navbar.menu.feedback')}}</b-dropdown-item>
-            <div class="dropdown-divider"></div>
-            <b-dropdown-item
-              @click="startDetachedMode"
-              class="dropdown-item"
-              v-b-tooltip.left
-              :title="$t('navbar.menu.newWindowDescription')"
-            >
-              <fa icon="external-link-alt" fixed-width class="mr-1"/>
-              {{$t('navbar.menu.newWindow')}}
-            </b-dropdown-item>
-            <div class="dropdown-divider"></div>
-            <b-dropdown-item :to="localePath('captioner-save-to-file')" replace>
-              <fa icon="save" class="mr-1" fixed-width/>
-              {{$t('navbar.menu.saveToFile')}}
-            </b-dropdown-item>
-            <b-dropdown-item :to="localePath('captioner-clear')" replace>
-              <fa icon="trash-alt" class="mr-1" fixed-width/>
-              {{$t('common.clear')}}...
-            </b-dropdown-item>
-            <div class="dropdown-divider"></div>
-            <b-dropdown-item :to="localePath('captioner-settings')" class="dropdown-item">
-              <fa icon="cog" class="mr-1" fixed-width/>
+          <b-popover
+            target="navbar-settings-button"
+            placement="top"
+            :show.sync="showMenu"
+            triggers="click blur"
+            title
+          >
+            <b-btn-group vertical class="d-flex">
+              <b-btn
+                href="/"
+                block
+                variant="link"
+                class="py-1"
+                size="sm"
+              >{{$t('navbar.menu.about')}}</b-btn>
+              <b-btn
+                href="/blog"
+                block
+                variant="link"
+                class="py-1"
+                size="sm"
+              >{{$t('navbar.menu.blog')}}</b-btn>
+              <b-btn
+                href="/help"
+                block
+                variant="link"
+                class="py-1"
+                size="sm"
+              >{{$t('navbar.menu.helpCenter')}}</b-btn>
+              <b-btn
+                href="/donate"
+                block
+                variant="link"
+                class="py-1"
+                size="sm"
+              >{{$t('navbar.menu.donate')}}</b-btn>
+              <b-btn
+                href="/feedback"
+                block
+                variant="link"
+                class="py-1"
+                size="sm"
+              >{{$t('navbar.menu.feedback')}}</b-btn>
+            </b-btn-group>
+            <hr>
+            <b-btn-group class="d-flex">
+              <b-btn
+                :to="localePath('captioner-save-to-file')"
+                variant="outline-secondary"
+                v-b-tooltip.hover.top
+                title="Save transcript"
+              >
+                <fa icon="save"/>
+              </b-btn>
+              <b-btn
+                variant="outline-secondary"
+                v-b-tooltip.hover.top
+                :title="$t('navbar.menu.newWindow')"
+                @click="startDetachedMode"
+              >
+                <fa icon="window-restore"/>
+              </b-btn>
+              <b-btn
+                variant="outline-danger"
+                :to="localePath('captioner-clear')"
+                v-b-tooltip.hover.top
+                title="Clear transcript"
+              >
+                <fa icon="trash-alt"/>
+              </b-btn>
+            </b-btn-group>
+            <hr>
+            <b-btn block variant="secondary" :to="localePath('captioner-settings')">
+              <fa icon="cog" class="mr-2"/>
               {{$t('navbar.menu.settings')}}
-            </b-dropdown-item>
-          </b-dropdown>
+            </b-btn>
+          </b-popover>
+          <b-btn
+            id="navbar-settings-button"
+            @click="showMenu = !showMenu"
+            v-b-tooltip.top
+            :variant="captioningToggleButtonVariant"
+            :title="$t('navbar.menu.menu')"
+          >
+            <fa icon="bars"/>
+          </b-btn>
         </b-btn-group>
       </div>
     </nav>
@@ -166,6 +219,7 @@ import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
 import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
 import bDropdownItem from 'bootstrap-vue/es/components/dropdown/dropdown-item';
 import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
+import bPopover from 'bootstrap-vue/es/components/popover/popover';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -177,6 +231,7 @@ export default {
     bBtnGroup,
     bDropdown,
     bDropdownItem,
+    bPopover,
   },
   directives: {
     bTooltip,
@@ -184,6 +239,7 @@ export default {
   data: function() {
     return {
       vmixNotFullySetUpMessageDismissed: false,
+      showMenu: false,
     };
   },
   computed: {
@@ -246,6 +302,10 @@ export default {
     },
   },
   watch: {
+    showMenu: function() {
+      // Hide all tooltips
+      this.$root.$emit('bv::hide::tooltip');
+    },
     //   transcriptExcerpt: function(transcriptExcerpt) {
     //       if (this.$router.currentRoute.name.startsWith('captioner-settings')) {
     //         if (transcriptExcerpt) {

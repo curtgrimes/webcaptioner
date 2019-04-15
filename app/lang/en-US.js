@@ -22,8 +22,7 @@ export default {
   },
   app: {
     webCaptioner: "Web Captioner",
-    description:
-      "Real-time captioning for your event, speech, classroom lecture, or church service."
+    description: "Real-time captioning for your event, speech, classroom lecture, or church service."
   },
   captioner: {
     volumeMeter: {
@@ -37,8 +36,7 @@ export default {
     saveToFile: {
       title: "Save to File",
       description: "Save your current transcript to a file.",
-      transcriptEmptyMessage:
-        "Psst... you know you don't have anything to save yet, right?",
+      transcriptEmptyMessage: "Psst... you know you don't have anything to save yet, right?",
       textFile: "Text File",
       text: "Text",
       wordDocument: "Word Document",
@@ -77,7 +75,8 @@ export default {
       newWindow: "New Window",
       newWindowDescription: "@:settings.controls.showNewWindow",
       saveToFile: "@:captioner.saveToFile.title",
-      settings: "Settings"
+      settings: "Settings",
+      menu: "Menu",
     },
     vmixNotConnected: "vMix Not Connected"
   },
@@ -96,34 +95,27 @@ export default {
     eventLog: {
       eventLog: "Event Log",
       instructions: {
-        i0:
-          "Reproduce the issue you were having, and then copy this log and {sendItToMeOnFacebook}. The log includes the content of your current transcription, if any. You can leave this page and continue to use Web Captioner like normal.",
-        i1:
-          "For performance reasons, logging will automatically shut off after {loggingDurationMinutes} minutes. You can still copy the log after it shuts off as long as you don't reload the page.",
+        i0: "Reproduce the issue you were having, and then copy this log and {sendItToMeOnFacebook}. The log includes the content of your current transcription, if any. You can leave this page and continue to use Web Captioner like normal.",
+        i1: "For performance reasons, logging will automatically shut off after {loggingDurationMinutes} minutes. You can still copy the log after it shuts off as long as you don't reload the page.",
         sendItToMeOnFacebook: "send it to me on Facebook"
       },
       copyLog: "Copy Log",
       stopLogging: "Stop Logging",
       restartLogging: "Restart Logging",
-      loggingTurnsOffIn:
-        "Logging turns off in {timeRemainingMinutes}:{timeRemainingSeconds}",
+      loggingTurnsOffIn: "Logging turns off in {timeRemainingMinutes}:{timeRemainingSeconds}",
       loggingOff: "Logging Off",
-      eventsHidden:
-        "{notShowingCount} events are hidden, but they'll be included when you copy the log.",
+      eventsHidden: "{notShowingCount} events are hidden, but they'll be included when you copy the log.",
       autoScroll: "Auto scroll",
       events: "No events | 1 event | {count} events"
     },
     experiments: {
       experiments: "Experiments",
-      description:
-        "Be sure to help out and give me feedback about experiments! Email me at {email} or {messageMeOnFacebook}.",
+      description: "Be sure to help out and give me feedback about experiments! Email me at {email} or {messageMeOnFacebook}.",
       messageMeOnFacebook: "message me on Facebook",
-      addExperimentConfirmation:
-        'Do you want to add the "{experimentName}" experiment?',
+      addExperimentConfirmation: 'Do you want to add the "{experimentName}" experiment?',
       addExperiment: "Add Experiment",
       experimentName: "Experiment Name",
-      alreadyAdded:
-        'You\'ve already added the "{alreadyAddedExperimentName}" experiment.',
+      alreadyAdded: 'You\'ve already added the "{alreadyAddedExperimentName}" experiment.',
       addedExperiments: "Added Experiments"
     },
     appearance: {
@@ -133,8 +125,7 @@ export default {
       textColor: "Text Color",
       textColorInterim: "Interim Text Color",
       useRegularTextColor: "Use Regular Text Color",
-      interimTextColorDescription:
-        "During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.",
+      interimTextColorDescription: "During captioning, words that have just been recognized may change slightly while Web Captioner determines the context of the current phrase. Those words will be this color.",
       fontFamily: "Font Family",
       textSize: "Text Size",
       lineHeight: "Line Height",
@@ -143,8 +134,7 @@ export default {
       uppercase: "UPPERCASE",
       firstLetterOfEachWord: "First Letter Of Each Word",
       properNouns: "Proper nouns and the start of sentences",
-      properNounsDescription:
-        'Separate sentences are detected only when a puncuation mark like "period" or "question mark" is literally said.',
+      properNounsDescription: 'Separate sentences are detected only when a puncuation mark like "period" or "question mark" is literally said.',
       alignment: "Alignment",
       horizontalAlignment: "Horizontal Alignment",
       verticalAlignment: "Vertical Alignment",
@@ -171,8 +161,7 @@ export default {
       censorProfaneLanguage: "Censor profane language.",
       usEnglishOnly: "Currently available for US English only.",
       censorProfaneLanguageDescription: {
-        text:
-          "What's considered profane? {seeThisList} (note: profanity ahead!) If you need to censor additional words not included in this list, {useWordReplacements}.",
+        text: "What's considered profane? {seeThisList} (note: profanity ahead!) If you need to censor additional words not included in this list, {useWordReplacements}.",
         seeThisList: "See this list",
         useWordReplacements: "use word replacements"
       },
@@ -186,8 +175,7 @@ export default {
       default: "Default",
       defaultDescription: "Regular-sized controls",
       larger: "Larger",
-      largerDescription:
-        "Larger controls and additional buttons for one-click saving and clearing the transcript",
+      largerDescription: "Larger controls and additional buttons for one-click saving and clearing the transcript",
       keyboardShortcuts: "Keyboard Shortcuts",
       then: "then",
       ctrl: "Ctrl",
@@ -205,15 +193,12 @@ export default {
     language: {
       language: "Language",
       interface: "Web Captioner Interface Language",
-      interfaceDescription:
-        "Select a language for the Web Captioner interface (menus, messages, and settings pages).",
-      wouldYouLikeYourLanguage:
-        "Would you like your language here? {contactWebCaptionerOnFacebook} if you're interested in helping to translate Web Captioner. Thanks for all of your awesome help! {heartIcon}",
+      interfaceDescription: "Select a language for the Web Captioner interface (menus, messages, and settings pages).",
+      wouldYouLikeYourLanguage: "Would you like your language here? {contactWebCaptionerOnFacebook} if you're interested in helping to translate Web Captioner. Thanks for all of your awesome help! {heartIcon}",
       contactWebCaptionerOnFacebook: "Contact Web Captioner on Facebook",
       spoken: "Spoken Language",
       spokenDescription: {
-        text:
-          "Web Captioner will recognize speech in this language. Learn more about {supportedLanguagesAndDialects}.",
+        text: "Web Captioner will recognize speech in this language. Learn more about {supportedLanguagesAndDialects}.",
         supportedLanguagesAndDialects: "supported languages and dialects"
       },
       list: {
@@ -226,12 +211,10 @@ export default {
     },
     wordReplacements: {
       wordReplacements: "Word Replacements",
-      description:
-        "Replace or hide specific words or phrases during captioning.",
+      description: "Replace or hide specific words or phrases during captioning.",
       wordOrPhraseToReplace: "Word or Phrase to Replace",
       wordOrPhraseToReplaceSentenceCase: "Word or phrase to replace",
-      wordOrPhraseToReplaceDescription:
-        "Separate multiple words or phrases with commas. Not case sensitive.",
+      wordOrPhraseToReplaceDescription: "Separate multiple words or phrases with commas. Not case sensitive.",
       replaceWith: "Replace With",
       replaceWithSentenceCase: "Replace with",
       addAnother: "Add Another"
@@ -239,14 +222,12 @@ export default {
     vmix: {
       vmix: "vMix",
       description: {
-        text:
-          "{vMix} is a popular software video mixer and switcher. You can send text directly to vMix and display it in a title input. You can then use vMix's font and color controls to style captioned text. {visitTheHelpCenter} to learn more.",
+        text: "{vMix} is a popular software video mixer and switcher. You can send text directly to vMix and display it in a title input. You can then use vMix's font and color controls to style captioned text. {visitTheHelpCenter} to learn more.",
         visitTheHelpCenter: "Visit the Help Center"
       },
       connectedToVmix: "Connected to vMix!",
       connected: "Connected",
-      captionsWillAppear:
-        "{startCaptioning} and your captions will now appear in vMix.",
+      captionsWillAppear: "{startCaptioning} and your captions will now appear in vMix.",
       startCaptioning: "Start captioning",
       connectToVmix: "Connect to vMix",
       sendTestMessage: "Send Test Message",
@@ -258,8 +239,7 @@ export default {
       completeStep2First: "Complete step 2 first",
       completeSteps1And2First: "Complete steps 1 and 2 first",
       installChromeExtension: "Install Chrome Extension",
-      installChromeExtensionDescription:
-        "The Web Captioner Connector extension for Google Chrome lets Web Captioner connect to vMix.",
+      installChromeExtensionDescription: "The Web Captioner Connector extension for Google Chrome lets Web Captioner connect to vMix.",
       addToChrome: "Add to Chrome",
       extensionInstalled: "Extension Installed",
       extensionNotInstalled: "Extension not installed.",
@@ -267,29 +247,23 @@ export default {
       webControllerAddress: "vMix Web Controller Address",
       webController: "Web Controller",
       enableVmixWebController: "Enable the vMix Web Controller",
-      enableVmixWebControllerInstructions:
-        "In vMix, go to {settingMenu}. Check the box to enable the {webController}. Specify a port number or accept the default.",
+      enableVmixWebControllerInstructions: "In vMix, go to {settingMenu}. Check the box to enable the {webController}. Specify a port number or accept the default.",
       enableVmixWebControllerSettingMenu: "Settings > Web Controller",
       provideAddress: "Provide the address that appears in vMix:",
       example: "Example:",
-      cannotConnect:
-        'Cannot connect to vMix at "{webControllerAddress}". Make sure Web Controller is enabled in vMix and that you\'ve copied over the website address correctly. It should look something like this: http://192.168.1.1:8080',
+      cannotConnect: 'Cannot connect to vMix at "{webControllerAddress}". Make sure Web Controller is enabled in vMix and that you\'ve copied over the website address correctly. It should look something like this: http://192.168.1.1:8080',
       import: "Import",
       importTitleTemplate: "Import Title Template",
       webCaptionerTitleTemplate: "Web Captioner Title Template",
-      importTitleTemplateLonger:
-        "Import the Web Captioner Title Template into vMix",
+      importTitleTemplateLonger: "Import the Web Captioner Title Template into vMix",
       importTitleTemplateInstructions: {
         i0: "Download the {webCaptionerTitleTemplate} for vMix.",
         i1: "In vMix, go to {addInputSetting}.",
-        i2:
-          "In the {inputSelect} window, click {browse} in the upper right and open the Web Captioner title template you downloaded.",
+        i2: "In the {inputSelect} window, click {browse} in the upper right and open the Web Captioner title template you downloaded.",
         i3: "The title will appear in the {recent} tab. Double-click it.",
-        i4:
-          "In the Title Editor that appears, optionally customize font and text size. Close it when you are finished."
+        i4: "In the Title Editor that appears, optionally customize font and text size. Close it when you are finished."
       },
-      cantFindTemplate:
-        "Web Captioner can connect to vMix, but it can't find the Web Captioner title template in an input.",
+      cantFindTemplate: "Web Captioner can connect to vMix, but it can't find the Web Captioner title template in an input.",
       testAndFinishSetup: "Test and Finish Setup"
     },
     webhooks: {
@@ -298,8 +272,7 @@ export default {
     exportRestore: {
       exportRestoreSettings: "Export/Restore Settings",
       restore: "Restore",
-      restoreDescription:
-        "Restore settings (appearance, censor settings, word replacements, vMix settings, etc.) from a settings file you previously exported.",
+      restoreDescription: "Restore settings (appearance, censor settings, word replacements, vMix settings, etc.) from a settings file you previously exported.",
       restoreSettingsQuestion: "Restore settings from this file?",
       somethingWrongWithFile: "It looks like something's wrong with that file.",
       restoredSettings: "Settings Restored",
@@ -316,10 +289,8 @@ export default {
     incompatibleBrowser: "Incompatible Browser",
     message: {
       i0: "Sorry, but currently Web Captioner only works in Google Chrome.",
-      i1:
-        "You can still look around and play with settings, but in order to start captioning, you'll have to {switchToGoogleChrome}.",
-      i2:
-        "If compatibility with browsers other than Chrome is important to you, {castAVoteHere}.",
+      i1: "You can still look around and play with settings, but in order to start captioning, you'll have to {switchToGoogleChrome}.",
+      i2: "If compatibility with browsers other than Chrome is important to you, {castAVoteHere}.",
       switchToGoogleChrome: "switch to Google Chrome",
       castAVoteHere: "cast a vote here"
     },
