@@ -27,7 +27,7 @@
         >{{variant}}</b-dropdown-item>
       </b-dropdown>
     </b-btn-group>
-    <font-stylesheet v-if="selectedFont" :fontFamily="selectedFont.fontFamily"/>
+    <font-stylesheet v-if="selectedFont" v-model="selectedFont.fontFamily"/>
 
     <b-popover
       target="font-selector-popover-start"
@@ -84,7 +84,7 @@
               </span>
               <span class="col-9 pl-0">{{font.fontFamily}}</span>
             </span>
-            <font-stylesheet v-if="selectedFont" :fontFamily="font.fontFamily"/>
+            <font-stylesheet v-if="font" v-model="font.fontFamily"/>
           </b-list-group-item>
         </b-list-group>
       </div>

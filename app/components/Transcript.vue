@@ -7,7 +7,7 @@
   >
     <!--
     -->
-    <font-stylesheet v-if="$store.state.settings.loaded" :fontFamily="fontFamily"/>
+    <font-stylesheet v-if="$store.state.settings.loaded" v-model="fontFamily"/>
     <!--
     -->
     <span

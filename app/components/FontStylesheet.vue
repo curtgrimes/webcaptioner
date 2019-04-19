@@ -1,11 +1,11 @@
 <template>
-  <link v-if="font" :href="fontHref" rel="stylesheet">
+  <link v-if="font" v-bind:href="fontHref" rel="stylesheet">
 </template>
 
 <script>
 export default {
   props: {
-    fontFamily: {
+    value: {
       type: String,
       required: true,
     },
@@ -15,15 +15,23 @@ export default {
       font: null,
     };
   },
-  created: async function() {
-    try {
-      this.font = await this.$axios.$get('/api/fonts/' + this.fontFamily);
-    } catch (e) {
-      // Default font
-      this.font = await this.$axios.$get('/api/fonts/Cousine');
-    }
+  created: function() {
+    this.initFont(this.value);
+  },
+  watch: {
+    value: function(value) {
+      this.initFont(this.value);
+    },
   },
   methods: {
+    initFont: async function(fontFamily) {
+      try {
+        this.font = await this.$axios.$get('/api/fonts/' + this.value);
+      } catch (e) {
+        // Default font
+        this.font = await this.$axios.$get('/api/fonts/Cousine');
+      }
+    },
     getDefaultOrSelectedVariant: function(font) {
       if (
         this.selectedFontVariant &&

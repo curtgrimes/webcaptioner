@@ -2,6 +2,7 @@
   <div class="settings-appearance-view">
     <h3 class="mt-0 mt-sm-3">{{$t('settings.appearance.text')}}</h3>
     <div class="form-group row">
+      <font-stylesheet v-model="fontFamily"/>
       <label
         for="text-color"
         class="col-sm-6 col-form-label"
@@ -468,6 +469,7 @@ import debounce from 'lodash.debounce';
 import hexToRGB from '~/mixins/hexToRGB';
 import FontSelector from '~/components/FontSelector.vue';
 import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
+import fontStylesheet from '~/components/FontStylesheet.vue';
 
 export default {
   transition: 'fade',
@@ -479,6 +481,7 @@ export default {
   components: {
     FontSelector,
     bSpinner,
+    fontStylesheet,
   },
   computed: {
     textColor: {
