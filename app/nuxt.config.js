@@ -54,15 +54,18 @@ module.exports = {
       },
     ],
     link: [{
+        // https://github.com/nuxt/nuxt.js/issues/1204
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico?v=2',
-      }, // https://github.com/nuxt/nuxt.js/issues/1204
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700',
+      },
     ],
   },
-  css: [
-    // '~/assets/scss/app.scss',
-  ],
+  css: [],
   modules: [
     [
       'nuxt-env',
