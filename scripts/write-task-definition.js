@@ -1,72 +1,68 @@
 function env(key) {
-    let envKey = key + '__' + process.env.CI_ENVIRONMENT_SLUG;
+  let envKey = key + '__' + process.env.CI_ENVIRONMENT_SLUG;
 
-    if (!process.env[envKey]) {
-        console.error('Environment variable '+ envKey +' does not exist.')
-        process.exit(1);
-    }
-    else {
-        return process.env[envKey];
-    }
+  if (!process.env[envKey]) {
+    console.error('Environment variable ' + envKey + ' does not exist.')
+    process.exit(1);
+  } else {
+    return process.env[envKey];
+  }
 }
 
 function getEnvironmentKeyPairs(keys) {
-    return keys.map((key) => {
-        return {
-            name: key,
-            value: env(key),
-        };
-    });
+  return keys.map((key) => {
+    return {
+      name: key,
+      value: env(key),
+    };
+  });
 }
 
 let taskDefinition = {
-    "volumes": [],
-    "family": "webcaptioner-" + process.env.CI_ENVIRONMENT_SLUG,
-    "executionRoleArn": "REMOVED",
-    "networkMode": "awsvpc",
-    "containerDefinitions": [
-      {
-        "logConfiguration": {
-          "logDriver": "awslogs",
-          "options": {
-            "awslogs-group": "/ecs/webcaptioner",
-            "awslogs-region": "us-east-1",
-            "awslogs-stream-prefix": "ecs"
-          }
-        },
-        "portMappings": [
-          {
-            "hostPort": 8080,
-            "protocol": "tcp",
-            "containerPort": 8080
-          }
-        ],
-        "cpu": 0,
-        "memoryReservation": 300,
-        "volumesFrom": [],
-        "image": "REMOVED:" + process.env.CI_ENVIRONMENT_SLUG,
-        "name": "webcaptioner",
-        "environment": [
-            ...getEnvironmentKeyPairs([
-                'CHROME_EXTENSION_ID',
-                'GOOGLE_CAST_APP_ID',
-                'SENTRY_SECURITY_TOKEN',
-                'SENTRY_DSN',
-                'REDIS_URL',
-                'ADMIN_TOKEN',
-                'TWITCH_APP_CLIENT_ID',
-                'TWITCH_APP_CLIENT_SECRET',
-                'STRIPE_API_KEY_PUBLIC',
-                'STRIPE_API_KEY_SECRET',
-                'DROPBOX_CLIENT_ID',
-            ]),
-            {
-                name: "HOSTNAME",
-                value: process.env.CI_ENVIRONMENT_URL,
-            },
-        ]
+  "volumes": [],
+  "family": "webcaptioner-" + process.env.CI_ENVIRONMENT_SLUG,
+  "executionRoleArn": "REMOVED",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [{
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/webcaptioner",
+        "awslogs-region": "us-east-1",
+        "awslogs-stream-prefix": "ecs"
       }
+    },
+    "portMappings": [{
+      "hostPort": 8080,
+      "protocol": "tcp",
+      "containerPort": 8080
+    }],
+    "cpu": 0,
+    "memoryReservation": 300,
+    "volumesFrom": [],
+    "image": "REMOVED:" + process.env.CI_ENVIRONMENT_SLUG,
+    "name": "webcaptioner",
+    "environment": [
+      ...getEnvironmentKeyPairs([
+        'CHROME_EXTENSION_ID',
+        'GOOGLE_CAST_APP_ID',
+        'SENTRY_SECURITY_TOKEN',
+        'SENTRY_DSN',
+        'REDIS_URL',
+        'ADMIN_TOKEN',
+        'TWITCH_APP_CLIENT_ID',
+        'TWITCH_APP_CLIENT_SECRET',
+        'STRIPE_API_KEY_PUBLIC',
+        'STRIPE_API_KEY_SECRET',
+        'DROPBOX_CLIENT_ID',
+        'GOOGLE_FONTS_API_KEY',
+      ]),
+      {
+        name: "HOSTNAME",
+        value: process.env.CI_ENVIRONMENT_URL,
+      },
     ]
-  };
+  }]
+};
 
 console.log(JSON.stringify(taskDefinition));
