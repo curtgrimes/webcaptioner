@@ -34,6 +34,7 @@ let mutationInterceptorPlugin = store => {
         'captioner/VOLUME_TOO_LOW',
         'captioner/SET_WAITING_FOR_INITIAL_TRANSCRIPT',
         'captioner/SET_MICROPHONE_NAME',
+        'share/SET_EXPIRED',
       ];
 
       return ((payload && !payload.omitFromGoogleAnalytics) || !payload) &&
