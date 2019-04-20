@@ -32,7 +32,7 @@
 import bBtn from 'bootstrap-vue/es/components/button/button';
 
 export default {
-  componens: {
+  components: {
     bBtn,
   },
   props: {

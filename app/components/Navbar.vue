@@ -112,6 +112,7 @@
             placement="top"
             :show.sync="showMenu"
             triggers="click blur"
+            boundary="viewport"
             title
           >
             <b-btn-group vertical class="d-flex">
