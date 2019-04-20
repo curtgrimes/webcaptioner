@@ -24,8 +24,20 @@ let mutationInterceptorPlugin = store => {
     }
 
     function shouldTrackMutation(type, payload) {
+      const ignoredMutationTypes = [
+        'SOCKET_ONOPEN',
+        'SOCKET_ONCLOSE',
+        'SOCKET_RECONNECT',
+        'captioner/APPEND_TRANSCRIPT_STABILIZED',
+        'captioner/APPEND_TRANSCRIPT_FINAL',
+        'captioner/CLEAR_TRANSCRIPT_INTERIM',
+        'captioner/VOLUME_TOO_LOW',
+        'captioner/SET_WAITING_FOR_INITIAL_TRANSCRIPT',
+        'captioner/SET_MICROPHONE_NAME',
+      ];
+
       return ((payload && !payload.omitFromGoogleAnalytics) || !payload) &&
-        !type.includes('route/');
+        !type.includes('route/') && !ignoredMutationTypes.includes(type);
     }
 
     // Track mutations with Google Analytics
@@ -53,12 +65,10 @@ let mutationInterceptorPlugin = store => {
           event: {
             event: 'mutation',
             type,
-            payload: type === 'route/ROUTE_CHANGED' ?
-              {
-                from: payload.from.path,
-                to: payload.to.path,
-              } :
-              payload,
+            payload: type === 'route/ROUTE_CHANGED' ? {
+              from: payload.from.path,
+              to: payload.to.path,
+            } : payload,
           },
           omitFromGoogleAnalytics: true,
         });
