@@ -311,11 +311,11 @@ export default {
   },
   // mutations for reconnect methods
   SOCKET_RECONNECT(state, count) {
-    console.log('socket reconnect');
+    // console.log('socket reconnect');
     // console.info(state, count)
   },
   SOCKET_RECONNECT_ERROR(state) {
-    console.log('socket reconnect error');
+    // console.log('socket reconnect error');
     // state.socket.reconnectError = true;
   },
 

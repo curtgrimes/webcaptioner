@@ -20,7 +20,7 @@ export default {
         email: null,
         name: null,
         photoUrl: null,
-      }
+      },
     };
   },
   mounted: function() {
@@ -38,7 +38,7 @@ export default {
         return this.$store.state.settings.integrations.dropbox.accessToken;
       },
       set(accessToken) {
-        this.$store.commit("SET_DROPBOX_ACCESS_TOKEN", {accessToken});
+        this.$store.commit('SET_DROPBOX_ACCESS_TOKEN', { accessToken });
       },
     },
     accountId: {
@@ -46,14 +46,17 @@ export default {
         return this.$store.state.settings.integrations.dropbox.accountId;
       },
       set(accountId) {
-        this.$store.commit("SET_DROPBOX_ACCOUNT_ID", {accountId});
+        this.$store.commit('SET_DROPBOX_ACCOUNT_ID', { accountId });
       },
     },
   },
   methods: {
     parseOauthResponse: function() {
       // Returning from an oauth flow; parse incoming data
-      let {access_token: accessToken, account_id: accountId} = queryString.parse(location.hash);
+      let {
+        access_token: accessToken,
+        account_id: accountId,
+      } = queryString.parse(location.hash);
       if (accessToken && accountId) {
         this.accessToken = accessToken;
         this.accountId = accountId;
@@ -62,21 +65,19 @@ export default {
           eventCategory: 'sync-dropbox',
           eventAction: 'connect',
         });
-        this.redirectBackToSyncSettings({somethingWentWrong: false});
-      }
-      else {
-        console.log('somethingWentWrong');
-        this.redirectBackToSyncSettings({somethingWentWrong: true});
+        this.redirectBackToSyncSettings({ somethingWentWrong: false });
+      } else {
+        this.redirectBackToSyncSettings({ somethingWentWrong: true });
       }
     },
-    redirectBackToSyncSettings: function({somethingWentWrong}) {
-        this.$router.replace({
-          path: this.localePath('captioner-settings-sync'),
-          query: {
-            ...(somethingWentWrong ? {somethingWentWrong} : {}),
-          },
-        });
+    redirectBackToSyncSettings: function({ somethingWentWrong }) {
+      this.$router.replace({
+        path: this.localePath('captioner-settings-sync'),
+        query: {
+          ...(somethingWentWrong ? { somethingWentWrong } : {}),
+        },
+      });
     },
   },
-}
+};
 </script>
