@@ -5,43 +5,34 @@
     v-bind:style="{color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
     @click="focusIfInTypingMode()"
   >
-    <!--
-    -->
-    <font-stylesheet v-if="$store.state.settings.loaded" v-model="fontFamily"/>
-    <!--
-    -->
     <span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
       @scroll="onManualScroll"
       ref="scroller"
     >
-      <!--
-      -->
+      <!--prettyhtml-ignore-->
       <span class="transcript-scroller-child">
-        <span :class="{'d-block w-100': finalTranscriptEndsInNewline}">{{finalTranscript}}</span>
-        <span
-          data-test="transcriptInterim"
-          v-if="interimTranscript"
-          v-bind:style="{color: interimColor}"
-        >{{interimTranscript}}</span>
-        <span
-          v-show="typingModeOn && (showTypedLiveReadOnly !== true)"
-          contenteditable
-          v-text="transcriptTypedForDisplay"
-          @input="typedTranscriptDidChange()"
-          ref="typedTranscript"
-          class="transcriptTyped combokeys"
-        ></span>
-        <span v-if="showTypedLiveReadOnly && typedTranscript" class="d-block">{{typedTranscript}}</span>
-        <br v-if="finalTranscriptEndsInNewline && !interimTranscript">
-        <br v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly">
-      </span>
-      <!--
-      -->
+        <span :class="{'d-block w-100': finalTranscriptEndsInNewline}">{{finalTranscript}}</span><span
+  data-test="transcriptInterim"
+  v-if="interimTranscript"
+  v-bind:style="{color: interimColor}"
+>{{interimTranscript}}</span><span
+  v-show="typingModeOn && (showTypedLiveReadOnly !== true)"
+  contenteditable
+  v-text="transcriptTypedForDisplay"
+  @input="typedTranscriptDidChange()"
+  ref="typedTranscript"
+  class="transcriptTyped combokeys"
+></span><span
+  v-if="showTypedLiveReadOnly && typedTranscript"
+  class="d-block"
+>{{typedTranscript}}</span><br
+  v-if="finalTranscriptEndsInNewline && !interimTranscript"
+><br
+  v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"
+></span>
     </span>
-    <!--
-    -->
     <transition name="fade">
       <b-btn
         class="autoscrollButton"
@@ -51,8 +42,7 @@
         <fa icon="chevron-down" class="backToLatestIcon mr-2"/>Back to Latest
       </b-btn>
     </transition>
-    <!--
-    -->
+    <font-stylesheet v-if="$store.state.settings.loaded" v-model="fontFamily"/>
   </div>
 </template>
 
