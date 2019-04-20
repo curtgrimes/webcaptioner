@@ -448,7 +448,7 @@ export const actions = {
       ...rootState.settings.wordReplacements,
       ...internalWordReplacements,
 
-      ...(rootState.settings.on
+      ...(rootState.settings.censor.on
         // Add profanity censor
         ?
         [{
