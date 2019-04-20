@@ -106,7 +106,7 @@ module.exports = {
         batch: {
           enabled: true,
           amount: 2,
-          delay: 400, // ms
+          delay: 1000, // ms
         },
         autoTracking: {
           pageviewTemplate: function (route) {
