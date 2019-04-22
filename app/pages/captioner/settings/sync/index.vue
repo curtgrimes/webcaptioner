@@ -126,7 +126,6 @@ export default {
   directives: {
     bTooltip,
   },
-  transition: 'fade',
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitle: 'Sync',

@@ -39,8 +39,8 @@
         <!--  pb-5 mb-3 for bottom navbar space -->
         <b-list-group flush>
           <b-list-group-item
-            :to="localePath('captioner-settings-about')"
-          >{{$t('settings.about.about')}}</b-list-group-item>
+            :to="localePath('captioner-settings-general')"
+          >{{$t('settings.general')}}</b-list-group-item>
           <b-list-group-item
             v-if="eventLog"
             :to="localePath('captioner-settings-event-log')"
@@ -50,42 +50,26 @@
             :to="localePath('captioner-settings-experiments')"
           >{{$t('settings.experiments.experiments')}}</b-list-group-item>
         </b-list-group>
-        <h3 class="text-muted pl-3 pt-2 small">{{$t('settings.general')}}</h3>
         <b-list-group flush>
           <b-list-group-item
             :to="localePath('captioner-settings-appearance')"
           >{{$t('settings.appearance.appearance')}}</b-list-group-item>
           <b-list-group-item
-            :to="localePath('captioner-settings-censor')"
-          >{{$t('settings.censor.censor')}}</b-list-group-item>
-          <b-list-group-item
-            :to="localePath('captioner-settings-controls')"
-          >{{$t('settings.controls.controls')}}</b-list-group-item>
-          <b-list-group-item
             :to="localePath('captioner-settings-language')"
           >{{$t('settings.language.language')}}</b-list-group-item>
           <b-list-group-item :to="localePath('captioner-settings-sync')">Sync</b-list-group-item>
           <b-list-group-item
-            v-if="experiments.includes('remoteDisplays')"
-            :to="localePath('captioner-settings-remote-displays')"
-          >{{$t('settings.remoteDisplays.remoteDisplays')}}</b-list-group-item>
-          <b-list-group-item
             :to="localePath('captioner-settings-word-replacements')"
           >{{$t('settings.wordReplacements.wordReplacements')}}</b-list-group-item>
-          <!-- <b-list-group-item :to="localePath('captioner-settings-title-cards">Title Cards</b-list-group-item> -->
-        </b-list-group>
-        <h3 class="text-muted pl-3 pt-2 small">{{$t('settings.integrations')}}</h3>
-        <b-list-group flush>
           <b-list-group-item
             :to="localePath('captioner-settings-vmix')"
           >{{$t('settings.vmix.vmix')}}</b-list-group-item>
           <b-list-group-item
-            v-if="experiments.includes('webhooks')"
             :to="localePath('captioner-settings-webhooks')"
           >{{$t('settings.webhooks.webhooks')}}</b-list-group-item>
-        </b-list-group>
-        <h3 class="text-muted pl-3 pt-2 small">{{$t('settings.other')}}</h3>
-        <b-list-group flush>
+          <b-list-group-item
+            :to="localePath('captioner-settings-about')"
+          >{{$t('settings.about.whatsNew')}}</b-list-group-item>
           <b-list-group-item
             :to="localePath('captioner-settings-export-restore')"
           >{{$t('settings.exportRestore.exportRestoreSettings')}}</b-list-group-item>
@@ -108,8 +92,8 @@
                 <b-nav vertical pills>
                   <b-nav-item
                     active-class="active"
-                    :to="localePath('captioner-settings-about')"
-                  >{{$t('settings.about.about')}}</b-nav-item>
+                    :to="localePath('captioner-settings-general')"
+                  >{{$t('settings.general')}}</b-nav-item>
                   <b-nav-item v-if="eventLog" :to="localePath('captioner-settings-event-log')">
                     {{$t('settings.eventLog.eventLog')}}
                     <span
@@ -130,7 +114,6 @@
                     {{$t('settings.experiments.experiments')}}
                   </b-nav-item>
                 </b-nav>
-                <hr>
                 <b-nav vertical pills>
                   <b-nav-item
                     active-class="active"
@@ -138,29 +121,14 @@
                   >{{$t('settings.appearance.appearance')}}</b-nav-item>
                   <b-nav-item
                     active-class="active"
-                    :to="localePath('captioner-settings-censor')"
-                  >{{$t('settings.censor.censor')}}</b-nav-item>
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-controls')"
-                  >{{$t('settings.controls.controls')}}</b-nav-item>
-                  <b-nav-item
-                    active-class="active"
                     :to="localePath('captioner-settings-language')"
                   >{{$t('settings.language.language')}}</b-nav-item>
-                  <b-nav-item
-                    active-class="active"
-                    v-if="experiments.includes('remoteDisplays')"
-                    :to="localePath('captioner-settings-remote-displays')"
-                  >{{$t('settings.remoteDisplays.remoteDisplays')}}</b-nav-item>
                   <b-nav-item active-class="active" :to="localePath('captioner-settings-sync')">Sync</b-nav-item>
                   <b-nav-item
                     active-class="active"
                     :to="localePath('captioner-settings-word-replacements')"
                   >{{$t('settings.wordReplacements.wordReplacements')}}</b-nav-item>
-                  <!-- <b-nav-item :to="localePath('captioner-settings-title-cards">Title Cards</b-nav-item> -->
                 </b-nav>
-                <hr>
                 <b-nav vertical pills>
                   <b-nav-item
                     active-class="active"
@@ -168,12 +136,15 @@
                   >{{$t('settings.vmix.vmix')}}</b-nav-item>
                   <b-nav-item
                     active-class="active"
-                    v-if="experiments.includes('webhooks')"
                     :to="localePath('captioner-settings-webhooks')"
                   >{{$t('settings.webhooks.webhooks')}}</b-nav-item>
                 </b-nav>
                 <hr>
                 <b-nav vertical pills>
+                  <b-nav-item
+                    active-class="active"
+                    :to="localePath('captioner-settings-about')"
+                  >{{$t('settings.about.whatsNew')}}</b-nav-item>
                   <b-nav-item
                     active-class="active"
                     class="small"

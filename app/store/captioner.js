@@ -155,6 +155,9 @@ export const actions = {
     speechRecognizer.continuous = true;
     speechRecognizer.interimResults = true;
     speechRecognizer.lang = rootState.settings.locale.from;
+
+    let didMakeAfterNoAudioAction = false;
+
     try {
       speechRecognizer.start();
     } catch (e) {}
@@ -169,8 +172,6 @@ export const actions = {
         microphonePermissionNeeded: true
       });
     }, 200);
-
-    let self = this;
 
     speechRecognizer.onstart = function () {
       commit('SET_CAPTIONER_ON', {
@@ -207,8 +208,62 @@ export const actions = {
               dispatch('restart');
             }
 
+            if (
+              state.lastUpdate &&
+              timeSinceLastResult >= (rootState.settings.afterNoAudio.seconds * 1000) &&
+              !didMakeAfterNoAudioAction
+            ) {
+              switch (rootState.settings.afterNoAudio.action) {
+                case 'lineBreak1':
+                  {
+                    commit('APPEND_TRANSCRIPT_FINAL', {
+                      transcriptFinal: '\n'
+                    });
+                    break;
+                  }
+                case 'lineBreak2':
+                  {
+                    commit('APPEND_TRANSCRIPT_FINAL', {
+                      transcriptFinal: '\n\n'
+                    });
+                    break;
+                  }
+                case 'lineBreak3':
+                  {
+                    commit('APPEND_TRANSCRIPT_FINAL', {
+                      transcriptFinal: '\n\n\n'
+                    });
+                    break;
+                  }
+                case 'lineBreak4':
+                  {
+                    commit('APPEND_TRANSCRIPT_FINAL', {
+                      transcriptFinal: '\n\n\n\n'
+                    });
+                    break;
+                  }
+                case 'lineBreak5':
+                  {
+                    commit('APPEND_TRANSCRIPT_FINAL', {
+                      transcriptFinal: '\n\n\n\n\n'
+                    });
+                    break;
+                  }
+                case 'clearTranscript':
+                  {
+                    commit('CLEAR_TRANSCRIPT');
+                    break;
+                  }
+                case 'doNothing':
+                default:
+                  {
+                    // Do nothing
+                  }
+              }
+              didMakeAfterNoAudioAction = true;
+            }
           }
-        }, 1000);
+        }, 750);
       }
     };
 
@@ -224,6 +279,10 @@ export const actions = {
     };
 
     speechRecognizer.onresult = function (event) {
+
+      // Reset this flag for the next future pause
+      didMakeAfterNoAudioAction = false;
+
       if (state.transcript.waitingForInitial) {
         // Set flag false once we're receiving a transcript for the first time
         commit('SET_WAITING_FOR_INITIAL_TRANSCRIPT', {

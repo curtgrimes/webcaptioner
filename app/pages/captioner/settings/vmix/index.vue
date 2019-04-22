@@ -343,7 +343,6 @@ export default {
     bTab,
     bTooltip,
   },
-  transition: 'fade',
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.vmix.vmix',

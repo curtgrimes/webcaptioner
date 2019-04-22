@@ -5,9 +5,5 @@
 </template>
 
 <script>
-
-export default {
-  name: 'settings-title-cards',
-  transition: 'fade',
-}
+export default {};
 </script>

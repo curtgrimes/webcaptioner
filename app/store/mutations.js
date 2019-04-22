@@ -217,6 +217,17 @@ export default {
     state.settings.censor.replaceWith = replaceWith
   },
 
+  SET_AFTER_NO_AUDIO_SECONDS: (state, {
+    seconds
+  }) => {
+    state.settings.afterNoAudio.seconds = seconds
+  },
+  SET_AFTER_NO_AUDIO_ACTION: (state, {
+    action
+  }) => {
+    state.settings.afterNoAudio.action = action
+  },
+
 
   SET_LOCALE_USER_DEFAULT: (state, {
     locale

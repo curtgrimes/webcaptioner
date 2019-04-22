@@ -128,7 +128,6 @@ export default {
   components: {
     bBtn,
   },
-  transition: 'fade',
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.eventLog.eventLog',

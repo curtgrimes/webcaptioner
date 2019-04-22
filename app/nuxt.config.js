@@ -61,7 +61,7 @@ module.exports = {
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Cousine:400,700|Roboto:400,700',
+        href: 'https://fonts.googleapis.com/css?family=Cousine:400,700|Source+Sans+Pro:400,700',
       },
     ],
   },

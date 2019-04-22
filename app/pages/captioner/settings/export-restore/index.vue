@@ -124,7 +124,6 @@ export default {
     bBtn,
     bModal,
   },
-  transition: 'fade',
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.exportRestore.exportRestoreSettings',

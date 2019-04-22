@@ -129,7 +129,7 @@
         size="sm"
         variant="light"
         class="text-white px-2 py-1 float-right"
-        style="background:#1b95e0;border-color:#1b95e0;font-family:'Roboto', sans-serif;text-transform:none"
+        style="background:#1b95e0;border-color:#1b95e0;font-family:'Source Sans Pro', sans-serif;text-transform:none"
         :href="twitterShareLink"
         target="_blank"
         v-b-tooltip.hover
@@ -137,7 +137,7 @@
       >
         <fa :icon="['fab', 'twitter']"/>
       </b-btn>
-      <!-- <b-btn size="sm" variant="light" class="text-white px-2 py-1 float-right mr-1" style="background:#3B5998;border-color:#3B5998;font-family:'Roboto', sans-serif;text-transform:none" :href="facebookShareLink" target="_blank" v-b-tooltip.hover title="Share on Facebook"><fa :icon="['fab', 'facebook']" /></b-btn> -->
+      <!-- <b-btn size="sm" variant="light" class="text-white px-2 py-1 float-right mr-1" style="background:#3B5998;border-color:#3B5998;font-family:'Source Sans Pro', sans-serif;text-transform:none" :href="facebookShareLink" target="_blank" v-b-tooltip.hover title="Share on Facebook"><fa :icon="['fab', 'facebook']" /></b-btn> -->
     </div>
     <div
       v-if="somethingWentWrong"

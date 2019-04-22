@@ -148,7 +148,6 @@ export default {
   components: {
     bCollapse,
   },
-  transition: 'fade',
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitle: 'Stats',

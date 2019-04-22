@@ -472,7 +472,6 @@ import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
 import fontStylesheet from '~/components/FontStylesheet.vue';
 
 export default {
-  transition: 'fade',
   mixins: [hexToRGB],
   middleware: ['settings-meta'],
   meta: {

@@ -70,6 +70,10 @@ export default () => {
         throttleMs: 200,
       },
     },
+    afterNoAudio: {
+      seconds: 2,
+      action: 'lineBreak2',
+    },
     donationDate: null,
     exp: [],
   };

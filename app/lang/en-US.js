@@ -165,9 +165,9 @@ export default {
         seeThisList: "See this list",
         useWordReplacements: "use word replacements"
       },
-      replaceCensoredWordsWith: "Replace censored words with:",
-      nothing: "Nothing — just omit them.",
-      asterisks: "Asterisks"
+      replaceCensoredWordsWith: "Replace censored words with",
+      nothing: "nothing — just omit them",
+      asterisks: "asterisks"
     },
     controls: {
       controls: "Controls",
@@ -176,7 +176,7 @@ export default {
       defaultDescription: "Regular-sized controls",
       larger: "Larger",
       largerDescription: "Larger controls and additional buttons for one-click saving and clearing the transcript",
-      keyboardShortcuts: "Keyboard Shortcuts",
+      keyboardShortcuts: "Shortcuts",
       then: "then",
       ctrl: "Ctrl",
       shift: "Shift",

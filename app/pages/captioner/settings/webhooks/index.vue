@@ -1,11 +1,17 @@
 <template>
   <div>
     <p>Webhooks allows you to receive real-time HTTP notifications of captioning events in your application.</p>
-    
+
     <div class="card bg-white">
       <div class="card-header">
         <div class="custom-control custom-checkbox">
-          <input v-model="on" class="custom-control-input" name="word-replacements-censor-profanity" type="checkbox" id="word-replacements-censor-profanity">
+          <input
+            v-model="on"
+            class="custom-control-input"
+            name="word-replacements-censor-profanity"
+            type="checkbox"
+            id="word-replacements-censor-profanity"
+          >
           <label class="custom-control-label" for="word-replacements-censor-profanity">Use Webhooks</label>
         </div>
       </div>
@@ -15,15 +21,32 @@
             <div class="row">
               <label for="webhooksUrl" class="col-sm-4 col-md-3 col-form-label">URL</label>
               <div class="col-sm-8 col-md-9 mb-2 mb-md-0">
-                <input id="webhooksUrl" :disabled="!on" name="webhooksUrl" v-model="url" class="form-control" type="url" placeholder="URL" />
+                <input
+                  id="webhooksUrl"
+                  :disabled="!on"
+                  name="webhooksUrl"
+                  v-model="url"
+                  class="form-control"
+                  type="url"
+                  placeholder="URL"
+                >
               </div>
             </div>
           </div>
           <div class="col-md-3 col-lg-4">
             <div class="row">
-              <label for="webhooksMethod" class="d-md-none d-lg-flex col-sm-4 col-lg-5 col-form-label">Method</label>
+              <label
+                for="webhooksMethod"
+                class="d-md-none d-lg-flex col-sm-4 col-lg-5 col-form-label"
+              >Method</label>
               <div class="col-sm-8 col-md-12 col-lg-7">
-                <select class="form-control" id="webhooksMethod" :disabled="!on" name="webhooksMethod" v-model="method">
+                <select
+                  class="form-control"
+                  id="webhooksMethod"
+                  :disabled="!on"
+                  name="webhooksMethod"
+                  v-model="method"
+                >
                   <option value="POST" selected>POST</option>
                   <option value="PUT">PUT</option>
                 </select>
@@ -53,25 +76,39 @@
             -->
           </div>
         </div>
-        <hr class="my-3"/>
-        <div ref="webhookLog" class="card bg-dark text-white small text-monospace" style="max-height:350px;overflow-y:auto">
-          <div class="card-header bg-info p-2">
-            Log
-          </div>
+        <hr class="my-3">
+        <div
+          ref="webhookLog"
+          class="card bg-dark text-white small text-monospace"
+          style="max-height:350px;overflow-y:auto"
+        >
+          <div class="card-header bg-info p-2">Log</div>
           <div class="p-2">
-            <div v-if="!log.length" class="text-muted">Empty. Turn on webhooks and start captioning to see requests.</div>
-            <div v-for="(event, index) in log" :key="index" :class="event.type == 'receive' ? 'mb-2' : ''">
+            <div
+              v-if="!log.length"
+              class="text-muted"
+            >Empty. Turn on webhooks and start captioning to see requests.</div>
+            <div
+              v-for="(event, index) in log"
+              :key="index"
+              :class="event.type == 'receive' ? 'mb-2' : ''"
+            >
               <span v-if="event.type === 'send'" class="font-weight-bold">{{event.title}}</span>
               <span v-else :class="event.error ? 'text-danger' : 'text-success'">--> {{event.title}}</span>
 
               <span v-if="event.body">
-                <a class="ml-2 btn btn-link text-primary btn-sm py-0 pl-0 pr-1" href="javascript:void(0)" @click="event.showBody = !event.showBody"><fa :icon="event.showBody ? 'caret-down' : 'caret-right'" fixed-width />Payload</a>
+                <a
+                  class="ml-2 btn btn-link text-primary btn-sm py-0 pl-0 pr-1"
+                  href="javascript:void(0)"
+                  @click="event.showBody = !event.showBody"
+                >
+                  <fa :icon="event.showBody ? 'caret-down' : 'caret-right'" fixed-width/>Payload
+                </a>
                 <span v-if="event.showBody">{{event.body}}</span>
               </span>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -88,14 +125,10 @@
 </template>
 
 <script>
-import debounce from 'lodash.debounce'
+import debounce from 'lodash.debounce';
 
 export default {
-  name: 'settings-webhooks-view',
-  transition: 'fade',
-  middleware: [
-    'settings-meta',
-  ],
+  middleware: ['settings-meta'],
   meta: {
     settingsPageTitle: 'Webhooks',
   },
@@ -105,27 +138,31 @@ export default {
     };
   },
   mounted: function() {
-    this.$store.commit('ADD_EXPERIMENT', {experiment: 'webhooks'});
+    this.$store.commit('ADD_EXPERIMENT', { experiment: 'webhooks' });
   },
   computed: {
     on: {
-      get () {
+      get() {
         return this.$store.state.settings.integrations.webhooks.on;
       },
-      set: function (onOrOff) {
+      set: function(onOrOff) {
         this.$store.commit('SET_WEBHOOKS_ON', { onOrOff });
       },
     },
     url: {
-      get () {
+      get() {
         return this.$store.state.settings.integrations.webhooks.url;
       },
-      set: debounce(function(url) {
-        this.$store.commit('SET_WEBHOOKS_URL', { url });
-      }, 500, {leading: true})
+      set: debounce(
+        function(url) {
+          this.$store.commit('SET_WEBHOOKS_URL', { url });
+        },
+        500,
+        { leading: true }
+      ),
     },
     method: {
-      get () {
+      get() {
         return this.$store.state.settings.integrations.webhooks.method;
       },
       set: function(method) {
@@ -133,15 +170,15 @@ export default {
       },
     },
     throttleMs: {
-      get () {
+      get() {
         return this.$store.state.settings.integrations.webhooks.throttleMs;
       },
-      set (throttleMs) {
+      set(throttleMs) {
         this.$store.commit('SET_WEBHOOKS_THROTTLE_MS', { throttleMs });
       },
     },
     log: {
-      get () {
+      get() {
         return this.$store.state.integrations.webhooks.log;
       },
     },
@@ -149,7 +186,7 @@ export default {
   watch: {
     log: function() {
       this.$refs.webhookLog.scrollTop = this.$refs.webhookLog.scrollHeight;
-    }
+    },
   },
-}
+};
 </script>

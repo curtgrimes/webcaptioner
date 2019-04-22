@@ -1,94 +1,107 @@
 <template>
-  <div class="settings-controls-view">
-    <div class="row">
-      <div class="col-md-6">
-        <h3>{{$t('settings.controls.screenLayout')}}</h3>
-        <b-list-group>
-          <b-list-group-item
-            button
-            :active="!largerLayout"
-            @click="largerLayout = false"
-            @mouseover="largerPreview = false"
-            @mouseleave="largerPreview = largerLayout"
-          >
-            <p class="font-weight-bold mb-0">{{$t('settings.controls.default')}}</p>
-            <p class="small mb-0">{{$t('settings.controls.defaultDescription')}}</p>
-          </b-list-group-item>
-          <b-list-group-item
-            button
-            :active="largerLayout"
-            @click="largerLayout = true"
-            @mouseover="largerPreview = true"
-            @mouseleave="largerPreview = largerLayout"
-          >
-            <p class="font-weight-bold mb-0">{{$t('settings.controls.larger')}}</p>
-            <p class="small mb-0">{{$t('settings.controls.largerDescription')}}</p>
-          </b-list-group-item>
-        </b-list-group>
-      </div>
-      <div class="col-md-6 mt-3 mt-md-0">
-        <h3 class="d-none d-md-block">&nbsp;</h3>
-        <div class="preview" :class="{'default-size': !largerPreview}" style="min-height:300px">
-          <div
-            class="text-preview-mockup-wrap main-preview w-100 d-flex"
-            v-bind:style="{backgroundColor: backgroundColor, padding: (alignmentPadding/2)+'em'}"
-            v-bind:class="previewWrapTextPositionClass"
-          >
-            <div
-              class="text-preview-mockup p-1 d-flex"
-              style="cursor:default"
-              v-bind:style="{color: textColor}"
-              v-bind:class="previewTextPositionClass"
-            >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligdiam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauriula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
+  <div>
+    <hr>
+    <label for="censor-profane-language" class="mb-0">Censor profane language</label>
+    <b-form-checkbox id="censor-profane-language" v-model="censor" switch class="float-right"></b-form-checkbox>
+    <div class="clearfix"></div>
+    <transition name="fade-in">
+      <div v-if="censor">
+        <div class="form-inline small mt-1">
+          <div class="form-group">
+            <label>
+              <span class="pr-2">{{$t('settings.censor.replaceCensoredWordsWith')}}</span>
+              <select
+                v-model="censorReplaceWith"
+                class="form-control form-control-sm"
+                id="volumeMeterSensitivity"
+              >
+                <option value="nothing">{{$t('settings.censor.nothing')}}</option>
+                <option value="asterisks">{{$t('settings.censor.asterisks')}} (*****)</option>
+              </select>
+            </label>
           </div>
-          <b-navbar variant="dark" class="px-2 py-1 d-flex flex-column">
-            <div v-if="largerPreview" class="d-flex w-100 pb-1">
-              <b-btn variant="danger" disabled class="mr-auto">Xxxxx</b-btn>
-              <b-btn variant="info" disabled>Xxxx xx Xxxx</b-btn>
-            </div>
-            <div class="d-flex w-100 align-items-center">
-              <img src="/static/img/logo.svg" width="8" height="8" class="align-middle mr-auto">
-              <b-dropdown variant="primary" split text="Xxxxx Xxxxxxxx" disabled></b-dropdown>
-            </div>
-          </b-navbar>
         </div>
+        <p class="mb-0 small text-muted mt-2">
+          {{$t('settings.censor.usEnglishOnly')}}
+          <i18n path="settings.censor.censorProfaneLanguageDescription.text" tag="span">
+            <a
+              place="seeThisList"
+              href="https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words"
+              target="_blank"
+            >{{$t('settings.censor.censorProfaneLanguageDescription.seeThisList')}}</a>
+            <router-link
+              place="useWordReplacements"
+              to="word-replacements"
+            >{{$t('settings.censor.censorProfaneLanguageDescription.useWordReplacements')}}</router-link>
+          </i18n>
+        </p>
       </div>
-    </div>
-    <h3 class="mt-3">Volume Meter</h3>
-    <p
-      class="mb-2"
-    >By default, a volume meter appears during captioning if your volume level is low.</p>
-    <div class="custom-control custom-checkbox">
-      <input
-        v-model="volumeMeterShow"
-        class="custom-control-input"
-        type="checkbox"
-        name="showVolumeMeter"
-        id="showVolumeMeter"
-        value="uppercase"
-      >
-      <label
-        class="custom-control-label"
-        for="showVolumeMeter"
-      >Show volume meter when volume level is low</label>
-    </div>
-    <transition name="fade">
-      <div class="form-inline" v-if="volumeMeterShow">
-        <div class="form-group ml-4 small">
-          <label for="volumeMeterSensitivity" class="mr-2">
-            <strong>Sensitivity</strong>
+      <p v-else class="mb-0 text-muted small mt-2">
+        Censorship is off. However, the speech-to-text service that Web Captioner runs on currently does not give an option to completely disable censorship. Web Captioner applies a heuristic to uncensor words that are returned from this service that still appear to be censored. If you are running into issues with words being censored even when censorship is off,
+        <a
+          href="https://feedback.webcaptioner.com/"
+        >leave feedback</a> or
+        <a href="https://m.me/webcaptioner">contact Web Captioner</a>.
+      </p>
+    </transition>
+    <div class="clearfix"></div>
+    <hr>
+    <label for="show-volume-meter" class="mb-0">Show volume meter when volume level is low</label>
+    <b-form-checkbox id="show-volume-meter" v-model="volumeMeterShow" switch class="float-right"></b-form-checkbox>
+    <div class="clearfix"></div>
+    <transition name="fade-in">
+      <div class="form-inline small mt-1" v-if="volumeMeterShow">
+        <div class="form-group">
+          <label>
+            <span class="pr-2">Sensitivity</span>
+            <select
+              v-model="volumeMeterSensitivity"
+              class="form-control form-control-sm"
+              id="volumeMeterSensitivity"
+            >
+              <option value="high">High (default)</option>
+              <option value="low">Low</option>
+            </select>
           </label>
-          <select
-            v-model="volumeMeterSensitivity"
-            class="form-control form-control-sm"
-            id="volumeMeterSensitivity"
-          >
-            <option value="high">High sensitivity (default)</option>
-            <option value="low">Low sensitivity</option>
-          </select>
         </div>
       </div>
     </transition>
+    <div class="clearfix"></div>
+    <hr>
+    <label for="large-navigation-bar-buttons" class="mb-0">Use large navigation bar buttons</label>
+    <b-form-checkbox
+      id="large-navigation-bar-buttons"
+      v-model="largerLayout"
+      switch
+      class="float-right"
+    ></b-form-checkbox>
+    <div class="clearfix"></div>
+    <hr>
+    <label for="action-after-no-audio" class="mb-0 form-group form-inline float-left">
+      After
+      <select class="form-control form-control-sm mx-2" v-model="afterNoAudioSeconds">
+        <option v-for="val in [1,2,3,4,5,10,20,30]" :key="val" :value="val">{{val}}</option>
+      </select>
+      <span v-if="afterNoAudioSeconds === 1">second&nbsp;</span>
+      <span v-else>seconds&nbsp;</span>of no audio while captioning
+    </label>
+    <div class="form-group float-right mb-0">
+      <select
+        class="form-control form-control-sm"
+        id="action-after-no-audio"
+        v-model="afterNoAudioAction"
+      >
+        <option value="doNothing">Do nothing</option>
+        <option value="lineBreak1">Add 1 line break</option>
+        <option value="lineBreak2">Add 2 line breaks</option>
+        <option value="lineBreak3">Add 3 line breaks</option>
+        <option value="lineBreak5">Add 5 line breaks</option>
+        <option value="clearTranscript">Clear transcript</option>
+      </select>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+
     <h3 class="mt-5">{{$t('settings.controls.keyboardShortcuts')}}</h3>
     <div class="list-group mt-sm-3">
       <div class="list-group-item">
@@ -189,6 +202,7 @@
 
 <script>
 import bBtn from 'bootstrap-vue/es/components/button/button';
+import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
 import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
 import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
 import bNavbar from 'bootstrap-vue/es/components/navbar/navbar';
@@ -197,6 +211,7 @@ import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
 export default {
   components: {
     bBtn,
+    bFormCheckbox,
     bListGroup,
     bListGroupItem,
     bNavbar,
@@ -204,7 +219,7 @@ export default {
   },
   middleware: ['settings-meta'],
   meta: {
-    settingsPageTitleKey: 'settings.controls.controls',
+    settingsPageTitleKey: 'settings.general',
   },
   data: function() {
     return {
@@ -243,6 +258,38 @@ export default {
       },
       set(sensitivity) {
         this.$store.commit('SET_VOLUME_METER_SENSITIVITY', { sensitivity });
+      },
+    },
+    censor: {
+      get() {
+        return this.$store.state.settings.censor.on;
+      },
+      set(censor) {
+        this.$store.commit('SET_CENSOR', { censor });
+      },
+    },
+    censorReplaceWith: {
+      get() {
+        return this.$store.state.settings.censor.replaceWith;
+      },
+      set(replaceWith) {
+        this.$store.commit('SET_CENSOR_REPLACE_WITH', { replaceWith });
+      },
+    },
+    afterNoAudioSeconds: {
+      get() {
+        return this.$store.state.settings.afterNoAudio.seconds;
+      },
+      set(seconds) {
+        this.$store.commit('SET_AFTER_NO_AUDIO_SECONDS', { seconds });
+      },
+    },
+    afterNoAudioAction: {
+      get() {
+        return this.$store.state.settings.afterNoAudio.action;
+      },
+      set(action) {
+        this.$store.commit('SET_AFTER_NO_AUDIO_ACTION', { action });
       },
     },
     backgroundColor: function() {

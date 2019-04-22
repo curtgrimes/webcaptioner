@@ -108,7 +108,6 @@ export default {
     bFormInput,
     bModal,
   },
-  transition: 'fade',
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.experiments.experiments',
@@ -157,21 +156,14 @@ export default {
           return 'Add a manual typing mode.';
         case 'share':
           return 'Get a link you can use to share captions.';
-        case 'webhooks':
-          return 'Use webhooks to integrate your application with Web Captioner.';
         default:
           return '';
       }
     },
     isValidExperiment: function() {
-      return [
-        'demo',
-        'typingMode',
-        'share',
-        'science',
-        '',
-        'webhooks',
-      ].includes(this.experimentName);
+      return ['demo', 'typingMode', 'share', 'science', ''].includes(
+        this.experimentName
+      );
     },
     addExperiment: function({ withConfirmation }) {
       if (this.isValidExperiment()) {

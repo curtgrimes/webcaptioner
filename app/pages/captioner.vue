@@ -468,7 +468,7 @@ export default {
         currentName.indexOf('captioner-settings___') === 0 && // Route name starts with that
         window.outerWidth > 575
       ) {
-        this.$router.replace(this.localePath('captioner-settings-about'));
+        this.$router.replace(this.localePath('captioner-settings-general'));
       }
     },
     refreshVmixStatus: function() {
