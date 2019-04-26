@@ -66,7 +66,7 @@ module.exports = {
     ],
   },
   css: [],
-  env: {
+  env: { // These are used when not running in the Docker container
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
@@ -78,11 +78,16 @@ module.exports = {
     [
       'nuxt-env',
       {
-        keys: [
+        keys: [ // These are used when running in the Docker container
           'GOOGLE_CAST_APP_ID',
           'CHROME_EXTENSION_ID',
           'STRIPE_API_KEY_PUBLIC',
           'FIREBASE_API_KEY',
+          'FIREBASE_AUTH_DOMAIN',
+          'FIREBASE_DATABASE_URL',
+          'FIREBASE_PROJECT_ID',
+          'FIREBASE_STORAGE_BUCKET',
+          'FIREBASE_MESSAGING_SENDER_ID',
         ],
       },
     ],
