@@ -228,7 +228,7 @@ export default {
 
           // Restore settings and current transcript
           self.sendMessage({
-            action: 'RESTORE_SETTINGS',
+            action: 'RESTORE_SETTINGS_OBJECT',
             payload: {
               settings: self.$store.state.settings,
             },

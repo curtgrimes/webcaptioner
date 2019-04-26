@@ -85,14 +85,6 @@
               <span v-else>{{$t('navbar.captioner.stopCaptioning')}}</span>
               <kbd v-show="largerLayout" class="small ml-3">c</kbd>
             </div>
-
-            <!-- <b-popover
-                            id="captioningPreviewPopover"
-                            target="startCaptioningDropdown"
-                            placement="top"
-                        >
-                            {{transcriptExcerpt}}
-            </b-popover>-->
           </b-btn>
           <b-btn
             v-show="experiments.includes('typingMode') && !typingModeOn"
@@ -110,10 +102,9 @@
           <b-popover
             target="navbar-settings-button"
             placement="top"
-            :show.sync="showMenu"
+            :show.sync="showSettingsMenu"
             triggers="click blur"
             boundary="viewport"
-            title
           >
             <b-btn-group vertical class="d-flex">
               <b-btn
@@ -185,25 +176,108 @@
               {{$t('navbar.menu.settings')}}
             </b-btn>
           </b-popover>
+          <b-tooltip target="navbar-settings-button" :title="$t('navbar.menu.menu')"></b-tooltip>
           <b-btn
             id="navbar-settings-button"
-            @click="showMenu = !showMenu"
+            @click="showSettingsMenu = !showSettingsMenu"
             v-b-tooltip.top
             :variant="captioningToggleButtonVariant"
-            :title="$t('navbar.menu.menu')"
           >
             <fa icon="bars"/>
           </b-btn>
         </b-btn-group>
+        <b-popover
+          target="navbar-profile-button-logged-in"
+          placement="top"
+          :show.sync="showProfileMenu"
+          triggers="click blur"
+          boundary="viewport"
+          title
+        >
+          <div style="min-width:300px">
+            <img
+              :src="$store.state.user.photoURL"
+              v-if="$store.state.user.photoURL"
+              class="rounded-circle float-left p-1 pr-2"
+              style="max-width:50px"
+            >
+            <fa v-else icon="user-circle" class="rounded-circle float-left p-1 pr-2 text-muted"/>
+
+            <div class="pt-1" style="line-height:1.25rem">
+              <span class="text-muted">
+                Signed in
+                <span v-if="$store.state.user.email || $store.state.user.displayName">as</span>
+              </span>
+              <div
+                v-if="$store.state.user.email || $store.state.user.displayName"
+              >{{$store.state.user.email || $store.state.user.displayName}}</div>
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <b-btn variant="link" class="d-block" @click="signOut()">Sign out</b-btn>
+          </div>
+        </b-popover>
+
+        <!-- if logged in -->
+        <b-tooltip target="navbar-profile-button-logged-in" title="Profile"></b-tooltip>
+        <b-btn
+          id="navbar-profile-button-logged-in"
+          v-show="$store.state.user.signedIn"
+          @click="showProfileMenu = !showProfileMenu"
+          v-b-tooltip.top
+          class="ml-2 text-white px-2 profile-button"
+          style="position:relative"
+          variant="link"
+        >
+          <transition name="fade">
+            <img
+              :src="$store.state.user.photoURL"
+              v-if="$store.state.user.photoURL"
+              class="rounded-circle"
+              style="max-width: 30px;position: absolute;margin-left: -2px;margin-top: -2px;"
+            >
+          </transition>
+          <fa icon="user-circle"/>
+        </b-btn>
+
+        <!-- not logged in -->
+        <b-tooltip target="navbar-profile-button-logged-out" title="Sign in or sign up"></b-tooltip>
+        <b-btn
+          id="navbar-profile-button-logged-out"
+          v-show="!$store.state.user.signedIn && experiments.includes('signin')"
+          v-b-tooltip.top
+          class="ml-2 text-white px-2 profile-button"
+          variant="link"
+          :to="localePath('captioner-sign-in')"
+        >
+          <fa icon="user-circle"/>
+        </b-btn>
       </div>
     </nav>
   </div>
 </template>
 
 <style>
+.firebaseui-title {
+  text-align: center !important;
+}
+</style>
+
+
+<style scoped>
 .button-only-disabled > .btn-primary:first-child {
   opacity: 0.6;
   cursor: default;
+}
+.profile-button {
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  opacity: 0.7;
+}
+.profile-button:hover,
+.profile-button:active,
+.profile-button:focus {
+  opacity: 1;
 }
 </style>
 
@@ -217,7 +291,8 @@ import saveToFile from '~/mixins/saveToFile';
 import dateFormat from '~/mixins/dateFormat';
 import bBtn from 'bootstrap-vue/es/components/button/button';
 import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
-import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
+import bTooltipDirective from 'bootstrap-vue/es/directives/tooltip/tooltip';
+import bTooltipComponent from 'bootstrap-vue/es/components/tooltip/tooltip';
 import bPopover from 'bootstrap-vue/es/components/popover/popover';
 
 export default {
@@ -229,14 +304,16 @@ export default {
     bBtn,
     bBtnGroup,
     bPopover,
+    bTooltip: bTooltipComponent,
   },
   directives: {
-    bTooltip,
+    bTooltip: bTooltipDirective,
   },
   data: function() {
     return {
       vmixNotFullySetUpMessageDismissed: false,
-      showMenu: false,
+      showSettingsMenu: false,
+      showProfileMenu: false,
     };
   },
   computed: {
@@ -299,22 +376,31 @@ export default {
     },
   },
   watch: {
-    showMenu: function() {
-      // Hide all tooltips
-      this.$root.$emit('bv::hide::tooltip');
+    showProfileMenu: function() {
+      this.hideAllTooltips();
     },
-    //   transcriptExcerpt: function(transcriptExcerpt) {
-    //       if (this.$router.currentRoute.name.startsWith('captioner-settings')) {
-    //         if (transcriptExcerpt) {
-    //             this.$root.$emit('bv::show::popover', 'startCaptioningDropdown');
-    //         }
-    //         else {
-    //             this.$root.$emit('bv::hide::popover', 'startCaptioningDropdown');
-    //         }
-    //       }
-    //   },
+    showSettingsMenu: function() {
+      this.hideAllTooltips();
+    },
   },
   methods: {
+    hideAllTooltips: function() {
+      this.$root.$emit('bv::hide::tooltip');
+    },
+    signOut: function() {
+      this.showProfileMenu = false;
+      setTimeout(() => {
+        this.$firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            // Success signing out
+            // INIT_CHECK_AUTH_STATUS_WATCHER handles
+            // updating the store and removing the user
+            this.$store.commit('SHOW_TOAST', { toastName: 'signedOut' });
+          });
+      }, 350); // let popover fade out first to get around positioning issue on close
+    },
     captioningToggleButtonClick: function() {
       if (this.captioningOn) {
         this.stopCaptioning();
@@ -324,6 +410,7 @@ export default {
     },
     startCaptioning: function() {
       this.$store.dispatch('captioner/startManual');
+      this.$router.push('/captioner');
     },
     stopCaptioning: function() {
       this.$store.dispatch('captioner/stopManual');

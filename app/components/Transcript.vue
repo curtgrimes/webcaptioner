@@ -42,7 +42,7 @@
         <fa icon="chevron-down" class="backToLatestIcon mr-2"/>Back to Latest
       </b-btn>
     </transition>
-    <font-stylesheet v-if="$store.state.settings.loaded" v-model="fontFamily"/>
+    <font-stylesheet v-if="$store.state.settingsLoaded" v-model="fontFamily"/>
   </div>
 </template>
 

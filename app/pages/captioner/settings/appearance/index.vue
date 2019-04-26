@@ -9,7 +9,7 @@
       >{{$t('settings.appearance.fontFamily')}}</label>
       <div class="col-sm-6">
         <Font-Selector
-          v-if="$store.state.settings.loaded"
+          v-if="$store.state.settingsLoaded"
           :fontFamily="fontFamily"
           @update:fontFamily="value => fontFamily = value"
           :fontVariant="fontVariant"

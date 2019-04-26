@@ -4,6 +4,16 @@
     <incompatible-browser-modal ref="incompatibleBrowserModal"/>
     <microphone-permission-needed-modal ref="microphonePermissionNeededModal"/>
     <microphone-permission-denied-modal ref="microphonePermissionDeniedModal"/>
+    <b-toast
+      title="Signed in"
+      variant="info"
+      v-model="$store.state.visibleToasts.signedIn"
+    >You are signed in!</b-toast>
+    <b-toast
+      title="Signed out"
+      variant="info"
+      v-model="$store.state.visibleToasts.signedOut"
+    >You have signed out.</b-toast>
     <navbar></navbar>
   </div>
 </template>
@@ -17,6 +27,8 @@ import navbar from '~/components/Navbar.vue';
 import IncompatibleBrowserModal from '~/components/IncompatibleBrowserModal.vue';
 import MicrophonePermissionNeededModal from '~/components/MicrophonePermissionNeededModal.vue';
 import MicrophonePermissionDeniedModal from '~/components/MicrophonePermissionDeniedModal.vue';
+import bToast from 'bootstrap-vue/es/components/toast/toast';
+import bToaster from 'bootstrap-vue/es/components/toast/toaster';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
 import throttle from 'lodash.throttle';
 import { getCurrentVersionNumber } from '~/mixins/settingsNormalizer.js';
@@ -24,43 +36,36 @@ import versionSort from 'semver-compare';
 import '~/components/_globals';
 
 export default {
-  name: 'app-view',
   mixins: [saveToFile, dateFormat],
   components: {
     navbar,
     IncompatibleBrowserModal,
     MicrophonePermissionNeededModal,
     MicrophonePermissionDeniedModal,
+    bToast,
+    bToaster,
   },
   data: function() {
     return {
       combokeysDocument: null,
+      shouldWatchIfSignedIn: true,
+      startedSettingsWatcher: false,
     };
   },
   mounted: function() {
-    this.$store
-      .dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE')
-      .then(() => {
-        return this.$store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
-      })
-      .then(() => {
-        this.hideLoadingScreen();
-
-        // Watch for changes and save to localstorage
-        this.$store.watch(
-          (state) => {
-            return state.settings;
-          },
-          () => {
-            this.$store.dispatch('SAVE_SETTINGS_TO_LOCALSTORAGE');
-          },
-          { deep: true }
-        );
-
-        // if (!this.shouldAutostart()) {
-        //   this.$refs.welcomeModal.showModal();
-        // }
-      });
+    if (this.$route.path !== '/captioner/sign-in') {
+      this.checkAuthStatusAndRestoreSettings();
+    } else {
+      this.shouldWatchIfSignedIn = false; // only do this once
+      this.$store.watch(
+        (state) => {
+          return state.user.signedIn;
+        },
+        (signedIn) => {
+          this.checkAuthStatusAndRestoreSettings();
+        }
+      );
+    }
 
     if (!this.$route.meta.disableShortcutKeys) {
       this.combokeysDocument = new Combokeys(document.documentElement);
@@ -445,15 +450,6 @@ export default {
     },
   },
   methods: {
-    hideLoadingScreen: function() {
-      let loadingScreen = document.getElementById('full-screen-loading');
-      if (loadingScreen) {
-        loadingScreen.classList.add('fadeOut');
-        setTimeout(() => {
-          loadingScreen.remove();
-        }, 500);
-      }
-    },
     startCaptioning: function() {
       this.$store.dispatch('captioner/startManual');
     },
@@ -498,6 +494,56 @@ export default {
         this.$route &&
         this.$route.query &&
         Object.keys(this.$route.query).includes('autostart')
+      );
+    },
+    checkAuthStatusAndRestoreSettings: function() {
+      this.$store.dispatch('INIT_CHECK_AUTH_STATUS_WATCHER').then((user) => {
+        if (user) {
+          // They are signed in
+          // Load settings from Firestore
+          this.$store.dispatch('RESTORE_SETTINGS_FROM_FIRESTORE');
+          // Don't do this because it triggers an unnecessary save. Not sure
+          // what the solution is though if we need to do this.
+          // .then(() => {
+          //   return this.$store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
+          // });
+        } else {
+          // Not signed in
+          // Load settings from localstorage
+          this.$store
+            .dispatch('RESTORE_SETTINGS_FROM_LOCALSTORAGE')
+            .then(() => {
+              return this.$store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
+            });
+        }
+      });
+
+      let unwatch = this.$store.watch(
+        (state) => {
+          return state.settingsLoaded;
+        },
+        (loaded) => {
+          if (loaded) {
+            this.initSettingsWatcher();
+            unwatch();
+          }
+        }
+      );
+    },
+    initSettingsWatcher: function() {
+      if (this.startedSettingsWatcher) return; // only run this once
+
+      this.startedSettingsWatcher = true;
+      this.$store.watch(
+        (state) => {
+          return state.settings;
+        },
+        () => {
+          if (this.$store.state.settingsLoaded) {
+            this.$store.dispatch('SAVE_SETTINGS');
+          }
+        },
+        { deep: true }
       );
     },
   },

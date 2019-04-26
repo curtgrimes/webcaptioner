@@ -157,9 +157,9 @@ export default {
     },
     restoreSettings: function() {
       this.$store
-        .dispatch('RESTORE_SETTINGS', { settings: getDefaultSettings() })
+        .dispatch('RESTORE_SETTINGS_OBJECT', { settings: getDefaultSettings() })
         .then(() => {
-          return this.$store.dispatch('RESTORE_SETTINGS', {
+          return this.$store.dispatch('RESTORE_SETTINGS_OBJECT', {
             settings: this.importedSettings,
           });
         })
@@ -170,7 +170,7 @@ export default {
     },
     resetSettings: function() {
       this.$store
-        .dispatch('RESTORE_SETTINGS', { settings: getDefaultSettings() })
+        .dispatch('RESTORE_SETTINGS_OBJECT', { settings: getDefaultSettings() })
         .then(() => {
           this.$refs.confirmReset.hide();
           this.$refs.resetSuccessModal.show();

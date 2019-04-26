@@ -7,7 +7,28 @@ export default {
     state.settingsPageTitle = settingsPageTitle;
   },
   SET_SETTINGS_LOADED: (state, loaded) => {
-    state.settings.loaded = loaded;
+    state.settingsLoaded = loaded;
+  },
+  SET_SIGNED_IN_STATUS: (state, signedIn) => {
+    state.user.signedIn = signedIn;
+  },
+  SET_USER: (state, {
+    displayName,
+    email,
+    photoURL,
+    uid,
+    signedIn,
+  }) => {
+    state.user.signedIn = signedIn;
+    state.user.displayName = displayName;
+    state.user.email = email;
+    state.user.photoURL = photoURL;
+    state.user.uid = uid;
+  },
+  SHOW_TOAST: (state, {
+    toastName
+  }) => {
+    state.visibleToasts[toastName] = true;
   },
   SET_TEXT_COLOR: (state, {
     textColor
@@ -190,6 +211,10 @@ export default {
     wordReplacement
   }) {
     state.settings.wordReplacements.push(wordReplacement);
+  },
+
+  REMOVE_WORD_REPLACEMENTS(state) {
+    state.settings.wordReplacements = [];
   },
 
   REMOVE_WORD_REPLACEMENT(state, {

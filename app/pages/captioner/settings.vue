@@ -164,9 +164,22 @@
           <!-- pb-5 here adds bottom padding to clear the fixed navbar. pt-4 is extra for top navbar on xs. -->
           <div class="col-lg-10 col-xl-9 mr-auto">
             <h2 class="d-none" :class="{'d-sm-block': showBackButton}">{{navbarTitle}}</h2>
-            <!-- <transition name="fade" mode="out-in"> -->
+            <div
+              class="form-inline alert alert-secondary"
+              v-if="$store.state.user.signedIn === false && experiments.includes('signin')"
+            >
+              Sign in to save your settings to your account.
+              <div class="w-100 d-md-none"></div>
+              <b-btn
+                :to="localePath('captioner-sign-in')"
+                size="sm"
+                class="p-2 px-3 ml-md-auto mt-2 mt-md-0 d-block"
+                variant="secondary"
+              >
+                <fa icon="user-circle" class="mr-2"/>Sign In
+              </b-btn>
+            </div>
             <nuxt-child/>
-            <!-- </transition> -->
           </div>
         </div>
       </div>
@@ -222,6 +235,7 @@ import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-it
 import bNav from 'bootstrap-vue/es/components/nav/nav';
 import bNavItem from 'bootstrap-vue/es/components/nav/nav-item';
 import bBadge from 'bootstrap-vue/es/components/badge/badge';
+import bBtn from 'bootstrap-vue/es/components/button/button';
 
 export default {
   mixins: [],
@@ -231,6 +245,7 @@ export default {
     bNav,
     bNavItem,
     bBadge,
+    bBtn,
   },
   data: function() {
     return {

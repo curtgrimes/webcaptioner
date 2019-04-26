@@ -80,8 +80,15 @@ let mutationInterceptorPlugin = store => {
 
 export const state = () => ({
   version: '2.0.0',
+  user: {
+    signedIn: null, // If null, they are currently signing in
+    displayName: null,
+    email: null,
+    photoURL: null,
+    uid: null,
+  },
+  settingsLoaded: false,
   settings: {
-    loaded: false,
     ...getSettingsState(),
   },
   receivers: {
@@ -120,6 +127,10 @@ export const state = () => ({
     webhooks: {
       log: [],
     },
+  },
+  visibleToasts: {
+    signedIn: false,
+    signedOut: false,
   },
   eventLog: {
     onUntilStopTime: null,

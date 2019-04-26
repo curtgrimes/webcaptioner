@@ -4,10 +4,11 @@ import RemoteEventBus from '~/mixins/RemoteEventBus'
 import ChromelessWindowManager from '~/mixins/ChromelessWindowManager'
 import get from 'lodash.get'
 import vmixSetup from '~/mixins/vmixSetup'
+import throttle from 'lodash.throttle';
 import {
   normalizeSettings
 } from '~/mixins/settingsNormalizer'
-import VueNativeWebsocket from 'vue-native-websocket'
+
 import axios from 'axios'
 
 function getVmixPath(webControllerAddress) {
@@ -29,6 +30,24 @@ function eventLogger(commit, state, {
     });
   }
 }
+
+const saveSettingsToFirestore = throttle(function (state, db) {
+    db.collection('users').doc(state.user.uid)
+      .collection('settings').doc('user')
+      .set({
+        ...state.settings,
+        ...{
+          version: state.version
+        }
+      })
+      .then(function () {
+        console.log('Document successfully written!');
+      })
+      .catch(function (error) {
+        console.error('Error writing document: ', error);
+      });
+  },
+  5000);
 
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({
@@ -61,6 +80,50 @@ export default {
     });
   },
 
+  INIT_CHECK_AUTH_STATUS_WATCHER: function ({
+    commit,
+    rootState,
+  }) {
+    return new Promise((resolve, reject) => {
+      this.$firebase.auth().onAuthStateChanged((user) => {
+        // if (rootState.user.signedIn === null) {
+        //   alert('hi');
+        //   // They may be signing in right now. Don't
+        //   // check current authentication status.
+        //   return;
+        // }
+
+        if (user) {
+          // User is signed in.
+          const {
+            displayName,
+            email,
+            photoURL,
+            uid
+          } = user;
+          commit('SET_USER', {
+            displayName,
+            email,
+            photoURL,
+            uid,
+            signedIn: true,
+          });
+        } else {
+          // User is signed out/not signed in
+          commit('SET_USER', {
+            displayName: null,
+            email: null,
+            photoURL: null,
+            uid: null,
+            signedIn: false,
+          });
+        }
+
+        resolve(user);
+      });
+    });
+  },
+
   START_DETACHED_MODE: ({
     commit,
     state
@@ -80,12 +143,14 @@ export default {
     commit('SET_DETACHED_MODE_ON');
   },
 
-  RESTORE_SETTINGS: ({
+  RESTORE_SETTINGS_OBJECT: ({
     commit
   }, {
     settings
   }) => {
     return new Promise((resolve, reject) => {
+      commit('SET_SETTINGS_LOADED', false);
+
       function commitPropertySetting(mutationName, mutationDataPropertyName, settingsKey) {
         let value = get(settings, settingsKey);
         if (typeof value !== 'undefined') {
@@ -165,6 +230,7 @@ export default {
         });
       });
 
+      commit('REMOVE_WORD_REPLACEMENTS');
       (get(settings, 'wordReplacements') || []).forEach((wordReplacement) => {
         if (wordReplacement.from) {
           commit('ADD_WORD_REPLACEMENT', {
@@ -174,12 +240,52 @@ export default {
         }
       });
 
-      commit('SET_SETTINGS_LOADED', true);
+      setTimeout(function () {
+        commit('SET_SETTINGS_LOADED', true);
+      }, 0);
 
       resolve();
     });
   },
 
+  RESTORE_SETTINGS_FROM_FIRESTORE: function ({
+    commit,
+    state,
+    dispatch
+  }) {
+    return new Promise((resolve, reject) => {
+      let db = this.$firebase.firestore();
+      db.collection('users').doc(state.user.uid)
+        .collection('settings').doc('user')
+        .get()
+        .then(function (document) {
+          if (document.exists) {
+            const data = document.data();
+
+            const settings = normalizeSettings({
+              localStorageData: {
+                settings: data
+              },
+              fromVersionNumber: data.version,
+            });
+
+            if (!settings) {
+              commit('SET_SETTINGS_LOADED', true);
+              resolve();
+              return;
+            }
+
+            dispatch('RESTORE_SETTINGS_OBJECT', {
+                settings
+              })
+              .then(resolve);
+          }
+        })
+        .catch(function (error) {
+          console.error('Error getting document: ', error);
+        });
+    });
+  },
 
   RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({
     commit,
@@ -216,26 +322,32 @@ export default {
         return;
       }
 
-      dispatch('RESTORE_SETTINGS', {
+      dispatch('RESTORE_SETTINGS_OBJECT', {
           settings
         })
         .then(resolve);
     });
   },
 
-  SAVE_SETTINGS_TO_LOCALSTORAGE: ({
+  SAVE_SETTINGS: function ({
     state,
     commit
-  }) => {
+  }) {
     eventLogger(commit, state, {
-      action: 'SAVE_SETTINGS_TO_LOCALSTORAGE'
+      action: 'SAVE_SETTINGS'
     });
+
 
     if (localStorage) {
       localStorage.setItem('webcaptioner-settings', JSON.stringify({
         settings: state.settings,
         version: state.version,
       }));
+    }
+
+    if (state.user.uid) {
+      // Save to firestore
+      saveSettingsToFirestore(state, this.$firebase.firestore());
     }
   },
 

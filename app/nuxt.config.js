@@ -7,7 +7,7 @@ import healthCheckMiddleware from './middleware/server/health-check.js';
 import sourcemapMiddleware from './middleware/server/sourcemaps.js';
 import url from 'url';
 import wsServer from './socket.io/server';
-import gitRevision from 'git-rev-sync';
+// import gitRevision from 'git-rev-sync';
 
 module.exports = {
   head: {
@@ -66,6 +66,14 @@ module.exports = {
     ],
   },
   css: [],
+  env: {
+    FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
+    FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
+    FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+    FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
+    FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  },
   modules: [
     [
       'nuxt-env',
@@ -74,6 +82,7 @@ module.exports = {
           'GOOGLE_CAST_APP_ID',
           'CHROME_EXTENSION_ID',
           'STRIPE_API_KEY_PUBLIC',
+          'FIREBASE_API_KEY',
         ],
       },
     ],
@@ -157,11 +166,12 @@ module.exports = {
               'faBroadcastTower',
               'faWindowRestore',
               'faBars',
+              'faUserCircle',
             ],
           },
           {
             set: '@fortawesome/free-regular-svg-icons',
-            icons: ['faThumbsUp', 'faTimesCircle'],
+            icons: ['faThumbsUp', 'faTimesCircle', 'faUserCircle'],
           },
           {
             set: '@fortawesome/free-brands-svg-icons',
@@ -181,7 +191,11 @@ module.exports = {
   ],
   plugins: [{
       src: '~/plugins/websocket',
-      ssr: false,
+      mode: 'client',
+    },
+    {
+      src: '~/plugins/firebase.js',
+      mode: 'client',
     },
     '~/plugins/vue-timeago',
     '~/plugins/performance.js',
@@ -190,7 +204,7 @@ module.exports = {
     public_key: 'REMOVED',
     project_id: 'REMOVED',
     config: {
-      release: gitRevision.short(),
+      // release: gitRevision.short(),
       environment: process.env.HOSTNAME,
     },
   },
@@ -198,12 +212,8 @@ module.exports = {
     proxy: true,
     timeout: 7000, // ms
   },
-  /*
-   ** Customize the progress bar color
-   */
-  loading: {
-    color: '#274DE6',
-  },
+  // Nuxt loading bar
+  loading: false,
   /*
    ** Build configuration
    */
