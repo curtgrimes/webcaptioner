@@ -120,7 +120,7 @@ export default {
             setTimeout(() => {
               // add delay because StripeCheckout might not be available yet
               this.stripeCheckout = StripeCheckout.configure({
-                key: this.$env.STRIPE_API_KEY_PUBLIC,
+                key: process.env.STRIPE_API_KEY_PUBLIC,
                 image: '/logo-solid-bg.png',
                 locale: 'auto',
                 panelLabel: 'Donate',

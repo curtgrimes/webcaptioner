@@ -66,31 +66,18 @@ module.exports = {
     ],
   },
   css: [],
-  env: { // These are used when not running in the Docker container
+  env: {
+    CHROME_EXTENSION_ID: process.env.CHROME_EXTENSION_ID,
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
     FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
     FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    GOOGLE_CAST_APP_ID: process.env.GOOGLE_CAST_APP_ID,
+    STRIPE_API_KEY_PUBLIC: process.env.STRIPE_API_KEY_PUBLIC,
   },
   modules: [
-    [
-      'nuxt-env',
-      {
-        keys: [ // These are used when running in the Docker container
-          'GOOGLE_CAST_APP_ID',
-          'CHROME_EXTENSION_ID',
-          'STRIPE_API_KEY_PUBLIC',
-          'FIREBASE_API_KEY',
-          'FIREBASE_AUTH_DOMAIN',
-          'FIREBASE_DATABASE_URL',
-          'FIREBASE_PROJECT_ID',
-          'FIREBASE_STORAGE_BUCKET',
-          'FIREBASE_MESSAGING_SENDER_ID',
-        ],
-      },
-    ],
     'nuxt-trailingslash-module',
     '@nuxtjs/axios',
     [
