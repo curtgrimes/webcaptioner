@@ -166,6 +166,7 @@ export default {
         .then(() => {
           this.cancelConfirmRestoreModal();
           this.$refs.restoreSuccessModal.show();
+          this.$store.dispatch('SAVE_SETTINGS');
         });
     },
     resetSettings: function() {
@@ -174,6 +175,8 @@ export default {
         .then(() => {
           this.$refs.confirmReset.hide();
           this.$refs.resetSuccessModal.show();
+
+          this.$store.dispatch('SAVE_SETTINGS');
         });
     },
     focusInvalidSettingsFileModalOkButton: function() {
