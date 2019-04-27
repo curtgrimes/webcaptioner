@@ -86,6 +86,7 @@ export const state = () => ({
     email: null,
     photoURL: null,
     uid: null,
+    shouldSaveSettingsOnNextSignIn: false,
   },
   settingsLoaded: false,
   settings: {

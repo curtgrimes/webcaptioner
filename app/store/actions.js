@@ -15,6 +15,23 @@ function getVmixPath(webControllerAddress) {
   return (webControllerAddress || '').trim().replace(/\/$/, "") + '/API';
 }
 
+var saveSettingsToFirestore = throttle((state, db) => {
+  db.collection('users').doc(state.user.uid)
+    .collection('settings').doc('user')
+    .set({
+      ...state.settings,
+      ...{
+        version: state.version
+      }
+    })
+    .then(function () {
+      // console.log('Document successfully written!');
+    })
+    .catch(function (error) {
+      // console.error('Error writing document: ', error);
+    });
+}, 5000);
+
 function eventLogger(commit, state, {
   action,
   payload
@@ -30,24 +47,6 @@ function eventLogger(commit, state, {
     });
   }
 }
-
-const saveSettingsToFirestore = throttle(function (state, db) {
-    db.collection('users').doc(state.user.uid)
-      .collection('settings').doc('user')
-      .set({
-        ...state.settings,
-        ...{
-          version: state.version
-        }
-      })
-      .then(function () {
-        console.log('Document successfully written!');
-      })
-      .catch(function (error) {
-        console.error('Error writing document: ', error);
-      });
-  },
-  5000);
 
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({
@@ -82,17 +81,11 @@ export default {
 
   INIT_CHECK_AUTH_STATUS_WATCHER: function ({
     commit,
-    rootState,
+    state,
+    dispatch,
   }) {
     return new Promise((resolve, reject) => {
       this.$firebase.auth().onAuthStateChanged((user) => {
-        // if (rootState.user.signedIn === null) {
-        //   alert('hi');
-        //   // They may be signing in right now. Don't
-        //   // check current authentication status.
-        //   return;
-        // }
-
         if (user) {
           // User is signed in.
           const {
@@ -108,6 +101,11 @@ export default {
             uid,
             signedIn: true,
           });
+
+          if (state.user.shouldSaveSettingsOnNextSignIn) {
+            commit('SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN', false);
+            dispatch('SAVE_SETTINGS_TO_FIRESTORE');
+          }
         } else {
           // User is signed out/not signed in
           commit('SET_USER', {
@@ -122,6 +120,12 @@ export default {
         resolve(user);
       });
     });
+  },
+
+  SAVE_SETTINGS_TO_FIRESTORE: function ({
+    state
+  }) {
+    saveSettingsToFirestore(state, this.$firebase.firestore());
   },
 
   START_DETACHED_MODE: ({
@@ -279,6 +283,8 @@ export default {
                 settings
               })
               .then(resolve);
+          } else {
+            commit('SET_SETTINGS_LOADED', true);
           }
         })
         .catch(function (error) {
@@ -331,7 +337,8 @@ export default {
 
   SAVE_SETTINGS: function ({
     state,
-    commit
+    commit,
+    dispatch
   }) {
     eventLogger(commit, state, {
       action: 'SAVE_SETTINGS'
@@ -346,8 +353,7 @@ export default {
     }
 
     if (state.user.uid) {
-      // Save to firestore
-      saveSettingsToFirestore(state, this.$firebase.firestore());
+      dispatch('SAVE_SETTINGS_TO_FIRESTORE');
     }
   },
 

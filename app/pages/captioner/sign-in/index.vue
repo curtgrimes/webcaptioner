@@ -74,14 +74,20 @@ export default {
       let ui =
         firebaseui.auth.AuthUI.getInstance() || // if hot reloading the app in nuxt dev environment
         new firebaseui.auth.AuthUI(this.$firebase.auth());
-
+      let store = this.$store;
+      let postSignInRedirect = this.postSignInRedirect;
+      let sateSettingsOnNextLogin = () => {
+        store.commit('SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN', true);
+      };
       ui.start('#firebaseui-auth-container', {
         callbacks: {
-          signInSuccessWithAuthResult: (user, redirectUrl) => {
-            // Do something with the returned AuthResult.
-            // Return type determines whether we continue the redirect automatically
-            // or whether we leave that to developer to handle.
-            this.postSignInRedirect();
+          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+            if (authResult.additionalUserInfo.isNewUser) {
+              // User is signing in for the first time. Do an initial save.
+              sateSettingsOnNextLogin();
+            }
+
+            postSignInRedirect();
             return false; // don't redirect
           },
           uiShown: () => {
@@ -98,14 +104,7 @@ export default {
         ],
         privacyPolicyUrl: '/privacy-policy',
         credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-        // tosUrl and privacyPolicyUrl accept either url string or a callback
-        // function.
-        // Terms of service url/callback.
-        // tosUrl: '<your-tos-url>',
-        // Privacy policy url/callback.
-        // privacyPolicyUrl: function() {
-        //   window.location.assign('<your-privacy-policy-url>');
-        // },
+        tosUrl: '/terms-of-service',
       });
     },
     postSignInRedirect: function() {

@@ -9,6 +9,9 @@ export default {
   SET_SETTINGS_LOADED: (state, loaded) => {
     state.settingsLoaded = loaded;
   },
+  SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN: (state, shouldSaveSettings) => {
+    state.user.shouldSaveSettingsOnNextSignIn = shouldSaveSettings;
+  },
   SET_SIGNED_IN_STATUS: (state, signedIn) => {
     state.user.signedIn = signedIn;
   },
