@@ -103,8 +103,12 @@ export default {
           });
 
           if (state.user.shouldSaveSettingsOnNextSignIn) {
+            // This will happen if this is the first time they're signing in.
             commit('SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN', false);
             dispatch('SAVE_SETTINGS_TO_FIRESTORE');
+          } else {
+            // Not their first sign in.
+            dispatch('RESTORE_SETTINGS_FROM_FIRESTORE');
           }
         } else {
           // User is signed out/not signed in
