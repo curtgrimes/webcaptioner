@@ -156,14 +156,12 @@ export default {
           return 'Add a manual typing mode.';
         case 'share':
           return 'Get a link you can use to share captions.';
-        case 'signin':
-          return 'Create a user account.';
         default:
           return '';
       }
     },
     isValidExperiment: function() {
-      return ['demo', 'typingMode', 'share', 'science', 'signin', ''].includes(
+      return ['demo', 'typingMode', 'share', 'science', ''].includes(
         this.experimentName
       );
     },

@@ -166,7 +166,7 @@
             <h2 class="d-none" :class="{'d-sm-block': showBackButton}">{{navbarTitle}}</h2>
             <div
               class="form-inline alert alert-secondary"
-              v-if="$store.state.user.signedIn === false && experiments.includes('signin')"
+              v-if="$store.state.user.signedIn === false"
             >
               Sign in to save your settings to your account.
               <div class="w-100 d-md-none"></div>

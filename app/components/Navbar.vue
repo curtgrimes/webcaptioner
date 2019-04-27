@@ -250,7 +250,7 @@
         <b-tooltip target="navbar-profile-button-logged-out" title="Sign in or sign up"></b-tooltip>
         <b-btn
           id="navbar-profile-button-logged-out"
-          v-show="!$store.state.user.signedIn && experiments.includes('signin')"
+          v-show="!$store.state.user.signedIn"
           v-b-tooltip.top
           class="ml-2 text-white px-2 profile-button"
           variant="link"
