@@ -194,7 +194,7 @@
           boundary="viewport"
           title
         >
-          <div style="min-width:300px">
+          <div style="min-width:240px">
             <img
               :src="$store.state.user.photoURL"
               v-if="$store.state.user.photoURL"
@@ -219,7 +219,7 @@
             </div>
             <div class="clearfix"></div>
             <hr>
-            <b-btn variant="link" class="d-block" @click="signOut()">Sign out</b-btn>
+            <b-btn variant="light" block class="text-center" @click="signOut()">Sign out</b-btn>
           </div>
         </b-popover>
 
@@ -234,6 +234,7 @@
           style="position:relative"
           variant="link"
         >
+          <!-- If there's a photo URL, show it on top of the fallback user-circle button -->
           <transition name="fade">
             <img
               :src="$store.state.user.photoURL"
@@ -242,7 +243,7 @@
               style="max-width: 30px;position: absolute;margin-left: -2px;margin-top: -2px;"
             >
           </transition>
-          <fa icon="user-circle"/>
+          <fa icon="user-circle" class="text-primary"/>
         </b-btn>
 
         <!-- not logged in -->
