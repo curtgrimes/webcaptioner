@@ -89,6 +89,7 @@
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.5",
     "normalize-strings": "^1.1.0",
+    "nuxt-env": "^0.1.0",
     "nuxt-fontawesome": "^0.4.0",
     "nuxt-i18n": "^5.8.5",
     "nuxt-trailingslash-module": "^1.1.0",

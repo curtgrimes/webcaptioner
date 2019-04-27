@@ -428,7 +428,7 @@ export default {
     },
     refreshVmixSetupStatus: function() {
       return this.$store.dispatch('REFRESH_VMIX_SETUP_STATUS', {
-        chromeExtensionId: process.env.CHROME_EXTENSION_ID,
+        chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
       });
     },
     resetWebControllerConnectedStatus: function() {
@@ -481,7 +481,7 @@ export default {
     sendTestMessage: function() {
       this.$store.dispatch('SEND_TO_VMIX', {
         text: this.testMessage,
-        chromeExtensionId: process.env.CHROME_EXTENSION_ID,
+        chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
       });
       this.testMessageSent = true;
       let self = this;

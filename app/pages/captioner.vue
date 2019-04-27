@@ -364,7 +364,7 @@ export default {
       if (this.vmixOn) {
         this.$store.dispatch('SEND_TO_VMIX', {
           text: this.transcript,
-          chromeExtensionId: process.env.CHROME_EXTENSION_ID,
+          chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
         });
       }
     },
@@ -471,7 +471,7 @@ export default {
       if (this.vmixOn) {
         this.$store
           .dispatch('REFRESH_VMIX_SETUP_STATUS', {
-            chromeExtensionId: process.env.CHROME_EXTENSION_ID,
+            chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
           })
           .then(() => {
             if (!this.$store.state.integrations.vmix.cachedInputGUID) {
