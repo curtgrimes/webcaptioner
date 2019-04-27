@@ -201,7 +201,12 @@
               class="rounded-circle float-left p-1 pr-2"
               style="max-width:50px"
             >
-            <fa v-else icon="user-circle" class="rounded-circle float-left p-1 pr-2 text-muted"/>
+            <fa
+              v-else
+              icon="user-circle"
+              style="font-size:2.5em"
+              class="float-left mt-2 mr-2 text-muted"
+            />
 
             <div class="pt-1" style="line-height:1.25rem">
               <span class="text-muted">
