@@ -12,6 +12,9 @@ export default {
   SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN: (state, shouldSaveSettings) => {
     state.user.shouldSaveSettingsOnNextSignIn = shouldSaveSettings;
   },
+  SHOW_FIRST_SIGN_IN_MESSAGE: (state, onOrOff) => {
+    state.notifications.showFirstSignInMessage = onOrOff;
+  },
   SET_SIGNED_IN_STATUS: (state, signedIn) => {
     state.user.signedIn = signedIn;
   },

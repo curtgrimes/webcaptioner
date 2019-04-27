@@ -164,21 +164,23 @@
           <!-- pb-5 here adds bottom padding to clear the fixed navbar. pt-4 is extra for top navbar on xs. -->
           <div class="col-lg-10 col-xl-9 mr-auto">
             <h2 class="d-none" :class="{'d-sm-block': showBackButton}">{{navbarTitle}}</h2>
-            <div
-              class="form-inline alert alert-secondary"
-              v-if="$store.state.user.signedIn === false"
-            >
-              Sign in to save your settings to your account.
-              <div class="w-100 d-md-none"></div>
-              <b-btn
-                :to="localePath('captioner-sign-in')"
-                size="sm"
-                class="p-2 px-3 ml-md-auto mt-2 mt-md-0 d-block"
-                variant="secondary"
+            <transition name="fade">
+              <div
+                class="form-inline alert alert-secondary"
+                v-if="$store.state.user.signedIn === false"
               >
-                <fa icon="user-circle" class="mr-2"/>Sign In
-              </b-btn>
-            </div>
+                Sign in to save your settings to your account.
+                <div class="w-100 d-md-none"></div>
+                <b-btn
+                  :to="localePath('captioner-sign-in')"
+                  size="sm"
+                  class="p-2 px-3 ml-md-auto mt-2 mt-md-0 d-block"
+                  variant="secondary"
+                >
+                  <fa icon="user-circle" class="mr-2"/>Sign In
+                </b-btn>
+              </div>
+            </transition>
             <nuxt-child/>
           </div>
         </div>

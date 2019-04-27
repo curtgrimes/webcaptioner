@@ -105,6 +105,7 @@ export default {
           if (state.user.shouldSaveSettingsOnNextSignIn) {
             // This will happen if this is the first time they're signing in.
             commit('SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN', false);
+            commit('SHOW_FIRST_SIGN_IN_MESSAGE', true);
             dispatch('SAVE_SETTINGS_TO_FIRESTORE');
           } else {
             // Not their first sign in.

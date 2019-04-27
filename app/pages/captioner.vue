@@ -4,6 +4,7 @@
     <incompatible-browser-modal ref="incompatibleBrowserModal"/>
     <microphone-permission-needed-modal ref="microphonePermissionNeededModal"/>
     <microphone-permission-denied-modal ref="microphonePermissionDeniedModal"/>
+    <first-sign-in-modal ref="firstSignInModal"/>
     <b-toast
       title="Signed in"
       variant="info"
@@ -27,6 +28,7 @@ import navbar from '~/components/Navbar.vue';
 import IncompatibleBrowserModal from '~/components/IncompatibleBrowserModal.vue';
 import MicrophonePermissionNeededModal from '~/components/MicrophonePermissionNeededModal.vue';
 import MicrophonePermissionDeniedModal from '~/components/MicrophonePermissionDeniedModal.vue';
+import FirstSignInModal from '~/components/FirstSignInModal.vue';
 import bToast from 'bootstrap-vue/es/components/toast/toast';
 import bToaster from 'bootstrap-vue/es/components/toast/toaster';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
@@ -42,6 +44,7 @@ export default {
     IncompatibleBrowserModal,
     MicrophonePermissionNeededModal,
     MicrophonePermissionDeniedModal,
+    FirstSignInModal,
     bToast,
     bToaster,
   },
@@ -381,6 +384,13 @@ export default {
         this.$refs.microphonePermissionDeniedModal.showModal();
       }
     },
+    showFirstSignInMessage: function() {
+      if (this.showFirstSignInMessage) {
+        this.$refs.firstSignInModal.showModal();
+      } else {
+        this.$refs.firstSignInModal.hideModal();
+      }
+    },
     '$store.state.settings.appearance': {
       handler: function(appearance) {
         if (this.$store.state.settings.share.roomId) {
@@ -441,6 +451,9 @@ export default {
     },
     microphonePermissionDenied: function() {
       return this.$store.state.captioner.microphonePermission.denied;
+    },
+    showFirstSignInMessage: function() {
+      return this.$store.state.notifications.showFirstSignInMessage;
     },
     socketConnected: function() {
       return this.$store.state.socket.isConnected;

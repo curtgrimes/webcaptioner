@@ -133,6 +133,9 @@ export const state = () => ({
     signedIn: false,
     signedOut: false,
   },
+  notifications: {
+    showFirstSignInMessage: false,
+  },
   eventLog: {
     onUntilStopTime: null,
     log: [],
