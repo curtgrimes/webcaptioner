@@ -503,8 +503,18 @@ export const actions = {
     rootState,
     dispatch
   }) {
+    // Clone this so we're not editing the original copy in state
+    // because we don't want to put regex into the state that
+    // Firebase doesn't like.
+    let clonedWordReplacements = rootState.settings.wordReplacements.map((r) => {
+      return {
+        from: r.from,
+        to: r.to,
+      }
+    });
+
     state.wordReplacements = [
-      ...rootState.settings.wordReplacements,
+      ...clonedWordReplacements,
       ...internalWordReplacements,
 
       ...(rootState.settings.censor.on

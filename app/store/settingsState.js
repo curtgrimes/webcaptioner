@@ -5,6 +5,7 @@ export default () => {
       ownerKey: null,
       url: null,
       expireDate: null,
+      urlType: 'random', // or 'vanity'
     },
     roomMembershipId: null,
     roomLeaderToken: null,

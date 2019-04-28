@@ -159,6 +159,11 @@ export default {
   }) => {
     state.settings.share.expireDate = expireDate;
   },
+  SET_SHARE_URL_TYPE: (state, {
+    urlType
+  }) => {
+    state.settings.share.urlType = urlType;
+  },
 
   SET_CONNECT_ID: (state, {
     connectId

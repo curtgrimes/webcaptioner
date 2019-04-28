@@ -80,7 +80,7 @@ module.exports = {
           try {
             const appearanceJSON = JSON.stringify(json.appearance);
 
-            if (appearanceJSON.length <= 1000) {
+            if (appearanceJSON.length <= 1000 && socket._wc.room) {
               redisSharedClient.hsetAsync(
                 socket._wc.room.ownerRoomKey,
                 'appearance',

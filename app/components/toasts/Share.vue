@@ -7,28 +7,34 @@
       >Your previous link expired, but you can get a new one.</div>
       <p class="mb-2">Get a link to share live captions with others.</p>
       <form ref="shareLinkForm" action="javascript:void(0)" onsubmit="return false">
-        <div class="custom-control custom-checkbox">
-          <input
-            v-model="showBacklink"
-            class="custom-control-input"
-            name="showBacklink"
-            type="checkbox"
-            id="show-backlink"
-          >
-          <label
-            class="custom-control-label"
-            for="show-backlink"
-          >Show a link back to my stream or website</label>
+        <b-form-checkbox v-model="showBacklink" switch>Show a link back to my stream or website</b-form-checkbox>
+        <transition name="fade-in">
           <input
             ref="backlinkInput"
             required
             v-if="showBacklink"
             type="url"
-            class="form-control mt-2"
+            class="form-control mt-2 mb-4"
             v-model="backlink"
             placeholder="Stream or website URL"
           >
-        </div>
+        </transition>
+        <b-form-group label="Link Type" class="mt-3 mb-0">
+          <b-form-radio-group v-model="urlType" stacked name="plain-stacked">
+            <b-form-radio value="random">
+              Random link
+              <span class="small text-muted">(Expires in 48 hours)</span>
+            </b-form-radio>
+            <b-form-radio value="vanity" v-if="false">
+              My custom vanity link
+              <span class="small text-muted">(Never expires)</span>
+            </b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
+        <p
+          v-if="urlType === 'vanity'"
+          class="small text-danger mb-0 mt-2"
+        >Sorry, vanity links aren't available to everyone yet.</p>
       </form>
     </div>
     <div v-else style="width:500px; min-width:200px; max-width:100%">
@@ -64,6 +70,9 @@
             </b-btn>
           </div>
         </div>
+        <div
+          class="small mt-2"
+        >This link lets other people watch your captions on their device in real time.</div>
         <div class="small mt-2 mb-3">
           <!--Viewers will be able to set their own appearance settings.-->
         </div>
@@ -144,7 +153,11 @@
       class="alert bg-danger text-white mt-2 mb-0 p-2"
     >Something went wrong.</div>
     <template v-if="!hasValidShareLink" slot="footer">
-      <b-btn @click="getLink()" :disabled="gettingLink" variant="secondary">
+      <b-btn
+        @click="getLink()"
+        :disabled="gettingLink || urlType === 'vanity'"
+        :variant="urlType === 'vanity' ? 'light' : 'secondary'"
+      >
         Get Link
         <fa v-if="gettingLink" icon="spinner" spin/>
       </b-btn>
@@ -159,6 +172,10 @@ import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
 import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
 import bDropdownItem from 'bootstrap-vue/es/components/dropdown/dropdown-item';
 import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
+import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
+import bFormGroup from 'bootstrap-vue/es/components/form-group/form-group';
+import bFormRadio from 'bootstrap-vue/es/components/form-radio/form-radio';
+import bFormRadioGroup from 'bootstrap-vue/es/components/form-radio/form-radio-group';
 
 export default {
   components: {
@@ -167,6 +184,10 @@ export default {
     bCollapse,
     bDropdown,
     bDropdownItem,
+    bFormCheckbox,
+    bFormGroup,
+    bFormRadio,
+    bFormRadioGroup,
   },
   directives: {
     bTooltip,
@@ -330,6 +351,14 @@ export default {
     },
     expireDate: function() {
       return this.$store.state.settings.share.expireDate;
+    },
+    urlType: {
+      get() {
+        return this.$store.state.settings.share.urlType;
+      },
+      set(urlType) {
+        this.$store.commit('SET_SHARE_URL_TYPE', { urlType });
+      },
     },
     hasValidShareLink() {
       return this.shareLink && this.roomId && this.expireDate;

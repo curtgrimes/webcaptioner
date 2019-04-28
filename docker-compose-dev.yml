@@ -1,12 +1,12 @@
 version: '3'
 services:
-  webcaptioner:
-    build: .
-    ports:
-      - '80:8080'
-    env_file:
-      - ./app/.env
-  # redis:
-  #   image: redis:4.0.11
+  # webcaptioner:
+  #   build: .
   #   ports:
-  #     - 6379:6379
+  #     - '80:8080'
+  #   env_file:
+  #     - ./app/.env
+  redis:
+    image: redis:4.0.11
+    ports:
+      - 6379:6379

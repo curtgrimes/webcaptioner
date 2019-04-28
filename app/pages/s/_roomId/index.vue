@@ -268,6 +268,8 @@ export default {
           s,
         });
       }
+
+      this.$store.commit('SET_SETTINGS_LOADED', true);
     },
     increaseTextSize: function() {
       this.$store.commit('TEXT_SIZE_INCREASE');
