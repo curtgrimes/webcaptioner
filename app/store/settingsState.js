@@ -1,11 +1,14 @@
 export default () => {
   return {
     share: {
+      on: false,
       roomId: null,
       ownerKey: null,
       url: null,
+      expires: true,
       expireDate: null,
       urlType: 'random', // or 'vanity'
+      vanity: '',
     },
     roomMembershipId: null,
     roomLeaderToken: null,

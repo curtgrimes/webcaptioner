@@ -133,12 +133,16 @@ export default {
     state.settings.appearance.text.textSize = parseFloat(state.settings.appearance.text.textSize) - 0.1;
   },
 
+  SET_SHARE_ON: (state, {
+    on
+  }) => {
+    state.settings.share.on = on;
+  },
   SET_SHARE_SUBSCRIBER_COUNT: (state, {
     subscriberCount
   }) => {
     state.receivers.share.subscriberCount = subscriberCount;
   },
-
   SET_SHARE_ROOM_ID: (state, {
     roomId
   }) => {
@@ -154,6 +158,11 @@ export default {
   }) => {
     state.settings.share.url = url;
   },
+  SET_SHARE_EXPIRES: (state, {
+    expires
+  }) => {
+    state.settings.share.expires = expires;
+  },
   SET_SHARE_EXPIRE_DATE: (state, {
     expireDate
   }) => {
@@ -163,6 +172,11 @@ export default {
     urlType
   }) => {
     state.settings.share.urlType = urlType;
+  },
+  SET_SHARE_VANITY: (state, {
+    vanity
+  }) => {
+    state.settings.share.vanity = vanity;
   },
 
   SET_CONNECT_ID: (state, {

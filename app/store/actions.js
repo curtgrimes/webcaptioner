@@ -211,10 +211,14 @@ export default {
       commitPropertySetting('SET_LOCALE_USER_DEFAULT', 'locale', 'locale.userDefault');
       commitPropertySetting('SET_LOCALE_FROM', 'locale', 'locale.from');
 
+      commitPropertySetting('SET_SHARE_ON', 'on', 'share.on');
       commitPropertySetting('SET_SHARE_ROOM_ID', 'roomId', 'share.roomId');
       commitPropertySetting('SET_SHARE_OWNER_KEY', 'ownerKey', 'share.ownerKey');
       commitPropertySetting('SET_SHARE_URL', 'url', 'share.url');
+      commitPropertySetting('SET_SHARE_EXPIRES', 'expires', 'share.expires');
       commitPropertySetting('SET_SHARE_EXPIRE_DATE', 'expireDate', 'share.expireDate');
+      commitPropertySetting('SET_SHARE_URL_TYPE', 'urlType', 'share.urlType');
+      commitPropertySetting('SET_SHARE_VANITY', 'vanity', 'share.vanity');
 
       commitPropertySetting('SET_ROOM_LEADER_TOKEN', 'roomLeaderToken', 'roomLeaderToken');
       commitPropertySetting('SET_ROOM_MEMBERSHIP_ID', 'roomMembershipId', 'roomMembershipId');

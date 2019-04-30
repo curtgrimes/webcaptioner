@@ -171,9 +171,7 @@ export default {
         });
     }
 
-    if (this.socketConnected) {
-      this.initRoom();
-    }
+    this.initRoom();
 
     this.redirectSettingsRouteOnMobile(this.$route.name); // if navigating to settings page on load
 
@@ -210,8 +208,6 @@ export default {
     if (this.shouldAutostart()) {
       this.startCaptioning();
     }
-
-    this.$store.dispatch('share/CHECK_LINK_EXPIRY');
 
     let lastWebhookEventDate = 0;
     let sequence = 0;
@@ -267,7 +263,8 @@ export default {
       ) {
         if (
           this.$store.state.settings.share.roomId &&
-          this.$store.state.socket.isConnected
+          this.$store.state.socket.isConnected &&
+          this.$store.state.settings.share.on
         ) {
           this.$socket.sendObj({
             action: 'mutation',
@@ -330,10 +327,13 @@ export default {
     });
   },
   watch: {
-    socketConnected: function(isConnected) {
-      if (isConnected) {
-        this.initRoom();
-      }
+    socketConnected: function() {
+      console.log('socket connected init room');
+      this.initRoom();
+    },
+    settingsLoaded: function() {
+      console.log('settings loaded init room');
+      this.initRoom();
     },
     $route(toRoute) {
       this.redirectSettingsRouteOnMobile(toRoute.name);
@@ -443,6 +443,9 @@ export default {
     socketConnected: function() {
       return this.$store.state.socket.isConnected;
     },
+    settingsLoaded: function() {
+      return this.$store.state.settingsLoaded;
+    },
     vmixOn: function() {
       return this.$store.state.settings.integrations.vmix.on;
     },
@@ -481,11 +484,19 @@ export default {
       }
     },
     initRoom: function() {
-      this.$socket.sendObj({
-        action: 'authenticateRoomOwner',
-        roomId: this.$store.state.settings.share.roomId,
-        ownerKey: this.$store.state.settings.share.ownerKey,
-      });
+      // initRoom gets called multiple times, but it will (should) only continue
+      // if both socket is connected and settings are loaded
+      if (this.socketConnected && this.settingsLoaded) {
+        this.$store.dispatch('share/CHECK_LINK_EXPIRY');
+
+        this.$socket.sendObj({
+          action: 'authenticateRoomOwner',
+          roomId: this.$store.state.settings.share.roomId,
+          ownerKey: this.$store.state.settings.share.ownerKey,
+        });
+      } else {
+        // Can't init room until socket is connected settings are loaded
+      }
     },
     shouldAutostart: function() {
       return (

@@ -80,6 +80,7 @@ module.exports = {
         'FIREBASE_STORAGE_BUCKET',
         'FIREBASE_MESSAGING_SENDER_ID',
         'GOOGLE_CAST_APP_ID',
+        'HOSTNAME',
         'STRIPE_API_KEY_PUBLIC',
       ]
     }],
@@ -164,6 +165,9 @@ module.exports = {
               'faWindowRestore',
               'faBars',
               'faUserCircle',
+              'faStar',
+              'faToggleOn',
+              'faToggleOff',
             ],
           },
           {

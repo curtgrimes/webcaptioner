@@ -25,16 +25,30 @@
               Random link
               <span class="small text-muted">(Expires in 48 hours)</span>
             </b-form-radio>
-            <b-form-radio value="vanity" v-if="false">
-              My custom vanity link
+            <b-form-radio value="vanity">
+              Custom vanity link
               <span class="small text-muted">(Never expires)</span>
             </b-form-radio>
           </b-form-radio-group>
         </b-form-group>
-        <p
-          v-if="urlType === 'vanity'"
-          class="small text-danger mb-0 mt-2"
-        >Sorry, vanity links aren't available to everyone yet.</p>
+        <transition name="fade-in">
+          <div v-if="urlType === 'vanity'">
+            <b-badge
+              v-if="vanity"
+              variant="success"
+              class="ml-4 mt-1 px-2 py-1"
+              style="font-size:.9rem"
+            >
+              <fa icon="star"/>
+              {{vanity}}
+            </b-badge>
+            <p
+              v-else-if="vanity === false"
+              class="small text-danger mb-0 mt-2"
+            >Hang tight! Vanity links aren't available to everyone yet.</p>
+            <b-spinner v-else small class="mt-2 ml-4" variant="muted"></b-spinner>
+          </div>
+        </transition>
       </form>
     </div>
     <div v-else style="width:500px; min-width:200px; max-width:100%">
@@ -108,15 +122,13 @@
         </div>
       </b-collapse>
       <hr class="my-3">
-      <p class="small text-muted mb-2">
-        Link expires
-        <timeago :datetime="expireDate"></timeago>
-      </p>
-      <!-- <div class="card p-2 bg-primary text-info mb-3">
-                <p class="text-monospace text-uppercase font-weight-bold mb-1"><fa icon="info-circle"/> Enjoy this Preview!</p>
-                <span class="small">I hope you enjoy the preview of this new feature! Please send me feedback on <a href="https://facebook.com/webcaptioner" target="_blank">Facebook</a> or <a href="https://twitter.com/webcaptioner" target="_blank">Twitter</a> about how well it works for you and your viewers.</span>
-      </div>-->
-      <hr class="my-3">
+      <div v-if="expireDate !== null">
+        <p class="small text-muted mb-2">
+          Link expires
+          <timeago :datetime="expireDate"></timeago>
+        </p>
+        <hr class="my-3">
+      </div>
       <b-dropdown
         text="Options"
         variant="outline-secondary"
@@ -155,8 +167,8 @@
     <template v-if="!hasValidShareLink" slot="footer">
       <b-btn
         @click="getLink()"
-        :disabled="gettingLink || urlType === 'vanity'"
-        :variant="urlType === 'vanity' ? 'light' : 'secondary'"
+        :disabled="gettingLink || (urlType === 'vanity' && !vanity)"
+        :variant="(urlType === 'vanity' && !vanity) ? 'light' : 'secondary'"
       >
         Get Link
         <fa v-if="gettingLink" icon="spinner" spin/>
@@ -176,6 +188,8 @@ import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkb
 import bFormGroup from 'bootstrap-vue/es/components/form-group/form-group';
 import bFormRadio from 'bootstrap-vue/es/components/form-radio/form-radio';
 import bFormRadioGroup from 'bootstrap-vue/es/components/form-radio/form-radio-group';
+import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
+import bBadge from 'bootstrap-vue/es/components/badge/badge';
 
 export default {
   components: {
@@ -188,6 +202,8 @@ export default {
     bFormGroup,
     bFormRadio,
     bFormRadioGroup,
+    bSpinner,
+    bBadge,
   },
   directives: {
     bTooltip,
@@ -236,17 +252,24 @@ export default {
       }
 
       try {
-        const { roomId, ownerKey, url, expireDate } = await this.$axios.$post(
-          '/api/rooms',
-          {
-            backlink: this.backlink,
-            appearance: JSON.stringify(this.$store.state.settings.appearance),
-          }
-        );
+        const {
+          roomId,
+          ownerKey,
+          url,
+          expires,
+          expireDate,
+        } = await this.$axios.$post('/api/rooms', {
+          backlink: this.backlink,
+          appearance: JSON.stringify(this.$store.state.settings.appearance),
+          urlType: this.urlType,
+          uid: this.$store.state.user.uid,
+        });
 
+        this.$store.commit('SET_SHARE_ON', { on: true });
         this.$store.commit('SET_SHARE_ROOM_ID', { roomId });
         this.$store.commit('SET_SHARE_OWNER_KEY', { ownerKey });
         this.$store.commit('SET_SHARE_URL', { url });
+        this.$store.commit('SET_SHARE_EXPIRES', { expires });
         this.$store.commit('SET_SHARE_EXPIRE_DATE', { expireDate });
         this.$store.commit('SET_SHARE_SUBSCRIBER_COUNT', {
           subscriberCount: 0,
@@ -284,10 +307,12 @@ export default {
       }
     },
     nullLinkProperties() {
+      this.$store.commit('SET_SHARE_ON', { on: false });
       this.$store.commit('SET_SHARE_ROOM_ID', { roomId: null });
       this.$store.commit('SET_SHARE_OWNER_KEY', { ownerKey: null });
       this.$store.commit('SET_SHARE_URL', { url: null });
       this.$store.commit('SET_SHARE_EXPIRE_DATE', { expireDate: null });
+      this.$store.commit('SET_SHARE_URL_TYPE', { urlType: 'random' });
     },
     shareLinkSelect() {
       this.$nextTick(function() {
@@ -332,6 +357,24 @@ export default {
         }
       });
     },
+    urlType: function(urlType) {
+      if (urlType === 'vanity') {
+        let db = this.$firebase.firestore();
+        db.collection('users')
+          .doc(this.$store.state.user.uid)
+          .collection('privileges')
+          .doc('share')
+          .get()
+          .then((document) => {
+            if (document.exists) {
+              const { vanity } = document.data();
+              this.$store.commit('SET_SHARE_VANITY', {
+                vanity: vanity || false,
+              });
+            }
+          });
+      }
+    },
   },
   computed: {
     show: function() {
@@ -360,8 +403,13 @@ export default {
         this.$store.commit('SET_SHARE_URL_TYPE', { urlType });
       },
     },
+    vanity: function() {
+      return this.$store.state.settings.share.vanity;
+    },
     hasValidShareLink() {
-      return this.shareLink && this.roomId && this.expireDate;
+      return (
+        this.shareLink && this.roomId && (this.expireDate || !this.expires)
+      );
     },
     // facebookShareLink() {
     // return 'https://www.facebook.com/dialog/share?app_id=1339681726086659&amp;display=popup&amp;href=' + encodeURIComponent(this.shareLink);

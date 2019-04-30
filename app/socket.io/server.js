@@ -68,10 +68,6 @@ module.exports = {
             }));
           } else {
             // Haven't authenticated successfully
-            socket.send(JSON.stringify({
-              mutation: 'share/SET_EXPIRED',
-              expired: true,
-            }));
           }
         } else if (json.action == 'updateAppearance') {
 

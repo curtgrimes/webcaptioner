@@ -7,6 +7,11 @@ const openGraphScraper = require('open-graph-scraper');
 const vibrant = require('node-vibrant')
 const url = require('url');
 const twitch = require('./twitch');
+const admin = require('firebase-admin');
+
+admin.initializeApp({
+  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_NODE_SERVICE_ACCOUNT_KEY))
+});
 
 const expireHours = 48;
 
@@ -71,13 +76,43 @@ rooms.post('/', async (req, res, next) => {
   }
 
   let roomKey, roomId, roomKeyAlreadyExists;
-  do {
-    roomId = nanoidGenerate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ_abcdefghjkmnpqrstuvwxyz-', 8);
-    roomKey = 'rooms:' + roomId;
-    roomKeyAlreadyExists = await redisClient.existsAsync(roomKey) === 1;
-  }
-  while (roomKeyAlreadyExists); // repeat roomkey generation on collision
+  if (req.body.urlType === 'vanity') {
+    if (!req.body.uid) {
+      // Need a user ID to continue
+      res.sendStatus(403);
+      return;
+    }
 
+    // Check that they're allowed to request this vanity URL
+    let db = admin.firestore();
+    let vanity = await db.collection('users')
+      .doc(req.body.uid)
+      .collection('privileges')
+      .doc('share')
+      .get()
+      .then((document) => {
+        if (document.exists) {
+          return document.data().vanity;
+        }
+      });
+
+    if (vanity) {
+      // They have a vanity URL
+      roomId = vanity;
+      roomKey = 'rooms:' + roomId;
+    } else {
+      // They don't have a vanity URL
+      res.sendStatus(403);
+      return;
+    }
+  } else {
+    do {
+      roomId = nanoidGenerate('23456789ABCDEFGHJKLMNPQRSTUVWXYZ_abcdefghjkmnpqrstuvwxyz-', 8);
+      roomKey = 'rooms:' + roomId;
+      roomKeyAlreadyExists = await redisClient.existsAsync(roomKey) === 1;
+    }
+    while (roomKeyAlreadyExists); // repeat roomkey generation on collision
+  }
   const ownerKey = nanoid(50);
 
   const backlink = req.body.backlink ? ['backlink', req.body.backlink] : [];
@@ -86,13 +121,22 @@ rooms.post('/', async (req, res, next) => {
   const appearance = req.body.appearance && req.body.appearance.length <= 1000 ? ['appearance', req.body.appearance] : [];
 
   redisClient.hmset(roomKey, 'ownerKey', ownerKey, ...backlink, ...appearance);
-  redisClient.expire(roomKey, 60 * 60 * expireHours);
+
+  if (req.body.urlType === 'random') {
+    // Random URLs expire
+    redisClient.expire(roomKey, 60 * 60 * expireHours);
+  }
 
   res.send(JSON.stringify({
     roomId,
     ownerKey,
     url: process.env.HOSTNAME + '/s/' + roomId,
-    expireDate: new Date((new Date()).getTime() + (1000 * 60 * 60 * expireHours)),
+
+    // Vanity URLs never expire
+    expires: req.body.urlType === 'random',
+    expireDate: req.body.urlType === 'random' ?
+      (new Date((new Date()).getTime() + (1000 * 60 * 60 * expireHours))) :
+      null,
   }));
   return;
 });
