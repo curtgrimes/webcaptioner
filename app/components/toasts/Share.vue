@@ -395,7 +395,7 @@ export default {
       });
     },
     urlType: function(urlType) {
-      if (urlType === 'vanity') {
+      if (urlType === 'vanity' && this.$store.state.user.uid) {
         let db = this.$firebase.firestore();
         db.collection('users')
           .doc(this.$store.state.user.uid)
@@ -410,6 +410,10 @@ export default {
               });
             }
           });
+      } else {
+        this.$store.commit('SET_SHARE_VANITY', {
+          vanity: false,
+        });
       }
     },
   },
