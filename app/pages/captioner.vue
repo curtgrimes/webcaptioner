@@ -214,24 +214,9 @@ export default {
     this.$store.dispatch('share/CHECK_LINK_EXPIRY');
 
     let lastWebhookEventDate = 0;
+    let sequence = 0;
     let callWebhook = ({ url, method, transcript }) => {
       transcript = (transcript || '').toUpperCase();
-
-      // this.$store.commit('APPEND_WEBHOOK_LOG', {
-      //   event: {
-      //     type: 'send',
-      //     title: method + ' ' + url,
-      //     body: JSON.stringify({transcript}),
-      //     showBody: false,
-      //   }
-      // });
-
-      // this.$socket.sendObj({
-      //   action: 'callWebhook',
-      //   url,
-      //   method,
-      //   transcript,
-      // });
 
       fetch(url, {
         method,
@@ -239,7 +224,7 @@ export default {
         headers: {
           Accept: 'application/json',
         },
-        body: JSON.stringify({ transcript }),
+        body: JSON.stringify({ transcript, sequence }),
       })
         .then((response) => {
           response.text().then(() => {
@@ -261,12 +246,12 @@ export default {
             },
           });
         });
+      sequence++;
     };
     RemoteEventBus.$on('sendMutationToReceivers', ({ mutation, payload }) => {
       if (
         this.$store.state.settings.integrations.webhooks.on &&
         mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
-        // && (Date.now() - lastWebhookEventDate) >= this.$store.state.settings.integrations.webhooks.throttleMs
       ) {
         callWebhook({
           url: this.$store.state.settings.integrations.webhooks.url,

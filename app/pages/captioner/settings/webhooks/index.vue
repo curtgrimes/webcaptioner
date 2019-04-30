@@ -118,9 +118,18 @@
     <div class="card bg-white p-3 mb-4">
       <pre class="m-0">
 {
-  "transcript": "This is a transcript"
+  transcript: "Hello",
+  sequence: 2
 }</pre>
     </div>
+    <ul>
+      <li>
+        <tt class="font-weight-bold">transcript</tt> &mdash; A string of the word or words that were spoken.
+      </li>
+      <li>
+        <tt class="font-weight-bold">sequence</tt> &mdash; An integer that increments by 1 on every webhook call. Starts at 0. Resets back to 0 every time the Web Captioner page is reloaded, but it does not start from 0 if captioning is manually stopped and started again by the user.
+      </li>
+    </ul>
   </div>
 </template>
 
