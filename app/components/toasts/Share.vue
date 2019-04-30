@@ -19,6 +19,28 @@
             placeholder="Stream or website URL"
           >
         </transition>
+        <b-form-checkbox v-model="showCustomWelcomeMessageAuthorInput" switch>Custom welcome message</b-form-checkbox>
+        <transition name="fade-in">
+          <input
+            ref="showCustomWelcomeMessageAuthorInput"
+            required
+            v-if="showCustomWelcomeMessageAuthorInput"
+            type="text"
+            class="form-control mt-2"
+            v-model="customWelcomeMessageAuthor"
+            placeholder="Your name or business"
+            maxlength="50"
+          >
+        </transition>
+        <transition name="fade-in">
+          <p v-if="showCustomWelcomeMessageAuthorInput" class="mb-4 mt-2 text-muted">
+            Before captioning starts, your viewers will see this message:
+            <br>
+            <span v-if="customWelcomeMessageAuthor">"{{customWelcomeMessageAuthor}} has invited you</span>
+            <span v-else>"You've been invited</span> to watch live captions with Web Captioner."
+          </p>
+        </transition>
+
         <b-form-group label="Link Type" class="mt-3 mb-0">
           <b-form-radio-group v-model="urlType" stacked name="plain-stacked">
             <b-form-radio value="random">
@@ -216,6 +238,8 @@ export default {
       showPopover: false,
       shareStyle: 'current',
       showBacklink: false,
+      showCustomWelcomeMessageAuthorInput: false,
+      customWelcomeMessageAuthor: null,
       backlink: '',
       showViewerLink: false,
       showBroadcastLink: false,
@@ -263,6 +287,7 @@ export default {
           appearance: JSON.stringify(this.$store.state.settings.appearance),
           urlType: this.urlType,
           uid: this.$store.state.user.uid,
+          customWelcomeMessageAuthor: this.customWelcomeMessageAuthor,
         });
 
         this.$store.commit('SET_SHARE_ON', { on: true });
@@ -354,6 +379,18 @@ export default {
       this.$nextTick(function() {
         if (showBacklink && this.$refs.backlinkInput) {
           this.$refs.backlinkInput.focus();
+        }
+      });
+    },
+    showCustomWelcomeMessageAuthorInput: function(
+      showCustomWelcomeMessageAuthorInput
+    ) {
+      this.$nextTick(function() {
+        if (
+          showCustomWelcomeMessageAuthorInput &&
+          this.$refs.showCustomWelcomeMessageAuthorInput
+        ) {
+          this.$refs.showCustomWelcomeMessageAuthorInput.focus();
         }
       });
     },

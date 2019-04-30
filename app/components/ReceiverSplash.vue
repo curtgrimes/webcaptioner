@@ -119,9 +119,14 @@
                               <span
                                 v-if="backlinkData && backlinkData.author"
                               >{{backlinkData.author}} is live captioning with Web Captioner.</span>
-                              <span
-                                v-else
-                              >You've been invited to watch live captions with Web Captioner.</span>
+                              <span v-else>
+                                <span
+                                  v-if="customWelcomeMessageAuthor"
+                                >{{customWelcomeMessageAuthor}} has invited you to watch live captions with Web Captioner.</span>
+                                <span
+                                  v-else
+                                >You've been invited to watch live captions with Web Captioner.</span>
+                              </span>
                             </span>
                           </h3>
                         </div>
@@ -189,6 +194,10 @@ export default {
   props: {
     roomId: String,
     backlinkData: Object,
+    customWelcomeMessageAuthor: {
+      type: String,
+      required: false,
+    },
     notFound: {
       type: Boolean,
       default: false,

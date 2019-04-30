@@ -65,6 +65,7 @@
       :notFound="notFound"
       :backlink-data="backlinkData"
       :roomId="$route.params.roomId"
+      :customWelcomeMessageAuthor="customWelcomeMessageAuthor"
     />
 
     <b-modal
@@ -200,12 +201,15 @@ export default {
   },
   async asyncData({ app, params, res }) {
     try {
-      let { appearance } = await app.$axios.$get('/api/rooms/' + params.roomId); // if the page doesn't exist, this 404s
+      let { appearance, customWelcomeMessageAuthor } = await app.$axios.$get(
+        '/api/rooms/' + params.roomId
+      ); // if the page doesn't exist, this 404s
       let { backlink } = await app.$axios.$get(
         '/api/rooms/' + params.roomId + '/backlink'
       );
       return {
         appearance,
+        customWelcomeMessageAuthor,
         backlinkData: backlink,
       };
     } catch (error) {
@@ -218,6 +222,7 @@ export default {
   data: function() {
     return {
       broadcastLink: true, // Hide splash screen and navbar on broadcast-type links
+      customWelcomeMessageAuthor: null,
       notFound: false,
       backlinkData: null,
       showTranscript: false,

@@ -9,9 +9,11 @@ const url = require('url');
 const twitch = require('./twitch');
 const admin = require('firebase-admin');
 
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_NODE_SERVICE_ACCOUNT_KEY))
-});
+if (process.env.FIREBASE_NODE_SERVICE_ACCOUNT_KEY) {
+  admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_NODE_SERVICE_ACCOUNT_KEY))
+  });
+}
 
 const expireHours = 48;
 
@@ -116,11 +118,12 @@ rooms.post('/', async (req, res, next) => {
   const ownerKey = nanoid(50);
 
   const backlink = req.body.backlink ? ['backlink', req.body.backlink] : [];
+  const customWelcomeMessageAuthor = req.body.customWelcomeMessageAuthor ? ['customWelcomeMessageAuthor', req.body.customWelcomeMessageAuthor] : [];
 
   // Limit to 1000 characters for safety; currently length is around 350-400 characters
   const appearance = req.body.appearance && req.body.appearance.length <= 1000 ? ['appearance', req.body.appearance] : [];
 
-  redisClient.hmset(roomKey, 'ownerKey', ownerKey, ...backlink, ...appearance);
+  redisClient.hmset(roomKey, 'ownerKey', ownerKey, ...backlink, ...appearance, ...customWelcomeMessageAuthor);
 
   if (req.body.urlType === 'random') {
     // Random URLs expire
@@ -135,8 +138,7 @@ rooms.post('/', async (req, res, next) => {
     // Vanity URLs never expire
     expires: req.body.urlType === 'random',
     expireDate: req.body.urlType === 'random' ?
-      (new Date((new Date()).getTime() + (1000 * 60 * 60 * expireHours))) :
-      null,
+      (new Date((new Date()).getTime() + (1000 * 60 * 60 * expireHours))) : null,
   }));
   return;
 });
@@ -163,7 +165,7 @@ rooms.get('/:roomId', async (req, res) => {
   const roomExists = await redisClient.existsAsync(roomKey) === 1;
 
   if (roomExists) {
-    let appearance;
+    let appearance, customWelcomeMessageAuthor;
 
     try {
       appearance = await redisClient.hgetAsync(roomKey, 'appearance');
@@ -173,8 +175,11 @@ rooms.get('/:roomId', async (req, res) => {
       appearance = null;
     }
 
+    customWelcomeMessageAuthor = await redisClient.hgetAsync(roomKey, 'customWelcomeMessageAuthor');
+
     res.send(JSON.stringify({
       appearance,
+      customWelcomeMessageAuthor,
     }));
   } else {
     res.sendStatus(404);
