@@ -328,11 +328,9 @@ export default {
   },
   watch: {
     socketConnected: function() {
-      console.log('socket connected init room');
       this.initRoom();
     },
     settingsLoaded: function() {
-      console.log('settings loaded init room');
       this.initRoom();
     },
     $route(toRoute) {
