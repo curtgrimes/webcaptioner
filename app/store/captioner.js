@@ -32,6 +32,7 @@ export const state = () => ({
     delay: 0,
     cursorable: [],
     stabilized: '',
+    stabilizedWithTimings: [],
   },
   totalCaptioningSeconds: 0,
   lastStart: null,
@@ -704,6 +705,8 @@ export const mutations = {
   },
   CLEAR_TRANSCRIPT_FINAL(state) {
     state.transcript.final = '';
+    state.transcript.stabilized = '';
+    state.transcript.stabilizedWithTimings = [];
   },
   CLEAR_TRANSCRIPT_TYPED(state) {
     state.transcript.typed = '';
@@ -724,6 +727,11 @@ export const mutations = {
     transcript
   }) {
     state.transcript.stabilized += transcript + ' ';
+
+    state.transcript.stabilizedWithTimings.push({
+      time: Date.now() - 2500,
+      text: transcript,
+    });
   },
 
   VOLUME_TOO_LOW(state, {

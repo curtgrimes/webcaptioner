@@ -46,6 +46,34 @@
     </transition>
     <div class="clearfix"></div>
     <hr>
+    <!--
+    <div class="row">
+      <div class="col-md-4">
+        <label
+          for="adjust-speed-accuracy"
+          class="mb-0 form-group form-inline float-left"
+        >Adjust speed/accuracy</label>
+      </div>
+      <div class="col-md-8">
+        <div class="d-flex">
+          <div class="small text-muted font-weight-bold text-right">More real-time captions</div>
+          <div class="form-group mx-auto w-100 px-2">
+            <b-form-input
+              id="adjust-speed-accuracy"
+              v-model="value"
+              type="range"
+              min="2000"
+              max="5000"
+              step="1000"
+            ></b-form-input>
+          </div>
+          <div class="small text-muted font-weight-bold text-left">More real-time captions</div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+    -->
     <label for="show-volume-meter" class="mb-0">Show volume meter when volume level is low</label>
     <b-form-checkbox id="show-volume-meter" v-model="volumeMeterShow" switch class="float-right"></b-form-checkbox>
     <div class="clearfix"></div>
@@ -202,6 +230,7 @@
 
 <script>
 import bBtn from 'bootstrap-vue/es/components/button/button';
+import bFormInput from 'bootstrap-vue/es/components/form-input/form-input';
 import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
 import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
 import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
@@ -211,6 +240,7 @@ import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
 export default {
   components: {
     bBtn,
+    bFormInput,
     bFormCheckbox,
     bListGroup,
     bListGroupItem,
