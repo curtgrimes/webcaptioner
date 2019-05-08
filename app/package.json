@@ -42,6 +42,7 @@
     "node-vibrant": "^3.0.0",
     "nuxt": "^2.6.2",
     "open-graph-scraper": "^3.5.1",
+    "parse-domain": "^2.1.7",
     "query-string": "^6.2.0",
     "redirect-ssl": "^1.4.0",
     "redis": "^2.8.0",

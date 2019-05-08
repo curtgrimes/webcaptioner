@@ -243,6 +243,12 @@ export default {
   },
   mounted: function() {
     this.broadcastLink = this.$route.query.broadcast !== undefined;
+
+    if (this.$route.query.d !== undefined) {
+      // This was a subdomain redirect
+      history.replaceState({}, 's', '/');
+    }
+
     if (this.socketConnected) {
       this.initSubscription();
     }

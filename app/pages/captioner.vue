@@ -36,8 +36,24 @@ import throttle from 'lodash.throttle';
 import { getCurrentVersionNumber } from '~/mixins/settingsNormalizer.js';
 import versionSort from 'semver-compare';
 import '~/components/_globals';
+import parseDomain from 'parse-domain';
 
 export default {
+  asyncData({ req, redirect }) {
+    // Redirect to share URL if arriving here from a subdomain
+    let { subdomain } = parseDomain(req.headers.host) || {};
+
+    if (subdomain) {
+      // Subdomain will look like "asdf.staging" or "asdf"
+      // Remove ".staging" from subdomain if it's there
+      subdomain = subdomain.replace('.staging', '');
+
+      if (!['feedback', 'signin', 'staging'].includes(subdomain)) {
+        // It's not a protected WC subdomain
+        redirect('/s/' + subdomain + '?d'); // ?d will cause replaceState to be triggered to clear out the URL
+      }
+    }
+  },
   mixins: [saveToFile, dateFormat],
   components: {
     navbar,
