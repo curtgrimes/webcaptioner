@@ -273,11 +273,13 @@ module.exports = {
         // Remove ".staging" from subdomain if it's there
         subdomain = subdomain.replace('.staging', '');
 
-        if (!['feedback', 'signin', 'staging'].includes(subdomain)) {
+        // ?d will cause replaceState to be triggered to clear out the URL client-side
+        let redirectPath = '/s/' + subdomain + '?d';
+
+        if (!['feedback', 'signin', 'staging'].includes(subdomain) && req.url !== redirectPath) {
           // It's not a protected WC subdomain
           res.writeHead(301, {
-            // ?d will cause replaceState to be triggered to clear out the URL
-            Location: '/s/' + subdomain + '?d'
+            Location: redirectPath
           });
           res.end();
           return;
