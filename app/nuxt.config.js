@@ -7,6 +7,7 @@ import healthCheckMiddleware from './middleware/server/health-check.js';
 import sourcemapMiddleware from './middleware/server/sourcemaps.js';
 import url from 'url';
 import wsServer from './socket.io/server';
+import parseDomain from 'parse-domain';
 // import gitRevision from 'git-rev-sync';
 
 module.exports = {
@@ -259,6 +260,31 @@ module.exports = {
       });
   },
   serverMiddleware: [
+    // Redirect subdomain. Remove this after main page is part of the Nuxt app
+    // and can handle redirects that /captioner is currently responsible for
+    (req, res, next) => {
+      // Redirect to share URL if arriving here from a subdomain
+      let {
+        subdomain
+      } = parseDomain(req.headers.host) || {};
+
+      if (subdomain) {
+        // Subdomain will look like "asdf.staging" or "asdf"
+        // Remove ".staging" from subdomain if it's there
+        subdomain = subdomain.replace('.staging', '');
+
+        if (!['feedback', 'signin', 'staging'].includes(subdomain)) {
+          // It's not a protected WC subdomain
+          res.writeHead(301, {
+            // ?d will cause replaceState to be triggered to clear out the URL
+            Location: '/s/' + subdomain + '?d'
+          });
+          res.end();
+          return;
+        }
+      }
+      next();
+    },
     '~/api/index.js',
     {
       path: '/admin',
