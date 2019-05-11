@@ -250,9 +250,7 @@ module.exports = {
 
         if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
           app.use(
-            redirectSSL.create({
-              redirectHost: url.parse(process.env.HOSTNAME).hostname,
-            })
+            redirectSSL.create()
           );
         }
 
