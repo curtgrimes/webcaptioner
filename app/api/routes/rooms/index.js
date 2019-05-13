@@ -79,8 +79,19 @@ rooms.post('/', async (req, res, next) => {
 
   let roomKey, roomId, roomKeyAlreadyExists;
   if (req.body.urlType === 'vanity') {
-    if (!req.body.uid) {
-      // Need a user ID to continue
+    if (!req.body.idToken) {
+      // Need a user token to continue
+      res.sendStatus(403);
+      return;
+    }
+
+    // Authenticate (verify ID token)
+    try {
+      let {
+        uid
+      } = await admin.auth().verifyIdToken(req.body.idToken);
+    } catch (e) {
+      // Invalid token ID
       res.sendStatus(403);
       return;
     }
@@ -88,7 +99,7 @@ rooms.post('/', async (req, res, next) => {
     // Check that they're allowed to request this vanity URL
     let db = admin.firestore();
     let vanity = await db.collection('users')
-      .doc(req.body.uid)
+      .doc(uid)
       .collection('privileges')
       .doc('share')
       .get()

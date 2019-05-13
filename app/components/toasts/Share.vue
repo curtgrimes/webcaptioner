@@ -275,6 +275,12 @@ export default {
         return;
       }
 
+      let idToken;
+      if (this.$store.state.user.uid && this.$firebase.auth().currentUser) {
+        // Person is currently logged in. Get their ID token for authentication.
+        idToken = await this.$firebase.auth().currentUser.getIdToken();
+      }
+
       try {
         const {
           roomId,
@@ -286,7 +292,7 @@ export default {
           backlink: this.backlink,
           appearance: JSON.stringify(this.$store.state.settings.appearance),
           urlType: this.urlType,
-          uid: this.$store.state.user.uid,
+          idToken: idToken + 'a',
           customWelcomeMessageAuthor: this.customWelcomeMessageAuthor,
         });
 
