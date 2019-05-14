@@ -33,11 +33,9 @@ export default async function (req, res, next) {
         } = doc.data();
 
         if (vanity) {
-
-          if (req.url !== vanity) {
-            // ?d will cause replaceState to be triggered to clear out the URL client-side
-            let redirectPath = '/s/' + vanity + '?d';
-
+          // ?d will cause replaceState to be triggered to clear out the URL client-side
+          let redirectPath = '/s/' + vanity + '?d';
+          if (req.url !== redirectPath) {
             res.writeHead(301, {
               Location: redirectPath
             });
