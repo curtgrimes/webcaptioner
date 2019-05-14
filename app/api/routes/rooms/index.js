@@ -7,17 +7,39 @@ const openGraphScraper = require('open-graph-scraper');
 const vibrant = require('node-vibrant')
 const url = require('url');
 const twitch = require('./twitch');
-const admin = require('firebase-admin');
-
-if (process.env.FIREBASE_NODE_SERVICE_ACCOUNT_KEY) {
-  admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_NODE_SERVICE_ACCOUNT_KEY))
-  });
-}
+const firebaseAdmin = require('./../../firebaseAdmin.js');
 
 const expireHours = 48;
 
 rooms.get('/', async (req, res, next) => {
+  if (req.query.customDomain) {
+    // Find the room for this given custom domain
+    let db = firebaseAdmin().firestore();
+
+    db.collectionGroup('privileges')
+      .where('customDomain', '==', req.query.customDomain)
+      .get()
+      .then((querySnapshot) => {
+        if (querySnapshot.size) {
+          querySnapshot.forEach((doc) => {
+            let {
+              customDomain
+            } = doc.data();
+
+            if (customDomain) {
+              res.send(customDomain);
+              return;
+            }
+          });
+        }
+
+        res.sendStatus(404);
+      });
+    return;
+  }
+
+
+
   if (!req.query.token || !process.env.ADMIN_TOKEN || req.query.token !== process.env.ADMIN_TOKEN) {
     // Require admin token
     res.sendStatus(404);
@@ -86,20 +108,24 @@ rooms.post('/', async (req, res, next) => {
     }
 
     // Authenticate (verify ID token)
+    let decodedToken;
     try {
-      let {
-        uid
-      } = await admin.auth().verifyIdToken(req.body.idToken);
+      decodedToken = await firebaseAdmin().auth().verifyIdToken(req.body.idToken);
     } catch (e) {
       // Invalid token ID
       res.sendStatus(403);
       return;
     }
 
+    if (!decodedToken.uid) {
+      res.sendStatus(403);
+      return;
+    }
+
     // Check that they're allowed to request this vanity URL
-    let db = admin.firestore();
+    let db = firebaseAdmin().firestore();
     let vanity = await db.collection('users')
-      .doc(uid)
+      .doc(decodedToken.uid)
       .collection('privileges')
       .doc('share')
       .get()

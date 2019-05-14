@@ -292,7 +292,7 @@ export default {
           backlink: this.backlink,
           appearance: JSON.stringify(this.$store.state.settings.appearance),
           urlType: this.urlType,
-          idToken: idToken + 'a',
+          idToken: idToken,
           customWelcomeMessageAuthor: this.customWelcomeMessageAuthor,
         });
 

@@ -22,7 +22,8 @@
     "tests:cypress": "cypress run",
     "tests:cypress:watch": "cypress open",
     "tests": "NUXT_PORT=8228 CYPRESS_baseUrl=http://localhost:8228 start-server-and-test dev http://localhost:8228 tests:cypress",
-    "tests:watch": "NUXT_PORT=8228 CYPRESS_baseUrl=http://localhost:8228 start-server-and-test dev http://localhost:8228 tests:cypress:watch"
+    "tests:watch": "NUXT_PORT=8228 CYPRESS_baseUrl=http://localhost:8228 start-server-and-test dev http://localhost:8228 tests:cypress:watch",
+    "free8080": "sudo kill -9 $(lsof -t -i :8080)"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.3",
@@ -31,6 +32,7 @@
     "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
     "dropbox": "^4.0.12",
+    "express": "^4.16.4",
     "express-rate-limit": "^3.4.1",
     "firebase-admin": "^7.3.0",
     "isomorphic-fetch": "^2.2.1",
@@ -73,8 +75,8 @@
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",
     "eslint-plugin-vue": "^4.0.0",
-    "firebase": "^5.10.0",
-    "firebaseui": "^3.6.0",
+    "firebase": "^6.0.2",
+    "firebaseui": "^3.6.1",
     "git-rev-sync": "^1.12.0",
     "intersection-observer": "^0.5.1",
     "jquery": "^3.3.1",

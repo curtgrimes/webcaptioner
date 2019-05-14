@@ -5,9 +5,9 @@ import path from 'path';
 import redirectSSL from 'redirect-ssl';
 import healthCheckMiddleware from './middleware/server/health-check.js';
 import sourcemapMiddleware from './middleware/server/sourcemaps.js';
-import url from 'url';
+import vanityRedirectMiddleware from './server/middleware/vanityRedirect.js';
 import wsServer from './socket.io/server';
-import parseDomain from 'parse-domain';
+
 // import gitRevision from 'git-rev-sync';
 
 module.exports = {
@@ -222,17 +222,17 @@ module.exports = {
   build: {
     // analyze: true,
     extend(config, {
-      isDev
+      isDev,
+      isClient
     }) {
-      if (isDev && process.client) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/,
-        });
-      }
-
+      // if (isDev && isClient) {
+      //   config.module.rules.push({
+      //     enforce: 'pre',
+      //     test: /\.(js|vue)$/,
+      //     loader: 'eslint-loader',
+      //     exclude: [/node_modules/, /middleware/, ],
+      //   });
+      // }
       if (process.client) {
         config.devtool = '#source-map';
       }
@@ -254,38 +254,12 @@ module.exports = {
           );
         }
 
+        app.use(vanityRedirectMiddleware);
         app.use(sourcemapMiddleware);
       });
   },
   serverMiddleware: [
-    // Redirect subdomain. Remove this after main page is part of the Nuxt app
-    // and can handle redirects that /captioner is currently responsible for
-    (req, res, next) => {
-      // Redirect to share URL if arriving here from a subdomain
-      let {
-        subdomain
-      } = parseDomain(req.headers.host) || {};
-
-      if (subdomain) {
-        // Subdomain will look like "asdf.staging" or "asdf"
-        // Remove ".staging" from subdomain if it's there
-        subdomain = subdomain.replace('.staging', '');
-
-        // ?d will cause replaceState to be triggered to clear out the URL client-side
-        let redirectPath = '/s/' + subdomain + '?d';
-
-        if (!['feedback', 'signin', 'staging'].includes(subdomain) && req.url !== redirectPath) {
-          // It's not a protected WC subdomain
-          res.writeHead(301, {
-            Location: redirectPath
-          });
-          res.end();
-          return;
-        }
-      }
-      next();
-    },
-    '~/api/index.js',
+    '~/api/index.js', // Keep first
     {
       path: '/admin',
       handler: '~/middleware/server/admin.js',
