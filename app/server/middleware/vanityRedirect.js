@@ -7,7 +7,7 @@ export default async function (req, res, next) {
   let {
     subdomain
   } = parseDomain(host) || {};
-
+  console.log(req.url);
   if (!subdomain || [
       'feedback.webcaptioner.com',
       'signin.webcaptioner.com',
@@ -33,16 +33,18 @@ export default async function (req, res, next) {
         } = doc.data();
 
         if (vanity) {
-          // ?d will cause replaceState to be triggered to clear out the URL client-side
-          let redirectPath = '/s/' + vanity + '?d';
-          if (req.url !== redirectPath) {
+          if (req.url === '/') { // only if requesting the base path (filters out any requests for assets)
+
+            // ?d will cause replaceState to be triggered to clear out the URL client-side
+            let redirectPath = '/s/' + vanity + '?d';
+
             res.writeHead(301, {
               Location: redirectPath
             });
             res.end();
             return;
           } else {
-            // We already redirected to the /s/ URL
+            // We already redirected to the /s/ URL, or this is a request for an asset
             next();
             return;
           }
