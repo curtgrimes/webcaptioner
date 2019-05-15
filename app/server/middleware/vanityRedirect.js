@@ -1,5 +1,6 @@
 const parseDomain = require('parse-domain');
 const firebaseAdmin = require('./../../api/firebaseAdmin.js');
+const url = require('url');
 
 export default async function (req, res, next) {
   // Redirect to share URL if arriving here from a nonstandard different host
@@ -32,7 +33,8 @@ export default async function (req, res, next) {
         } = doc.data();
 
         if (vanity) {
-          if (req.url === '/') { // only if requesting the base path (filters out any requests for assets)
+          const urlParsed = url.parse(req.url);
+          if (!req.url || urlParsed.pathname === '/') { // only if requesting the base path (filters out any requests for assets)
 
             // ?d will cause replaceState to be triggered to clear out the URL client-side
             let redirectPath = '/s/' + vanity + '?d';
