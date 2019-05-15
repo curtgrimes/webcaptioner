@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     initAuth: function() {
+      console.log(this.$firebase);
       let ui =
         firebaseui.auth.AuthUI.getInstance() || // if hot reloading the app in nuxt dev environment
         new firebaseui.auth.AuthUI(this.$firebase.auth());

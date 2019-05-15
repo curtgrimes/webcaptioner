@@ -7,7 +7,6 @@ export default async function (req, res, next) {
   let {
     subdomain
   } = parseDomain(host) || {};
-  console.log(req.url);
   if (!subdomain || [
       'feedback.webcaptioner.com',
       'signin.webcaptioner.com',
