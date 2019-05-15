@@ -90,7 +90,7 @@
     "lodash.throttle": "^4.1.1",
     "metascraper": "^5.1.1",
     "node-fetch": "^2.3.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.12.0",
     "nodemon": "^1.18.5",
     "normalize-strings": "^1.1.0",
     "nuxt-env": "^0.1.0",
