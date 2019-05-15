@@ -1,4 +1,4 @@
-FROM node:11.14
+FROM node:12.2
 
 # Force binary name because the current linux architecture
 # wasn't available on GitHub as a prebuilt binary
