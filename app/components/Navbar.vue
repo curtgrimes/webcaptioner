@@ -36,7 +36,7 @@
               height="20"
               class="d-inline-block align-top mr-2"
               :alt="$t('app.webCaptioner')"
-            >
+            />
             <span class="d-none d-md-inline">{{$t('app.webCaptioner')}}</span>
           </a>
         </div>
@@ -54,7 +54,7 @@
         <share-button v-if="experiments.includes('share')"></share-button>
         <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
           <span class="navbar-text text-white pr-3 text-primary">
-            <fa icon="exclamation-triangle"/>
+            <fa icon="exclamation-triangle" />
             {{$t('navbar.vmixNotConnected')}}
           </span>
           <b-btn-group size="sm">
@@ -66,7 +66,7 @@
               class="btn-sm"
             >{{$t('common.setUpVerb')}}</b-btn>
             <b-btn @click="sendToVmix = false" :aria-label="$t('common.dismiss')">
-              <fa icon="times"/>
+              <fa icon="times" />
             </b-btn>
           </b-btn-group>
         </div>
@@ -76,10 +76,11 @@
             :class="incompatibleBrowser ? 'button-only-disabled' : ''"
             :variant="captioningToggleButtonVariant"
             @click="captioningToggleButtonClick"
+            :disabled="$store.state.user.signedIn === null"
           >
             <div :class="{'px-4 py-2' : largerLayout}">
               <span v-if="!this.captioningOn">
-                <fa icon="microphone"/>
+                <fa icon="microphone" />
                 <span v-show="!typingModeOn">{{$t('navbar.captioner.startCaptioning')}}</span>
               </span>
               <span v-else>{{$t('navbar.captioner.stopCaptioning')}}</span>
@@ -93,10 +94,10 @@
             title="Start Typing (t)"
             @click="startTypingMode"
           >
-            <fa icon="keyboard"/>
+            <fa icon="keyboard" />
           </b-btn>
           <b-btn v-if="typingModeOn" variant="danger" @click="stopTypingMode">
-            <fa icon="keyboard"/>Done Typing
+            <fa icon="keyboard" />Done Typing
             <kbd>ESC</kbd>
           </b-btn>
           <b-popover
@@ -143,7 +144,7 @@
                 size="sm"
               >{{$t('navbar.menu.feedback')}}</b-btn>
             </b-btn-group>
-            <hr>
+            <hr />
             <b-btn-group class="d-flex">
               <b-btn
                 :to="localePath('captioner-save-to-file')"
@@ -151,7 +152,7 @@
                 v-b-tooltip.hover.top
                 title="Save transcript"
               >
-                <fa icon="save"/>
+                <fa icon="save" />
               </b-btn>
               <b-btn
                 variant="outline-secondary"
@@ -159,7 +160,7 @@
                 :title="$t('navbar.menu.newWindow')"
                 @click="startDetachedMode"
               >
-                <fa icon="window-restore"/>
+                <fa icon="window-restore" />
               </b-btn>
               <b-btn
                 variant="outline-danger"
@@ -167,12 +168,12 @@
                 v-b-tooltip.hover.top
                 title="Clear transcript"
               >
-                <fa icon="trash-alt"/>
+                <fa icon="trash-alt" />
               </b-btn>
             </b-btn-group>
-            <hr>
+            <hr />
             <b-btn block variant="secondary" :to="localePath('captioner-settings')">
-              <fa icon="cog" class="mr-2"/>
+              <fa icon="cog" class="mr-2" />
               {{$t('navbar.menu.settings')}}
             </b-btn>
           </b-popover>
@@ -183,7 +184,7 @@
             v-b-tooltip.top
             :variant="captioningToggleButtonVariant"
           >
-            <fa icon="bars"/>
+            <fa icon="bars" />
           </b-btn>
         </b-btn-group>
         <b-popover
@@ -200,7 +201,7 @@
               v-if="$store.state.user.photoURL"
               class="rounded-circle float-left p-1 pr-2"
               style="max-width:50px"
-            >
+            />
             <fa
               v-else
               icon="user-circle"
@@ -218,7 +219,7 @@
               >{{$store.state.user.email || $store.state.user.displayName}}</div>
             </div>
             <div class="clearfix"></div>
-            <hr>
+            <hr />
             <b-btn variant="light" block class="text-center" @click="signOut()">Sign out</b-btn>
           </div>
         </b-popover>
@@ -241,9 +242,9 @@
               v-if="$store.state.user.photoURL"
               class="rounded-circle"
               style="max-width: 30px;position: absolute;margin-left: -2px;margin-top: -2px;"
-            >
+            />
           </transition>
-          <fa icon="user-circle" class="text-primary"/>
+          <fa icon="user-circle" class="text-primary" />
         </b-btn>
 
         <!-- not logged in -->
@@ -255,8 +256,9 @@
           class="ml-2 text-white px-2 profile-button"
           variant="link"
           :to="localePath('captioner-sign-in')"
+          :disabled="$store.state.user.signedIn === null"
         >
-          <fa icon="user-circle"/>
+          <fa icon="user-circle" />
         </b-btn>
       </div>
     </nav>

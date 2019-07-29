@@ -1,10 +1,10 @@
 <template>
   <div id="app" class="w-100" style="display: flex;flex-direction: column;height: 100vh;">
-    <nuxt-child/>
-    <incompatible-browser-modal ref="incompatibleBrowserModal"/>
-    <microphone-permission-needed-modal ref="microphonePermissionNeededModal"/>
-    <microphone-permission-denied-modal ref="microphonePermissionDeniedModal"/>
-    <first-sign-in-modal ref="firstSignInModal"/>
+    <nuxt-child />
+    <incompatible-browser-modal ref="incompatibleBrowserModal" />
+    <microphone-permission-needed-modal ref="microphonePermissionNeededModal" />
+    <microphone-permission-denied-modal ref="microphonePermissionDeniedModal" />
+    <first-sign-in-modal ref="firstSignInModal" />
     <b-toast
       title="Signed in"
       variant="info"
@@ -206,10 +206,6 @@ export default {
       this.refreshVmixStatus();
     });
 
-    if (this.shouldAutostart()) {
-      this.startCaptioning();
-    }
-
     let lastWebhookEventDate = 0;
     let sequence = 0;
     let callWebhook = ({ url, method, transcript }) => {
@@ -333,6 +329,10 @@ export default {
     },
     settingsLoaded: function() {
       this.initRoom();
+
+      if (this.shouldAutostart()) {
+        this.startCaptioning();
+      }
     },
     $route(toRoute) {
       this.redirectSettingsRouteOnMobile(toRoute.name);

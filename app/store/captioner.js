@@ -214,51 +214,44 @@ export const actions = {
               !didMakeAfterNoAudioAction
             ) {
               switch (rootState.settings.afterNoAudio.action) {
-                case 'lineBreak1':
-                  {
-                    commit('APPEND_TRANSCRIPT_FINAL', {
-                      transcriptFinal: '\n'
-                    });
-                    break;
-                  }
-                case 'lineBreak2':
-                  {
-                    commit('APPEND_TRANSCRIPT_FINAL', {
-                      transcriptFinal: '\n\n'
-                    });
-                    break;
-                  }
-                case 'lineBreak3':
-                  {
-                    commit('APPEND_TRANSCRIPT_FINAL', {
-                      transcriptFinal: '\n\n\n'
-                    });
-                    break;
-                  }
-                case 'lineBreak4':
-                  {
-                    commit('APPEND_TRANSCRIPT_FINAL', {
-                      transcriptFinal: '\n\n\n\n'
-                    });
-                    break;
-                  }
-                case 'lineBreak5':
-                  {
-                    commit('APPEND_TRANSCRIPT_FINAL', {
-                      transcriptFinal: '\n\n\n\n\n'
-                    });
-                    break;
-                  }
-                case 'clearTranscript':
-                  {
-                    commit('CLEAR_TRANSCRIPT');
-                    break;
-                  }
+                case 'lineBreak1': {
+                  commit('APPEND_TRANSCRIPT_FINAL', {
+                    transcriptFinal: '\n'
+                  });
+                  break;
+                }
+                case 'lineBreak2': {
+                  commit('APPEND_TRANSCRIPT_FINAL', {
+                    transcriptFinal: '\n\n'
+                  });
+                  break;
+                }
+                case 'lineBreak3': {
+                  commit('APPEND_TRANSCRIPT_FINAL', {
+                    transcriptFinal: '\n\n\n'
+                  });
+                  break;
+                }
+                case 'lineBreak4': {
+                  commit('APPEND_TRANSCRIPT_FINAL', {
+                    transcriptFinal: '\n\n\n\n'
+                  });
+                  break;
+                }
+                case 'lineBreak5': {
+                  commit('APPEND_TRANSCRIPT_FINAL', {
+                    transcriptFinal: '\n\n\n\n\n'
+                  });
+                  break;
+                }
+                case 'clearTranscript': {
+                  commit('CLEAR_TRANSCRIPT');
+                  break;
+                }
                 case 'doNothing':
-                default:
-                  {
-                    // Do nothing
-                  }
+                default: {
+                  // Do nothing
+                }
               }
               didMakeAfterNoAudioAction = true;
             }
