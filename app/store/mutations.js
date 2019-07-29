@@ -278,6 +278,11 @@ export default {
     state.settings.afterNoAudio.action = action
   },
 
+  SET_ALWAYS_AUTOSTART_ON_LOAD: (state, {
+    on
+  }) => {
+    state.settings.alwaysAutostartOnLoad = Boolean(on);
+  },
 
   SET_LOCALE_USER_DEFAULT: (state, {
     locale

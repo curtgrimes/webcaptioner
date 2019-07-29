@@ -1,6 +1,6 @@
 <template>
   <div>
-    <hr>
+    <hr />
     <label for="censor-profane-language" class="mb-0">Censor profane language</label>
     <b-form-checkbox id="censor-profane-language" v-model="censor" switch class="float-right"></b-form-checkbox>
     <div class="clearfix"></div>
@@ -45,7 +45,7 @@
       </p>
     </transition>
     <div class="clearfix"></div>
-    <hr>
+    <hr />
     <label for="show-volume-meter" class="mb-0">Show volume meter when volume level is low</label>
     <b-form-checkbox id="show-volume-meter" v-model="volumeMeterShow" switch class="float-right"></b-form-checkbox>
     <div class="clearfix"></div>
@@ -67,7 +67,7 @@
       </div>
     </transition>
     <div class="clearfix"></div>
-    <hr>
+    <hr />
     <label for="large-navigation-bar-buttons" class="mb-0">Use large navigation bar buttons</label>
     <b-form-checkbox
       id="large-navigation-bar-buttons"
@@ -76,7 +76,7 @@
       class="float-right"
     ></b-form-checkbox>
     <div class="clearfix"></div>
-    <hr>
+    <hr />
     <label for="action-after-no-audio" class="mb-0 form-group form-inline float-left">
       After
       <select class="form-control form-control-sm mx-2" v-model="afterNoAudioSeconds">
@@ -100,7 +100,26 @@
       </select>
     </div>
     <div class="clearfix"></div>
-    <hr>
+    <hr />
+    <label
+      for="always-autostart-on-load"
+      class="mb-0"
+    >Always automatically start captioning on page load</label>
+    <b-form-checkbox
+      id="always-autostart-on-load"
+      v-model="alwaysAutostartOnLoad"
+      switch
+      class="float-right"
+    ></b-form-checkbox>
+    <div class="clearfix"></div>
+    <p
+      class="small mb-1 mt-1"
+    >You'll need to grant Web Captioner permission to use your microphone the first time, if you haven't already.</p>
+    <p class="small mb-0">
+      Alternatively, you can use this link to automatically start captions:
+      <a :href="autostartURL" target="_blank">{{autostartURL}}</a>
+    </p>
+    <hr />
 
     <h3 class="mt-5">{{$t('settings.controls.keyboardShortcuts')}}</h3>
     <div class="list-group mt-sm-3">
@@ -225,9 +244,13 @@ export default {
     return {
       largerPreview: false,
       isMac: false,
+      autostartURL: null,
     };
   },
   mounted: function() {
+    // This has to happen client-side so we put it in mounted()
+    this.autostartURL = window.location.origin + '/captioner?autostart';
+
     this.largerPreview = this.largerLayout;
 
     // Do only client-side
@@ -290,6 +313,14 @@ export default {
       },
       set(action) {
         this.$store.commit('SET_AFTER_NO_AUDIO_ACTION', { action });
+      },
+    },
+    alwaysAutostartOnLoad: {
+      get() {
+        return this.$store.state.settings.alwaysAutostartOnLoad;
+      },
+      set(on) {
+        this.$store.commit('SET_ALWAYS_AUTOSTART_ON_LOAD', { on });
       },
     },
     backgroundColor: function() {

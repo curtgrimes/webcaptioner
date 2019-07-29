@@ -78,6 +78,7 @@ export default () => {
       seconds: 2,
       action: 'lineBreak2',
     },
+    alwaysAutostartOnLoad: false,
     donationDate: null,
     exp: [],
   };

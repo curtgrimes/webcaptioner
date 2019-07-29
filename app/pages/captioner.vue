@@ -499,9 +499,10 @@ export default {
     },
     shouldAutostart: function() {
       return (
-        this.$route &&
-        this.$route.query &&
-        Object.keys(this.$route.query).includes('autostart')
+        this.$store.state.settings.alwaysAutostartOnLoad ||
+        (this.$route &&
+          this.$route.query &&
+          Object.keys(this.$route.query).includes('autostart'))
       );
     },
     checkAuthStatusAndRestoreSettings: function() {

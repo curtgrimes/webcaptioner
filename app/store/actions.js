@@ -204,6 +204,8 @@ export default {
       commitPropertySetting('SET_AFTER_NO_AUDIO_SECONDS', 'seconds', 'afterNoAudio.seconds');
       commitPropertySetting('SET_AFTER_NO_AUDIO_ACTION', 'action', 'afterNoAudio.action');
 
+      commitPropertySetting('SET_ALWAYS_AUTOSTART_ON_LOAD', 'on', 'alwaysAutostartOnLoad');
+
       commitPropertySetting('SET_LAYOUT_LARGER', 'on', 'controls.layout.larger');
       commitPropertySetting('SET_VOLUME_METER_SHOW', 'on', 'controls.volumeMeter.show');
       commitPropertySetting('SET_VOLUME_METER_SENSITIVITY', 'sensitivity', 'controls.volumeMeter.sensitivity');
