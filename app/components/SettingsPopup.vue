@@ -22,7 +22,13 @@
         <div
           v-if="$store.state.user.email || $store.state.user.displayName"
         >{{$store.state.user.email || $store.state.user.displayName}}</div>
-        <b-btn size="sm" class="py-1 px-2 mt-2" variant="light" @click="signOut()">Sign Out</b-btn>
+        <b-btn
+          size="sm"
+          style="font-size:.8rem"
+          class="py-0 px-2 mt-1"
+          variant="light"
+          @click="signOut()"
+        >Sign Out</b-btn>
       </div>
       <hr />
     </div>
@@ -101,7 +107,12 @@
       </transition>
     </b-card>
     <hr />
-    <b-btn block variant="secondary" :to="localePath('captioner-settings')">
+    <b-btn
+      block
+      variant="secondary"
+      :to="localePath('captioner-settings')"
+      @click="$emit('dismiss')"
+    >
       <fa icon="cog" class="mr-1" />
       <!--
       -->
@@ -110,7 +121,7 @@
     <div v-if="$store.state.user.signedIn === false" class="pt-1" style="line-height:1.25rem">
       <!-- Not signed in -->
       <hr />
-      <b-btn variant="light" block :to="localePath('captioner-sign-in')">
+      <b-btn variant="light" block :to="localePath('captioner-sign-in')" @click="$emit('dismiss')">
         <fa icon="user-circle" class="mr-1" />
         <!---->
         Sign in

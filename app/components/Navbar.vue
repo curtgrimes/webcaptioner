@@ -28,13 +28,17 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-brand mr-auto" :class="{'mt-3' : largerLayout}">
+        <div
+          class="navbar-brand mr-auto"
+          :class="{'mt-3' : largerLayout}"
+          style="padding-top:.75rem"
+        >
           <a href="/">
             <img
-              src="/static/img/logo.svg"
+              src="/logo-solid-bg.svg"
               width="20"
               height="20"
-              class="d-inline-block align-top mr-2"
+              class="d-inline-block align-top mr-2 rounded-circle"
               :alt="$t('app.webCaptioner')"
             />
             <span class="d-none d-md-inline">{{$t('app.webCaptioner')}}</span>
@@ -44,14 +48,21 @@
         <!-- Do not remove this from the DOM with v-if. Currently the volume meter needs to exist in order to populate microphoneName. -->
         <volume-meter v-bind:hidden="!captioningOn || waitingForInitialTranscript"></volume-meter>
 
-        <div v-if="waitingForInitialTranscript" class="navbar-text small text-primary mr-3">
-          <span
-            v-if="microphoneName"
-          >{{$t('navbar.captioner.listeningToMicrophone', {microphoneName})}}</span>
-          <span v-else>{{$t('navbar.captioner.listening')}}</span>
+        <div
+          v-if="waitingForInitialTranscript"
+          class="navbar-text small text-primary mr-3"
+          style="padding-top:.75rem"
+        >
+          <b-spinner small type="grow" />
+          <strong>{{$t('navbar.captioner.listening')}}</strong>
+          <transition name="fade">
+            <span v-if="microphoneName">&middot; {{microphoneName}}</span>
+          </transition>
         </div>
         <cast-button></cast-button>
-        <share-button v-if="experiments.includes('share')"></share-button>
+        <transition name="fade">
+          <share-button v-if="experiments.includes('share')"></share-button>
+        </transition>
         <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
           <span class="navbar-text text-white pr-3 text-primary">
             <fa icon="exclamation-triangle" />
@@ -109,7 +120,7 @@
           boundary="viewport"
           title
         >
-          <settings-popup :shown="showSettingsMenu" />
+          <settings-popup :shown="showSettingsMenu" @dismiss="showSettingsMenu = false" />
         </b-popover>
 
         <b-btn
@@ -170,6 +181,7 @@ import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
 import bTooltipDirective from 'bootstrap-vue/es/directives/tooltip/tooltip';
 import bTooltipComponent from 'bootstrap-vue/es/components/tooltip/tooltip';
 import bPopover from 'bootstrap-vue/es/components/popover/popover';
+import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -181,6 +193,7 @@ export default {
     bBtn,
     bBtnGroup,
     bPopover,
+    bSpinner,
     bTooltip: bTooltipComponent,
   },
   directives: {

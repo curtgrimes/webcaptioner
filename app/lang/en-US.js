@@ -62,7 +62,7 @@ export default {
     captioner: {
       startCaptioning: "Start Captioning",
       stopCaptioning: "Stop Captioning",
-      listeningToMicrophone: 'Listening to "{microphoneName}"',
+      listeningToMicrophone: 'Listening &middot; {microphoneName}',
       listening: "Listening"
     },
     menu: {

@@ -1,12 +1,7 @@
 <template>
   <b-btn-group class="mr-2">
-    <b-btn
-      v-b-tooltip.hover
-      :title="tooltip"
-      :variant="on ? 'secondary' : 'outline-light'"
-      @click="showShareSettings()"
-    >
-      <fa icon="broadcast-tower"/>
+    <b-btn v-b-tooltip.hover :title="tooltip" :variant="buttonVariant" @click="showShareSettings()">
+      <fa icon="broadcast-tower" :class="buttonTextClass" />
       <span
         v-if="!expired && hasValidShareLink && subscriberCount > 0"
         class="ml-2"
@@ -24,7 +19,7 @@
       class="px-3"
       @click="on = !on; $event.target.blur(); $event.target.parentElement.blur()"
     >
-      <fa :icon="on ? 'toggle-on' : 'toggle-off'" style="font-size:1.3rem;margin-top:0.2rem"/>
+      <fa :icon="on ? 'toggle-on' : 'toggle-off'" style="font-size:1.3rem;margin-top:0.2rem" />
     </b-btn>
   </b-btn-group>
 </template>
@@ -116,6 +111,22 @@ export default {
       return (
         this.shareLink && this.roomId && (this.expireDate || !this.expires)
       );
+    },
+    buttonVariant() {
+      if (this.on) {
+        return 'secondary';
+      } else {
+        if (this.$store.state.share.settings.show) {
+          return 'light';
+        } else {
+          return 'link';
+        }
+      }
+    },
+    buttonTextClass() {
+      if (!this.$store.state.share.settings.show) {
+        return 'text-white';
+      }
     },
   },
 };
