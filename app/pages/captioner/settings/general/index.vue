@@ -117,7 +117,10 @@
     >You'll need to grant Web Captioner permission to use your microphone the first time, if you haven't already.</p>
     <p class="small mb-0">
       Alternatively, you can use this link to automatically start captions:
-      <a :href="autostartURL" target="_blank">{{autostartURL}}</a>
+      <a
+        :href="autostartURL"
+        target="_blank"
+      >{{autostartURL}}</a>
     </p>
     <hr />
 

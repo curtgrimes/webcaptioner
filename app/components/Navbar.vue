@@ -88,7 +88,7 @@
             </div>
           </b-btn>
           <b-btn
-            v-show="experiments.includes('typingMode') && !typingModeOn"
+            v-if="experiments.includes('typingMode') && !typingModeOn"
             variant="primary"
             v-b-tooltip.top
             title="Start Typing (t)"
@@ -100,165 +100,38 @@
             <fa icon="keyboard" />Done Typing
             <kbd>ESC</kbd>
           </b-btn>
-          <b-popover
-            target="navbar-settings-button"
-            placement="top"
-            :show.sync="showSettingsMenu"
-            triggers="click blur"
-            boundary="viewport"
-          >
-            <b-btn-group vertical class="d-flex">
-              <b-btn
-                href="/"
-                block
-                variant="link"
-                class="py-1"
-                size="sm"
-              >{{$t('navbar.menu.about')}}</b-btn>
-              <b-btn
-                href="/blog"
-                block
-                variant="link"
-                class="py-1"
-                size="sm"
-              >{{$t('navbar.menu.blog')}}</b-btn>
-              <b-btn
-                href="/help"
-                block
-                variant="link"
-                class="py-1"
-                size="sm"
-              >{{$t('navbar.menu.helpCenter')}}</b-btn>
-              <b-btn
-                href="/donate"
-                block
-                variant="link"
-                class="py-1"
-                size="sm"
-              >{{$t('navbar.menu.donate')}}</b-btn>
-              <b-btn
-                href="/feedback"
-                block
-                variant="link"
-                class="py-1"
-                size="sm"
-              >{{$t('navbar.menu.feedback')}}</b-btn>
-            </b-btn-group>
-            <hr />
-            <b-btn-group class="d-flex">
-              <b-btn
-                :to="localePath('captioner-save-to-file')"
-                variant="outline-secondary"
-                v-b-tooltip.hover.top
-                title="Save transcript"
-              >
-                <fa icon="save" />
-              </b-btn>
-              <b-btn
-                variant="outline-secondary"
-                v-b-tooltip.hover.top
-                :title="$t('navbar.menu.newWindow')"
-                @click="startDetachedMode"
-              >
-                <fa icon="window-restore" />
-              </b-btn>
-              <b-btn
-                variant="outline-danger"
-                :to="localePath('captioner-clear')"
-                v-b-tooltip.hover.top
-                title="Clear transcript"
-              >
-                <fa icon="trash-alt" />
-              </b-btn>
-            </b-btn-group>
-            <hr />
-            <b-btn block variant="secondary" :to="localePath('captioner-settings')">
-              <fa icon="cog" class="mr-2" />
-              {{$t('navbar.menu.settings')}}
-            </b-btn>
-          </b-popover>
-          <b-tooltip target="navbar-settings-button" :title="$t('navbar.menu.menu')"></b-tooltip>
-          <b-btn
-            id="navbar-settings-button"
-            @click="showSettingsMenu = !showSettingsMenu"
-            v-b-tooltip.top
-            :variant="captioningToggleButtonVariant"
-          >
-            <fa icon="bars" />
-          </b-btn>
         </b-btn-group>
         <b-popover
-          target="navbar-profile-button-logged-in"
+          target="navbar-settings-button"
           placement="top"
-          :show.sync="showProfileMenu"
+          :show.sync="showSettingsMenu"
           triggers="click blur"
           boundary="viewport"
           title
         >
-          <div style="min-width:240px">
-            <img
-              :src="$store.state.user.photoURL"
-              v-if="$store.state.user.photoURL"
-              class="rounded-circle float-left p-1 pr-2"
-              style="max-width:50px"
-            />
-            <fa
-              v-else
-              icon="user-circle"
-              style="font-size:2.5em"
-              class="float-left mt-2 mr-2 text-muted"
-            />
-
-            <div class="pt-1" style="line-height:1.25rem">
-              <span class="text-muted">
-                Signed in
-                <span v-if="$store.state.user.email || $store.state.user.displayName">as</span>
-              </span>
-              <div
-                v-if="$store.state.user.email || $store.state.user.displayName"
-              >{{$store.state.user.email || $store.state.user.displayName}}</div>
-            </div>
-            <div class="clearfix"></div>
-            <hr />
-            <b-btn variant="light" block class="text-center" @click="signOut()">Sign out</b-btn>
-          </div>
+          <settings-popup :shown="showSettingsMenu" />
         </b-popover>
 
-        <!-- if logged in -->
-        <b-tooltip target="navbar-profile-button-logged-in" title="Profile"></b-tooltip>
         <b-btn
-          id="navbar-profile-button-logged-in"
-          v-show="$store.state.user.signedIn"
-          @click="showProfileMenu = !showProfileMenu"
+          id="navbar-settings-button"
+          @click="showSettingsMenu = !showSettingsMenu"
           v-b-tooltip.top
+          :title="$t('navbar.menu.settings')"
           class="ml-2 text-white px-2 profile-button"
           style="position:relative"
-          variant="link"
+          variant="info"
         >
           <!-- If there's a photo URL, show it on top of the fallback user-circle button -->
           <transition name="fade">
             <img
               :src="$store.state.user.photoURL"
-              v-if="$store.state.user.photoURL"
+              v-if="$store.state.user.signedIn && $store.state.user.photoURL"
               class="rounded-circle"
               style="max-width: 30px;position: absolute;margin-left: -2px;margin-top: -2px;"
             />
           </transition>
-          <fa icon="user-circle" class="text-primary" />
-        </b-btn>
-
-        <!-- not logged in -->
-        <b-tooltip target="navbar-profile-button-logged-out" title="Sign in or sign up"></b-tooltip>
-        <b-btn
-          id="navbar-profile-button-logged-out"
-          v-show="!$store.state.user.signedIn"
-          v-b-tooltip.top
-          class="ml-2 text-white px-2 profile-button"
-          variant="link"
-          :to="localePath('captioner-sign-in')"
-          :disabled="$store.state.user.signedIn === null"
-        >
           <fa icon="user-circle" />
+          <fa icon="ellipsis-v" size="xs" />
         </b-btn>
       </div>
     </nav>
@@ -280,12 +153,6 @@
 .profile-button {
   font-size: 1.5rem;
   line-height: 1.5rem;
-  opacity: 0.7;
-}
-.profile-button:hover,
-.profile-button:active,
-.profile-button:focus {
-  opacity: 1;
 }
 </style>
 
@@ -295,6 +162,7 @@
 import VolumeMeter from './VolumeMeter.vue';
 import CastButton from '../components/CastButton.vue';
 import ShareButton from '../components/ShareButton.vue';
+import SettingsPopup from '../components/SettingsPopup.vue';
 import saveToFile from '~/mixins/saveToFile';
 import dateFormat from '~/mixins/dateFormat';
 import bBtn from 'bootstrap-vue/es/components/button/button';
@@ -308,6 +176,7 @@ export default {
   components: {
     VolumeMeter,
     CastButton,
+    SettingsPopup,
     ShareButton,
     bBtn,
     bBtnGroup,
@@ -321,7 +190,6 @@ export default {
     return {
       vmixNotFullySetUpMessageDismissed: false,
       showSettingsMenu: false,
-      showProfileMenu: false,
     };
   },
   computed: {
@@ -384,9 +252,6 @@ export default {
     },
   },
   watch: {
-    showProfileMenu: function() {
-      this.hideAllTooltips();
-    },
     showSettingsMenu: function() {
       this.hideAllTooltips();
     },
@@ -394,20 +259,6 @@ export default {
   methods: {
     hideAllTooltips: function() {
       this.$root.$emit('bv::hide::tooltip');
-    },
-    signOut: function() {
-      this.showProfileMenu = false;
-      setTimeout(() => {
-        this.$firebase
-          .auth()
-          .signOut()
-          .then(() => {
-            // Success signing out
-            // INIT_CHECK_AUTH_STATUS_WATCHER handles
-            // updating the store and removing the user
-            this.$store.commit('SHOW_TOAST', { toastName: 'signedOut' });
-          });
-      }, 350); // let popover fade out first to get around positioning issue on close
     },
     captioningToggleButtonClick: function() {
       if (this.captioningOn) {
@@ -434,10 +285,6 @@ export default {
     },
     startClearTranscriptModal: function() {
       this.$router.push('/captioner/clear');
-    },
-    startDetachedMode: function() {
-      this.$store.dispatch('START_DETACHED_MODE');
-      // TODO: check for when child window closes here and unbind event
     },
     clearTranscript: function() {
       if (this.captioningOn) {
