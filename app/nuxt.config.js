@@ -244,7 +244,11 @@ module.exports = {
     },
   },
   hooks(hook) {
-    hook('listen', (server) => {
+    hook('modules:before', (nuxt) => {
+        // https://github.com/nuxt/nuxt.js/pull/6026#issuecomment-519030254
+        nuxt.options.devModules = nuxt.options.devModules.filter((name) => name !== '@nuxt/loading-screen')
+      }),
+      hook('listen', (server) => {
         wsServer.createSocket(server);
       }),
       hook('render:setupMiddleware', (app) => {
