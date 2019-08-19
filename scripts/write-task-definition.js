@@ -63,6 +63,7 @@ let taskDefinition = {
         'FIREBASE_STORAGE_BUCKET',
         'FIREBASE_MESSAGING_SENDER_ID',
         'FIREBASE_NODE_SERVICE_ACCOUNT_KEY',
+        'PATREON_ACCESS_TOKEN',
       ]),
       {
         name: "HOSTNAME",
