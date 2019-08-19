@@ -15,12 +15,12 @@
     >
       <div style="font-size:7rem" class="p-0">&#129300;</div>
       <div slot="modal-footer">
-        <b-btn
+        <b-button
           class="float-right"
           variant="secondary"
           ref="invalidExperimentModalOkButton"
           @click="hideInvalidExperimentModal()"
-        >{{$t('common.ok')}}</b-btn>
+        >{{$t('common.ok')}}</b-button>
       </div>
     </b-modal>
     <b-modal ref="experimentConfirmation" hide-header>
@@ -28,16 +28,16 @@
         class="modal-title"
       >{{$t('settings.experiments.addExperimentConfirmation', {experimentName})}}</h5>
       <div slot="modal-footer">
-        <b-btn
+        <b-button
           class="float-right"
           variant="secondary"
           @click="addExperiment({withConfirmation: false})"
-        >{{$t('settings.experiments.addExperiment')}}</b-btn>
-        <b-btn
+        >{{$t('settings.experiments.addExperiment')}}</b-button>
+        <b-button
           class="float-right"
           variant="link"
           @click="hideExperimentConfirmationModal()"
-        >{{$t('common.cancel')}}</b-btn>
+        >{{$t('common.cancel')}}</b-button>
       </div>
     </b-modal>
     <b-modal ref="experimentAlreadyAdded" hide-header>
@@ -45,11 +45,11 @@
         class="modal-title"
       >{{$t('settings.experiments.alreadyAdded', {alreadyAddedExperimentName})}}</h5>
       <div slot="modal-footer">
-        <b-btn
+        <b-button
           class="float-right"
           variant="secondary"
           @click="hideExperimentAlreadyAddedModal()"
-        >{{$t('common.ok')}}</b-btn>
+        >{{$t('common.ok')}}</b-button>
       </div>
     </b-modal>
     <b-input-group size="lg" class="mb-4">
@@ -60,7 +60,7 @@
         :placeholder="$t('settings.experiments.experimentName')"
       ></b-form-input>
       <b-input-group-append>
-        <b-btn @click="addExperiment({withConfirmation: false})">{{$t('common.add')}}</b-btn>
+        <b-button @click="addExperiment({withConfirmation: false})">{{$t('common.add')}}</b-button>
       </b-input-group-append>
     </b-input-group>
     <div v-if="experiments.length">
@@ -75,12 +75,12 @@
               <p class="small mb-0">{{getDescription(experiment)}}</p>
             </div>
             <div class="col-4 pr-2">
-              <b-btn
+              <b-button
                 class="float-right"
                 variant="danger"
                 size="sm"
                 @click="removeExperiment(experiment)"
-              >{{$t('common.remove')}}</b-btn>
+              >{{$t('common.remove')}}</b-button>
             </div>
           </div>
         </b-list-group-item>
@@ -90,23 +90,25 @@
 </template>
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
-import bInputGroup from 'bootstrap-vue/es/components/input-group/input-group';
-import bInputGroupAppend from 'bootstrap-vue/es/components/input-group/input-group-append';
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
-import bFormInput from 'bootstrap-vue/es/components/form-input/form-input';
+import {
+  BButton,
+  BModal,
+  BInputGroup,
+  BInputGroupAppend,
+  BListGroup,
+  BListGroupItem,
+  BFormInput,
+} from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bInputGroup,
-    bInputGroupAppend,
-    bListGroup,
-    bListGroupItem,
-    bFormInput,
-    bModal,
+    BButton,
+    BInputGroup,
+    BInputGroupAppend,
+    BListGroup,
+    BListGroupItem,
+    BFormInput,
+    BModal,
   },
   middleware: ['settings-meta'],
   meta: {

@@ -17,7 +17,7 @@
             class="form-control mt-2 mb-4"
             v-model="backlink"
             placeholder="Stream or website URL"
-          >
+          />
         </transition>
         <b-form-checkbox v-model="showCustomWelcomeMessageAuthorInput" switch>Custom welcome message</b-form-checkbox>
         <transition name="fade-in">
@@ -30,12 +30,12 @@
             v-model="customWelcomeMessageAuthor"
             placeholder="Your name or business"
             maxlength="50"
-          >
+          />
         </transition>
         <transition name="fade-in">
           <p v-if="showCustomWelcomeMessageAuthorInput" class="mb-4 mt-2 text-muted">
             Before captioning starts, your viewers will see this message:
-            <br>
+            <br />
             <span v-if="customWelcomeMessageAuthor">"{{customWelcomeMessageAuthor}} has invited you</span>
             <span v-else>"You've been invited</span> to watch live captions with Web Captioner."
           </p>
@@ -61,7 +61,7 @@
               class="ml-4 mt-1 px-2 py-1"
               style="font-size:.9rem"
             >
-              <fa icon="star"/>
+              <fa icon="star" />
               {{vanity}}
             </b-badge>
             <p
@@ -81,7 +81,7 @@
         @click="showViewerLink = !showViewerLink"
         class="d-block mb-2 font-weight-bold"
       >
-        <fa :icon="showViewerLink ? 'caret-down' : 'caret-right'" fixed-width/>Share with viewers
+        <fa :icon="showViewerLink ? 'caret-down' : 'caret-right'" fixed-width />Share with viewers
       </a>
       <b-collapse
         id="shareViewerLink"
@@ -99,11 +99,11 @@
             readonly
             :value="shareLink"
             :disabled="expiringLink"
-          >
+          />
           <div class="input-group-append">
-            <b-btn size="sm" class="pt-2" type="button" :href="shareLink" target="_blank">
-              <fa icon="arrow-right"/>
-            </b-btn>
+            <b-button size="sm" class="pt-2" type="button" :href="shareLink" target="_blank">
+              <fa icon="arrow-right" />
+            </b-button>
           </div>
         </div>
         <div
@@ -119,7 +119,7 @@
         @click="showBroadcastLink = !showBroadcastLink"
         class="d-block font-weight-bold"
       >
-        <fa :icon="showBroadcastLink ? 'caret-down' : 'caret-right'" fixed-width/>Use in your broadcasting application
+        <fa :icon="showBroadcastLink ? 'caret-down' : 'caret-right'" fixed-width />Use in your broadcasting application
       </a>
       <b-collapse
         id="shareBroadcastLink"
@@ -137,19 +137,19 @@
             readonly
             :value="shareLinkBroadcast"
             :disabled="expiringLink"
-          >
+          />
           <div
             class="small mt-2"
           >Use this link in a browser source in Streamlabs OBS, OBS, or XSplit. Captions will match your current appearance settings. The splash screen, navigation bar, and extra buttons will be hidden. Since this hides Web Captioner branding, consider mentioning Web Captioner when you use this.</div>
         </div>
       </b-collapse>
-      <hr class="my-3">
+      <hr class="my-3" />
       <div v-if="expireDate !== null">
         <p class="small text-muted mb-2">
           Link expires
           <timeago :datetime="expireDate"></timeago>
         </p>
-        <hr class="my-3">
+        <hr class="my-3" />
       </div>
       <b-dropdown
         text="Options"
@@ -159,16 +159,16 @@
         :disabled="expiringLink"
       >
         <template slot="button-content">
-          <fa icon="cog"/>
+          <fa icon="cog" />
         </template>
         <!-- <b-dropdown-item :to="localePath('captioner-share')">Customize Link</b-dropdown-item>
         <b-dropdown-divider/>-->
         <b-dropdown-item @click="expireLink()">Expire Now</b-dropdown-item>
       </b-dropdown>
       <span class="pl-2 text-secondary">
-        <fa v-if="expiringLink" icon="spinner" spin/>
+        <fa v-if="expiringLink" icon="spinner" spin />
       </span>
-      <b-btn
+      <b-button
         size="sm"
         variant="light"
         class="text-white px-2 py-1 float-right"
@@ -178,57 +178,60 @@
         v-b-tooltip.hover
         title="Share on Twitter"
       >
-        <fa :icon="['fab', 'twitter']"/>
-      </b-btn>
-      <!-- <b-btn size="sm" variant="light" class="text-white px-2 py-1 float-right mr-1" style="background:#3B5998;border-color:#3B5998;font-family:'Source Sans Pro', sans-serif;text-transform:none" :href="facebookShareLink" target="_blank" v-b-tooltip.hover title="Share on Facebook"><fa :icon="['fab', 'facebook']" /></b-btn> -->
+        <fa :icon="['fab', 'twitter']" />
+      </b-button>
+      <!-- <b-button size="sm" variant="light" class="text-white px-2 py-1 float-right mr-1" style="background:#3B5998;border-color:#3B5998;font-family:'Source Sans Pro', sans-serif;text-transform:none" :href="facebookShareLink" target="_blank" v-b-tooltip.hover title="Share on Facebook"><fa :icon="['fab', 'facebook']" /></b-button> -->
     </div>
     <div
       v-if="somethingWentWrong"
       class="alert bg-danger text-white mt-2 mb-0 p-2"
     >Something went wrong.</div>
     <template v-if="!hasValidShareLink" slot="footer">
-      <b-btn
+      <b-button
         @click="getLink()"
         :disabled="gettingLink || (urlType === 'vanity' && !vanity)"
         :variant="(urlType === 'vanity' && !vanity) ? 'light' : 'secondary'"
       >
         Get Link
-        <fa v-if="gettingLink" icon="spinner" spin/>
-      </b-btn>
+        <fa v-if="gettingLink" icon="spinner" spin />
+      </b-button>
     </template>
   </toast>
 </template>
 
 <script>
 import toast from '~/components/Toast.vue';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
-import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
-import bDropdownItem from 'bootstrap-vue/es/components/dropdown/dropdown-item';
-import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
-import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
-import bFormGroup from 'bootstrap-vue/es/components/form-group/form-group';
-import bFormRadio from 'bootstrap-vue/es/components/form-radio/form-radio';
-import bFormRadioGroup from 'bootstrap-vue/es/components/form-radio/form-radio-group';
-import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
-import bBadge from 'bootstrap-vue/es/components/badge/badge';
+
+import {
+  BButton,
+  BCollapse,
+  BDropdown,
+  BDropdownItem,
+  VBTooltip,
+  BFormCheckbox,
+  BFormGroup,
+  BFormRadio,
+  BFormRadioGroup,
+  BSpinner,
+  BBadge,
+} from 'bootstrap-vue';
 
 export default {
   components: {
     toast,
-    bBtn,
-    bCollapse,
-    bDropdown,
-    bDropdownItem,
-    bFormCheckbox,
-    bFormGroup,
-    bFormRadio,
-    bFormRadioGroup,
-    bSpinner,
-    bBadge,
+    BButton,
+    BCollapse,
+    BDropdown,
+    BDropdownItem,
+    BFormCheckbox,
+    BFormGroup,
+    BFormRadio,
+    BFormRadioGroup,
+    BSpinner,
+    BBadge,
   },
   directives: {
-    bTooltip,
+    'b-tooltip': VBTooltip,
   },
   data: () => {
     return {

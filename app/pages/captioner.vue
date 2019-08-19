@@ -29,13 +29,12 @@ import IncompatibleBrowserModal from '~/components/IncompatibleBrowserModal.vue'
 import MicrophonePermissionNeededModal from '~/components/MicrophonePermissionNeededModal.vue';
 import MicrophonePermissionDeniedModal from '~/components/MicrophonePermissionDeniedModal.vue';
 import FirstSignInModal from '~/components/FirstSignInModal.vue';
-import bToast from 'bootstrap-vue/es/components/toast/toast';
-import bToaster from 'bootstrap-vue/es/components/toast/toaster';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
 import throttle from 'lodash.throttle';
 import { getCurrentVersionNumber } from '~/mixins/settingsNormalizer.js';
 import versionSort from 'semver-compare';
 import '~/components/_globals';
+import { BToast, BToaster } from 'bootstrap-vue';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -45,8 +44,8 @@ export default {
     MicrophonePermissionNeededModal,
     MicrophonePermissionDeniedModal,
     FirstSignInModal,
-    bToast,
-    bToaster,
+    BToast,
+    BToaster,
   },
   data: function() {
     return {

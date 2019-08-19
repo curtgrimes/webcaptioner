@@ -21,7 +21,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-sm-3 col-lg-2">
-                <fa :icon="['fab', 'dropbox']" size="5x" style="color:#007ee5"/>
+                <fa :icon="['fab', 'dropbox']" size="5x" style="color:#007ee5" />
               </div>
               <div class="col-sm-9 col-lg-10">
                 <h4>Connected to Dropbox</h4>
@@ -31,15 +31,15 @@
             </div>
           </div>
           <div class="card-footer d-flex">
-            <b-btn
+            <b-button
               variant="danger"
               size="sm"
               class="ml-auto"
               @click="revokeAuthToken()"
               :disabled="revoking"
             >
-              <fa v-if="revoking" icon="spinner" spin/>Disconnect
-            </b-btn>
+              <fa v-if="revoking" icon="spinner" spin />Disconnect
+            </b-button>
           </div>
         </div>
         <h3>Recent Transcripts</h3>
@@ -48,7 +48,7 @@
           :show="reachedFileCountLimit"
         >You have a lot of files in your transcripts folder and you might not see all of them here. Go to your Dropbox to see them all.</b-alert>
         <div v-if="loadingTranscripts">
-          <fa icon="spinner" spin class="text-muted" size="2x"/>
+          <fa icon="spinner" spin class="text-muted" size="2x" />
         </div>
         <div v-else-if="transcripts && transcripts.length === 0">
           <b-alert
@@ -69,39 +69,39 @@
                 class="d-none d-md-flex col-md-3 text-muted py-3"
               >{{bytesToString(transcript.size)}}</div>
               <div class="col-6 col-md-3 d-flex">
-                <b-btn
+                <b-button
                   class="ml-auto py-3 px-4 px-sm-3"
                   variant="link"
                   :href="'/api/storage/dropbox/transcripts/' + transcript.name.replace('.txt', '') + '?accessToken=' + accessToken"
                   v-b-tooltip.top
                   title="Save to File"
                 >
-                  <fa icon="file-alt"/>
-                </b-btn>
-                <b-btn
+                  <fa icon="file-alt" />
+                </b-button>
+                <b-button
                   class="py-3 px-4 px-sm-3"
                   variant="link"
                   :href="'https://www.dropbox.com/home/Apps/Web%20Captioner/Transcripts?preview=' + transcript.name"
                   v-b-tooltip.top
                   title="Open in Dropbox"
                 >
-                  <fa :icon="['fab', 'dropbox']"/>
-                </b-btn>
+                  <fa :icon="['fab', 'dropbox']" />
+                </b-button>
               </div>
             </div>
           </b-list-group-item>
         </b-list-group>
       </div>
       <div v-else>
-        <b-btn
+        <b-button
           size="lg"
           :disabled="loading"
           href="/api/storage/dropbox/auth"
           :variant="loading ? 'outline-secondary' : 'secondary'"
         >
-          <fa v-if="loading" spin icon="spinner"/>
-          <fa v-else :icon="['fab', 'dropbox']"/>Connect to Dropbox
-        </b-btn>
+          <fa v-if="loading" spin icon="spinner" />
+          <fa v-else :icon="['fab', 'dropbox']" />Connect to Dropbox
+        </b-button>
       </div>
     </transition>
   </div>
@@ -110,21 +110,23 @@
 <script>
 const queryString = require('query-string');
 const bytesUtility = require('bytes');
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bAlert from 'bootstrap-vue/es/components/alert/alert';
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
-import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
+import {
+  BButton,
+  BAlert,
+  BListGroup,
+  BListGroupItem,
+  VBTooltip,
+} from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bAlert,
-    bListGroup,
-    bListGroupItem,
+    BButton,
+    BAlert,
+    BListGroup,
+    BListGroupItem,
   },
   directives: {
-    bTooltip,
+    'b-tooltip': VBTooltip,
   },
   middleware: ['settings-meta'],
   meta: {

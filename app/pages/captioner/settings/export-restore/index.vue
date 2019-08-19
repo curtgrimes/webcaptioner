@@ -8,17 +8,17 @@
     >
       <div class="py-2">
         <div class="pb-2 h4">
-          <fa icon="exclamation-triangle" size="3x"/>
+          <fa icon="exclamation-triangle" size="3x" />
         </div>
         <p class="lead">{{$t('settings.exportRestore.somethingWrongWithFile')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn
+        <b-button
           class="float-right"
           variant="secondary"
           ref="invalidSettingsFileModalOkButton"
           @click="hideInvalidSettingsFileModal()"
-        >{{$t('common.ok')}}</b-btn>
+        >{{$t('common.ok')}}</b-button>
       </div>
     </b-modal>
     <b-modal ref="confirmRestore" hide-header @shown="focusConfirmRestoreModalOkButton()">
@@ -27,17 +27,17 @@
         <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn
+        <b-button
           class="float-right ml-2"
           variant="secondary"
           ref="confirmRestoreModalOkButton"
           @click="restoreSettings()"
-        >{{$t('settings.exportRestore.restore')}}</b-btn>
-        <b-btn
+        >{{$t('settings.exportRestore.restore')}}</b-button>
+        <b-button
           class="float-right"
           variant="link"
           @click="cancelConfirmRestoreModal()"
-        >{{$t('common.cancel')}}</b-btn>
+        >{{$t('common.cancel')}}</b-button>
       </div>
     </b-modal>
     <b-modal ref="confirmReset" hide-header @shown="focusConfirmResetModalOkButton()">
@@ -46,17 +46,17 @@
         <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
       </div>
       <div slot="modal-footer">
-        <b-btn
+        <b-button
           class="float-right ml-2"
           variant="danger"
           ref="confirmResetModalOkButton"
           @click="resetSettings()"
-        >{{$t('settings.exportRestore.reset')}}</b-btn>
-        <b-btn
+        >{{$t('settings.exportRestore.reset')}}</b-button>
+        <b-button
           class="float-right"
           variant="link"
           @click="cancelConfirmResetModal()"
-        >{{$t('common.cancel')}}</b-btn>
+        >{{$t('common.cancel')}}</b-button>
       </div>
     </b-modal>
     <b-modal
@@ -67,13 +67,13 @@
       ok-variant="secondary"
     >
       <div class="pb-2 h4">
-        <fa icon="check-circle" size="3x"/>
+        <fa icon="check-circle" size="3x" />
       </div>
       <h2>{{$t('settings.exportRestore.restoredSettings')}}</h2>
     </b-modal>
     <b-modal class="text-center" ref="resetSuccessModal" ok-only hide-header ok-variant="secondary">
       <div class="pb-2 h4">
-        <fa icon="check-circle" size="3x"/>
+        <fa icon="check-circle" size="3x" />
       </div>
       <h2>{{$t('settings.exportRestore.settingsReset')}}</h2>
     </b-modal>
@@ -96,7 +96,7 @@
           type="file"
           accept=".json"
           @change="loadSettingsFile($event)"
-        >
+        />
       </div>
     </div>
     <div class="card mb-3">
@@ -116,13 +116,12 @@
 import saveToFile from '~/mixins/saveToFile';
 import getDefaultSettings from '~/store/settingsState';
 import Vue from 'vue';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
+import { BButton, BModal } from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bModal,
+    BButton,
+    BModal,
   },
   middleware: ['settings-meta'],
   meta: {

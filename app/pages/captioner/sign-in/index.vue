@@ -13,10 +13,10 @@
                 role="tab"
                 active-class
               >
-                <fa icon="times" size="2x"/>
+                <fa icon="times" size="2x" />
               </router-link>
             </div>
-            <hr>
+            <hr />
             <b-spinner
               v-show="$store.state.user.signedIn === null || !firebaseUILoaded"
               class="mx-auto mt-4 mb-3"
@@ -39,7 +39,7 @@
 
 
 <script>
-import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
+import { BSpinner } from 'bootstrap-vue';
 
 if (process.client) {
   let firebaseui = require('firebaseui');
@@ -55,7 +55,7 @@ export default {
   },
 
   components: {
-    bSpinner,
+    BSpinner,
   },
 
   watch: {

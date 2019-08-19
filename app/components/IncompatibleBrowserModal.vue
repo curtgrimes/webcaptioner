@@ -33,11 +33,11 @@
           </p>
         </div>
         <div class="col-sm-6 text-sm-right">
-          <b-btn
+          <b-button
             ref="getStartedButton"
             variant="secondary"
             @click="hideModal()"
-          >{{$t('incompatibleBrowser.lookAroundAnyway')}}</b-btn>
+          >{{$t('incompatibleBrowser.lookAroundAnyway')}}</b-button>
         </div>
       </div>
     </div>
@@ -46,13 +46,12 @@
 
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
+import { BButton, BModal } from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bModal,
+    BButton,
+    BModal,
   },
   methods: {
     showModal() {

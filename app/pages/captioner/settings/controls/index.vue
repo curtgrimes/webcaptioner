@@ -43,11 +43,11 @@
           </div>
           <b-navbar variant="dark" class="px-2 py-1 d-flex flex-column">
             <div v-if="largerPreview" class="d-flex w-100 pb-1">
-              <b-btn variant="danger" disabled class="mr-auto">Xxxxx</b-btn>
-              <b-btn variant="info" disabled>Xxxx xx Xxxx</b-btn>
+              <b-button variant="danger" disabled class="mr-auto">Xxxxx</b-button>
+              <b-button variant="info" disabled>Xxxx xx Xxxx</b-button>
             </div>
             <div class="d-flex w-100 align-items-center">
-              <img src="/static/img/logo.svg" width="8" height="8" class="align-middle mr-auto">
+              <img src="/static/img/logo.svg" width="8" height="8" class="align-middle mr-auto" />
               <b-dropdown variant="primary" split text="Xxxxx Xxxxxxxx" disabled></b-dropdown>
             </div>
           </b-navbar>
@@ -66,7 +66,7 @@
         name="showVolumeMeter"
         id="showVolumeMeter"
         value="uppercase"
-      >
+      />
       <label
         class="custom-control-label"
         for="showVolumeMeter"
@@ -188,19 +188,21 @@
 </template>
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
-import bNavbar from 'bootstrap-vue/es/components/navbar/navbar';
-import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
+import {
+  BButton,
+  BListGroup,
+  BListGroupItem,
+  BNavbar,
+  BDropdown,
+} from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bListGroup,
-    bListGroupItem,
-    bNavbar,
-    bDropdown,
+    BButton,
+    BListGroup,
+    BListGroupItem,
+    BNavbar,
+    BDropdown,
   },
   middleware: ['settings-meta'],
   meta: {

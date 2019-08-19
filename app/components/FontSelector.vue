@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-btn-group class="d-flex">
-      <b-btn
+    <b-button-group class="d-flex">
+      <b-button
         variant="light"
         class="bg-white border fontPreviewButton"
         id="font-selector-popover-start"
@@ -10,7 +10,7 @@
         style="text-transform: none"
         v-b-tooltip.hover
         :title="selectedFontFamily"
-      >{{selectedFontFamily}}</b-btn>
+      >{{selectedFontFamily}}</b-button>
       <b-dropdown
         @show="showFontSelectorPopover = false"
         :disabled="!selectedFont"
@@ -26,8 +26,8 @@
           style="text-transform: capitalize"
         >{{variant}}</b-dropdown-item>
       </b-dropdown>
-    </b-btn-group>
-    <font-stylesheet v-if="selectedFont" v-model="selectedFont.fontFamily"/>
+    </b-button-group>
+    <font-stylesheet v-if="selectedFont" v-model="selectedFont.fontFamily" />
 
     <b-popover
       target="font-selector-popover-start"
@@ -36,15 +36,15 @@
       :show.sync="showFontSelectorPopover"
     >
       <template slot="title">
-        <b-btn
+        <b-button
           @click="showFontSelectorPopover = false"
           size="sm"
           variant="link"
           aria-label="Close"
           class="float-right p-0 text-dark"
         >
-          <fa icon="times"/>
-        </b-btn>Font
+          <fa icon="times" />
+        </b-button>Font
       </template>
 
       <b-form-input
@@ -79,12 +79,12 @@
                   class="d-block"
                   v-if="selectedFont && selectedFont.fontFamily === font.fontFamily"
                 >
-                  <fa icon="check-circle"/>
+                  <fa icon="check-circle" />
                 </span>
               </span>
               <span class="col-9 pl-0">{{font.fontFamily}}</span>
             </span>
-            <font-stylesheet v-if="font" v-model="font.fontFamily"/>
+            <font-stylesheet v-if="font" v-model="font.fontFamily" />
           </b-list-group-item>
         </b-list-group>
       </div>
@@ -95,32 +95,35 @@
 <script>
 import throttle from 'lodash.throttle';
 import fontStylesheet from '~/components/FontStylesheet.vue';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
-import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
-import bPopover from 'bootstrap-vue/es/components/popover/popover';
-import bFormInput from 'bootstrap-vue/es/components/form-input/form-input';
-import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
-import bDropdownItem from 'bootstrap-vue/es/components/dropdown/dropdown-item';
-import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
+
+import {
+  BButton,
+  BButtonGroup,
+  BSpinner,
+  BListGroup,
+  BListGroupItem,
+  BPopover,
+  BFormInput,
+  BDropdown,
+  BDropdownItem,
+  VBTooltip,
+} from 'bootstrap-vue';
 
 export default {
   components: {
     fontStylesheet,
-    bBtn,
-    bBtnGroup,
-    bSpinner,
-    bListGroup,
-    bListGroupItem,
-    bPopover,
-    bFormInput,
-    bDropdown,
-    bDropdownItem,
+    BButton,
+    BButtonGroup,
+    BSpinner,
+    BListGroup,
+    BListGroupItem,
+    BPopover,
+    BFormInput,
+    BDropdown,
+    BDropdownItem,
   },
   directives: {
-    bTooltip,
+    'b-tooltip': VBTooltip,
   },
   props: {
     fontFamily: {

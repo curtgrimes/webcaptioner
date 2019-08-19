@@ -29,20 +29,20 @@
   class="d-block"
 >{{typedTranscript}}</span><br
   v-if="finalTranscriptEndsInNewline && !interimTranscript"
-><br
+/><br
   v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"
-></span>
+/></span>
     </span>
     <transition name="fade">
-      <b-btn
+      <b-button
         class="autoscrollButton"
         v-if="!scrollerIsAtBottom() && !autoScrollEnabled"
         @click="autoScrollEnabled = true"
       >
-        <fa icon="chevron-down" class="backToLatestIcon mr-2"/>Back to Latest
-      </b-btn>
+        <fa icon="chevron-down" class="backToLatestIcon mr-2" />Back to Latest
+      </b-button>
     </transition>
-    <font-stylesheet v-if="$store.state.settingsLoaded" v-model="fontFamily"/>
+    <font-stylesheet v-if="$store.state.settingsLoaded" v-model="fontFamily" />
   </div>
 </template>
 
@@ -50,13 +50,13 @@
 import hexToRGB from '~/mixins/hexToRGB';
 import Combokeys from 'combokeys';
 import fontStylesheet from '~/components/FontStylesheet.vue';
-import bBtn from 'bootstrap-vue/es/components/button/button';
+import { BButton } from 'bootstrap-vue';
 
 export default {
   name: 'transcript',
   components: {
     fontStylesheet,
-    bBtn,
+    BButton,
   },
   props: {
     showTypedLiveReadOnly: Boolean,

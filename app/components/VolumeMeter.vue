@@ -2,21 +2,21 @@
   <div
     v-if="$store.state.settings.controls.volumeMeter.show && captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)"
   >
-    <b-btn variant="white" class="meter-outer mr-2 border-0 text-left text-danger px-2 bg-white">
-      <fa icon="exclamation-triangle" class="mr-1"/>
+    <b-button variant="white" class="meter-outer mr-2 border-0 text-left text-danger px-2 bg-white">
+      <fa icon="exclamation-triangle" class="mr-1" />
       <span
         v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh"
       >{{$t('captioner.volumeMeter.tooQuiet')}}</span>
       <span
         v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow"
       >{{$t('captioner.volumeMeter.tooLoud')}}</span>
-      <b-btn
+      <b-button
         variant="danger"
         class="meter-inner border-0 px-0 text-left rounded-0"
         v-bind:style="{width: (volumeLevel * 100) + '%'}"
       >
         <span class="px-2">
-          <fa icon="exclamation-triangle" class="mr-1"/>
+          <fa icon="exclamation-triangle" class="mr-1" />
           <span
             v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh"
           >{{$t('captioner.volumeMeter.tooQuiet')}}</span>
@@ -24,8 +24,8 @@
             v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow"
           >{{$t('captioner.volumeMeter.tooLoud')}}</span>
         </span>
-      </b-btn>
-    </b-btn>
+      </b-button>
+    </b-button>
   </div>
 </template>
 
@@ -53,11 +53,11 @@
 <script>
 import AudioStreamMeter from 'audio-stream-meter';
 import clamp from 'lodash.clamp';
-import bBtn from 'bootstrap-vue/es/components/button/button';
+import { BButton } from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
+    BButton,
   },
   props: [],
   data: function() {

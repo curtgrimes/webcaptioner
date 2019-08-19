@@ -2,7 +2,7 @@
   <div class="settings-appearance-view">
     <h3 class="mt-0 mt-sm-3">{{$t('settings.appearance.text')}}</h3>
     <div class="form-group row">
-      <font-stylesheet v-model="fontFamily"/>
+      <font-stylesheet v-model="fontFamily" />
       <label
         for="text-color"
         class="col-sm-6 col-form-label"
@@ -88,7 +88,7 @@
             name="capitalization"
             id="capitalization-uppercase"
             value="uppercase"
-          >
+          />
           <label
             class="custom-control-label"
             for="capitalization-uppercase"
@@ -102,7 +102,7 @@
             name="capitalization"
             id="capitalization-first-letter-only"
             value="capitalize"
-          >
+          />
           <label
             class="custom-control-label"
             for="capitalization-first-letter-only"
@@ -116,10 +116,10 @@
             name="capitalization"
             id="capitalization-initial"
             value="initial"
-          >
+          />
           <label class="custom-control-label" for="capitalization-initial">
             {{$t('settings.appearance.properNouns')}}
-            <br>
+            <br />
             <p class="small mb-0">{{$t('settings.appearance.properNounsDescription')}}</p>
           </label>
         </div>
@@ -165,7 +165,7 @@
               value="full"
               autocomplete="off"
               checked
-            >
+            />
             {{$t('settings.appearance.full')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
@@ -188,7 +188,7 @@
               id="horizontal-alignment-left"
               value="left"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.left')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
@@ -211,7 +211,7 @@
               id="horizontal-alignment-middle"
               value="middle"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.middle')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
@@ -234,7 +234,7 @@
               id="horizontal-alignment-right"
               value="right"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.right')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
@@ -263,7 +263,7 @@
               id="vertical-alignment-full"
               value="full"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.full')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
@@ -286,7 +286,7 @@
               id="vertical-alignment-top"
               value="top"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.top')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
@@ -310,7 +310,7 @@
               id="horizontal-alignment-middle"
               value="middle"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.middle')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-center"
@@ -333,7 +333,7 @@
               id="vertical-alignment-bottom"
               value="bottom"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.bottom')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-end"
@@ -357,7 +357,7 @@
               id="vertical-alignment-lower-third"
               value="lowerThird"
               autocomplete="off"
-            >
+            />
             {{$t('settings.appearance.lowerThird')}}
             <div
               class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-end"
@@ -386,7 +386,7 @@
                 step="0.25"
                 max="10"
                 v-model="alignmentPadding"
-              >
+              />
               <span class="input-group-append">
                 <span class="input-group-text">em</span>
               </span>
@@ -396,7 +396,7 @@
       </div>
     </div>
 
-    <hr class="my-4">
+    <hr class="my-4" />
 
     <h3>{{$t('settings.appearance.background')}}</h3>
 
@@ -417,7 +417,7 @@
       append-input-text="%"
     />
 
-    <hr class="my-4">
+    <hr class="my-4" />
 
     <h3>{{$t('settings.appearance.textShadow')}}</h3>
 
@@ -468,7 +468,7 @@
 import debounce from 'lodash.debounce';
 import hexToRGB from '~/mixins/hexToRGB';
 import FontSelector from '~/components/FontSelector.vue';
-import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
+import { BSpinner } from 'bootstrap-vue';
 import fontStylesheet from '~/components/FontStylesheet.vue';
 
 export default {
@@ -479,7 +479,7 @@ export default {
   },
   components: {
     FontSelector,
-    bSpinner,
+    BSpinner,
     fontStylesheet,
   },
   computed: {

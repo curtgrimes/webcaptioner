@@ -13,34 +13,34 @@
       <div class="card-header px-3">
         <div class="row">
           <div class="col-lg-4">
-            <b-btn
+            <b-button
               size="sm"
               v-if="!copyLogMode"
               variant="secondary"
               class="mr-2"
               @click="copyLogMode = true"
-            >{{$t('settings.eventLog.copyLog')}}</b-btn>
-            <b-btn
+            >{{$t('settings.eventLog.copyLog')}}</b-button>
+            <b-button
               size="sm"
               v-if="copyLogMode"
               variant="outline-secondary"
               class="mr-2"
               @click="copyLogMode = false"
-            >{{$t('common.done')}}</b-btn>
-            <b-btn
+            >{{$t('common.done')}}</b-button>
+            <b-button
               class="d-lg-none"
               size="sm"
               v-if="tickInterval"
               variant="danger"
               @click="stopLogging()"
-            >{{$t('settings.eventLog.stopLogging')}}</b-btn>
-            <b-btn
+            >{{$t('settings.eventLog.stopLogging')}}</b-button>
+            <b-button
               class="d-lg-none"
               size="sm"
               v-if="!tickInterval"
               variant="default"
               @click="initEventLog()"
-            >{{$t('settings.eventLog.restartLogging')}}</b-btn>
+            >{{$t('settings.eventLog.restartLogging')}}</b-button>
           </div>
           <div class="col-lg-8 small text-lg-right">
             <span class="pt-2 pr-2 d-inline-block">
@@ -49,20 +49,20 @@
               >{{$t('settings.eventLog.loggingTurnsOffIn', {timeRemainingMinutes, timeRemainingSeconds})}}</span>
               <span v-else>{{$t('settings.eventLog.loggingOff')}}</span>
             </span>
-            <b-btn
+            <b-button
               class="d-none d-lg-inline-block"
               size="sm"
               v-if="tickInterval"
               variant="danger"
               @click="stopLogging()"
-            >{{$t('settings.eventLog.stopLogging')}}</b-btn>
-            <b-btn
+            >{{$t('settings.eventLog.stopLogging')}}</b-button>
+            <b-button
               class="d-none d-lg-inline-block"
               size="sm"
               v-if="!tickInterval"
               variant="default"
               @click="initEventLog()"
-            >{{$t('settings.eventLog.restartLogging')}}</b-btn>
+            >{{$t('settings.eventLog.restartLogging')}}</b-button>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@
                 v-model="autoscroll"
                 style="position:relative;top:-1px;"
                 class="mr-1"
-              >
+              />
               {{$t('settings.eventLog.autoScroll')}}
             </label>
           </div>
@@ -122,11 +122,11 @@
 </template>
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
+import { BButton } from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
+    BButton,
   },
   middleware: ['settings-meta'],
   meta: {

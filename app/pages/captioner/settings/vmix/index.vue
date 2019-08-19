@@ -9,7 +9,7 @@
     </i18n>
     <transition name="fade">
       <b-alert :show="showStep3SuccessMessage" variant="success">
-        <fa icon="check-circle" fixed-width/>
+        <fa icon="check-circle" fixed-width />
         {{$t('settings.vmix.connectedToVmix')}}
         <i18n path="settings.vmix.captionsWillAppear" tag="span">
           <router-link
@@ -24,42 +24,42 @@
       <div class="row">
         <div class="col-6 pt-2">{{$t('settings.vmix.connectToVmix')}}</div>
         <div class="col-6 text-right">
-          <b-btn
+          <b-button
             @click="sendToVmixOn = false"
             :variant="sendToVmixOn ? 'link' : 'outline-secondary'"
             size="sm"
-          >{{$t('common.off')}}</b-btn>
-          <b-btn
+          >{{$t('common.off')}}</b-button>
+          <b-button
             @click="sendToVmixOn = true"
             :variant="sendToVmixOn ? 'secondary' : 'link'"
             size="sm"
-          >{{$t('common.on')}}</b-btn>
+          >{{$t('common.on')}}</b-button>
         </div>
       </div>
-      <hr>
+      <hr />
       <div class="row">
         <div class="col-4 col-sm-6 pt-sm-2">{{$t('settings.vmix.webControllerAddress')}}</div>
         <div class="col-8 col-sm-6 text-right">
           <b-input-group size="sm">
             <b-form-input type="text" v-model="webControllerAddressLocalCopy"></b-form-input>
             <b-input-group-append>
-              <b-btn
+              <b-button
                 variant="outline-secondary"
                 style="padding:.35rem 1rem .425rem 1rem"
                 @click="updateWebControllerAddress()"
-              >{{$t('common.update')}}</b-btn>
+              >{{$t('common.update')}}</b-button>
             </b-input-group-append>
           </b-input-group>
         </div>
       </div>
-      <hr>
+      <hr />
       <div class="row">
         <div class="col-4 col-sm-6 pt-sm-2">{{$t('settings.vmix.sendTestMessage')}}</div>
         <div class="col-8 col-sm-6 text-right">
           <b-input-group size="sm">
             <b-form-input type="text" v-model="testMessage"></b-form-input>
             <b-input-group-append>
-              <b-btn
+              <b-button
                 variant="outline-secondary"
                 style="padding:.35rem 1rem .425rem 1rem"
                 @click="sendTestMessage()"
@@ -67,29 +67,29 @@
               >
                 <span v-if="!testMessageSent">Send</span>
                 <span v-else>{{$t('settings.vmix.sent')}}</span>
-              </b-btn>
+              </b-button>
             </b-input-group-append>
           </b-input-group>
         </div>
       </div>
-      <hr>
+      <hr />
       <div class="row mb-2">
         <div class="col-6 pt-2">{{$t('common.setup')}}</div>
         <div class="col-6 text-right">
-          <b-btn
+          <b-button
             @click="showSettings = !showSettings; vmixStepsTabIndex = 2"
             :variant="showSettings ? 'secondary' : 'outline-secondary'"
             size="sm"
           >
             <span v-if="showSettings">{{$t('common.hideSetup')}}</span>
             <span v-else>{{$t('common.showSetup')}}</span>
-          </b-btn>
+          </b-button>
         </div>
       </div>
     </div>
 
     <div class="position-relative">
-      <b-btn
+      <b-button
         v-if="loading"
         variant="default"
         disabled
@@ -97,9 +97,9 @@
         style="top:0"
       >
         <!-- Haven't decided yet if settings will show or not -->
-        <fa icon="spinner" spin/>
+        <fa icon="spinner" spin />
         {{$t('common.loading')}}
-      </b-btn>
+      </b-button>
       <transition name="fade">
         <div v-show="showSettings">
           <b-card no-body class="fade" :class="{'show' : showSettings, 'invisible': !showSettings}">
@@ -107,7 +107,7 @@
               <b-tab active>
                 <template slot="title">
                   <div class="text-md-left">
-                    <fa icon="check-circle" v-if="chromeExtensionInstalled"/>
+                    <fa icon="check-circle" v-if="chromeExtensionInstalled" />
                     {{$t('settings.vmix.step1')}}
                     <div class="small d-none d-md-block">
                       <span class="d-inline d-xl-none">{{$t('common.install')}}</span>
@@ -126,34 +126,34 @@
                     v-if="!chromeExtensionInstalled"
                     class="btn btn-outline-info"
                   >
-                    <fa :icon="['fab','chrome']" class="mr-2"/>
+                    <fa :icon="['fab','chrome']" class="mr-2" />
                     {{$t('settings.vmix.addToChrome')}}
                   </a>
-                  <b-btn v-else variant="outline-success" disabled>
-                    <fa icon="check-circle" class="mr-2"/>
+                  <b-button v-else variant="outline-success" disabled>
+                    <fa icon="check-circle" class="mr-2" />
                     {{$t('settings.vmix.extensionInstalled')}}
-                  </b-btn>
+                  </b-button>
                 </div>
                 <b-alert
                   :show="showExtensionNotInstalledMessage"
                   variant="danger"
                 >{{$t('settings.vmix.extensionNotInstalled')}}</b-alert>
-                <hr class="my-3">
+                <hr class="my-3" />
                 <div class="text-right">
-                  <b-btn
+                  <b-button
                     @click="step1NextClick()"
                     size="sm"
                     :variant="chromeExtensionInstalled ? 'secondary' : 'default'"
                   >
                     {{$t('common.next')}}
-                    <fa icon="chevron-right"/>
-                  </b-btn>
+                    <fa icon="chevron-right" />
+                  </b-button>
                 </div>
               </b-tab>
               <b-tab :disabled="!chromeExtensionInstalled">
                 <template slot="title">
                   <div class="text-md-left" id="vmixStep2Tab">
-                    <fa icon="check-circle" v-if="webControllerConnected"/>
+                    <fa icon="check-circle" v-if="webControllerConnected" />
                     {{$t('settings.vmix.step2')}}
                     <div class="small d-none d-md-block">{{$t('settings.vmix.vmixWebController')}}</div>
                   </div>
@@ -182,7 +182,7 @@
                     class="form-control"
                     :placeholder="$t('settings.vmix.webControllerAddress')"
                     required="true"
-                  >
+                  />
                   <template slot="append" v-if="webControllerConnected">
                     <div class="input-group-text text-success">
                       <fa
@@ -205,9 +205,9 @@
                     <span place="webControllerAddress">{{webControllerAddress}}</span>
                   </i18n>
                 </b-alert>
-                <hr class="my-3">
+                <hr class="my-3" />
                 <div class="text-right">
-                  <b-btn
+                  <b-button
                     @click="step2NextClick()"
                     size="sm"
                     :variant="webControllerAddress == '' ? 'default' : 'secondary'"
@@ -215,18 +215,18 @@
                   >
                     <div v-if="!attemptingWebControllerConnect">
                       {{$t('common.next')}}
-                      <fa icon="chevron-right"/>
+                      <fa icon="chevron-right" />
                     </div>
                     <div v-else aria-label="Loading">
-                      <fa icon="spinner" spin/>
+                      <fa icon="spinner" spin />
                     </div>
-                  </b-btn>
+                  </b-button>
                 </div>
               </b-tab>
               <b-tab :disabled="!webControllerConnected">
                 <template slot="title">
                   <div class="text-md-left" id="vmixStep3Tab">
-                    <fa icon="check-circle" v-if="foundTemplateInVmix"/>
+                    <fa icon="check-circle" v-if="foundTemplateInVmix" />
                     {{$t('settings.vmix.step3')}}
                     <div class="small d-none d-md-block">
                       <span class="d-inline d-xl-none">{{$t('settings.vmix.import')}}</span>
@@ -248,7 +248,7 @@
                         <a href="/web-captioner-title.xaml">
                           {{$t('settings.vmix.webCaptionerTitleTemplate')}}
                           <span class="ml-1">
-                            <fa icon="external-link-alt" fixed-width/>
+                            <fa icon="external-link-alt" fixed-width />
                           </span>
                         </a>
                       </strong>
@@ -277,9 +277,9 @@
                   dismissible
                   variant="danger"
                 >{{$t('settings.vmix.cantFindTemplate')}}</b-alert>
-                <hr class="my-3">
+                <hr class="my-3" />
                 <div class="text-right">
-                  <b-btn
+                  <b-button
                     @click="step3NextClick"
                     size="sm"
                     :variant="webControllerAddress == '' ? 'default' : 'secondary'"
@@ -287,9 +287,9 @@
                   >
                     <div v-if="!testingVmixTemplate">{{$t('settings.vmix.testAndFinishSetup')}}</div>
                     <div v-else aria-label="Loading">
-                      <fa icon="spinner" spin/>
+                      <fa icon="spinner" spin />
                     </div>
-                  </b-btn>
+                  </b-button>
                 </div>
               </b-tab>
             </b-tabs>
@@ -321,27 +321,29 @@
 
 
 <script>
-import bAlert from 'bootstrap-vue/es/components/alert/alert';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bCard from 'bootstrap-vue/es/components/card/card';
-import bFormInput from 'bootstrap-vue/es/components/form-input/form-input';
-import bInputGroup from 'bootstrap-vue/es/components/input-group/input-group';
-import bInputGroupAppend from 'bootstrap-vue/es/components/input-group/input-group-append';
-import bTabs from 'bootstrap-vue/es/components/tabs/tabs';
-import bTab from 'bootstrap-vue/es/components/tabs/tab';
-import bTooltip from 'bootstrap-vue/es/components/tooltip/tooltip';
+import {
+  BAlert,
+  BButton,
+  BCard,
+  BFormInput,
+  BInputGroup,
+  BInputGroupAppend,
+  BTabs,
+  BTab,
+  BTooltip,
+} from 'bootstrap-vue';
 
 export default {
   components: {
-    bAlert,
-    bBtn,
-    bCard,
-    bFormInput,
-    bInputGroup,
-    bInputGroupAppend,
-    bTabs,
-    bTab,
-    bTooltip,
+    BAlert,
+    BButton,
+    BCard,
+    BFormInput,
+    BInputGroup,
+    BInputGroupAppend,
+    BTabs,
+    BTab,
+    BTooltip,
   },
   middleware: ['settings-meta'],
   meta: {

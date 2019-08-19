@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-grow-1">
-    <transcript/>
+    <transcript />
     <b-modal
       v-model="showModal"
       lazy
@@ -19,7 +19,7 @@
       >{{$t('captioner.saveToFile.transcriptEmptyMessage')}}</b-alert>
       <div class="row">
         <div class="col-6">
-          <b-btn
+          <b-button
             @click="saveAsText()"
             :disabled="transcriptEmpty"
             variant="secondary"
@@ -28,14 +28,14 @@
             ref="textFileButton"
           >
             <div class="mx-auto mb-3 mt-2">
-              <fa icon="file-alt" size="3x"/>
+              <fa icon="file-alt" size="3x" />
             </div>
             <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.text')}}</span>
             <span class="d-none d-sm-inline">{{$t('captioner.saveToFile.textFile')}}</span>
-          </b-btn>
+          </b-button>
         </div>
         <div class="col-6">
-          <b-btn
+          <b-button
             @click="saveAsWord()"
             :disabled="transcriptEmpty"
             variant="secondary"
@@ -43,20 +43,20 @@
             class="py-3"
           >
             <div class="mx-auto mb-3 mt-2">
-              <fa icon="file-word" size="3x"/>
+              <fa icon="file-word" size="3x" />
             </div>
             <span class="d-inline d-sm-none">{{$t('captioner.saveToFile.word')}}</span>
             <span class="d-none d-sm-inline">{{$t('captioner.saveToFile.wordDocument')}}</span>
-          </b-btn>
+          </b-button>
         </div>
       </div>
-      <b-btn
+      <b-button
         class="mt-3"
         variant="outline-info"
         block
         :to="localePath('captioner')"
         replace
-      >{{$t('common.close')}}</b-btn>
+      >{{$t('common.close')}}</b-button>
     </b-modal>
   </div>
 </template>
@@ -65,9 +65,7 @@
 import saveToFile from '~/mixins/saveToFile';
 import transcript from '~/components/Transcript.vue';
 import dateFormat from '~/mixins/dateFormat';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bAlert from 'bootstrap-vue/es/components/alert/alert';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
+import { BButton, BAlert, BModal } from 'bootstrap-vue';
 
 const routeName = 'save-to-file';
 
@@ -75,9 +73,9 @@ export default {
   name: 'save-as-file-modal',
   components: {
     transcript,
-    bBtn,
-    bAlert,
-    bModal,
+    BButton,
+    BAlert,
+    BModal,
   },
   mixins: [saveToFile, dateFormat],
   data: function() {

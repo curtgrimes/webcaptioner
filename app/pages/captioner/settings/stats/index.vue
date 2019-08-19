@@ -8,7 +8,7 @@
           class="col-sm-9 scrollRight"
         >{{$store.state.captioner.transcript.interim}}</div>
       </div>
-      <hr>
+      <hr />
       <div class="row small mb-3 mb-sm-2 mt-2">
         <div class="col-sm-3 col-lg-2 font-weight-bold text-uppercase text-sm-right">Final</div>
         <div
@@ -16,7 +16,7 @@
           class="col-sm-9 scrollRight"
         >{{$store.state.captioner.transcript.final}}</div>
       </div>
-      <hr>
+      <hr />
       <div class="row small mb-3 mb-sm-2 mt-2">
         <div class="col-sm-3 col-lg-2 font-weight-bold text-uppercase text-sm-right">Stabilized</div>
         <div
@@ -24,7 +24,7 @@
           class="col-sm-9 scrollRight"
         >{{$store.state.captioner.transcript.stabilized}}</div>
       </div>
-      <hr>
+      <hr />
       <div class="row mb-3 mb-sm-2 mt-2">
         <div class="col-sm-3 small col-lg-2 font-weight-bold text-uppercase text-sm-right">Cursor</div>
         <div class="col-sm-9">
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-      <hr>
+      <hr />
       <div class="row mt-2">
         <div class="col-sm-3 small col-lg-2 font-weight-bold text-uppercase text-sm-right">Locale</div>
         <div class="col-sm-9 small">
@@ -142,11 +142,11 @@
 
 <script>
 import locales from '~/mixins/data/locales';
-import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
+import { BCollapse } from 'bootstrap-vue';
 
 export default {
   components: {
-    bCollapse,
+    BCollapse,
   },
   middleware: ['settings-meta'],
   meta: {

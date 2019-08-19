@@ -1,6 +1,6 @@
 <template>
   <transition :name="inline ? 'expand' : 'fade'">
-    <b-btn
+    <b-button
       v-if="show && backlink"
       @mouseover="backlinkHovering = true"
       @mouseleave="backlinkHovering = false"
@@ -16,24 +16,24 @@
         class="og-image flex-shrink-0"
         :style="{backgroundImage: 'url(\''+ backlink.imageUrl +'\')'}"
       ></div>
-      <fa v-else icon="info-circle" class="m-1" size="2x"/>
+      <fa v-else icon="info-circle" class="m-1" size="2x" />
       <transition name="fade">
         <div v-show="shouldShowInfo || alwaysExpanded" class="og-text px-1 ml-2">
           {{backlink.title}}
-          <br>
+          <br />
           <span class="normal-text small">{{backlink.description}}</span>
         </div>
       </transition>
-    </b-btn>
+    </b-button>
   </transition>
 </template>
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
+import { BButton } from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
+    BButton,
   },
   props: {
     backlinkData: Object,

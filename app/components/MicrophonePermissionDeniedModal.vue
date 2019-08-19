@@ -14,7 +14,7 @@
       <strong>allow Web Captioner to use your microphone</strong>.
     </p>
     <div slot="modal-footer">
-      <b-btn ref="closeButton" class="float-right" variant="secondary" @click="hideModal()">Close</b-btn>
+      <b-button ref="closeButton" class="float-right" variant="secondary" @click="hideModal()">Close</b-button>
     </div>
   </b-modal>
 </template>
@@ -22,13 +22,12 @@
 
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
+import { BButton, BModal } from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bModal,
+    BButton,
+    BModal,
   },
   methods: {
     showModal() {

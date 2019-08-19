@@ -41,13 +41,12 @@
 
 
 <script>
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
+import { BListGroup, BListGroupItem } from 'bootstrap-vue';
 
 export default {
   components: {
-    bListGroup,
-    bListGroupItem,
+    BListGroup,
+    BListGroupItem,
   },
   data: function() {
     return {

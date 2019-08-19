@@ -1,6 +1,6 @@
 <template>
   <div v-if="receiversAvailable" :class="largerLayout ? 'mr-3' : 'mr-2'">
-    <b-btn
+    <b-button
       v-if="connecting"
       id="castConnectingButton"
       v-b-tooltip.hover
@@ -36,37 +36,41 @@
                 id="Path"
                 fill="#ffffff"
                 sketch:type="MSShapeGroup"
-              ></path>
+              />
               <path
                 class="cast-connecting-bar cast-connecting-bar-2"
                 d="M1,14 L1,16 C3.76,16 6,18.24 6,21 L8,21 C8,17.13 4.87,14 1,14 L1,14 Z"
                 id="Path"
                 fill="#ffffff"
                 sketch:type="MSShapeGroup"
-              ></path>
+              />
               <path
                 class="cast-connecting-bar cast-connecting-bar-3"
                 d="M1,10 L1,12 C5.97,12 10,16.03 10,21 L12,21 C12,14.92 7.07,10 1,10 L1,10 Z"
                 id="Path"
                 fill="#ffffff"
                 sketch:type="MSShapeGroup"
-              ></path>
+              />
               <path
                 d="M21,3 L3,3 C1.9,3 1,3.9 1,5 L1,8 L3,8 L3,5 L21,5 L21,19 L14,19 L14,21 L21,21 C22.1,21 23,20.1 23,19 L23,5 C23,3.9 22.1,3 21,3 L21,3 Z"
                 id="Path"
                 fill="#ffffff"
                 sketch:type="MSShapeGroup"
-              ></path>
-              <rect id="bounds" sketch:type="MSShapeGroup" x="0" y="0" width="24" height="24"></rect>
+              />
+              <rect id="bounds" sketch:type="MSShapeGroup" x="0" y="0" width="24" height="24" />
             </g>
           </g>
-          <g id="assets" sketch:type="MSLayerGroup" transform="translate(-240.000000, -106.000000)">
-            <g id="64px" transform="translate(0.000000, 114.000000)"></g>
+          <g
+            id="assets"
+            sketch:type="MSLayerGroup"
+            transform="translate(-240.000000, -106.000000)"
+          >
+            <g id="64px" transform="translate(0.000000, 114.000000)" />
           </g>
         </g>
       </svg>
-    </b-btn>
-    <b-btn
+    </b-button>
+    <b-button
       id="cast-connected-button"
       v-else-if="connected"
       v-b-tooltip.hover="$t('googleCast.castingToReceiver', {receiverName})"
@@ -75,9 +79,9 @@
       :size="largerLayout ? 'lg' : ''"
       :class="largerLayout ? 'px-4 py-3' : ''"
     >
-      <img src="/static/cast-icons/cast-icon-connected.svg">
-    </b-btn>
-    <b-btn
+      <img src="/static/cast-icons/cast-icon-connected.svg" />
+    </b-button>
+    <b-button
       v-else
       variant="info"
       v-b-tooltip.hover="$t('googleCast.cast')"
@@ -85,8 +89,8 @@
       :size="largerLayout ? 'lg' : ''"
       :class="largerLayout ? 'px-4 py-3' : ''"
     >
-      <img src="/static/cast-icons/cast-icon.svg">
-    </b-btn>
+      <img src="/static/cast-icons/cast-icon.svg" />
+    </b-button>
     <b-modal
       :title="$t('googleCast.castingFailed')"
       :hide-header="true"
@@ -97,7 +101,7 @@
     >
       <div class="py-2">
         <div class="pb-2 h4">
-          <fa icon="exclamation-triangle" size="3x"/>
+          <fa icon="exclamation-triangle" size="3x" />
         </div>
         <h2>{{$t('googleCast.unableToCast')}}</h2>
         <p class="lead">{{$t('googleCast.pleaseTryAgain')}}</p>
@@ -135,19 +139,17 @@
 <script>
 import loadScript from 'load-script';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
-import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
+import { BButton, BModal, VBTooltip } from 'bootstrap-vue';
 
 const namespace = 'urn:x-cast:com.webcaptioner.cast.captioner';
 
 export default {
   components: {
-    bBtn,
-    bModal,
+    BButton,
+    BModal,
   },
   directives: {
-    bTooltip,
+    'b-tooltip': VBTooltip,
   },
   data: function() {
     return {

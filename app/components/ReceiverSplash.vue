@@ -91,7 +91,7 @@
                                   style="line-height:2.3rem"
                                 >Live captioning is in progress.</div>
                                 <div class="col-4 d-flex">
-                                  <b-btn
+                                  <b-button
                                     size="sm"
                                     @click="show = false"
                                     variant="outline-secondary"
@@ -102,16 +102,16 @@
                                       class="close-btn-inner-wrap"
                                       v-bind:style="{width: ((closeCountdownCurrentMs/closeCountdownMaxMs)*100) +'%'}"
                                     >
-                                      <b-btn
+                                      <b-button
                                         size="sm"
                                         @click="show = false"
                                         variant="secondary"
                                         class="close-btn-inner border-0 px-3 text-left rounded-0"
                                       >
                                         <span class="px-2">Close</span>
-                                      </b-btn>
+                                      </b-button>
                                     </div>
-                                  </b-btn>
+                                  </b-button>
                                 </div>
                               </div>
                             </span>
@@ -137,7 +137,7 @@
                         <div v-if="!message">
                           <transition name="expand">
                             <p v-show="!minimized" class="lead text-muted mb-0">
-                              <fa icon="circle-notch" spin class="mr-2"/>You'll see captions soon.
+                              <fa icon="circle-notch" spin class="mr-2" />You'll see captions soon.
                             </p>
                           </transition>
                           <backlink
@@ -162,7 +162,7 @@
                               height="22"
                               class="d-inline-block align-top"
                               alt
-                            >
+                            />
                             Web Captioner
                           </a>
                         </div>
@@ -184,12 +184,12 @@
 
 <script>
 import backlink from '~/components/Backlink.vue';
-import bBtn from 'bootstrap-vue/es/components/button/button';
+import { BButton } from 'bootstrap-vue';
 
 export default {
   components: {
     backlink,
-    bBtn,
+    BButton,
   },
   props: {
     roomId: String,

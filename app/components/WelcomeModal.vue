@@ -22,7 +22,7 @@
               style="width:100%"
               class="mt-3 mw-100 mx-auto d-block mb-3 logo-animated"
               alt
-            >
+            />
           </div>
         </div>
         <div class="col-lg-9 pl-4">
@@ -48,12 +48,12 @@
           </p>
         </div>
         <div class="col-6">
-          <b-btn
+          <b-button
             ref="getStartedButton"
             class="float-right"
             variant="secondary"
             @click="hideModal()"
-          >{{$t('settings.about.getStarted')}}</b-btn>
+          >{{$t('settings.about.getStarted')}}</b-button>
         </div>
       </div>
     </div>
@@ -99,14 +99,13 @@
 
 <script>
 import whatsNew from './WhatsNew.vue';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
+import { BButton, BModal } from 'bootstrap-vue';
 
 export default {
   components: {
     whatsNew,
-    bBtn,
-    bModal,
+    BButton,
+    BModal,
   },
   mounted: function() {
     let self = this;

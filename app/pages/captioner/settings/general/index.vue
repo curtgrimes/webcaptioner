@@ -223,21 +223,11 @@
 </template>
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
-import bNavbar from 'bootstrap-vue/es/components/navbar/navbar';
-import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
+import { BFormCheckbox } from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bFormCheckbox,
-    bListGroup,
-    bListGroupItem,
-    bNavbar,
-    bDropdown,
+    BFormCheckbox,
   },
   middleware: ['settings-meta'],
   meta: {

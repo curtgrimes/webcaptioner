@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex w-100 flex-column" style="height: 100vh;">
     <div v-if="showTranscript || $route.query.broadcast !== undefined" class="d-flex flex-grow-1">
-      <backlink v-if="$route.query.broadcast === undefined" :roomId="$route.params.roomId"/>
-      <transcript show-typed-live-read-only/>
+      <backlink v-if="$route.query.broadcast === undefined" :roomId="$route.params.roomId" />
+      <transcript show-typed-live-read-only />
     </div>
     <nav
       v-if="showTranscript && this.$route.query.broadcast === undefined"
@@ -16,18 +16,18 @@
           class="d-inline-block"
           style="position:relative;top:-1px;margin-right:10px"
           alt="Web Captioner"
-        >
+        />
         <span class="d-none d-md-inline">Web Captioner</span>
       </span>
       <b-dropdown variant="info" text="Settings" class="mr-2" no-caret right>
         <template slot="button-content">
-          <fa icon="cog"/>
+          <fa icon="cog" />
           <span class="sr-only">Settings</span>
         </template>
         <b-dropdown-item @click="$refs.delayModal.show()">Delay</b-dropdown-item>
       </b-dropdown>
       <b-button-group>
-        <b-btn
+        <b-button
           variant="primary"
           class="px-4"
           @click="decreaseTextSize()"
@@ -40,9 +40,9 @@
           v-b-tooltip.hover
           title="Smaller"
         >
-          <fa icon="minus"/>
-        </b-btn>
-        <b-btn
+          <fa icon="minus" />
+        </b-button>
+        <b-button
           variant="primary"
           class="px-4"
           @click="increaseTextSize()"
@@ -55,8 +55,8 @@
           v-b-tooltip.hover
           title="Larger"
         >
-          <fa icon="plus"/>
-        </b-btn>
+          <fa icon="plus" />
+        </b-button>
       </b-button-group>
     </nav>
     <receiver-splash
@@ -89,7 +89,7 @@
         </label>
         <div class="row">
           <div class="col-2">
-            <b-btn
+            <b-button
               variant="outline-info"
               block
               @click="decreaseDelay()"
@@ -100,8 +100,8 @@
               @touchend="stopLongPress(decreaseDelay)"
               @touchcancel="stopLongPress(decreaseDelay)"
             >
-              <fa icon="minus"/>
-            </b-btn>
+              <fa icon="minus" />
+            </b-button>
           </div>
           <div class="col-8 mt-1 pt-2 px-0">
             <input
@@ -112,10 +112,10 @@
               :step="delayInputStep"
               class="form-control-range"
               v-model="delayUnsavedMs"
-            >
+            />
           </div>
           <div class="col-2">
-            <b-btn
+            <b-button
               variant="outline-info"
               block
               @click="increaseDelay()"
@@ -126,8 +126,8 @@
               @touchend="stopLongPress(increaseDelay)"
               @touchcancel="stopLongPress(increaseDelay)"
             >
-              <fa icon="plus"/>
-            </b-btn>
+              <fa icon="plus" />
+            </b-button>
           </div>
         </div>
       </div>
@@ -151,13 +151,13 @@
           </b-progress>
         </div>
         <div class="col-3">
-          <b-btn
+          <b-button
             @click="restorePreviousDelaySetting()"
             block
             class="py-1"
             variant="light"
             size="sm"
-          >Cancel</b-btn>
+          >Cancel</b-button>
         </div>
       </div>
     </b-modal>
@@ -173,14 +173,16 @@ import ReceiverSplash from '~/components/ReceiverSplash.vue';
 import navbar from '~/components/Navbar.vue';
 import backlink from '~/components/Backlink.vue';
 
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
-import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
-import bDropdownItem from 'bootstrap-vue/es/components/dropdown/dropdown-item';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
-import bProgress from 'bootstrap-vue/es/components/progress/progress';
-import bProgressBar from 'bootstrap-vue/es/components/progress/progress-bar';
-import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
+import {
+  BButton,
+  BButtonGroup,
+  BDropdown,
+  BDropdownItem,
+  BModal,
+  BProgress,
+  BProgressBar,
+  VBTooltip,
+} from 'bootstrap-vue';
 
 export default {
   components: {
@@ -188,16 +190,16 @@ export default {
     ReceiverSplash,
     navbar,
     backlink,
-    bBtn,
-    bBtnGroup,
-    bDropdown,
-    bDropdownItem,
-    bProgress,
-    bProgressBar,
-    bModal,
+    BButton,
+    BButtonGroup,
+    BDropdown,
+    BDropdownItem,
+    BProgress,
+    BProgressBar,
+    BModal,
   },
   directives: {
-    bTooltip,
+    'b-tooltip': VBTooltip,
   },
   async asyncData({ app, params, res }) {
     try {

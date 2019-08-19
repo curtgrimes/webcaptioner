@@ -3,7 +3,7 @@
     Your settings will now be saved to your account whenever you're signed in.
     <div slot="modal-footer" class="w-100">
       <div class="d-flex">
-        <b-btn class="ml-auto" variant="secondary" @click="hideModal()">Got it</b-btn>
+        <b-button class="ml-auto" variant="secondary" @click="hideModal()">Got it</b-button>
       </div>
     </div>
   </b-modal>
@@ -12,13 +12,12 @@
 
 
 <script>
-import bModal from 'bootstrap-vue/es/components/modal/modal';
-import bBtn from 'bootstrap-vue/es/components/button/button';
+import { BModal, BButton } from 'bootstrap-vue';
 
 export default {
   components: {
-    bModal,
-    bBtn,
+    BModal,
+    BButton,
   },
   methods: {
     showModal() {

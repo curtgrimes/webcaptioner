@@ -8,7 +8,7 @@
       role="tab"
       active-class
     >
-      <fa icon="times" size="2x"/>
+      <fa icon="times" size="2x" />
     </router-link>
     <!-- xs navbar -->
     <nav
@@ -22,7 +22,7 @@
           class="btn btn-primary mr-2"
           v-if="showBackButton"
         >
-          <fa icon="arrow-left"/>
+          <fa icon="arrow-left" />
         </router-link>
         <div
           class="navbar-text font-weight-bold"
@@ -30,7 +30,7 @@
         >{{navbarTitle}}</div>
       </div>
       <router-link :to="localePath('captioner')" class="btn btn-primary">
-        <fa icon="times" aria-label="Close"/>
+        <fa icon="times" aria-label="Close" />
       </router-link>
     </nav>
     <div class="row mx-0" style="min-height:100%">
@@ -110,7 +110,7 @@
                     v-if="experiments.length || currentlyOnExperiments"
                     :to="localePath('captioner-settings-experiments')"
                   >
-                    <fa icon="flask"/>
+                    <fa icon="flask" />
                     {{$t('settings.experiments.experiments')}}
                   </b-nav-item>
                 </b-nav>
@@ -139,7 +139,7 @@
                     :to="localePath('captioner-settings-webhooks')"
                   >{{$t('settings.webhooks.webhooks')}}</b-nav-item>
                 </b-nav>
-                <hr>
+                <hr />
                 <b-nav vertical pills>
                   <b-nav-item
                     active-class="active"
@@ -171,17 +171,17 @@
               >
                 Sign in to save your settings to your account.
                 <div class="w-100 d-md-none"></div>
-                <b-btn
+                <b-button
                   :to="localePath('captioner-sign-in')"
                   size="sm"
                   class="p-2 px-3 ml-md-auto mt-2 mt-md-0 d-block"
                   variant="secondary"
                 >
-                  <fa icon="user-circle" class="mr-2"/>Sign In
-                </b-btn>
+                  <fa icon="user-circle" class="mr-2" />Sign In
+                </b-button>
               </div>
             </transition>
-            <nuxt-child/>
+            <nuxt-child />
           </div>
         </div>
       </div>
@@ -232,22 +232,25 @@
 
 <script>
 import Combokeys from 'combokeys';
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
-import bNav from 'bootstrap-vue/es/components/nav/nav';
-import bNavItem from 'bootstrap-vue/es/components/nav/nav-item';
-import bBadge from 'bootstrap-vue/es/components/badge/badge';
-import bBtn from 'bootstrap-vue/es/components/button/button';
+
+import {
+  BListGroup,
+  BListGroupItem,
+  BNav,
+  BNavItem,
+  BBadge,
+  BButton,
+} from 'bootstrap-vue';
 
 export default {
   mixins: [],
   components: {
-    bListGroup,
-    bListGroupItem,
-    bNav,
-    bNavItem,
-    bBadge,
-    bBtn,
+    BListGroup,
+    BListGroupItem,
+    BNav,
+    BNavItem,
+    BBadge,
+    BButton,
   },
   data: function() {
     return {

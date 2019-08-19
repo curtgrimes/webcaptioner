@@ -1,6 +1,11 @@
 <template>
-  <b-btn-group class="mr-2">
-    <b-btn v-b-tooltip.hover :title="tooltip" :variant="buttonVariant" @click="showShareSettings()">
+  <b-button-group class="mr-2">
+    <b-button
+      v-b-tooltip.hover
+      :title="tooltip"
+      :variant="buttonVariant"
+      @click="showShareSettings()"
+    >
       <fa icon="broadcast-tower" :class="buttonTextClass" />
       <span
         v-if="!expired && hasValidShareLink && subscriberCount > 0"
@@ -9,8 +14,8 @@
       <b-badge v-if="expired" variant="danger" class="ml-2">
         <fa icon="exclamation-triangle"></fa>
       </b-badge>
-    </b-btn>
-    <b-btn
+    </b-button>
+    <b-button
       v-b-tooltip.hover
       :title="on ? 'Turn off sharing' : 'Turn on sharing'"
       :variant="on ? 'light' : 'light'"
@@ -20,8 +25,8 @@
       @click="on = !on; $event.target.blur(); $event.target.parentElement.blur()"
     >
       <fa :icon="on ? 'toggle-on' : 'toggle-off'" style="font-size:1.3rem;margin-top:0.2rem" />
-    </b-btn>
-  </b-btn-group>
+    </b-button>
+  </b-button-group>
 </template>
 
 
@@ -35,21 +40,23 @@
 </style>
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
-import bBadge from 'bootstrap-vue/es/components/badge/badge';
-import bTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
-import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
+import {
+  BButton,
+  BButtonGroup,
+  BBadge,
+  VBTooltip,
+  BFormCheckbox,
+} from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bBtnGroup,
-    bBadge,
-    bFormCheckbox,
+    BButton,
+    BButtonGroup,
+    BBadge,
+    BFormCheckbox,
   },
   directives: {
-    bTooltip,
+    'b-tooltip': VBTooltip,
   },
   methods: {
     showShareSettings() {

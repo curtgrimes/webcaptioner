@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-grow-1">
-    <transcript/>
+    <transcript />
     <b-modal
       v-model="modalShow"
       lazy
@@ -11,13 +11,13 @@
       @hide="replaceRouteToParent"
     >
       <div class="text-right">
-        <b-btn
+        <b-button
           ref="cancelButton"
           class="mr-2"
           variant="link"
           @click="cancelModal()"
-        >{{$t('common.cancel')}}</b-btn>
-        <b-btn variant="danger" @click="clearTranscript">{{$t('captioner.clearTranscript.ok')}}</b-btn>
+        >{{$t('common.cancel')}}</b-button>
+        <b-button variant="danger" @click="clearTranscript">{{$t('captioner.clearTranscript.ok')}}</b-button>
       </div>
     </b-modal>
   </div>
@@ -26,14 +26,13 @@
 <script>
 const routeName = 'clear-transcript';
 import transcript from '~/components/Transcript.vue';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bModal from 'bootstrap-vue/es/components/modal/modal';
+import { BButton, BModal } from 'bootstrap-vue';
 
 export default {
   components: {
     transcript,
-    bBtn,
-    bModal,
+    BButton,
+    BModal,
   },
   data: function() {
     return {
