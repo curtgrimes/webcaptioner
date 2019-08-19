@@ -22,68 +22,68 @@
         <div
           v-if="$store.state.user.email || $store.state.user.displayName"
         >{{$store.state.user.email || $store.state.user.displayName}}</div>
-        <b-btn
+        <b-button
           size="sm"
           style="font-size:.8rem"
           class="py-0 px-2 mt-1"
           variant="light"
           @click="signOut()"
-        >Sign Out</b-btn>
+        >Sign Out</b-button>
       </div>
       <hr />
     </div>
-    <b-btn-group vertical class="d-flex">
-      <b-btn href="/" block variant="link" class="py-0" size="sm">{{$t('navbar.menu.about')}}</b-btn>
-      <b-btn href="/blog" block variant="link" class="py-0" size="sm">{{$t('navbar.menu.blog')}}</b-btn>
-      <b-btn
+    <b-button-group vertical class="d-flex">
+      <b-button href="/" block variant="link" class="py-0" size="sm">{{$t('navbar.menu.about')}}</b-button>
+      <b-button href="/blog" block variant="link" class="py-0" size="sm">{{$t('navbar.menu.blog')}}</b-button>
+      <b-button
         href="/help"
         block
         variant="link"
         class="py-0"
         size="sm"
-      >{{$t('navbar.menu.helpCenter')}}</b-btn>
-      <!-- <b-btn
+      >{{$t('navbar.menu.helpCenter')}}</b-button>
+      <!-- <b-button
                 href="/donate"
                 block
                 variant="link"
                 class="py-0"
                 size="sm"
-      >{{$t('navbar.menu.donate')}}</b-btn>-->
-      <b-btn
+      >{{$t('navbar.menu.donate')}}</b-button>-->
+      <b-button
         href="/feedback"
         block
         variant="link"
         class="py-0"
         size="sm"
-      >{{$t('navbar.menu.feedback')}}</b-btn>
-    </b-btn-group>
+      >{{$t('navbar.menu.feedback')}}</b-button>
+    </b-button-group>
     <hr />
-    <b-btn-group class="d-flex">
-      <b-btn
+    <b-button-group class="d-flex">
+      <b-button
         :to="localePath('captioner-save-to-file')"
         variant="outline-secondary"
         v-b-tooltip.hover.top
         title="Save transcript"
       >
         <fa icon="save" />
-      </b-btn>
-      <b-btn
+      </b-button>
+      <b-button
         variant="outline-secondary"
         v-b-tooltip.hover.top
         :title="$t('navbar.menu.newWindow')"
         @click="$store.dispatch('START_DETACHED_MODE')"
       >
         <fa icon="window-restore" />
-      </b-btn>
-      <b-btn
+      </b-button>
+      <b-button
         variant="outline-danger"
         :to="localePath('captioner-clear')"
         v-b-tooltip.hover.top
         title="Clear transcript"
       >
         <fa icon="trash-alt" />
-      </b-btn>
-    </b-btn-group>
+      </b-button>
+    </b-button-group>
     <!-- <hr /> -->
     <b-card v-if="false" style="background:#F86753" body-class="text-white p-2">
       <p class="mb-1">
@@ -94,7 +94,7 @@
       <p
         class="mb-1"
       >Support Web Captioner by becoming a patron and getting access to some cool stuff!</p>
-      <b-btn block variant="light" size="sm" :to="localePath('captioner-settings')">Learn More</b-btn>
+      <b-button block variant="light" size="sm" :to="localePath('captioner-settings')">Learn More</b-button>
       <transition name="fade">
         <div v-if="patronCount === null" class="text-center">
           <!-- loading -->
@@ -107,7 +107,7 @@
       </transition>
     </b-card>
     <hr />
-    <b-btn
+    <b-button
       block
       variant="secondary"
       :to="localePath('captioner-settings')"
@@ -117,15 +117,20 @@
       <!--
       -->
       {{$t('navbar.menu.settings')}}
-    </b-btn>
+    </b-button>
     <div v-if="$store.state.user.signedIn === false" class="pt-1" style="line-height:1.25rem">
       <!-- Not signed in -->
       <hr />
-      <b-btn variant="light" block :to="localePath('captioner-sign-in')" @click="$emit('dismiss')">
+      <b-button
+        variant="light"
+        block
+        :to="localePath('captioner-sign-in')"
+        @click="$emit('dismiss')"
+      >
         <fa icon="user-circle" class="mr-1" />
         <!---->
         Sign in
-      </b-btn>
+      </b-button>
       <div class="clearfix"></div>
     </div>
   </div>
@@ -133,25 +138,27 @@
 
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
-import bTooltipDirective from 'bootstrap-vue/es/directives/tooltip/tooltip';
-import bTooltipComponent from 'bootstrap-vue/es/components/tooltip/tooltip';
-import bPopover from 'bootstrap-vue/es/components/popover/popover';
-import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
-import bCard from 'bootstrap-vue/es/components/card/card';
+import {
+  BButton,
+  BButtonGroup,
+  BTooltip,
+  VBTooltip,
+  BPopover,
+  BSpinner,
+  BCard,
+} from 'bootstrap-vue';
 
 export default {
   components: {
-    bBtn,
-    bBtnGroup,
-    bPopover,
-    bCard,
-    bTooltip: bTooltipComponent,
-    bSpinner,
+    BButton,
+    BButtonGroup,
+    BPopover,
+    BCard,
+    BTooltip,
+    BSpinner,
   },
   directives: {
-    bTooltip: bTooltipDirective,
+    'b-tooltip': VBTooltip,
   },
   data: function() {
     return {

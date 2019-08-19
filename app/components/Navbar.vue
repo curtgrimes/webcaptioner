@@ -6,15 +6,15 @@
     >
       <div class="w-100 pb-3" :class="{'d-flex' : largerLayout, 'd-none': !largerLayout}">
         <div class="mr-auto">
-          <b-btn @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">
+          <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">
             Clear
             <kbd class="small ml-3">p</kbd>
-          </b-btn>
+          </b-button>
         </div>
-        <b-btn @click="startSaveToTextFile" variant="info" size="lg" class="px-4 py-3">
+        <b-button @click="startSaveToTextFile" variant="info" size="lg" class="px-4 py-3">
           Save to File
           <kbd class="small ml-3">f</kbd>
-        </b-btn>
+        </b-button>
       </div>
       <div class="d-flex w-100">
         <button
@@ -68,21 +68,21 @@
             <fa icon="exclamation-triangle" />
             {{$t('navbar.vmixNotConnected')}}
           </span>
-          <b-btn-group size="sm">
-            <b-btn
+          <b-button-group size="sm">
+            <b-button
               :to="localePath('captioner-settings-vmix')"
               @click="vmixNotFullySetUpMessageDismissed = true"
               variant="secondary"
               v-if="showVmixNotFullySetUpMessage"
               class="btn-sm"
-            >{{$t('common.setUpVerb')}}</b-btn>
-            <b-btn @click="sendToVmix = false" :aria-label="$t('common.dismiss')">
+            >{{$t('common.setUpVerb')}}</b-button>
+            <b-button @click="sendToVmix = false" :aria-label="$t('common.dismiss')">
               <fa icon="times" />
-            </b-btn>
-          </b-btn-group>
+            </b-button>
+          </b-button-group>
         </div>
-        <b-btn-group :size="largerLayout ? 'lg' : ''" class="captioning-split-button">
-          <b-btn
+        <b-button-group :size="largerLayout ? 'lg' : ''" class="captioning-split-button">
+          <b-button
             id="startCaptioningDropdown"
             :class="incompatibleBrowser ? 'button-only-disabled' : ''"
             :variant="captioningToggleButtonVariant"
@@ -97,8 +97,8 @@
               <span v-else>{{$t('navbar.captioner.stopCaptioning')}}</span>
               <kbd v-show="largerLayout" class="small ml-3">c</kbd>
             </div>
-          </b-btn>
-          <b-btn
+          </b-button>
+          <b-button
             v-if="experiments.includes('typingMode') && !typingModeOn"
             variant="primary"
             v-b-tooltip.top
@@ -106,12 +106,12 @@
             @click="startTypingMode"
           >
             <fa icon="keyboard" />
-          </b-btn>
-          <b-btn v-if="typingModeOn" variant="danger" @click="stopTypingMode">
+          </b-button>
+          <b-button v-if="typingModeOn" variant="danger" @click="stopTypingMode">
             <fa icon="keyboard" />Done Typing
             <kbd>ESC</kbd>
-          </b-btn>
-        </b-btn-group>
+          </b-button>
+        </b-button-group>
         <b-popover
           target="navbar-settings-button"
           placement="top"
@@ -123,11 +123,11 @@
           <settings-popup :shown="showSettingsMenu" @dismiss="showSettingsMenu = false" />
         </b-popover>
 
-        <b-btn
+        <b-button
           id="navbar-settings-button"
           @click="showSettingsMenu = !showSettingsMenu"
           v-b-tooltip.top
-          :title="$t('navbar.menu.settings')"
+          :title="showSettingsMenu ? ' ' : $t('navbar.menu.settings')"
           class="ml-2 text-white px-2 profile-button"
           style="position:relative"
           variant="info"
@@ -143,7 +143,7 @@
           </transition>
           <fa icon="user-circle" />
           <fa icon="ellipsis-v" size="xs" />
-        </b-btn>
+        </b-button>
       </div>
     </nav>
   </div>
@@ -176,12 +176,14 @@ import ShareButton from '../components/ShareButton.vue';
 import SettingsPopup from '../components/SettingsPopup.vue';
 import saveToFile from '~/mixins/saveToFile';
 import dateFormat from '~/mixins/dateFormat';
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bBtnGroup from 'bootstrap-vue/es/components/button-group/button-group';
-import bTooltipDirective from 'bootstrap-vue/es/directives/tooltip/tooltip';
-import bTooltipComponent from 'bootstrap-vue/es/components/tooltip/tooltip';
-import bPopover from 'bootstrap-vue/es/components/popover/popover';
-import bSpinner from 'bootstrap-vue/es/components/spinner/spinner';
+import {
+  BButton,
+  BButtonGroup,
+  BTooltip,
+  VBTooltip,
+  BPopover,
+  BSpinner,
+} from 'bootstrap-vue';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -190,14 +192,14 @@ export default {
     CastButton,
     SettingsPopup,
     ShareButton,
-    bBtn,
-    bBtnGroup,
-    bPopover,
-    bSpinner,
-    bTooltip: bTooltipComponent,
+    BButton,
+    BButtonGroup,
+    BPopover,
+    BSpinner,
+    BTooltip,
   },
   directives: {
-    bTooltip: bTooltipDirective,
+    'b-tooltip': VBTooltip,
   },
   data: function() {
     return {
