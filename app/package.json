@@ -41,6 +41,7 @@
     "lodash.upperfirst": "^4.3.1",
     "metascraper-description": "^5.1.0",
     "nanoid": "^2.0.1",
+    "node-cache": "^4.2.1",
     "node-vibrant": "^3.0.0",
     "nuxt": "^2.8.1",
     "open-graph-scraper": "^3.6.2",

@@ -1,6 +1,13 @@
 const axios = require('axios');
+const nodeCache = require('node-cache');
+const cache = new nodeCache();
 
 module.exports.getFonts = async function () {
+  const cachedFonts = cache.get('fonts');
+  if (cachedFonts) {
+    return cachedFonts;
+  }
+
   let {
     data: {
       items
@@ -18,7 +25,7 @@ module.exports.getFonts = async function () {
     };
   });
 
-  return [
+  const fontsToReturn = [
     // Add OpenDyslexic
     {
       fontFamily: 'OpenDyslexic',
@@ -39,4 +46,11 @@ module.exports.getFonts = async function () {
     },
     ...items
   ];
-}
+
+  cache.set(
+    'fonts',
+    fontsToReturn,
+    60 * 60 * 6 // TTL - Google fonts don't change that often
+  );
+  return fontsToReturn;
+};
