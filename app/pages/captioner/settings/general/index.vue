@@ -44,15 +44,17 @@
         <a href="https://m.me/webcaptioner">contact Web Captioner</a>.
       </p>
     </transition>
-    <div class="clearfix"></div>
+    <div class="clearfix"></div><<<<<<< HEAD
+    <hr />=======
     <hr />
-
+    <!--
+>>>>>>> 11c86e071293445421286f7ef2302071e1efa432
     <div class="row">
       <div class="col-md-4">
         <label
           for="adjust-speed-accuracy"
           class="mb-0 form-group form-inline float-left"
-        >Speed vs. accuracy</label>
+        >Adjust speed/accuracy</label>
       </div>
       <div class="col-md-8">
         <div class="d-flex">
@@ -72,8 +74,8 @@
       </div>
     </div>
     <div class="clearfix"></div>
-    <hr />
-
+    <hr>
+    -->
     <label for="show-volume-meter" class="mb-0">Show volume meter when volume level is low</label>
     <b-form-checkbox id="show-volume-meter" v-model="volumeMeterShow" switch class="float-right"></b-form-checkbox>
     <div class="clearfix"></div>
