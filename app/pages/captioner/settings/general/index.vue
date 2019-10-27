@@ -44,11 +44,9 @@
         <a href="https://m.me/webcaptioner">contact Web Captioner</a>.
       </p>
     </transition>
-    <div class="clearfix"></div><<<<<<< HEAD
-    <hr />=======
+    <div class="clearfix"></div>
     <hr />
     <!--
->>>>>>> 11c86e071293445421286f7ef2302071e1efa432
     <div class="row">
       <div class="col-md-4">
         <label
