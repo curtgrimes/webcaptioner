@@ -692,6 +692,8 @@ export const mutations = {
     state.transcript.interim = '';
     state.transcript.final = '';
     state.transcript.typed = '';
+    state.transcript.stabilized = '';
+    state.transcript.stabilizedWithTimings = [];
   },
   CLEAR_TRANSCRIPT_INTERIM(state) {
     state.transcript.interim = '';

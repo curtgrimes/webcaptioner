@@ -25,6 +25,16 @@
         >{{$store.state.captioner.transcript.stabilized}}</div>
       </div>
       <hr />
+      <div class="row small mb-3 mb-sm-2 mt-2">
+        <div
+          class="col-sm-3 col-lg-2 font-weight-bold text-uppercase text-sm-right"
+        >Stabilized with timings</div>
+        <div
+          class="col-sm-9"
+          style="max-height:3rem;overflow-y:auto"
+        >{{$store.state.captioner.transcript.stabilizedWithTimings}}</div>
+      </div>
+      <hr />
       <div class="row mb-3 mb-sm-2 mt-2">
         <div class="col-sm-3 small col-lg-2 font-weight-bold text-uppercase text-sm-right">Cursor</div>
         <div class="col-sm-9">

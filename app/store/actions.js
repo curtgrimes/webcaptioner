@@ -508,11 +508,38 @@ export default {
       sessionStartDate = state.integrations.storage.sessionStartDate
     }
 
+
+    // I wrote this logic to allow for appending to an existing file in Dropbox
+    // and then discovered that Dropbox doesn't currently provide an API for appending
+    // to an existing file. Left this logic intact (untested though)
+
+    // const lastSyncDateTimestamp = state.integrations.storage.lastStabilizedTranscriptSyncDate ?
+    //   state.integrations.storage.lastStabilizedTranscriptSyncDate.getTime() :
+    //   0,
+    //   now = new Date(),
+    //   nowTimestamp = now.getTime();
+
+    // Get transcript with timings since the last sync date
+    // const transcriptWithTimingsToSync = state.captioner.transcript.stabilizedWithTimings.filter(i =>
+    //   i.time >= lastSyncDateTimestamp && i.time <= nowTimestamp);
+
     axios.post('/api/storage/dropbox/push', {
       accessToken: state.settings.integrations.dropbox.accessToken,
       sessionStartDate,
-      contents: state.captioner.transcript.final,
+      contents: {
+        text: state.captioner.transcript.final,
+        ...(
+          state.settings.exp.includes('saveTranscriptWithTimingsToDropbox') ? {
+            timings: state.captioner.transcript.stabilizedWithTimings
+          } : {}
+        ),
+        // timings: JSON.stringify(transcriptWithTimingsToSync),
+      }
     });
+
+    // commit('UPDATE_LAST_STABILIZED_TRANSCRIPT_SYNC_DATE', {
+    //   date: now
+    // });
   },
 
   SEND_TO_VMIX: ({

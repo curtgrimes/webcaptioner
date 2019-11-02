@@ -73,6 +73,7 @@
           <b-list-group-item
             :to="localePath('captioner-settings-export-restore')"
           >{{$t('settings.exportRestore.exportRestoreSettings')}}</b-list-group-item>
+          <!-- <b-list-group-item :to="localePath('captioner-settings-stats')">{{$t('settings.stats')}}</b-list-group-item> -->
         </b-list-group>
       </div>
 
@@ -150,6 +151,11 @@
                     class="small"
                     :to="localePath('captioner-settings-export-restore')"
                   >{{$t('settings.exportRestore.exportRestoreSettings')}}</b-nav-item>
+                  <!-- <b-nav-item
+                    active-class="active"
+                    class="small"
+                    :to="localePath('captioner-settings-stats')"
+                  >{{$t('settings.stats')}}</b-nav-item>-->
                 </b-nav>
               </nav>
             </div>
