@@ -117,6 +117,7 @@ export const state = () => ({
   integrations: {
     storage: {
       sessionStartDate: null,
+      lastStabilizedTranscriptSyncDate: null,
     },
     vmix: {
       showNotFullySetUpMessage: false,

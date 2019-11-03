@@ -222,6 +222,13 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    babel: {
+      plugins: [
+        ["@babel/plugin-proposal-optional-chaining", {
+          proposal: "minimal"
+        }]
+      ],
+    },
     // analyze: true,
     extend(config, {
       isDev,

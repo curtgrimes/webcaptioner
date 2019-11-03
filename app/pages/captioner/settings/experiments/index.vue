@@ -158,14 +158,20 @@ export default {
           return 'Add a manual typing mode.';
         case 'share':
           return 'Get a link you can use to share captions.';
+        case 'saveTranscriptWithTimingsToDropbox':
+          return 'Save transcript with timings to Dropbox.';
         default:
           return '';
       }
     },
     isValidExperiment: function() {
-      return ['demo', 'typingMode', 'share', 'science', ''].includes(
-        this.experimentName
-      );
+      return [
+        'demo',
+        'typingMode',
+        'share',
+        'science',
+        'saveTranscriptWithTimingsToDropbox',
+      ].includes(this.experimentName);
     },
     addExperiment: function({ withConfirmation }) {
       if (this.isValidExperiment()) {

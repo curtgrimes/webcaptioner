@@ -141,6 +141,8 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 @import '~bootstrap/scss/_utilities.scss';
 @import '~bootstrap/scss/_print.scss';
 
+@import 'bootstrap-vue/src/index.scss';
+
 .logo-text {
   font-family: $headings-font-family;
   text-transform: uppercase;

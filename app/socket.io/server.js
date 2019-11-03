@@ -84,7 +84,7 @@ module.exports = {
               );
             }
           } catch (e) {
-            console.log(e);
+            // console.log(e);
           }
         } else if (json.action == 'subscribeToRoom') {
           // TODO handle multiple subscriptions from same client??

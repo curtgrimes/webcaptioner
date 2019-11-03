@@ -308,17 +308,21 @@ export default {
           });
         }
       }
-
       if (
         [
           'captioner/APPEND_TRANSCRIPT_FINAL',
-          'captioner/CLEAR_TRANSCRIPT_INTERIM',
-          'captioner/CLEAR_TRANSCRIPT',
+          'captioner/SET_CAPTIONER_OFF',
+          'captioner/APPEND_TRANSCRIPT_STABILIZED',
         ].includes(mutation) &&
         this.$store.state.settings.integrations.dropbox.accessToken &&
         this.$store.state.captioner.transcript.final
       ) {
-        this.$store.dispatch('SAVE_TO_DROPBOX');
+        if ('captioner/SET_CAPTIONER_OFF' === mutation) {
+          // immediate
+          this.$store.dispatch('SAVE_TO_DROPBOX');
+        } else {
+          this.saveToDropboxThrottled();
+        }
       }
     });
   },
@@ -554,6 +558,9 @@ export default {
         { deep: true }
       );
     },
+    saveToDropboxThrottled: throttle(function() {
+      this.$store.dispatch('SAVE_TO_DROPBOX');
+    }, 1000 * 30),
   },
 };
 </script>

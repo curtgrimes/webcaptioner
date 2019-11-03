@@ -417,6 +417,11 @@ export default {
   INIT_STORAGE_SESSION_DATE: (state) => {
     state.integrations.storage.sessionStartDate = new Date();
   },
+  UPDATE_LAST_STABILIZED_TRANSCRIPT_SYNC_DATE: (state, {
+    date
+  }) => {
+    state.integrations.storage.lastStabilizedTranscriptSyncDate = date;
+  },
 
   SET_SEND_TO_VMIX: (state, {
     on
