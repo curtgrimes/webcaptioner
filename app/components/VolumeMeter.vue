@@ -2,7 +2,10 @@
   <div
     v-if="$store.state.settings.controls.volumeMeter.show && captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)"
   >
-    <b-button variant="white" class="meter-outer mr-2 border-0 text-left text-danger px-2 bg-white">
+    <b-button
+      variant="white"
+      class="meter-outer mr-2 border-0 text-left text-danger px-2 bg-white h-100"
+    >
       <fa icon="exclamation-triangle" class="mr-1" />
       <span
         v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh"
@@ -44,7 +47,7 @@
   top: 0;
   left: 0;
   bottom: 0;
-  transition: width 100ms;
+  transition: width 250ms;
   cursor: default !important;
 }
 </style>

@@ -8,7 +8,7 @@
       variant="info"
       disabled
       :size="largerLayout ? 'lg' : ''"
-      :class="largerLayout ? 'px-4 py-3' : ''"
+      :class="largerLayout ? 'px-4 py-3 h-100' : 'h-100'"
     >
       <svg
         style="vertical-align:middle"
@@ -77,7 +77,7 @@
       variant="secondary"
       @click="stop()"
       :size="largerLayout ? 'lg' : ''"
-      :class="largerLayout ? 'px-4 py-3' : ''"
+      :class="largerLayout ? 'px-4 py-3 h-100' : 'h-100'"
     >
       <img src="/static/cast-icons/cast-icon-connected.svg" />
     </b-button>
@@ -87,7 +87,7 @@
       v-b-tooltip.hover="$t('googleCast.cast')"
       @click="initConnection()"
       :size="largerLayout ? 'lg' : ''"
-      :class="largerLayout ? 'px-4 py-3' : ''"
+      :class="largerLayout ? 'px-4 py-3 h-100' : 'h-100'"
     >
       <img src="/static/cast-icons/cast-icon.svg" />
     </b-button>
