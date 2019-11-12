@@ -88,7 +88,10 @@ export default {
         this.scrollerIsAtBottom() // Start autoscrolling again if we were already at the bottom
       ) {
         await this.$nextTick();
-        this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight;
+        this.$refs.scroller.scrollTo({
+          top: this.$refs.scroller.scrollHeight,
+          behavior: 'smooth',
+        });
       }
     },
     onManualScroll: function() {
