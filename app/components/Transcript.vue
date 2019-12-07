@@ -103,9 +103,21 @@ export default {
         this.scrollerIsAtBottom() // Start autoscrolling again if we were already at the bottom
       ) {
         await this.$nextTick();
+
+        // This is how much it needs to scroll to reach the bottom
+        const scrollDistancePixels =
+          this.$refs.scroller.scrollHeight -
+          this.$refs.scroller.scrollTop -
+          this.$refs.scroller.clientHeight;
+
+        const maxSmoothScrollDistance = this.$refs.scroller.clientHeight / 2;
+
         this.$refs.scroller.scrollTo({
           top: this.$refs.scroller.scrollHeight,
-          behavior: 'smooth',
+
+          // Only smooth scroll if it will be smooth scrolling a short distance
+          behavior:
+            scrollDistancePixels <= maxSmoothScrollDistance ? 'smooth' : 'auto',
         });
       }
     },
