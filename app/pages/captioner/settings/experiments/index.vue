@@ -57,6 +57,7 @@
         @keydown.enter.native="addExperiment({withConfirmation: false})"
         v-model="experimentName"
         autofocus
+        autocomplete="off"
         :placeholder="$t('settings.experiments.experimentName')"
       ></b-form-input>
       <b-input-group-append>
