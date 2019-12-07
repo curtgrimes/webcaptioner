@@ -2,7 +2,18 @@
   <div
     class="transcript d-flex flex-grow-1"
     v-bind:class="[wrapTextPositionClass]"
-    v-bind:style="{color, backgroundColor, fontFamily, fontSize, lineHeight, letterSpacing, textTransform, padding, textShadow, cursor}"
+    v-bind:style="{
+      color,
+      backgroundColor,
+      fontFamily,
+      fontSize,
+      lineHeight,
+      letterSpacing,
+      textTransform,
+      padding,
+      textShadow,
+      cursor,
+    }"
     @click="focusIfInTypingMode()"
   >
     <span
@@ -13,25 +24,29 @@
     >
       <!--prettyhtml-ignore-->
       <span class="transcript-scroller-child">
-        <span :class="{'d-block w-100': finalTranscriptEndsInNewline}">{{finalTranscript}}</span><span
-  data-test="transcriptInterim"
-  v-if="interimTranscript"
-  v-bind:style="{color: interimColor}"
->{{interimTranscript}}</span><span
-  v-show="typingModeOn && (showTypedLiveReadOnly !== true)"
-  contenteditable
-  v-text="transcriptTypedForDisplay"
-  @input="typedTranscriptDidChange()"
-  ref="typedTranscript"
-  class="transcriptTyped combokeys"
-></span><span
-  v-if="showTypedLiveReadOnly && typedTranscript"
-  class="d-block"
->{{typedTranscript}}</span><br
-  v-if="finalTranscriptEndsInNewline && !interimTranscript"
-/><br
-  v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"
-/></span>
+        <span :class="{ 'd-block w-100': finalTranscriptEndsInNewline }">{{
+          finalTranscript
+        }}</span
+        ><span
+          data-test="transcriptInterim"
+          v-if="interimTranscript"
+          v-bind:style="{ color: interimColor }"
+          >{{ interimTranscript }}</span
+        ><span
+          v-show="typingModeOn && showTypedLiveReadOnly !== true"
+          contenteditable
+          v-text="transcriptTypedForDisplay"
+          @input="typedTranscriptDidChange()"
+          ref="typedTranscript"
+          class="transcriptTyped combokeys"
+        ></span
+        ><span
+          v-if="showTypedLiveReadOnly && typedTranscript"
+          class="d-block"
+          >{{ typedTranscript }}</span
+        ><br v-if="finalTranscriptEndsInNewline && !interimTranscript"/><br
+          v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"
+      /></span>
     </span>
     <transition name="fade">
       <b-button
