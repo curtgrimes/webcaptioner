@@ -89,10 +89,12 @@ export default {
       parseFloat(state.settings.appearance.text.textSize) - 0.1;
   },
 
-  SAVE_CHROMELESS_WINDOW_DIMENSIONS: (
-    state,
-    { left, top, width, height }
-  ) => {},
+  SAVE_CHROMELESS_WINDOW_DIMENSIONS: (state, { left, top, width, height }) => {
+    state.settings.chromelessWindow.left = left;
+    state.settings.chromelessWindow.top = top;
+    state.settings.chromelessWindow.width = width;
+    state.settings.chromelessWindow.height = height;
+  },
 
   SET_SHARE_ON: (state, { on }) => {
     state.settings.share.on = on;

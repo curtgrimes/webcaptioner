@@ -129,11 +129,36 @@ export default {
         transcriptInterim: state.captioner.transcript.interim,
         transcriptFinal: state.captioner.transcript.final,
         transcriptTyped: state.captioner.transcript.typed,
+        windowDimensions: {
+          left: state.settings.chromelessWindow.left,
+          top: state.settings.chromelessWindow.top,
+          width: state.settings.chromelessWindow.width,
+          height: state.settings.chromelessWindow.height,
+        },
       },
       () => {
         // On close
         commit('SET_DETACHED_MODE_OFF');
-      }
+      },
+      throttle(({ left, top, width, height }) => {
+        // onWindowSizePositionChange
+
+        if (
+          state.settings.chromelessWindow.left !== left ||
+          state.settings.chromelessWindow.top !== top ||
+          state.settings.chromelessWindow.width !== width ||
+          state.settings.chromelessWindow.height !== height
+        )
+          // Only commit if one of these values changed from what we already
+          // have saved in settings
+
+          commit('SAVE_CHROMELESS_WINDOW_DIMENSIONS', {
+            left,
+            top,
+            width,
+            height,
+          });
+      }, 1000)
     );
     commit('SET_DETACHED_MODE_ON');
   },
@@ -253,6 +278,14 @@ export default {
         'alignmentPadding',
         'appearance.text.alignment.padding'
       );
+
+      commit('SAVE_CHROMELESS_WINDOW_DIMENSIONS', {
+        left: get(settings, 'chromelessWindow.left'),
+        top: get(settings, 'chromelessWindow.top'),
+        width: get(settings, 'chromelessWindow.width'),
+        height: get(settings, 'chromelessWindow.height'),
+        omitFromGoogleAnalytics: true,
+      });
 
       commitPropertySetting('SET_CENSOR', 'censor', 'censor.on');
       commitPropertySetting(

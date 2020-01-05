@@ -27,15 +27,15 @@ export default () => {
         textColorInterim: '#ffffff',
         fontFamily: 'Cousine',
         fontVariant: 'regular',
-        textSize: "4", // em
-        lineHeight: "1.2", // em
-        letterSpacing: "0", // em
-        textTransform: "uppercase", // or "capitalize" or "initial"
+        textSize: '4', // em
+        lineHeight: '1.2', // em
+        letterSpacing: '0', // em
+        textTransform: 'uppercase', // or "capitalize" or "initial"
         alignment: {
           horizontal: 'full', // left, middle, right
           vertical: 'full', // top, middle, bottom, lowerThird
-          padding: "0.25", // em
-        }
+          padding: '0.25', // em
+        },
       },
       shadow: {
         color: '#000000',
@@ -48,6 +48,12 @@ export default () => {
         color: '#000000',
         opacity: '100',
       },
+    },
+    chromelessWindow: {
+      left: null,
+      top: null,
+      width: null,
+      height: null,
     },
     wordReplacements: [],
     censor: {
