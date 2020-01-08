@@ -57,7 +57,7 @@ export default () => {
     },
     wordReplacements: [],
     censor: {
-      on: true,
+      on: false,
       replaceWith: 'nothing', // or 'asterisks'
     },
     locale: {
