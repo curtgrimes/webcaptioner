@@ -279,8 +279,8 @@ module.exports = {
           app.use(redirectSSL.create());
         }
 
-        app.use(vanityRedirectMiddleware);
         app.use(wwwRedirectMiddleware);
+        app.use(vanityRedirectMiddleware);
         app.use(sourcemapMiddleware);
       });
   },
