@@ -6,6 +6,7 @@ import redirectSSL from 'redirect-ssl';
 import healthCheckMiddleware from './middleware/server/health-check.js';
 import sourcemapMiddleware from './middleware/server/sourcemaps.js';
 import vanityRedirectMiddleware from './server/middleware/vanityRedirect.js';
+import wwwRedirectMiddleware from './server/middleware/wwwRedirect.js';
 import wsServer from './socket.io/server';
 
 // import gitRevision from 'git-rev-sync';
@@ -279,6 +280,7 @@ module.exports = {
         }
 
         app.use(vanityRedirectMiddleware);
+        app.use(wwwRedirectMiddleware);
         app.use(sourcemapMiddleware);
       });
   },
