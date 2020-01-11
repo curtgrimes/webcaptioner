@@ -1,10 +1,9 @@
 <template>
   <div class="settings-experiments-view">
-    <i18n path="settings.experiments.description" tag="p">
-      <a place="email" href="mailto:REMOVED"
-        >REMOVED</a
-      >
-    </i18n>
+    <p>
+      Have feedback about experiments? Contact me at
+      <a href="mailto:REMOVED">REMOVED</a>.
+    </p>
     <b-modal
       ref="invalidExperiment"
       class="text-center"
