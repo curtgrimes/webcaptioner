@@ -6,6 +6,7 @@ import redirectSSL from 'redirect-ssl';
 import healthCheckMiddleware from './middleware/server/health-check.js';
 import sourcemapMiddleware from './middleware/server/sourcemaps.js';
 import vanityRedirectMiddleware from './server/middleware/vanityRedirect.js';
+import wwwRedirectMiddleware from './server/middleware/wwwRedirect.js';
 import wsServer from './socket.io/server';
 
 // import gitRevision from 'git-rev-sync';
@@ -13,12 +14,14 @@ import wsServer from './socket.io/server';
 module.exports = {
   head: {
     title: 'Web Captioner',
-    meta: [{
+    meta: [
+      {
         charset: 'utf-8',
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
+        content:
+          'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
       },
       {
         hid: 'description',
@@ -54,7 +57,8 @@ module.exports = {
         content: '630',
       },
     ],
-    link: [{
+    link: [
+      {
         // https://github.com/nuxt/nuxt.js/issues/1204
         rel: 'icon',
         type: 'image/x-icon',
@@ -62,36 +66,41 @@ module.exports = {
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Cousine:400,700|Source+Sans+Pro:400,700',
+        href:
+          'https://fonts.googleapis.com/css?family=Cousine:400,700|Source+Sans+Pro:400,700',
       },
     ],
   },
   css: [],
   modules: [
-    ['nuxt-env', {
-      // These will be available via this.$env at runtime. We can't use
-      // Nuxt's env property in this config unless we're okay with the
-      // env variable being baked in at build time.
-      keys: [
-        'CHROME_EXTENSION_ID',
-        'FIREBASE_API_KEY',
-        'FIREBASE_AUTH_DOMAIN',
-        'FIREBASE_DATABASE_URL',
-        'FIREBASE_PROJECT_ID',
-        'FIREBASE_STORAGE_BUCKET',
-        'FIREBASE_MESSAGING_SENDER_ID',
-        'GOOGLE_CAST_APP_ID',
-        'HOSTNAME',
-        'STRIPE_API_KEY_PUBLIC',
-      ]
-    }],
+    [
+      'nuxt-env',
+      {
+        // These will be available via this.$env at runtime. We can't use
+        // Nuxt's env property in this config unless we're okay with the
+        // env variable being baked in at build time.
+        keys: [
+          'CHROME_EXTENSION_ID',
+          'FIREBASE_API_KEY',
+          'FIREBASE_AUTH_DOMAIN',
+          'FIREBASE_DATABASE_URL',
+          'FIREBASE_PROJECT_ID',
+          'FIREBASE_STORAGE_BUCKET',
+          'FIREBASE_MESSAGING_SENDER_ID',
+          'GOOGLE_CAST_APP_ID',
+          'HOSTNAME',
+          'STRIPE_API_KEY_PUBLIC',
+        ],
+      },
+    ],
     'nuxt-trailingslash-module',
     '@nuxtjs/axios',
     [
       'nuxt-i18n',
       {
         defaultLocale: 'en-US',
-        locales: [{
+        locales: [
+          {
             code: 'en-US',
             file: 'en-US.js',
             iso: 'en-US',
@@ -117,7 +126,7 @@ module.exports = {
           delay: 1000, // ms
         },
         autoTracking: {
-          pageviewTemplate: function (route) {
+          pageviewTemplate: function(route) {
             return {
               page: route.path.replace(/\/$/, ''), // path with trailing slash removed
               title: document.title,
@@ -131,7 +140,8 @@ module.exports = {
       'nuxt-fontawesome',
       {
         component: 'fa',
-        imports: [{
+        imports: [
+          {
             set: '@fortawesome/free-solid-svg-icons',
             icons: [
               'faFileAlt',
@@ -155,6 +165,7 @@ module.exports = {
               'faPlusCircle',
               'faPlus',
               'faMinus',
+              'faCommentAlt',
               'faArrowLeft',
               'faArrowRight',
               'faFlask',
@@ -193,7 +204,8 @@ module.exports = {
       },
     ],
   ],
-  plugins: [{
+  plugins: [
+    {
       src: '~/plugins/websocket',
       mode: 'client',
     },
@@ -224,16 +236,16 @@ module.exports = {
   build: {
     babel: {
       plugins: [
-        ["@babel/plugin-proposal-optional-chaining", {
-          proposal: "minimal"
-        }]
+        [
+          '@babel/plugin-proposal-optional-chaining',
+          {
+            proposal: 'minimal',
+          },
+        ],
       ],
     },
     // analyze: true,
-    extend(config, {
-      isDev,
-      isClient
-    }) {
+    extend(config, { isDev, isClient }) {
       // if (isDev && isClient) {
       //   config.module.rules.push({
       //     enforce: 'pre',
@@ -246,15 +258,17 @@ module.exports = {
         config.devtool = '#source-map';
       }
 
-      if (process.server) {}
-
+      if (process.server) {
+      }
     },
   },
   hooks(hook) {
     hook('modules:before', (nuxt) => {
-        // https://github.com/nuxt/nuxt.js/pull/6026#issuecomment-519030254
-        nuxt.options.devModules = nuxt.options.devModules.filter((name) => name !== '@nuxt/loading-screen')
-      }),
+      // https://github.com/nuxt/nuxt.js/pull/6026#issuecomment-519030254
+      nuxt.options.devModules = nuxt.options.devModules.filter(
+        (name) => name !== '@nuxt/loading-screen'
+      );
+    }),
       hook('listen', (server) => {
         wsServer.createSocket(server);
       }),
@@ -262,11 +276,10 @@ module.exports = {
         app.use('/health-check', healthCheckMiddleware);
 
         if (process.env.DISABLE_SSL_REDIRECT !== 'true') {
-          app.use(
-            redirectSSL.create()
-          );
+          app.use(redirectSSL.create());
         }
 
+        app.use(wwwRedirectMiddleware);
         app.use(vanityRedirectMiddleware);
         app.use(sourcemapMiddleware);
       });

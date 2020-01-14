@@ -17,48 +17,48 @@
       <div class="pt-1" style="line-height:1.25rem">
         <span class="text-muted">
           Signed in
-          <span v-if="$store.state.user.email || $store.state.user.displayName">as</span>
+          <span v-if="$store.state.user.email || $store.state.user.displayName"
+            >as</span
+          >
         </span>
-        <div
-          v-if="$store.state.user.email || $store.state.user.displayName"
-        >{{$store.state.user.email || $store.state.user.displayName}}</div>
+        <div v-if="$store.state.user.email || $store.state.user.displayName">
+          {{ $store.state.user.email || $store.state.user.displayName }}
+        </div>
         <b-button
           size="sm"
           style="font-size:.8rem"
           class="py-0 px-2 mt-1"
           variant="light"
           @click="signOut()"
-        >Sign Out</b-button>
+          >Sign Out</b-button
+        >
       </div>
       <hr />
     </div>
-    <b-button-group vertical class="d-flex">
-      <b-button href="/" block variant="link" class="py-0" size="sm">{{$t('navbar.menu.about')}}</b-button>
-      <b-button href="/blog" block variant="link" class="py-0" size="sm">{{$t('navbar.menu.blog')}}</b-button>
-      <b-button
-        href="/help"
-        block
-        variant="link"
-        class="py-0"
-        size="sm"
-      >{{$t('navbar.menu.helpCenter')}}</b-button>
-      <!-- <b-button
-                href="/donate"
-                block
-                variant="link"
-                class="py-0"
-                size="sm"
-      >{{$t('navbar.menu.donate')}}</b-button>-->
-      <b-button
-        href="/feedback"
-        block
-        variant="link"
-        class="py-0"
-        size="sm"
-      >{{$t('navbar.menu.feedback')}}</b-button>
-    </b-button-group>
+    <b-button href="/" block variant="light" size="sm" class="mb-2 text-left"
+      ><fa icon="info-circle" fixed-width />
+      {{ $t('navbar.menu.about') }}</b-button
+    >
+    <b-button
+      href="/donate"
+      block
+      variant="light"
+      size="sm"
+      class="mb-2 text-left"
+    >
+      <fa icon="heart" fixed-width /> Donate
+    </b-button>
+    <b-button
+      @click="$emit('dismiss') && $store.dispatch('START_SUPPORT_POPUP')"
+      block
+      variant="light"
+      size="sm"
+      class="mb-2 text-left"
+    >
+      <fa icon="comment-alt" fixed-width /> Chat with Support
+    </b-button>
     <hr />
-    <b-button-group class="d-flex">
+    <b-button-group class="d-flex mb-2">
       <b-button
         :to="localePath('captioner-save-to-file')"
         variant="outline-secondary"
@@ -87,14 +87,19 @@
     <!-- <hr /> -->
     <b-card v-if="false" style="background:#F86753" body-class="text-white p-2">
       <p class="mb-1">
-        <strong>
-          <fa :icon="['fab', 'patreon']" class="mr-2" />Patreon
-        </strong>
+        <strong> <fa :icon="['fab', 'patreon']" class="mr-2" />Patreon </strong>
       </p>
-      <p
-        class="mb-1"
-      >Support Web Captioner by becoming a patron and getting access to some cool stuff!</p>
-      <b-button block variant="light" size="sm" :to="localePath('captioner-settings')">Learn More</b-button>
+      <p class="mb-1">
+        Support Web Captioner by becoming a patron and getting access to some
+        cool stuff!
+      </p>
+      <b-button
+        block
+        variant="light"
+        size="sm"
+        :to="localePath('captioner-settings')"
+        >Learn More</b-button
+      >
       <transition name="fade">
         <div v-if="patronCount === null" class="text-center">
           <!-- loading -->
@@ -103,12 +108,12 @@
         <div v-else-if="patronCount === false">
           <!-- failed to load -->
         </div>
-        <p v-else class="text-center mb-0 mt-1">{{patronCount}} patrons</p>
+        <p v-else class="text-center mb-0 mt-1">{{ patronCount }} patrons</p>
       </transition>
     </b-card>
-    <hr />
     <b-button
       block
+      size="sm"
       variant="secondary"
       :to="localePath('captioner-settings')"
       @click="$emit('dismiss')"
@@ -116,9 +121,13 @@
       <fa icon="cog" class="mr-1" />
       <!--
       -->
-      {{$t('navbar.menu.settings')}}
+      {{ $t('navbar.menu.settings') }}
     </b-button>
-    <div v-if="$store.state.user.signedIn === false" class="pt-1" style="line-height:1.25rem">
+    <div
+      v-if="$store.state.user.signedIn === false"
+      class="pt-1"
+      style="line-height:1.25rem"
+    >
       <!-- Not signed in -->
       <hr />
       <b-button
