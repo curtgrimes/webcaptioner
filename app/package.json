@@ -1,6 +1,6 @@
 {
   "name": "webcaptioner",
-  "version": "1.0.0",
+  "version": "2.3.0",
   "description": "A speech-to-text service using the Web Speech API",
   "author": "Curt Grimes <github@curtgrimes.com>",
   "private": true,
@@ -19,10 +19,6 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
-    "tests:cypress": "cypress run",
-    "tests:cypress:watch": "cypress open",
-    "tests": "NUXT_PORT=8228 CYPRESS_baseUrl=http://localhost:8228 start-server-and-test dev http://localhost:8228 tests:cypress",
-    "tests:watch": "NUXT_PORT=8228 CYPRESS_baseUrl=http://localhost:8228 start-server-and-test dev http://localhost:8228 tests:cypress:watch",
     "free8080": "sudo kill -9 $(lsof -t -i :8080)"
   },
   "dependencies": {
