@@ -71,7 +71,7 @@ module.exports = {
       },
     ],
   },
-  css: [],
+  css: ['@/assets/scss/app.scss'],
   modules: [
     [
       'nuxt-env',

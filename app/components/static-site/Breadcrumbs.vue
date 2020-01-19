@@ -13,9 +13,9 @@
           property="itemListElement"
           typeof="ListItem"
         >
-          <a :href="breadcrumb.url" property="item" typeof="WebPage">
+          <nuxt-link :to="breadcrumb.url" property="item" typeof="WebPage">
             <span property="name">{{ breadcrumb.text }}</span>
-          </a>
+          </nuxt-link>
           <meta property="position" :content="index + 1" />
         </li>
       </ol>
