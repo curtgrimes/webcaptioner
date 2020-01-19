@@ -76,8 +76,8 @@ module.exports = {
     [
       'nuxt-env',
       {
-        // These will be available via this.$env at runtime. We can't use
-        // Nuxt's env property in this config unless we're okay with the
+        // These will be available via this.$env at runtime on the public frontend.
+        // We can't use Nuxt's env property in this config unless we're okay with the
         // env variable being baked in at build time.
         keys: [
           'CHROME_EXTENSION_ID',

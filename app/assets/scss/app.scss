@@ -555,11 +555,11 @@ a.block-partial-highlight-children:hover .btn-primary {
   // border-color: darken(theme-color("primary"), 10%); /* Get this percentage from _buttons.scss mixin */
 }
 
-.blog-article-list h2 {
+.layout-site h2 {
   text-transform: none;
   font-family: $font-family-sans-serif;
-  font-size: 2.2rem;
-  font-weight: normal;
+  font-size: 2.5rem;
+  font-weight: bold;
 }
 
 .inner-link-no-highlight {
@@ -573,19 +573,6 @@ a.block-partial-highlight-children:hover .btn-primary {
 .blog-article-date {
   text-transform: uppercase;
   font-family: $headings-font-family;
-}
-
-html.blog h2,
-html.blog h3,
-html.blog h4,
-html.blog h5,
-html.blog h6 {
-  font-family: $font-family-sans-serif;
-  text-transform: none;
-}
-
-html.blog h2 {
-  margin: 2rem 0 1.5rem 0;
 }
 
 a.hover-no-underline:hover,

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white min-vh-100">
+  <div class="bg-white min-vh-100 layout-site">
     <div class="bg-primary navbar-border-bottom fixed-top">
       <div class="px-0">
         <nav id="main-navbar" class="navbar navbar-light navbar-expand-md">
