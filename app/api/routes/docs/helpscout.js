@@ -2,13 +2,11 @@ const axios = require('axios');
 const nodeCache = require('node-cache');
 const cache = new nodeCache({ stdTTL: 60 });
 
-const collectionId = '5e100ebd04286364bc9375f4';
-
 // @ts-ignore
 const helpscout = axios.create({
   auth: {
-    username: '',
-    password: '',
+    username: process.env.HELPSCOUT_DOCS_API_KEY,
+    password: 'X',
   },
   baseURL: 'https://docsapi.helpscout.net/v1',
 });
@@ -54,7 +52,9 @@ module.exports = {
       categories = cachedCategories;
     } else {
       let categoriesResponse = await helpscout.get(
-        '/collections/' + collectionId + '/categories'
+        '/collections/' +
+          process.env.HELPSCOUT_DOCS_COLLECTION_ID +
+          '/categories'
       );
       categories = categoriesResponse.data.categories.items;
       cache.set('docs-categories', categories);

@@ -70,6 +70,7 @@ let taskDefinition = {
           'FIREBASE_NODE_SERVICE_ACCOUNT_KEY',
           'PATREON_ACCESS_TOKEN',
           'HELPSCOUT_DOCS_API_KEY',
+          'HELPSCOUT_DOCS_COLLECTION_ID',
         ]),
         {
           name: 'HOSTNAME',
