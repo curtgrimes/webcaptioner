@@ -66,3 +66,34 @@
     <nuxt />
   </div>
 </template>
+
+<script>
+export default {
+  mounted() {
+    if (this.$route.path.startsWith('/help')) {
+      this.showHelpButton(true);
+    }
+  },
+  watch: {
+    $route() {
+      if (this.$route.path.startsWith('/help')) {
+        this.showHelpButton(true);
+      } else {
+        this.showHelpButton(false);
+      }
+    },
+  },
+  methods: {
+    showHelpButton(on) {
+      if (window && window.Beacon) {
+        // @ts-ignore
+        Beacon('config', {
+          display: {
+            style: on ? 'iconAndText' : 'manual',
+          },
+        });
+      }
+    },
+  },
+};
+</script>

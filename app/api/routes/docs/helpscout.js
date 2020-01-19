@@ -100,6 +100,7 @@ module.exports = {
       url: '/help/' + category.slug + '/' + articleData.slug,
       categoryTitle: category.name,
       categorySlug: category.slug,
+      categoryId: category.id,
     };
   },
 };

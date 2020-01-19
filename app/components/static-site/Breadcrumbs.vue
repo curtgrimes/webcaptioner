@@ -1,26 +1,20 @@
 <template>
-  <div class="bg-breadcrumb">
-    <div class="container">
-      <ol
-        class="breadcrumb px-0"
-        vocab="http://schema.org/"
-        typeof="BreadcrumbList"
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li
+        class="breadcrumb-item"
+        v-for="(breadcrumb, index) in breadcrumbs"
+        :key="index"
       >
-        <li
-          v-for="(breadcrumb, index) in breadcrumbs"
-          :key="index"
-          class="breadcrumb-item"
-          property="itemListElement"
-          typeof="ListItem"
-        >
-          <nuxt-link :to="breadcrumb.url" property="item" typeof="WebPage">
-            <span property="name">{{ breadcrumb.text }}</span>
-          </nuxt-link>
-          <meta property="position" :content="index + 1" />
-        </li>
-      </ol>
-    </div>
-  </div>
+        <nuxt-link v-if="breadcrumb.url" :to="breadcrumb.url">
+          {{ breadcrumb.text }}
+        </nuxt-link>
+        <span v-else class="text-muted">
+          {{ breadcrumb.text }}
+        </span>
+      </li>
+    </ol>
+  </nav>
 </template>
 
 <script>

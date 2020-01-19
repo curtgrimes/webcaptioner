@@ -91,6 +91,13 @@ $pagination-active-bg: theme-color('secondary');
 $pagination-active-border: theme-color('secondary');
 $pagination-disabled-color: #999;
 
+$breadcrumb-divider: quote('›');
+$breadcrumb-bg: none;
+$breadcrumb-padding-x: 0;
+$breadcrumb-padding-y: 0;
+$breadcrumb-font-size: 1rem;
+$breadcrumb-margin-bottom: 1.5rem;
+
 $carousel-indicator-width: 50px;
 $carousel-indicator-height: 10px;
 $carousel-control-opacity: 0.8;
@@ -144,6 +151,13 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 @import '~bootstrap/scss/_print.scss';
 
 @import 'bootstrap-vue/src/index.scss';
+
+.logo-text {
+  font-family: $headings-font-family;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
 
 h1,
 h2,
@@ -555,11 +569,31 @@ a.block-partial-highlight-children:hover .btn-primary {
   // border-color: darken(theme-color("primary"), 10%); /* Get this percentage from _buttons.scss mixin */
 }
 
-.layout-site h2 {
+.layout-site .layout-site-content {
+  font-size: 1.25rem;
+}
+
+.layout-site h2,
+.layout-site h3 {
   text-transform: none;
   font-family: $font-family-sans-serif;
-  font-size: 2.5rem;
   font-weight: bold;
+  margin-bottom: $spacer * 1.5;
+  margin-top: $spacer * 2;
+}
+
+.layout-site p {
+  margin-bottom: $spacer * 1.5;
+}
+
+.layout-site h2 {
+  font-size: 2.25rem;
+  margin-bottom: $spacer * 1.5;
+}
+
+.layout-site h3 {
+  font-size: 1.5rem;
+  margin-bottom: $spacer * 1.5;
 }
 
 .inner-link-no-highlight {
@@ -588,10 +622,6 @@ a.hover-no-underline:focus {
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;
-}
-
-.bg-breadcrumb {
-  background: $breadcrumb-bg;
 }
 
 #hero-caption-demo {

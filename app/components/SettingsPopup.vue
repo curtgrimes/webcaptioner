@@ -49,6 +49,15 @@
       <fa icon="heart" fixed-width class="mr-1" /> Donate
     </b-button>
     <b-button
+      :to="'/help'"
+      block
+      variant="light"
+      size="sm"
+      class="mb-2 text-left"
+    >
+      <fa icon="info-circle" fixed-width /> Help Center
+    </b-button>
+    <b-button
       @click="$emit('dismiss') && $store.dispatch('START_SUPPORT_POPUP')"
       block
       variant="light"

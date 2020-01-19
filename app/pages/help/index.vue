@@ -1,14 +1,14 @@
 <template>
   <div>
     <Header>Help Center</Header>
-    <div class="container my-4 my-sm-5">
+    <main class="container my-4 my-sm-5">
       <p class="lead">
         Have questions about Web Captioner? We're here to help!
       </p>
       <hr class="my-5" />
       <h2>Getting Started</h2>
       <article-list :articles="articles.general" />
-    </div>
+    </main>
   </div>
 </template>
 
