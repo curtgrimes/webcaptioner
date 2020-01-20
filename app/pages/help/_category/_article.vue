@@ -4,11 +4,11 @@
       :items="[
         {
           text: 'Help Center',
-          href: '/help',
+          to: '/help',
         },
         {
           text: $parent.name,
-          href: $parent.url,
+          to: $parent.url,
         },
         {
           text: title,
