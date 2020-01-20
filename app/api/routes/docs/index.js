@@ -9,6 +9,9 @@ docs.get('/categories/:categoryId/articles', async (req, res) => {
   }
 
   let articles = await helpscout.articlesForCategory({ categoryId });
+  res.cacheControl = {
+    maxAge: 60 * 5,
+  };
   res.send(articles);
 });
 
@@ -23,6 +26,9 @@ docs.get(
 
     try {
       let article = await helpscout.article({ categorySlug, articleSlug });
+      res.cacheControl = {
+        maxAge: 60 * 5,
+      };
       res.send(article);
     } catch (e) {
       return res.sendStatus(404);
