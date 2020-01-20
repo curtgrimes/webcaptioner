@@ -1,14 +1,29 @@
 const docs = require('express').Router();
 const helpscout = require('./helpscout');
 
-docs.get('/categories/:categoryId/articles', async (req, res) => {
-  let { categoryId } = req.params;
+docs.get('/categories/:categorySlug', async (req, res) => {
+  let { categorySlug } = req.params;
 
-  if (!categoryId) {
+  if (!categorySlug) {
     return res.sendStatus(422);
   }
 
-  let articles = await helpscout.articlesForCategory({ categoryId });
+  let category = await helpscout.category({ categorySlug });
+  res.cacheControl = {
+    maxAge: 60 * 5,
+  };
+  res.send(category);
+});
+
+docs.get('/categories/:categorySlug/articles', async (req, res) => {
+  let { categorySlug } = req.params;
+
+  if (!categorySlug) {
+    return res.sendStatus(422);
+  }
+
+  let articles = await helpscout.articlesForCategory({ categorySlug });
+
   res.cacheControl = {
     maxAge: 60 * 5,
   };

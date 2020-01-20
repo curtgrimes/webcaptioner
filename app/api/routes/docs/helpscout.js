@@ -1,6 +1,7 @@
 const axios = require('axios');
 const nodeCache = require('node-cache');
 const cache = new nodeCache({ stdTTL: 60 });
+const slug = require('slug');
 
 // @ts-ignore
 const helpscout = axios.create({
@@ -12,29 +13,75 @@ const helpscout = axios.create({
 });
 
 module.exports = {
-  articlesForCategory: async ({ categoryId }) => {
-    const cachedCategorySlug = cache.get('docs-category-slug-' + categoryId);
-    let categorySlug;
-    if (cachedCategorySlug) {
-      categorySlug = cachedCategorySlug;
+  category: async ({ categorySlug }) => {
+    categorySlug = categorySlug.toLowerCase();
+
+    // Get category ID for given category slug
+    const cachedCategories = cache.get('docs-categories');
+    let categories;
+    if (cachedCategories) {
+      categories = cachedCategories;
     } else {
-      let categoryResponse = await helpscout.get('/categories/' + categoryId);
-      categorySlug = categoryResponse.data.category.slug;
-      cache.set('docs-category-slug-' + categoryId, categorySlug);
+      let categoriesResponse = await helpscout.get(
+        '/collections/' +
+          process.env.HELPSCOUT_DOCS_COLLECTION_ID +
+          '/categories'
+      );
+      categories = categoriesResponse.data.categories.items;
+      cache.set('docs-categories', categories);
+    }
+
+    let category = categories.find(
+      (category) => slug(category.name, { lower: true }) === categorySlug
+    );
+
+    if (!category) {
+      return;
+    } else {
+      return {
+        name: category.name,
+        url: `/help/${slug(category.name, { lower: true })}`,
+      };
+    }
+  },
+  articlesForCategory: async ({ categorySlug }) => {
+    categorySlug = categorySlug.toLowerCase();
+
+    // Get category ID for given category slug
+    const cachedCategories = cache.get('docs-categories');
+    let categories;
+    if (cachedCategories) {
+      categories = cachedCategories;
+    } else {
+      let categoriesResponse = await helpscout.get(
+        '/collections/' +
+          process.env.HELPSCOUT_DOCS_COLLECTION_ID +
+          '/categories'
+      );
+      categories = categoriesResponse.data.categories.items;
+      cache.set('docs-categories', categories);
+    }
+
+    let category = categories.find(
+      (category) => slug(category.name, { lower: true }) === categorySlug
+    );
+
+    if (!category) {
+      return;
     }
 
     const cachedArticlesForCategory = cache.get(
-      'docs-category-articles-' + categoryId
+      'docs-category-articles-' + category.id
     );
     let articlesForCategory;
     if (cachedArticlesForCategory) {
       articlesForCategory = cachedArticlesForCategory;
     } else {
       let articleResponse = await helpscout.get(
-        '/categories/' + categoryId + '/articles?pageSize=100'
+        '/categories/' + category.id + '/articles?pageSize=100'
       );
       articlesForCategory = articleResponse.data.articles.items;
-      cache.set('docs-category-articles-' + categoryId, articlesForCategory);
+      cache.set('docs-category-articles-' + category.id, articlesForCategory);
     }
 
     return articlesForCategory.map((article) => {
@@ -61,7 +108,7 @@ module.exports = {
     }
 
     let category = categories.find(
-      (category) => category.slug === categorySlug
+      (category) => slug(category.name, { lower: true }) === categorySlug
     );
 
     if (!category) {
@@ -97,9 +144,13 @@ module.exports = {
     return {
       title: articleData.name,
       body: articleData.text,
-      url: '/help/' + category.slug + '/' + articleData.slug,
+      url:
+        '/help/' +
+        slug(category.name, { lower: true }) +
+        '/' +
+        articleData.slug,
       categoryTitle: category.name,
-      categorySlug: category.slug,
+      categorySlug: slug(category.name, { lower: true }),
       categoryId: category.id,
     };
   },
