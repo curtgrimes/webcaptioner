@@ -1,5 +1,17 @@
 <template>
   <div>
+    <b-breadcrumb
+      :items="[
+        {
+          text: 'Help Center',
+          href: '/help',
+        },
+        {
+          text: $parent.name,
+          active: true,
+        },
+      ]"
+    ></b-breadcrumb>
     <h2>{{ $parent.name }}</h2>
     <article-list :articles="articles" />
   </div>
@@ -7,10 +19,12 @@
 
 <script>
 import ArticleList from '~/components/help/ArticleList';
+import { BBreadcrumb } from 'bootstrap-vue';
 
 export default {
   layout: 'site',
   components: {
+    BBreadcrumb,
     ArticleList,
   },
   async asyncData({ app, params, res }) {

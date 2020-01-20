@@ -1,13 +1,21 @@
 <template>
   <div>
-    <breadcrumbs
-      v-if="$route.params.article"
-      :breadcrumbs="[
-        { text: 'Help Center', url: '/help' },
-        { text: $parent.name, url: $parent.url },
-        { text: title },
+    <b-breadcrumb
+      :items="[
+        {
+          text: 'Help Center',
+          href: '/help',
+        },
+        {
+          text: $parent.name,
+          href: $parent.url,
+        },
+        {
+          text: title,
+          active: true,
+        },
       ]"
-    ></breadcrumbs>
+    ></b-breadcrumb>
     <main>
       <h2 class="mt-0">{{ title }}</h2>
       <div v-html="body" />
@@ -16,11 +24,11 @@
 </template>
 
 <script>
-import Breadcrumbs from '~/components/static-site/Breadcrumbs';
+import { BBreadcrumb } from 'bootstrap-vue';
 
 export default {
   layout: 'site',
-  components: { Breadcrumbs },
+  components: { BBreadcrumb },
   scrollToTop: true,
   data: function() {
     return {
