@@ -12,7 +12,7 @@
         },
       ]"
     ></b-breadcrumb>
-    <h2>{{ $parent.name }}</h2>
+    <h2 class="mt-0">{{ $parent.name }}</h2>
     <article-list :articles="articles" />
   </div>
 </template>
