@@ -12,7 +12,7 @@ docs.get('/categories/:categorySlug', async (req, res) => {
   res.cacheControl = {
     maxAge: 60 * 5,
   };
-  res.send(category);
+  return category ? res.send(category) : res.sendStatus(404);
 });
 
 docs.get('/categories/:categorySlug/articles', async (req, res) => {

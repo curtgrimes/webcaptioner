@@ -53,7 +53,7 @@ export default {
       articles: [],
     };
   },
-  async asyncData({ app, params, res }) {
+  async asyncData({ app, params, error }) {
     try {
       const { name, url } = await app.$axios.$get(
         '/api/docs/categories/' + params.category
@@ -62,11 +62,12 @@ export default {
         '/api/docs/categories/' + params.category + '/articles'
       );
       return { name, url, articles };
-    } catch (error) {
-      if (res) {
-        res.statusCode = 404; // send 404 back
-        return { notFound: true };
-      }
+    } catch (e) {
+      error({
+        statusCode: e.response.status,
+        message: e.response.data,
+        header: 'Help Center',
+      });
     }
   },
 };

@@ -37,7 +37,7 @@ export default {
       url: '',
     };
   },
-  async asyncData({ app, params, res }) {
+  async asyncData({ app, params, error }) {
     try {
       let { title, body, url } = await app.$axios.$get(
         `/api/docs/categories/${params.category}/articles/${params.article}`
@@ -48,18 +48,13 @@ export default {
         body,
         url,
       };
-    } catch (error) {
-      // if (res) {
-      //   res.statusCode = 404; // send 404 back
-      //   return { notFound: true };
-      // }
+    } catch (e) {
+      error({
+        statusCode: e.response.status,
+        message: e.response.data,
+        header: 'Help Center',
+      });
     }
   },
-  // mounted: async function() {
-  //   const categoryArticles = await this.$axios.$get(
-  //     '/api/docs/categories/' + this.category.id + '/articles'
-  //   );
-  //   this.category.articles = categoryArticles;
-  // },
 };
 </script>
