@@ -51,4 +51,17 @@ docs.get(
   }
 );
 
+docs.get('/articles', async (req, res) => {
+  let { query } = req.query;
+
+  if (!query) {
+    return res.sendStatus(422);
+  }
+  let articles = await helpscout.search({ query });
+  res.cacheControl = {
+    maxAge: 60 * 5,
+  };
+  res.send(articles);
+});
+
 module.exports = docs;

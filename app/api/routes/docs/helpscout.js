@@ -154,4 +154,58 @@ module.exports = {
       categoryId: category.id,
     };
   },
+
+  search: async ({ query }) => {
+    const cachedSearchResults = cache.get('docs-search-' + query);
+    let articles;
+    if (cachedSearchResults) {
+      articles = cachedSearchResults;
+    } else {
+      let searchResults = await helpscout.get('/search/articles', {
+        params: {
+          query,
+        },
+      });
+      articles = searchResults.data.articles.items;
+
+      cache.set('docs-search-' + query, articles);
+    }
+
+    // Get categories
+    const cachedCategories = cache.get('docs-categories');
+    let categories;
+    if (cachedCategories) {
+      categories = cachedCategories;
+    } else {
+      let categoriesResponse = await helpscout.get(
+        '/collections/' +
+          process.env.HELPSCOUT_DOCS_COLLECTION_ID +
+          '/categories'
+      );
+      categories = categoriesResponse.data.categories.items;
+      cache.set('docs-categories', categories);
+    }
+
+    categories = categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+    }));
+
+    articles = articles.map((article) => {
+      let category = categories.find(
+        (category) => category.id === article.categoryIds[0]
+      );
+      return {
+        name: article.name,
+        preview: article.preview,
+        url:
+          '/help/' +
+          slug(category.name, { lower: true }) +
+          '/' +
+          slug(article.name, { lower: true }),
+      };
+    });
+
+    return articles;
+  },
 };

@@ -600,6 +600,23 @@ a.block-partial-highlight-children:hover .btn-primary {
   color: #000;
 }
 
+.help-search-header {
+  // opacity: 0.5;
+  background: rgba(darken(theme-color('primary'), 5%), 0.8);
+  border: 1px solid theme-color('primary');
+  color: darken(theme-color('primary'), 40%);
+}
+
+.help-search-header::placeholder {
+  color: darken(theme-color('primary'), 25%);
+}
+
+.help-search-header:hover,
+.help-search-header:focus,
+.help-search-header:active {
+  opacity: 1;
+}
+
 .blog-article-list .inner-link-no-highlight p {
   margin: 0;
 }
