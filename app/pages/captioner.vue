@@ -335,7 +335,7 @@ export default {
     // Zoom integration
     let zoomTranscriptBuffer = [];
     let zoomTranscriptCurrentlyDisplayed = [];
-    const zoomMaxCharactersPerLine = 100;
+    const zoomMaxCharactersPerLine = 40;
     this.$store.subscribe((mutation, state) => {
       if (
         this.$store.state.settings.integrations.zoom.on &&
