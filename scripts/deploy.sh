@@ -1,5 +1,5 @@
 # Install awscli
-apk add --update python python-dev py-pip nodejs
+apk add --update python python2 python-dev py-pip nodejs
 pip install awscli --upgrade
 
 # Create the task definition with env variables included
