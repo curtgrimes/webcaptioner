@@ -353,8 +353,8 @@ export default {
             mutation.payload.clearLimitedSpaceReceivers) ||
           mutation.type === 'captioner/CLEAR_TRANSCRIPT'
         ) {
-          // Clear the output
-          zoomTranscriptBuffer = [];
+          // Clear the output (this doesn't work completely yet)
+          zoomTranscriptBuffer = ['\n', '\n'];
         }
       }
     });
@@ -378,24 +378,33 @@ export default {
         this.$store.state.settings.locale.from || 'en-US'
       );
 
-      const transcript = zoomTranscriptCurrentlyDisplayed.join(' ');
-      this.$axios.$post('/api/zoom/api', {
-        apiPath,
-        transcript,
-      });
-      this.$store.commit('INCREMENT_ZOOM_SEQUENCE_NUMBER');
+      // Add line breaks if necessary
+      const firstWordAfterLastLineBreakIndex =
+        zoomTranscriptCurrentlyDisplayed.lastIndexOf('\n') + 1; // or this may be '0' if there are no line breaks yet
+      for (
+        let i = firstWordAfterLastLineBreakIndex;
+        i < zoomTranscriptCurrentlyDisplayed.length;
+        i++
+      ) {
+        // Check the length by adding one more word at a time
+        // up to but not including last
+        const someWordsAfterLastLineBreak = zoomTranscriptCurrentlyDisplayed.slice(
+          firstWordAfterLastLineBreakIndex,
+          i + 1
+        );
 
-      // If the transcript reached its max length since
-      // the last line break (or start of the string),
-      // add a new line break
-      const charactersSinceLastLineBreak =
-        transcript.length - (transcript.lastIndexOf('\n') + 1);
-      if (charactersSinceLastLineBreak >= zoomMaxCharactersPerLine) {
-        zoomTranscriptCurrentlyDisplayed.push('\n');
+        if (
+          someWordsAfterLastLineBreak.join(' ').length >
+          zoomMaxCharactersPerLine
+        ) {
+          // Add a line break before the `i`th word
+          zoomTranscriptCurrentlyDisplayed.splice(i, 0, '\n');
+          break;
+        }
       }
 
-      // Enforce two lines max by removing content before the first line break once we
-      // have two line breaks
+      // Enforce two lines max by removing content before the
+      // first line break if we now have two line breaks
       if (
         zoomTranscriptCurrentlyDisplayed.filter((word) => word === '\n')
           .length >= 2
@@ -406,6 +415,17 @@ export default {
 
         zoomTranscriptCurrentlyDisplayed.splice(0, firstLineBreakIndex + 1);
       }
+
+      const transcript = zoomTranscriptCurrentlyDisplayed
+        .join(' ')
+        .replace(' \n ', '\n') // remove spaces around line breaks
+        .trim();
+
+      this.$axios.$post('/api/zoom/api', {
+        apiPath,
+        transcript,
+      });
+      this.$store.commit('INCREMENT_ZOOM_SEQUENCE_NUMBER');
     }, 1000);
   },
   watch: {

@@ -13,8 +13,6 @@ zoom.post('/api', async (req, res) => {
     })
     .then((response) => {
       // Response
-      console.log(transcript);
-      console.log(response.status);
       res.sendStatus(200);
     })
     .catch((e) => {
