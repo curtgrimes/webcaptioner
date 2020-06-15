@@ -401,6 +401,14 @@ export default {
         'integrations.webhooks.throttleMs'
       );
 
+      commitPropertySetting('SET_ZOOM_ON', 'onOrOff', 'integrations.zoom.on');
+      commitPropertySetting('SET_ZOOM_URL', 'url', 'integrations.zoom.url');
+      commitPropertySetting(
+        'SET_ZOOM_LAST_SEQUENCE_NUMBER',
+        'lastSequenceNumber',
+        'integrations.zoom.lastSequenceNumber'
+      );
+
       commitPropertySetting(
         'SET_DONATION_DATE',
         'donationDate',

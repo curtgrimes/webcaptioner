@@ -10,7 +10,7 @@
       hide-header
       @shown="focusInvalidExperimentModalOkButton()"
     >
-      <div style="font-size:7rem" class="p-0">&#129300;</div>
+      <div style="font-size:7rem" class="p-0 text-center">&#129300;</div>
       <div slot="modal-footer">
         <b-button
           class="float-right"
@@ -22,17 +22,51 @@
       </div>
     </b-modal>
     <b-modal ref="experimentConfirmation" hide-header>
-      <h5 class="modal-title">
-        {{
-          $t('settings.experiments.addExperimentConfirmation', {
-            experimentName,
-          })
-        }}
-      </h5>
+      <h3 class="modal-title">
+        Do you want to add the "{{ experimentName }}" experiment?
+      </h3>
+      <p>This feature is still in the oven and may not work right.</p>
+      <div class="text-danger font-weight-bold">
+        <b-form-checkbox
+          v-model="acknowledgements.experimentMayNotWorkOrBreakThings"
+        >
+          I understand that this experiment may not work perfectly and things
+          might break.
+        </b-form-checkbox>
+        <b-form-checkbox v-model="acknowledgements.couldGoAwayAtAnyTime">
+          I understand that this experiment could go away at any time.
+        </b-form-checkbox>
+        <b-form-checkbox
+          v-model="acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks"
+        >
+          I'll give Curt feedback on how well this experiment works for me (<a
+            href="mailto:REMOVED"
+            target="_blank"
+            >REMOVED</a
+          >
+          or
+          <a
+            href="javascript:void(0)"
+            @click="$store.dispatch('START_SUPPORT_POPUP')"
+            >online chat</a
+          >).
+        </b-form-checkbox>
+      </div>
       <div slot="modal-footer">
         <b-button
+          :disabled="
+            !acknowledgements.experimentMayNotWorkOrBreakThings ||
+              !acknowledgements.couldGoAwayAtAnyTime ||
+              !acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks
+          "
           class="float-right"
-          variant="secondary"
+          :variant="
+            !acknowledgements.experimentMayNotWorkOrBreakThings ||
+            !acknowledgements.couldGoAwayAtAnyTime ||
+            !acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks
+              ? 'outline-dark'
+              : 'secondary'
+          "
           @click="addExperiment({ withConfirmation: false })"
           >{{ $t('settings.experiments.addExperiment') }}</b-button
         >
@@ -63,14 +97,14 @@
     </b-modal>
     <b-input-group size="lg" class="mb-4">
       <b-form-input
-        @keydown.enter.native="addExperiment({ withConfirmation: false })"
+        @keydown.enter.native="addExperiment({ withConfirmation: true })"
         v-model="experimentName"
         autofocus
         autocomplete="off"
         :placeholder="$t('settings.experiments.experimentName')"
       ></b-form-input>
       <b-input-group-append>
-        <b-button @click="addExperiment({ withConfirmation: false })">{{
+        <b-button @click="addExperiment({ withConfirmation: true })">{{
           $t('common.add')
         }}</b-button>
       </b-input-group-append>
@@ -111,6 +145,7 @@ import {
   BListGroup,
   BListGroupItem,
   BFormInput,
+  BFormCheckbox,
 } from 'bootstrap-vue';
 
 export default {
@@ -121,16 +156,22 @@ export default {
     BListGroup,
     BListGroupItem,
     BFormInput,
+    BFormCheckbox,
     BModal,
   },
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.experiments.experiments',
   },
-  data: function() {
+  data() {
     return {
       experimentName: '',
       alreadyAddedExperimentName: '',
+      acknowledgements: {
+        experimentMayNotWorkOrBreakThings: false,
+        couldGoAwayAtAnyTime: false,
+        iWillGiveFeedbackOnHowTheExperimentWorks: false,
+      },
     };
   },
   computed: {
@@ -173,6 +214,8 @@ export default {
           return 'Get a link you can use to share captions.';
         case 'saveTranscriptWithTimingsToDropbox':
           return 'Save transcript with timings to Dropbox.';
+        case 'zoom':
+          return 'Test Zoom integration. Once enabled, go to the Zoom tab in settings.';
         default:
           return '';
       }
@@ -184,6 +227,7 @@ export default {
         'share',
         'science',
         'saveTranscriptWithTimingsToDropbox',
+        'zoom',
       ].includes(this.experimentName);
     },
     addExperiment: function({ withConfirmation }) {

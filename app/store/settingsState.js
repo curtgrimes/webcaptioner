@@ -79,6 +79,11 @@ export default () => {
         method: 'POST',
         throttleMs: 200,
       },
+      zoom: {
+        on: false,
+        url: '',
+        lastSequenceNumber: 0,
+      },
     },
     afterNoAudio: {
       seconds: 2,

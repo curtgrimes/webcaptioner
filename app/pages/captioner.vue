@@ -1,5 +1,9 @@
 <template>
-  <div id="app" class="w-100" style="display: flex;flex-direction: column;height: 100vh;">
+  <div
+    id="app"
+    class="w-100"
+    style="display: flex;flex-direction: column;height: 100vh;"
+  >
     <nuxt-child />
     <incompatible-browser-modal ref="incompatibleBrowserModal" />
     <microphone-permission-needed-modal ref="microphonePermissionNeededModal" />
@@ -9,12 +13,14 @@
       title="Signed in"
       variant="info"
       v-model="$store.state.visibleToasts.signedIn"
-    >You are signed in!</b-toast>
+      >You are signed in!</b-toast
+    >
     <b-toast
       title="Signed out"
       variant="info"
       v-model="$store.state.visibleToasts.signedOut"
-    >You have signed out.</b-toast>
+      >You have signed out.</b-toast
+    >
     <navbar></navbar>
   </div>
 </template>
@@ -325,6 +331,82 @@ export default {
         }
       }
     });
+
+    // Zoom integration
+    let zoomTranscriptBuffer = [];
+    let zoomTranscriptCurrentlyDisplayed = [];
+    const zoomMaxCharactersPerLine = 100;
+    this.$store.subscribe((mutation, state) => {
+      if (
+        this.$store.state.settings.integrations.zoom.on &&
+        this.$store.state.settings.integrations.zoom.url &&
+        [
+          'captioner/APPEND_TRANSCRIPT_STABILIZED',
+          'captioner/APPEND_TRANSCRIPT_FINAL',
+          'captioner/CLEAR_TRANSCRIPT',
+        ].includes(mutation.type)
+      ) {
+        if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
+          zoomTranscriptBuffer.push(mutation.payload.transcript);
+        } else if (
+          (mutation.type === 'captioner/APPEND_TRANSCRIPT_FINAL' &&
+            mutation.payload.clearLimitedSpaceReceivers) ||
+          mutation.type === 'captioner/CLEAR_TRANSCRIPT'
+        ) {
+          // Clear the output
+          zoomTranscriptBuffer = [];
+        }
+      }
+    });
+
+    setInterval(() => {
+      if (!zoomTranscriptBuffer.length) {
+        return;
+      }
+
+      // Consume the buffer
+      zoomTranscriptCurrentlyDisplayed.push(...zoomTranscriptBuffer);
+      zoomTranscriptBuffer = [];
+
+      let apiPath = new URL(this.$store.state.settings.integrations.zoom.url);
+      apiPath.searchParams.append(
+        'seq',
+        this.$store.state.settings.integrations.zoom.lastSequenceNumber
+      );
+      apiPath.searchParams.append(
+        'lang',
+        this.$store.state.settings.locale.from || 'en-US'
+      );
+
+      const transcript = zoomTranscriptCurrentlyDisplayed.join(' ');
+      this.$axios.$post('/api/zoom/api', {
+        apiPath,
+        transcript,
+      });
+      this.$store.commit('INCREMENT_ZOOM_SEQUENCE_NUMBER');
+
+      // If the transcript reached its max length since
+      // the last line break (or start of the string),
+      // add a new line break
+      const charactersSinceLastLineBreak =
+        transcript.length - (transcript.lastIndexOf('\n') + 1);
+      if (charactersSinceLastLineBreak >= zoomMaxCharactersPerLine) {
+        zoomTranscriptCurrentlyDisplayed.push('\n');
+      }
+
+      // Enforce two lines max by removing content before the first line break once we
+      // have two line breaks
+      if (
+        zoomTranscriptCurrentlyDisplayed.filter((word) => word === '\n')
+          .length >= 2
+      ) {
+        const firstLineBreakIndex = zoomTranscriptCurrentlyDisplayed.findIndex(
+          (word) => word === '\n'
+        );
+
+        zoomTranscriptCurrentlyDisplayed.splice(0, firstLineBreakIndex + 1);
+      }
+    }, 1000);
   },
   watch: {
     socketConnected: function() {

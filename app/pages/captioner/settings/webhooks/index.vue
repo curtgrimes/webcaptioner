@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p>Webhooks allows you to receive real-time HTTP notifications of captioning events in your application.</p>
+    <p>
+      Webhooks allows you to receive real-time HTTP notifications of captioning
+      events in your application.
+    </p>
 
     <div class="card bg-white">
       <div class="card-header">
@@ -11,15 +14,21 @@
             name="word-replacements-censor-profanity"
             type="checkbox"
             id="word-replacements-censor-profanity"
+          />
+          <label
+            class="custom-control-label"
+            for="word-replacements-censor-profanity"
+            >Use Webhooks</label
           >
-          <label class="custom-control-label" for="word-replacements-censor-profanity">Use Webhooks</label>
         </div>
       </div>
       <div class="p-3">
         <div class="row mb-2">
           <div class="col-md-9 col-lg-8">
             <div class="row">
-              <label for="webhooksUrl" class="col-sm-4 col-md-3 col-form-label">URL</label>
+              <label for="webhooksUrl" class="col-sm-4 col-md-3 col-form-label"
+                >URL</label
+              >
               <div class="col-sm-8 col-md-9 mb-2 mb-md-0">
                 <input
                   id="webhooksUrl"
@@ -29,7 +38,7 @@
                   class="form-control"
                   type="url"
                   placeholder="URL"
-                >
+                />
               </div>
             </div>
           </div>
@@ -38,7 +47,8 @@
               <label
                 for="webhooksMethod"
                 class="d-md-none d-lg-flex col-sm-4 col-lg-5 col-form-label"
-              >Method</label>
+                >Method</label
+              >
               <div class="col-sm-8 col-md-12 col-lg-7">
                 <select
                   class="form-control"
@@ -76,7 +86,7 @@
             -->
           </div>
         </div>
-        <hr class="my-3">
+        <hr class="my-3" />
         <div
           ref="webhookLog"
           class="card bg-dark text-white small text-monospace"
@@ -84,17 +94,20 @@
         >
           <div class="card-header bg-info p-2">Log</div>
           <div class="p-2">
-            <div
-              v-if="!log.length"
-              class="text-muted"
-            >Empty. Turn on webhooks and start captioning to see requests.</div>
+            <div v-if="!log.length" class="text-muted">
+              Empty. Turn on webhooks and start captioning to see requests.
+            </div>
             <div
               v-for="(event, index) in log"
               :key="index"
               :class="event.type == 'receive' ? 'mb-2' : ''"
             >
-              <span v-if="event.type === 'send'" class="font-weight-bold">{{event.title}}</span>
-              <span v-else :class="event.error ? 'text-danger' : 'text-success'">--> {{event.title}}</span>
+              <span v-if="event.type === 'send'" class="font-weight-bold">{{
+                event.title
+              }}</span>
+              <span v-else :class="event.error ? 'text-danger' : 'text-success'"
+                >--> {{ event.title }}</span
+              >
 
               <span v-if="event.body">
                 <a
@@ -102,9 +115,12 @@
                   href="javascript:void(0)"
                   @click="event.showBody = !event.showBody"
                 >
-                  <fa :icon="event.showBody ? 'caret-down' : 'caret-right'" fixed-width/>Payload
+                  <fa
+                    :icon="event.showBody ? 'caret-down' : 'caret-right'"
+                    fixed-width
+                  />Payload
                 </a>
-                <span v-if="event.showBody">{{event.body}}</span>
+                <span v-if="event.showBody">{{ event.body }}</span>
               </span>
             </div>
           </div>
@@ -120,14 +136,19 @@
 {
   transcript: "Hello",
   sequence: 2
-}</pre>
+}</pre
+      >
     </div>
     <ul>
       <li>
-        <tt class="font-weight-bold">transcript</tt> &mdash; A string of the word or words that were spoken.
+        <tt class="font-weight-bold">transcript</tt> &mdash; A string of the
+        word or words that were spoken.
       </li>
       <li>
-        <tt class="font-weight-bold">sequence</tt> &mdash; An integer that increments by 1 on every webhook call. Starts at 0. Resets back to 0 every time the Web Captioner page is reloaded, but it does not start from 0 if captioning is manually stopped and started again by the user.
+        <tt class="font-weight-bold">sequence</tt> &mdash; An integer that
+        increments by 1 on every webhook call. Starts at 0. Resets back to 0
+        every time the Web Captioner page is reloaded, but it does not start
+        from 0 if captioning is manually stopped and started again by the user.
       </li>
     </ul>
   </div>
