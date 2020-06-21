@@ -11,7 +11,7 @@
     }
   },
   "scripts": {
-    "dev": "NODE_ENV=development nuxt dev --port 8080",
+    "dev": "NODE_ENV=development nuxt dev",
     "dev:api": "NODE_ENV=development DEBUG_API_ONLY=true nodemon ./api/index.js",
     "build": "nuxt build",
     "analyze": "nuxt build --analyze",

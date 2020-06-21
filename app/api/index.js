@@ -6,8 +6,6 @@ const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const cacheControl = require('express-cache-controller');
 
-// app.enable("trust proxy"); // behind AWS ELB
-
 app.use(bodyParser.json());
 app.use(cacheControl());
 app.use((error, request, response, next) => {
@@ -22,15 +20,7 @@ app.use((error, request, response, next) => {
 //     max: 100 // limit each IP to 100 requests per windowMs
 //   }));
 
-// app.use(function(req,res,next){setTimeout(next,1000)}); // Simulate latency
-
-if (process.env.DEBUG_API_ONLY === 'true') {
-  require('dotenv').config();
-  app.use('/api', routes);
-  app.listen(8080);
-} else {
-  app.use('/', routes);
-}
+app.use('/', routes);
 
 module.exports = {
   path: '/api',

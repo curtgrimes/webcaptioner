@@ -153,6 +153,7 @@ module.exports = {
               'faExternalLinkAlt',
               'faSave',
               'faSyncAlt',
+              'faSearch',
               'faTrashAlt',
               'faCog',
               'faPaintBrush',

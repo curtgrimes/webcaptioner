@@ -1,5 +1,5 @@
 const routes = require('express').Router();
-
+console.log('routes here');
 routes.use('/rooms', require('./rooms'));
 routes.use('/channels', require('./channels'));
 routes.use('/charges', require('./charges'));

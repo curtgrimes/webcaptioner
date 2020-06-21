@@ -7,12 +7,12 @@
           to: '/help',
         },
         {
-          text: $parent.name,
+          text: categoryName,
           active: true,
         },
       ]"
     ></b-breadcrumb>
-    <h2 class="mt-0">{{ $parent.name }}</h2>
+    <h1 class="mb-4">{{ categoryName }}</h1>
     <article-list :articles="articles" />
   </div>
 </template>
@@ -29,11 +29,16 @@ export default {
   },
   async asyncData({ app, params, res }) {
     try {
-      let articles = await app.$axios.$get(
+      const { name: categoryName } = await app.$axios.$get(
+        `/api/docs/categories/${params.category}`
+      );
+
+      const articles = await app.$axios.$get(
         `/api/docs/categories/${params.category}/articles`
       );
       return {
         articles,
+        categoryName,
       };
     } catch (error) {
       if (res) {
@@ -45,6 +50,7 @@ export default {
   data: function() {
     return {
       articles: {},
+      categoryName: '',
     };
   },
 };

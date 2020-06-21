@@ -1,8 +1,20 @@
 <template>
   <div>
-    <ul class="list-unstyled mb-5 mb-md-0 help-columns">
-      <li v-for="article in articles" :key="article.id" class="mb-2">
-        <nuxt-link :to="article.url">{{ article.name }}</nuxt-link>
+    <ul class="list-unstyled row mb-4" style="font-size:1.2rem">
+      <li
+        v-for="article in articles"
+        :key="article.id"
+        class="mb-2 col-md-6 position-relative"
+      >
+        <div class="border-top w-100 py-3">
+          <nuxt-link
+            :to="article.url"
+            class="stretched-link d-flex align-items-center"
+          >
+            {{ article.name }}
+            <fa icon="arrow-right" class="text-muted ml-auto mr-2" />
+          </nuxt-link>
+        </div>
       </li>
     </ul>
   </div>

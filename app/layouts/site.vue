@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white min-vh-100 layout-site">
-    <div class="bg-primary navbar-border-bottom fixed-top">
+    <div class="bg-primary sticky-top">
       <div class="px-0">
         <nav id="main-navbar" class="navbar navbar-light navbar-expand-md">
           <button
@@ -39,16 +39,24 @@
           >
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
-                <a class="nav-link mr-3 mr-md-0" href="/blog">Blog</a>
+                <a class="nav-link mr-3 mr-md-0 py-2" href="/blog">Blog</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link mr-3 mr-md-0" href="/help">Help Center</a>
+                <a
+                  class="nav-link mr-3 mr-md-0 py-2"
+                  href="/help"
+                  :class="$route.name.startsWith('help') ? 'active' : ''"
+                >
+                  Help Center
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link mr-3 mr-md-0" href="/community">Community</a>
+                <a class="nav-link mr-3 mr-md-0 py-2" href="/community"
+                  >Community</a
+                >
               </li>
               <li class="nav-item">
-                <a class="nav-link mr-3 mr-md-0" href="/donate">Donate</a>
+                <a class="nav-link mr-3 mr-md-0 py-2" href="/donate">Donate</a>
               </li>
               <li>
                 <nuxt-link

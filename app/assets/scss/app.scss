@@ -134,7 +134,7 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 @import '~bootstrap/scss/_pagination.scss';
 @import '~bootstrap/scss/_badge.scss';
 @import '~bootstrap/scss/_toasts.scss';
-//@import "~bootstrap/scss/_jumbotron.scss";
+@import '~bootstrap/scss/_jumbotron.scss';
 @import '~bootstrap/scss/_alert.scss';
 @import '~bootstrap/scss/_progress.scss';
 @import '~bootstrap/scss/_media.scss';
@@ -151,6 +151,10 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 @import '~bootstrap/scss/_print.scss';
 
 @import 'bootstrap-vue/src/index.scss';
+h2,
+.h2 {
+  font-weight: 700;
+}
 
 .logo-text {
   font-family: $headings-font-family;
@@ -173,6 +177,11 @@ h2,
   font-size: 1.5rem;
 }
 
+.jumbotron {
+  background: linear-gradient(to top, #fff399, #ffe200);
+  height: 350px;
+}
+
 input[type='color'] {
   height: 2.3rem;
   padding: 0.2rem 0.4rem;
@@ -180,6 +189,15 @@ input[type='color'] {
 
 .col-form-label {
   font-weight: bold;
+}
+
+.btn {
+  font-family: 'Cousine';
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.575rem 1rem 0.425rem 1rem;
+  white-space: nowrap;
 }
 
 .btn .normal-text {
@@ -222,6 +240,16 @@ input[type='color'] {
 
 .navbar-toggler {
   z-index: 15;
+}
+
+.nav-pills {
+  font-family: $headings-font-family;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.nav-link.active {
+  text-decoration: underline;
 }
 
 .btn-info:focus,
@@ -567,33 +595,6 @@ a.block-partial-highlight-children:hover .btn-primary {
   // color: color-yiq(theme-color("primary");
   // background-color: darken(theme-color("primary"), 7.5%); /* Get this percentage from _buttons.scss mixin */
   // border-color: darken(theme-color("primary"), 10%); /* Get this percentage from _buttons.scss mixin */
-}
-
-.layout-site .layout-site-content {
-  font-size: 1.25rem;
-}
-
-.layout-site h2,
-.layout-site h3 {
-  text-transform: none;
-  font-family: $font-family-sans-serif;
-  font-weight: bold;
-  margin-bottom: $spacer * 1.5;
-  margin-top: $spacer * 2;
-}
-
-.layout-site p {
-  margin-bottom: $spacer * 1.5;
-}
-
-.layout-site h2 {
-  font-size: 2.25rem;
-  margin-bottom: $spacer * 1.5;
-}
-
-.layout-site h3 {
-  font-size: 1.5rem;
-  margin-bottom: $spacer * 1.5;
 }
 
 .inner-link-no-highlight {
