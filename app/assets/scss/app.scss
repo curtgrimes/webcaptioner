@@ -5,10 +5,8 @@
   src: url('~static/redacted-regular.ttf');
 }
 
-$font-family-sans-serif: 'Source Sans Pro',
-sans-serif;
-$headings-font-family: 'Cousine',
-monopsace;
+$font-family-sans-serif: 'Inter', sans-serif;
+$headings-font-family: $font-family-sans-serif;
 $headings-font-weight: 700;
 
 $h3-font-size: 1.25rem;
@@ -16,16 +14,17 @@ $h4-font-size: 1.25rem;
 $h5-font-size: 1rem;
 $h6-font-size: 0.75rem;
 
-$theme-colors: (primary: #ffe200,
-secondary: #274de6,
-success: #39ad53,
-info: #000,
-warning: #ffc107,
-// $yellow
-danger: #e83f6f,
-light: #f4f4f4,
-lighter: #fafafa,
-dark: #292b2c,
+$theme-colors: (
+  primary: #ffe200,
+  secondary: #274de6,
+  success: #39ad53,
+  info: #000,
+  warning: #ffc107,
+  // $yellow
+    danger: #e83f6f,
+  light: #f4f4f4,
+  lighter: #fafafa,
+  dark: #292b2c,
 ) !default;
 
 $link-color: theme-color('secondary');
@@ -61,14 +60,16 @@ $navbar-light-color: #000;
 $navbar-light-hover-color: inherit;
 
 $nav-tabs-border-color: $modal-header-border-color;
-$nav-tabs-link-active-border-color: $modal-header-border-color $modal-header-border-color rgba(0, 0, 0, 0);
-$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%) lighten($modal-header-border-color, 5%) rgba(0, 0, 0, 0);
+$nav-tabs-link-active-border-color: $modal-header-border-color
+  $modal-header-border-color rgba(0, 0, 0, 0);
+$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%)
+  lighten($modal-header-border-color, 5%) rgba(0, 0, 0, 0);
 $nav-tabs-link-active-color: #000;
 $nav-tabs-link-active-bg: theme-color('primary');
 $nav-tabs-active-link-hover-bg: theme-color('primary');
 
-$nav-pills-link-active-color: #fff;
-$nav-pills-link-active-bg: theme-color('info');
+$nav-pills-link-active-bg: darken(theme-color('primary'), 5%);
+$nav-pills-link-active-color: #000;
 
 $list-group-bg: #fff;
 $list-group-hover-bg: darken($list-group-bg, 5%);
@@ -80,9 +81,10 @@ $list-group-action-active-bg: darken(theme-color('secondary'), 10%);
 $thumbnail-bg: theme-color('primary');
 $thumbnail-border-color: $modal-header-border-color;
 
-$container-max-widths: (sm: 540px,
-md: 860px,
-lg: 910px,
+$container-max-widths: (
+  sm: 540px,
+  md: 860px,
+  lg: 910px,
 );
 
 $pagination-active-bg: theme-color('secondary');
@@ -143,29 +145,18 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 
 @import 'bootstrap-vue/src/index.scss';
 
+h1,
+h2,
+.h1,
+.h2 {
+  font-weight: 900;
+}
+
 .logo-text {
   font-family: $headings-font-family;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.5rem;
-}
-
-h1,
-h2,
-.h1,
-.h2 {
-  text-transform: uppercase;
-}
-
-h3,
-h4,
-h5,
-h6,
-.h3,
-.h4,
-.h5,
-.h6 {
-  font-family: $font-family-sans-serif;
 }
 
 input[type='color'] {
@@ -177,22 +168,13 @@ input[type='color'] {
   font-weight: bold;
 }
 
-.btn {
-  font-family: $headings-font-family;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0.575rem 1rem 0.425rem 1rem;
-  white-space: nowrap;
-}
-
 .btn .normal-text {
   font-family: $font-family-sans-serif;
   font-weight: normal;
   text-transform: none;
 }
 
-.btn-group.captioning-split-button>* {
+.btn-group.captioning-split-button > * {
   border-left: 1px solid rgba(0, 0, 0, 0.2);
 }
 
@@ -227,17 +209,6 @@ input[type='color'] {
 
 .navbar-toggler {
   z-index: 15;
-}
-
-.nav-pills {
-  font-family: $headings-font-family;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.nav-link {
-  /* Adjust for Cousine baseline issue */
-  padding: 0.65rem 1rem 0.5rem 1rem;
 }
 
 .btn-info:focus,
@@ -310,10 +281,6 @@ a.navbar-brand:hover {
 
 a.nav-link.active {
   font-weight: bold;
-}
-
-.rgb-label {
-  font-family: 'Cousine';
 }
 
 .screen-preview .screen {
@@ -470,7 +437,7 @@ html.static-site body {
   display: inline-block;
 }
 
-.lds-message>div {
+.lds-message > div {
   position: absolute;
   width: 24px;
   height: 24px;
@@ -480,35 +447,35 @@ html.static-site body {
   animation: lds-message 1s cubic-bezier(0.3, 0, 0.7, 1) infinite;
 }
 
-.lds-message>div:nth-of-type(4n + 1) {
+.lds-message > div:nth-of-type(4n + 1) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n + 2) {
+.lds-message > div:nth-of-type(4n + 2) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n + 3) {
+.lds-message > div:nth-of-type(4n + 3) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n) {
+.lds-message > div:nth-of-type(4n) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n + 1) {
+.lds-message > div:nth-of-type(4n + 1) {
   left: 38px;
   -webkit-animation-delay: -0.666666666666667s;
   animation-delay: -0.666666666666667s;
 }
 
-.lds-message>div:nth-of-type(4n + 2) {
+.lds-message > div:nth-of-type(4n + 2) {
   left: 88px;
   -webkit-animation-delay: -0.333333333333333s;
   animation-delay: -0.333333333333333s;
 }
 
-.lds-message>div:nth-of-type(4n + 3) {
+.lds-message > div:nth-of-type(4n + 3) {
   left: 138px;
   -webkit-animation-delay: 0s;
   animation-delay: 0s;

@@ -85,6 +85,7 @@ export default () => {
         lastSequenceNumber: 0,
       },
     },
+    channels: [],
     afterNoAudio: {
       seconds: 2,
       action: 'lineBreak2',

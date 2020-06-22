@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import CircularJson from 'circular-json';
 
 export default {
@@ -292,6 +293,37 @@ export default {
 
   CLEAR_DELAYED_EVENTS: (state) => {
     state.delayedEvents = [];
+  },
+
+  SET_CHANNELS: (state, { channels }) => {
+    state.settings.channels = channels;
+  },
+
+  ADD_CHANNEL: (state, { channelId, parameters }) => {
+    state.settings.channels.push({
+      type: channelId,
+      on: false,
+      parameters,
+    });
+  },
+
+  UPDATE_CHANNEL: (state, { channel, channelIndex }) => {
+    Vue.set(state.settings.channels, channelIndex, channel);
+  },
+
+  TOGGLE_CHANNEL_ON_OR_OFF: (state, { channelIndex, onOrOff }) => {
+    Vue.set(state.settings.channels[channelIndex], 'on', onOrOff);
+  },
+
+  DELETE_CHANNEL: (state, { id }) => {
+    const channelIndexToDelete = state.settings.channels.findIndex(
+      (channel) => channel.id === id
+    );
+
+    if (channelIndexToDelete >= 0) {
+      // Found a chanel to replace
+      state.settings.channels.splice(channelIndexToDelete, 1);
+    }
   },
 
   SET_DROPBOX_ACCESS_TOKEN: (state, { accessToken }) => {

@@ -4,14 +4,27 @@
       class="navbar navbar-expand navbar-inverse bg-dark d-flex flex-column"
       :class="largerLayout ? 'pt-3 pb-4' : 'pr-2'"
     >
-      <div class="w-100 pb-3" :class="{'d-flex' : largerLayout, 'd-none': !largerLayout}">
+      <div
+        class="w-100 pb-3"
+        :class="{ 'd-flex': largerLayout, 'd-none': !largerLayout }"
+      >
         <div class="mr-auto">
-          <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">
+          <b-button
+            @click="clearTranscript"
+            size="lg"
+            variant="danger"
+            class="px-4 py-3"
+          >
             Clear
             <kbd class="small ml-3">p</kbd>
           </b-button>
         </div>
-        <b-button @click="startSaveToTextFile" variant="info" size="lg" class="px-4 py-3">
+        <b-button
+          @click="startSaveToTextFile"
+          variant="info"
+          size="lg"
+          class="px-4 py-3"
+        >
           Save to File
           <kbd class="small ml-3">f</kbd>
         </b-button>
@@ -30,7 +43,7 @@
         </button>
         <div
           class="navbar-brand mr-auto"
-          :class="{'mt-3' : largerLayout}"
+          :class="{ 'mt-3': largerLayout }"
           style="padding-top:.75rem"
         >
           <a href="/">
@@ -41,12 +54,14 @@
               class="d-inline-block align-top mr-2 rounded-circle"
               :alt="$t('app.webCaptioner')"
             />
-            <span class="d-none d-md-inline">{{$t('app.webCaptioner')}}</span>
+            <span class="d-none d-md-inline">{{ $t('app.webCaptioner') }}</span>
           </a>
         </div>
 
         <!-- Do not remove this from the DOM with v-if. Currently the volume meter needs to exist in order to populate microphoneName. -->
-        <volume-meter v-bind:hidden="!captioningOn || waitingForInitialTranscript"></volume-meter>
+        <volume-meter
+          v-bind:hidden="!captioningOn || waitingForInitialTranscript"
+        ></volume-meter>
 
         <div
           v-if="waitingForInitialTranscript"
@@ -54,19 +69,24 @@
           style="padding-top:.75rem"
         >
           <b-spinner small type="grow" />
-          <strong>{{$t('navbar.captioner.listening')}}</strong>
+          <strong>{{ $t('navbar.captioner.listening') }}</strong>
           <transition name="fade">
-            <span v-if="microphoneName">&middot; {{microphoneName}}</span>
+            <span v-if="microphoneName">&middot; {{ microphoneName }}</span>
           </transition>
         </div>
         <cast-button></cast-button>
         <transition name="fade">
           <share-button v-if="experiments.includes('share')"></share-button>
         </transition>
-        <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
+        <div
+          v-if="
+            showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed
+          "
+          class="mr-4"
+        >
           <span class="navbar-text text-white pr-3 text-primary">
             <fa icon="exclamation-triangle" />
-            {{$t('navbar.vmixNotConnected')}}
+            {{ $t('navbar.vmixNotConnected') }}
           </span>
           <b-button-group size="sm">
             <b-button
@@ -75,13 +95,20 @@
               variant="secondary"
               v-if="showVmixNotFullySetUpMessage"
               class="btn-sm"
-            >{{$t('common.setUpVerb')}}</b-button>
-            <b-button @click="sendToVmix = false" :aria-label="$t('common.dismiss')">
+              >{{ $t('common.setUpVerb') }}</b-button
+            >
+            <b-button
+              @click="sendToVmix = false"
+              :aria-label="$t('common.dismiss')"
+            >
               <fa icon="times" />
             </b-button>
           </b-button-group>
         </div>
-        <b-button-group :size="largerLayout ? 'lg' : ''" class="captioning-split-button">
+        <b-button-group
+          :size="largerLayout ? 'lg' : ''"
+          class="captioning-split-button"
+        >
           <b-button
             id="startCaptioningDropdown"
             :class="incompatibleBrowser ? 'button-only-disabled' : ''"
@@ -89,12 +116,14 @@
             @click="captioningToggleButtonClick"
             :disabled="$store.state.user.signedIn === null"
           >
-            <div :class="{'px-4 py-2' : largerLayout}">
+            <div :class="{ 'px-4 py-2': largerLayout }">
               <span v-if="!this.captioningOn">
-                <fa icon="microphone" />
-                <span v-show="!typingModeOn">{{$t('navbar.captioner.startCaptioning')}}</span>
+                <fa icon="microphone" fixed-width />
+                <span v-show="!typingModeOn">{{
+                  $t('navbar.captioner.startCaptioning')
+                }}</span>
               </span>
-              <span v-else>{{$t('navbar.captioner.stopCaptioning')}}</span>
+              <span v-else>{{ $t('navbar.captioner.stopCaptioning') }}</span>
               <kbd v-show="largerLayout" class="small ml-3">c</kbd>
             </div>
           </b-button>
@@ -107,7 +136,11 @@
           >
             <fa icon="keyboard" />
           </b-button>
-          <b-button v-if="typingModeOn" variant="danger" @click="stopTypingMode">
+          <b-button
+            v-if="typingModeOn"
+            variant="danger"
+            @click="stopTypingMode"
+          >
             <fa icon="keyboard" />Done Typing
             <kbd>ESC</kbd>
           </b-button>
@@ -120,7 +153,10 @@
           boundary="viewport"
           title
         >
-          <settings-popup :shown="showSettingsMenu" @dismiss="showSettingsMenu = false" />
+          <settings-popup
+            :shown="showSettingsMenu"
+            @dismiss="showSettingsMenu = false"
+          />
         </b-popover>
 
         <b-button
@@ -155,7 +191,6 @@
 }
 </style>
 
-
 <style scoped>
 .button-only-disabled > .btn-primary:first-child {
   opacity: 0.6;
@@ -166,8 +201,6 @@
   line-height: 1.5rem;
 }
 </style>
-
-
 
 <script>
 import VolumeMeter from './VolumeMeter.vue';

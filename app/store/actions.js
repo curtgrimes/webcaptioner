@@ -362,6 +362,8 @@ export default {
         'roomMembershipId'
       );
 
+      commitPropertySetting('SET_CHANNELS', 'channels', 'channels');
+
       commitPropertySetting(
         'SET_DROPBOX_ACCESS_TOKEN',
         'accessToken',

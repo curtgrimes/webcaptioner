@@ -596,7 +596,7 @@ export default {
       // doing a redirection based on screen width.
       // xs screen size has a standalone settings menu.
       if (
-        currentName.indexOf('captioner-settings___') === 0 && // Route name starts with that
+        currentName?.indexOf('captioner-settings___') === 0 && // Route name starts with that
         window.outerWidth > 575
       ) {
         this.$router.replace(this.localePath('captioner-settings-general'));
