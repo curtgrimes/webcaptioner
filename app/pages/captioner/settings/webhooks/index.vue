@@ -134,8 +134,8 @@
     <div class="card bg-white p-3 mb-4">
       <pre class="m-0">
 {
-  transcript: "Hello",
-  sequence: 2
+  "transcript": "Hello",
+  "sequence": 2
 }</pre
       >
     </div>
