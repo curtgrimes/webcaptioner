@@ -1,6 +1,7 @@
 export default {
     methods: {
         saveToTextFile({transcript, dateFormatter, onDone}) {
+            transcript = transcript.replace('\n', '\r\n')
             var a = document.createElement('a');
             a.href = 'data:text/plain;base64,' + btoa(transcript);
             a.textContent = 'download';
