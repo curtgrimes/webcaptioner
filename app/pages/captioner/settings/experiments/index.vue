@@ -216,6 +216,8 @@ export default {
           return 'Save transcript with timings to Dropbox.';
         case 'zoom':
           return 'Test Zoom integration. Once enabled, go to the Zoom tab in settings.';
+        case 'speakBack':
+          return 'Speak words back using browser speech synthesis.';
         default:
           return '';
       }
@@ -228,6 +230,7 @@ export default {
         'science',
         'saveTranscriptWithTimingsToDropbox',
         'zoom',
+        'speakBack',
       ].includes(this.experimentName);
     },
     addExperiment: function({ withConfirmation }) {

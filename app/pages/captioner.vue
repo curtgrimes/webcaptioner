@@ -246,91 +246,121 @@ export default {
         });
       sequence++;
     };
-    RemoteEventBus.$on('sendMutationToReceivers', ({ mutation, payload }) => {
-      if (
-        this.$store.state.settings.integrations.webhooks.on &&
-        mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
-      ) {
-        callWebhook({
-          url: this.$store.state.settings.integrations.webhooks.url,
-          method: this.$store.state.settings.integrations.webhooks.method,
-          transcript: payload ? payload.transcript : '',
-        });
-        lastWebhookEventDate = Date.now();
-      }
 
-      if (
-        mutation === 'captioner/SET_TRANSCRIPT_INTERIM' &&
-        Date.now() - lastWebhookEventDate >= 100
-      ) {
+    RemoteEventBus.$on(
+      'sendMutationToReceivers',
+      async ({ mutation, payload }) => {
         if (
-          this.$store.state.settings.share.roomId &&
-          this.$store.state.socket.isConnected &&
-          this.$store.state.settings.share.on
+          this.$store.state.settings.integrations.webhooks.on &&
+          mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
         ) {
-          this.$socket.sendObj({
-            action: 'mutation',
-            mutation,
-            payload,
+          callWebhook({
+            url: this.$store.state.settings.integrations.webhooks.url,
+            method: this.$store.state.settings.integrations.webhooks.method,
+            transcript: payload ? payload.transcript : '',
           });
           lastWebhookEventDate = Date.now();
         }
-      }
 
-      if (
-        [
-          'captioner/APPEND_TRANSCRIPT_FINAL',
-          'captioner/CLEAR_TRANSCRIPT_INTERIM',
-          'captioner/CLEAR_TRANSCRIPT',
-
-          'SET_TEXT_COLOR',
-          'SET_TEXT_COLOR_INTERIM',
-          'SET_FONT_FAMILY',
-          'SET_FONT_VARIANT',
-          'SET_TEXT_SIZE',
-          'SET_LINE_HEIGHT',
-          'SET_LETTER_SPACING',
-          'SET_TEXT_TRANSFORM',
-          'SET_SHADOW_COLOR',
-          'SET_SHADOW_OPACITY',
-          'SET_SHADOW_BLUR_RADIUS',
-          'SET_SHADOW_OFFSET_X',
-          'SET_SHADOW_OFFSET_Y',
-          'SET_BACKGROUND_COLOR',
-          'SET_BACKGROUND_OPACITY',
-          'SET_ALIGNMENT_HORIZONTAL',
-          'SET_ALIGNMENT_VERTICAL',
-          'SET_ALIGNMENT_PADDING',
-        ].includes(mutation)
-      ) {
         if (
-          this.$store.state.settings.share.roomId &&
-          this.$store.state.socket.isConnected
+          mutation === 'captioner/SET_TRANSCRIPT_INTERIM' &&
+          Date.now() - lastWebhookEventDate >= 100
         ) {
-          this.$socket.sendObj({
-            action: 'mutation',
-            mutation,
-            payload,
+          if (
+            this.$store.state.settings.share.roomId &&
+            this.$store.state.socket.isConnected &&
+            this.$store.state.settings.share.on
+          ) {
+            this.$socket.sendObj({
+              action: 'mutation',
+              mutation,
+              payload,
+            });
+            lastWebhookEventDate = Date.now();
+          }
+        }
+
+        if (
+          [
+            'captioner/APPEND_TRANSCRIPT_FINAL',
+            'captioner/CLEAR_TRANSCRIPT_INTERIM',
+            'captioner/CLEAR_TRANSCRIPT',
+
+            'SET_TEXT_COLOR',
+            'SET_TEXT_COLOR_INTERIM',
+            'SET_FONT_FAMILY',
+            'SET_FONT_VARIANT',
+            'SET_TEXT_SIZE',
+            'SET_LINE_HEIGHT',
+            'SET_LETTER_SPACING',
+            'SET_TEXT_TRANSFORM',
+            'SET_SHADOW_COLOR',
+            'SET_SHADOW_OPACITY',
+            'SET_SHADOW_BLUR_RADIUS',
+            'SET_SHADOW_OFFSET_X',
+            'SET_SHADOW_OFFSET_Y',
+            'SET_BACKGROUND_COLOR',
+            'SET_BACKGROUND_OPACITY',
+            'SET_ALIGNMENT_HORIZONTAL',
+            'SET_ALIGNMENT_VERTICAL',
+            'SET_ALIGNMENT_PADDING',
+          ].includes(mutation)
+        ) {
+          if (
+            this.$store.state.settings.share.roomId &&
+            this.$store.state.socket.isConnected
+          ) {
+            this.$socket.sendObj({
+              action: 'mutation',
+              mutation,
+              payload,
+            });
+          }
+        }
+        if (
+          [
+            'captioner/APPEND_TRANSCRIPT_FINAL',
+            'captioner/SET_CAPTIONER_OFF',
+            'captioner/APPEND_TRANSCRIPT_STABILIZED',
+          ].includes(mutation) &&
+          this.$store.state.settings.integrations.dropbox.accessToken &&
+          this.$store.state.captioner.transcript.final
+        ) {
+          if ('captioner/SET_CAPTIONER_OFF' === mutation) {
+            // immediate
+            this.$store.dispatch('SAVE_TO_DROPBOX');
+          } else {
+            this.saveToDropboxThrottled();
+          }
+        }
+
+        if (
+          [
+            'captioner/APPEND_TRANSCRIPT_FINAL',
+            // 'captioner/APPEND_TRANSCRIPT_STABILIZED',
+          ].includes(mutation) &&
+          this.experiments.includes('speakBack')
+        ) {
+          const voices = await new Promise((resolve) => {
+            let voices = speechSynthesis.getVoices();
+            if (voices.length) {
+              resolve(voices);
+              return;
+            }
+            speechSynthesis.onvoiceschanged = () => {
+              voices = speechSynthesis.getVoices();
+              resolve(voices);
+            };
           });
+          let utterance = new SpeechSynthesisUtterance(payload.transcriptFinal);
+
+          utterance.voice = voices.find(
+            (voice) => voice.name === 'Google US English'
+          );
+          window.speechSynthesis.speak(utterance);
         }
       }
-      if (
-        [
-          'captioner/APPEND_TRANSCRIPT_FINAL',
-          'captioner/SET_CAPTIONER_OFF',
-          'captioner/APPEND_TRANSCRIPT_STABILIZED',
-        ].includes(mutation) &&
-        this.$store.state.settings.integrations.dropbox.accessToken &&
-        this.$store.state.captioner.transcript.final
-      ) {
-        if ('captioner/SET_CAPTIONER_OFF' === mutation) {
-          // immediate
-          this.$store.dispatch('SAVE_TO_DROPBOX');
-        } else {
-          this.saveToDropboxThrottled();
-        }
-      }
-    });
+    );
 
     // Zoom integration
     let zoomTranscriptBuffer = [];
