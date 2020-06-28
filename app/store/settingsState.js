@@ -83,6 +83,7 @@ export default () => {
         on: false,
         url: '',
         lastSequenceNumber: 0,
+        error: null,
       },
     },
     channels: [],

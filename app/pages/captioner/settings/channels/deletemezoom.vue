@@ -4,11 +4,7 @@
       ref="modal"
       title="Add Channel"
       @hide="$router.replace('/captioner/settings/channels')"
-      ok-variant="secondary"
-      cancel-variant="link"
-      ok-title="Add Channel"
-      :ok-disabled="!zoomApiToken"
-      @ok="addChannel()"
+      @ok="alreadyAddedZoomChannel ? updateChannel() : addChannel()"
     >
       <img
         :src="channel.iconPath"
@@ -53,16 +49,33 @@
           placeholder="Zoom API Token"
         />
       </div>
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <b-button
+          v-if="alreadyAddedZoomChannel"
+          variant="outline-danger"
+          @click="deleteChannel()"
+          class="mr-auto"
+        >
+          Remove Channel
+        </b-button>
+        <b-button size="sm" variant="link" @click="cancel()">
+          Cancel
+        </b-button>
+        <b-button variant="secondary" @click="ok()" :disabled="!zoomApiToken">
+          {{ alreadyAddedZoomChannel ? 'Update' : 'Add Channel' }}
+        </b-button>
+      </template>
     </b-modal>
   </div>
 </template>
 
 <script>
-import { BModal } from 'bootstrap-vue';
+import { BModal, BButton } from 'bootstrap-vue';
 
 export default {
   components: {
     BModal,
+    BButton,
   },
   data() {
     return {
@@ -78,15 +91,23 @@ export default {
   },
   mounted() {
     this.$refs['modal'].show();
+
+    // this.zoomApiToken = this.alreadyAddedZoomChannel?.parameters?.zoomApiToken;
   },
-  methods: {
-    addChannel() {
-      this.$store.commit('ADD_CHANNEL', {
-        channelId: this.channel.id,
-        parameters: {
-          zoomApiToken: this.zoomApiToken,
-        },
-      });
+  computed: {
+    alreadyAddedZoomChannel() {
+      return this.$store.state.settings.channels.find(
+        (channel) => channel.id === 'zoom'
+      );
+    },
+  },
+  watch: {
+    alreadyAddedZoomChannel: {
+      deep: true,
+      immediate: true,
+      handler() {
+        this.zoomApiToken = this.alreadyAddedZoomChannel?.parameters?.zoomApiToken;
+      },
     },
   },
 };

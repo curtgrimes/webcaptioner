@@ -1,9 +1,17 @@
 <template>
   <div class="settings-experiments-view">
-    <p>
-      Have feedback about experiments? Contact me at
-      <a href="mailto:REMOVED">REMOVED</a>.
+    <p class="mb-0">
+      These are some features that aren't quite ready yet. You're welcome to try
+      them out! Feel free to send feedback to
+      <a href="mailto:REMOVED">REMOVED</a> or
+      through
+      <a
+        href="javascript:void(0)"
+        @click="$store.dispatch('START_SUPPORT_POPUP')"
+        >online chat</a
+      >.
     </p>
+    <hr class="my-3" />
     <b-modal
       ref="invalidExperiment"
       class="text-center"
@@ -22,10 +30,25 @@
       </div>
     </b-modal>
     <b-modal ref="experimentConfirmation" hide-header>
-      <h3 class="modal-title">
-        Do you want to add the "{{ experimentName }}" experiment?
+      <h3 class="modal-title text-center mb-3">
+        Do you want to add this experiment?
       </h3>
-      <p>This feature is still in the oven and may not work right.</p>
+      <div class="card card-body mb-3 d-flex h-100">
+        <fa icon="flask" size="3x" class="mx-auto mb-3" />
+        <h3 class="h4 text-center mb-0">
+          {{ experimentToAdd.name }}
+        </h3>
+        <p
+          class="mb-0 text-center mt-2 text-muted small"
+          v-if="experimentToAdd.description"
+        >
+          {{ experimentToAdd.description }}
+        </p>
+      </div>
+      <p class="text-center">
+        This feature is still in the oven and may not work right.
+      </p>
+      <hr />
       <div class="text-danger font-weight-bold">
         <b-form-checkbox
           v-model="acknowledgements.experimentMayNotWorkOrBreakThings"
@@ -39,7 +62,7 @@
         <b-form-checkbox
           v-model="acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks"
         >
-          I'll give Curt feedback on how well this experiment works for me (<a
+          I'll give feedback on how well this experiment works for me (<a
             href="mailto:REMOVED"
             target="_blank"
             >REMOVED</a
@@ -95,43 +118,54 @@
         >
       </div>
     </b-modal>
-    <b-input-group size="lg" class="mb-4">
-      <b-form-input
-        @keydown.enter.native="addExperiment({ withConfirmation: true })"
-        v-model="experimentName"
-        autofocus
-        autocomplete="off"
-        :placeholder="$t('settings.experiments.experimentName')"
-      ></b-form-input>
-      <b-input-group-append>
-        <b-button @click="addExperiment({ withConfirmation: true })">{{
-          $t('common.add')
-        }}</b-button>
-      </b-input-group-append>
-    </b-input-group>
-    <div v-if="experiments.length">
-      <h4>{{ $t('settings.experiments.addedExperiments') }}</h4>
-      <b-list-group class="mb-4">
-        <b-list-group-item v-for="experiment in experiments" :key="experiment">
-          <div class="row">
-            <div class="col-8">
-              <p class="mb-0">
-                <strong>{{ experiment }}</strong>
-              </p>
-              <p class="small mb-0">{{ getDescription(experiment) }}</p>
-            </div>
-            <div class="col-4 pr-2">
-              <b-button
-                class="float-right"
-                variant="danger"
-                size="sm"
-                @click="removeExperiment(experiment)"
-                >{{ $t('common.remove') }}</b-button
-              >
-            </div>
+    <div class="row">
+      <div
+        class="col-md-6 mb-3"
+        v-for="experiment in experimentsWithHiddenExperiments"
+        :key="experiment.id"
+      >
+        <div
+          class="card card-body mb-3 d-flex h-100"
+          :class="
+            experimentLoaded(experiment.id) ? 'bg-white shadow' : 'bg-light'
+          "
+        >
+          <h3 class="h5">
+            {{ experiment.name }}
+          </h3>
+          <p class="small mb-0">{{ experiment.description }}</p>
+          <hr class="mt-auto" />
+          <div class="d-flex mb-n2 mt-1 align-items-center">
+            <span
+              v-if="experimentLoaded(experiment.id)"
+              class="small text-muted"
+              ><fa icon="check" fixed-width /> Added
+            </span>
+            <b-button
+              v-if="experimentLoaded(experiment.id)"
+              class="ml-auto stretched-link"
+              @click="
+                $store.commit('REMOVE_EXPERIMENT', {
+                  experiment: experiment.id,
+                })
+              "
+              variant="outline-danger"
+            >
+              Remove
+            </b-button>
+            <b-button
+              v-else
+              class="ml-auto stretched-link"
+              @click="
+                experimentIdToAdd = experiment.id;
+                addExperiment({ withConfirmation: true });
+              "
+            >
+              Add
+            </b-button>
           </div>
-        </b-list-group-item>
-      </b-list-group>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -165,7 +199,27 @@ export default {
   },
   data() {
     return {
-      experimentName: '',
+      experiments: [
+        {
+          id: 'typingMode',
+          name: 'Manually type captions',
+          description: 'Adds a button to manually type captions.',
+        },
+        {
+          id: 'demo',
+          name: 'Demo mode',
+          description:
+            'Fills the captionining window automatically with dummy text and ignores any microphone input.',
+        },
+        {
+          id: 'speakBack',
+          name: 'Speak everything back',
+          description:
+            'After speech is converted to text, convert the text back to speech using speech synthesis.',
+        },
+      ],
+
+      experimentIdToAdd: '',
       alreadyAddedExperimentName: '',
       acknowledgements: {
         experimentMayNotWorkOrBreakThings: false,
@@ -175,63 +229,58 @@ export default {
     };
   },
   computed: {
-    experiments: function() {
+    loadedExperiments() {
       return this.$store.state.settings.exp;
     },
-  },
-  mounted: function() {
-    this.$nextTick(() => {
-      if (this.$route.query.add) {
-        if (this.experiments.includes(this.$route.query.add)) {
-          this.alreadyAddedExperimentName = this.$route.query.add;
-          this.$refs.experimentAlreadyAdded.show();
-        } else {
-          this.experimentName = this.$route.query.add;
-          this.addExperiment({ withConfirmation: true });
-        }
-      }
-    });
+    experimentToAdd() {
+      const experiment = this.experiments.find(
+        (e) => e.id === this.experimentIdToAdd
+      );
+      return experiment || { name: this.experimentIdToAdd }; // it's a hidden experiment
+    },
+    experimentsWithHiddenExperiments() {
+      return [
+        ...this.experiments,
+
+        // With added experiments that aren't in our static list
+        // of experiments we present on load
+        ...this.loadedExperiments
+          // Remove experiments that are already in our static list
+          .filter(
+            (loadedExperiment) =>
+              !this.experiments.map((e) => e.id).includes(loadedExperiment)
+          )
+          .map((loadedExperimentId) => ({
+            id: loadedExperimentId,
+            name: loadedExperimentId,
+          })),
+      ];
+    },
   },
   methods: {
+    experimentLoaded(experimentId) {
+      return this.loadedExperiments.includes(experimentId);
+    },
     hideInvalidExperimentModal: function() {
       this.$refs.invalidExperiment.hide();
     },
     hideExperimentConfirmationModal: function() {
       this.$refs.experimentConfirmation.hide();
+      Object.keys(this.acknowledgements).forEach(
+        (acknowledgementKey) =>
+          (this.acknowledgements[acknowledgementKey] = false)
+      );
     },
     hideExperimentAlreadyAddedModal: function() {
       this.$refs.experimentAlreadyAdded.hide();
     },
-    getDescription: function(experiment) {
-      switch (experiment) {
-        case 'science':
-          return 'This will do something someday I think';
-        case 'demo':
-          return 'Enter a demo mode when you start captioning.';
-        case 'typingMode':
-          return 'Add a manual typing mode.';
-        case 'share':
-          return 'Get a link you can use to share captions.';
-        case 'saveTranscriptWithTimingsToDropbox':
-          return 'Save transcript with timings to Dropbox.';
-        case 'zoom':
-          return 'Test Zoom integration. Once enabled, go to the Zoom tab in settings.';
-        case 'speakBack':
-          return 'Speak words back using browser speech synthesis.';
-        default:
-          return '';
-      }
-    },
     isValidExperiment: function() {
       return [
-        'demo',
-        'typingMode',
         'share',
-        'science',
         'saveTranscriptWithTimingsToDropbox',
         'zoom',
-        'speakBack',
-      ].includes(this.experimentName);
+        ...this.experiments.map((e) => e.id),
+      ].includes(this.experimentIdToAdd);
     },
     addExperiment: function({ withConfirmation }) {
       if (this.isValidExperiment()) {
@@ -239,20 +288,38 @@ export default {
           this.$refs.experimentConfirmation.show();
         } else {
           this.$store.commit('ADD_EXPERIMENT', {
-            experiment: this.experimentName,
+            experiment: this.experimentIdToAdd,
           });
-          this.experimentName = '';
+          this.experimentIdToAdd = '';
           this.$refs.experimentConfirmation.hide();
         }
       } else {
         this.$refs.invalidExperiment.show();
       }
+
+      Object.keys(this.acknowledgements).forEach(
+        (acknowledgementKey) =>
+          (this.acknowledgements[acknowledgementKey] = false)
+      );
     },
     focusInvalidExperimentModalOkButton: function() {
       this.$refs.invalidExperimentModalOkButton.focus();
     },
-    removeExperiment: function(experimentName) {
-      this.$store.commit('REMOVE_EXPERIMENT', { experiment: experimentName });
+    parseExperimentFromURL() {
+      if (this.$route.query.add) {
+        if (this.loadedExperiments.includes(this.$route.query.add)) {
+          this.alreadyAddedExperimentName = this.$route.query.add;
+          this.$refs.experimentAlreadyAdded.show();
+        } else {
+          this.experimentIdToAdd = this.$route.query.add;
+          this.addExperiment({ withConfirmation: true });
+        }
+      }
+    },
+  },
+  watch: {
+    '$store.state.settingsLoaded'() {
+      this.parseExperimentFromURL();
     },
   },
 };

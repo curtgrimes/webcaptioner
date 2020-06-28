@@ -1,7 +1,9 @@
 const channels = require('express').Router();
 
+channels.use('/zoom', require('./zoom'));
+
 const iconPrefix = '/static/channel-icons';
-const configPatePathPrefix = '/captioner/settings/channels';
+const configPatePathPrefix = '/captioner/settings/channels/new?type=';
 
 const channelsList = [
   {
@@ -9,28 +11,28 @@ const channelsList = [
     name: 'Dropbox',
     iconPath: `${iconPrefix}/dropbox.png`,
     limit: 1,
-    configPagePath: `${configPatePathPrefix}/dropbox`,
+    configPagePath: `${configPatePathPrefix}dropbox`,
   },
   {
     id: 'vmix',
     name: 'vMix',
     iconPath: `${iconPrefix}/vmix.png`,
     limit: 1,
-    configPagePath: `${configPatePathPrefix}/vmix`,
+    configPagePath: `${configPatePathPrefix}vmix`,
   },
   {
     id: 'link',
     name: 'Link or Embed',
     iconName: 'link',
     limit: 1,
-    configPagePath: `${configPatePathPrefix}/link`,
+    configPagePath: `${configPatePathPrefix}link`,
   },
   {
     id: 'webhook',
     name: 'Webhook',
     iconName: 'plug',
     limit: 1,
-    configPagePath: `${configPatePathPrefix}/webhooks`,
+    configPagePath: `${configPatePathPrefix}webhooks`,
   },
   {
     id: 'obs',
@@ -38,21 +40,21 @@ const channelsList = [
     iconPath: `${iconPrefix}/obs.svg`,
     showNameWithIcon: true,
     limit: 1,
-    configPagePath: `${configPatePathPrefix}/obs`,
+    configPagePath: `${configPatePathPrefix}obs`,
   },
   {
     id: 'zoom',
     name: 'Zoom',
     iconPath: `${iconPrefix}/zoom.png`,
     limit: 1,
-    configPagePath: `${configPatePathPrefix}/zoom`,
+    configPagePath: `${configPatePathPrefix}zoom`,
   },
   {
     id: 'youtube',
     name: 'YouTube',
     iconPath: `${iconPrefix}/youtube.png`,
     limit: 1,
-    configPagePath: `${configPatePathPrefix}/youtube`,
+    configPagePath: `${configPatePathPrefix}youtube`,
   },
 ];
 

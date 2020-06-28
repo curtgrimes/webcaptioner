@@ -111,7 +111,10 @@
         >
           <b-button
             id="startCaptioningDropdown"
-            :class="incompatibleBrowser ? 'button-only-disabled' : ''"
+            :class="{
+              'button-only-disabled': incompatibleBrowser,
+              'rounded-right': $store.state.settings.channels.length === 0,
+            }"
             :variant="captioningToggleButtonVariant"
             @click="captioningToggleButtonClick"
             :disabled="$store.state.user.signedIn === null"
@@ -126,6 +129,29 @@
               <span v-else>{{ $t('navbar.captioner.stopCaptioning') }}</span>
               <kbd v-show="largerLayout" class="small ml-3">c</kbd>
             </div>
+          </b-button>
+          <b-button
+            v-show="$store.state.settings.channels.length > 0"
+            :variant="captioningToggleButtonVariant"
+            v-b-tooltip.top
+            @click="
+              hideAllTooltips();
+              $store.commit('SET_CHANNEL_ERRORS_SEEN');
+            "
+            :title="
+              `Channels ${
+                $store.state.channels.unseenErrorExists ? '(Error)' : ''
+              }`
+            "
+            id="navbar-channels-button"
+          >
+            <fa icon="satellite-dish" />
+            <span
+              class="bg-danger d-inline-block px-1 py-0 rounded"
+              v-if="$store.state.channels.unseenErrorExists"
+            >
+              <fa icon="exclamation-triangle" class="text-white" />
+            </span>
           </b-button>
           <b-button
             v-if="experiments.includes('typingMode') && !typingModeOn"
@@ -157,6 +183,16 @@
             :shown="showSettingsMenu"
             @dismiss="showSettingsMenu = false"
           />
+        </b-popover>
+        <b-popover
+          id="navbar-channels-popover"
+          target="navbar-channels-button"
+          placement="top"
+          triggers="click blur"
+          boundary="viewport"
+          title
+        >
+          <channels-popup />
         </b-popover>
 
         <b-button
@@ -207,16 +243,9 @@ import VolumeMeter from './VolumeMeter.vue';
 import CastButton from '../components/CastButton.vue';
 import ShareButton from '../components/ShareButton.vue';
 import SettingsPopup from '../components/SettingsPopup.vue';
+import ChannelsPopup from '~/components/channels/ChannelsPopup';
 import saveToFile from '~/mixins/saveToFile';
 import dateFormat from '~/mixins/dateFormat';
-import {
-  BButton,
-  BButtonGroup,
-  BTooltip,
-  VBTooltip,
-  BPopover,
-  BSpinner,
-} from 'bootstrap-vue';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -225,19 +254,13 @@ export default {
     CastButton,
     SettingsPopup,
     ShareButton,
-    BButton,
-    BButtonGroup,
-    BPopover,
-    BSpinner,
-    BTooltip,
-  },
-  directives: {
-    'b-tooltip': VBTooltip,
+    ChannelsPopup,
   },
   data: function() {
     return {
       vmixNotFullySetUpMessageDismissed: false,
       showSettingsMenu: false,
+      showChannelsMenu: false,
     };
   },
   computed: {
@@ -297,6 +320,11 @@ export default {
       set() {
         this.$store.commit('SET_SEND_TO_VMIX', { on: false });
       },
+    },
+    activeChannels() {
+      return this.$store.state.settings.channels.filter(
+        (channel) => channel.on
+      );
     },
   },
   watch: {

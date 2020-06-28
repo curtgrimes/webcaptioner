@@ -808,4 +808,11 @@ input[type='range']::-ms-track {
   background: #000;
 }
 
+.desaturated {
+  filter: saturate(0);
+}
+.transition-all {
+  transition: all 150ms;
+}
+
 @import 'bootstrap-vue/src/index.scss';

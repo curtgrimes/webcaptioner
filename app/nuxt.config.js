@@ -159,6 +159,7 @@ module.exports = {
               'faGlobeAsia',
               'faFileDownload',
               'faCheckCircle',
+              'faCheck',
               'faSpinner',
               'faLink',
               'faPlug',
@@ -210,6 +211,7 @@ module.exports = {
         ],
       },
     ],
+    ['bootstrap-vue/nuxt'],
   ],
   plugins: [
     {
@@ -220,8 +222,8 @@ module.exports = {
       src: '~/plugins/firebase.js',
       mode: 'client',
     },
-    '~/plugins/vue-timeago',
-    '~/plugins/performance.js',
+    { src: '~/plugins/vue-timeago' },
+    { src: '~/plugins/performance.js' },
   ],
   sentry: {
     public_key: 'REMOVED',
@@ -270,15 +272,9 @@ module.exports = {
     },
   },
   hooks(hook) {
-    hook('modules:before', (nuxt) => {
-      // https://github.com/nuxt/nuxt.js/pull/6026#issuecomment-519030254
-      nuxt.options.devModules = nuxt.options.devModules.filter(
-        (name) => name !== '@nuxt/loading-screen'
-      );
+    hook('listen', (server) => {
+      wsServer.createSocket(server);
     }),
-      hook('listen', (server) => {
-        wsServer.createSocket(server);
-      }),
       hook('render:setupMiddleware', (app) => {
         app.use('/health-check', healthCheckMiddleware);
 

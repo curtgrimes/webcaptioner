@@ -41,6 +41,7 @@ import { getCurrentVersionNumber } from '~/mixins/settingsNormalizer.js';
 import versionSort from 'semver-compare';
 import '~/components/_globals';
 import { BToast, BToaster } from 'bootstrap-vue';
+import channels from '~/plugins/channels';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -366,6 +367,7 @@ export default {
     let zoomTranscriptBuffer = [];
     let zoomTranscriptCurrentlyDisplayed = [];
     const zoomMaxCharactersPerLine = 40;
+
     this.$store.subscribe((mutation, state) => {
       if (
         this.$store.state.settings.integrations.zoom.on &&
@@ -525,6 +527,17 @@ export default {
         }
       },
       deep: true,
+    },
+    '$store.state.settings.channels': {
+      immediate: true,
+      deep: true,
+      handler() {
+        channels.updateRegistrations({
+          $store: this.$store,
+          $socket: this.$socket,
+          $axios: this.$axios,
+        });
+      },
     },
   },
   beforeDestroy: function() {

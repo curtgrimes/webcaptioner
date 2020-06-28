@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import CircularJson from 'circular-json';
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   SET_SETTINGS_PAGE_TITLE: (state, { settingsPageTitle }) => {
@@ -299,25 +300,89 @@ export default {
     state.settings.channels = channels;
   },
 
-  ADD_CHANNEL: (state, { channelId, parameters }) => {
-    state.settings.channels.push({
-      type: channelId,
-      on: false,
+  ADD_CHANNEL: (state, { type, parameters }) => {
+    const newChannel = {
+      id: uuidv4(),
+      type,
+      on: true,
       parameters,
-    });
+    };
+    state.settings.channels.push(newChannel);
+    return newChannel;
   },
 
-  UPDATE_CHANNEL: (state, { channel, channelIndex }) => {
-    Vue.set(state.settings.channels, channelIndex, channel);
+  UPDATE_CHANNEL: (state, { channelId, parameters }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+    if (channelIndexToUpdate >= 0) {
+      state.settings.channels[channelIndexToUpdate].parameters = parameters;
+      state.settings.channels[channelIndexToUpdate].error = null;
+
+      if (!state.settings.channels.find((channel) => channel.error)) {
+        // After this update, no channels have any errors, so turn off this flag
+        state.channels.unseenErrorExists = false;
+      }
+    } else {
+      throw new Error(
+        'Sorry, unable to save channel. That channel could not be found. Try creating it again.'
+      );
+    }
   },
 
-  TOGGLE_CHANNEL_ON_OR_OFF: (state, { channelIndex, onOrOff }) => {
-    Vue.set(state.settings.channels[channelIndex], 'on', onOrOff);
+  TOGGLE_CHANNEL_ON_OR_OFF: (state, { channelId, onOrOff }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+
+    if (channelIndexToUpdate >= 0) {
+      Vue.set(state.settings.channels[channelIndexToUpdate], 'on', onOrOff);
+    }
   },
 
-  DELETE_CHANNEL: (state, { id }) => {
+  TURN_ON_CHANNEL: (state, { channelId }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+
+    if (channelIndexToUpdate >= 0) {
+      Vue.set(state.settings.channels[channelIndexToUpdate], 'on', true);
+    }
+  },
+
+  TURN_OFF_CHANNEL: (state, { channelId }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+
+    if (channelIndexToUpdate >= 0) {
+      Vue.set(state.settings.channels[channelIndexToUpdate], 'on', false);
+    }
+  },
+
+  UPDATE_CHANNEL_ERROR: (state, { channelId, error }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+    if (channelIndexToUpdate >= 0) {
+      state.settings.channels[channelIndexToUpdate].error = error;
+
+      if (state.settings.channels.find((channel) => channel.error)) {
+        // At least one channel has an error after this update
+        state.channels.unseenErrorExists = true;
+      } else {
+        state.channels.unseenErrorExists = false;
+      }
+    }
+  },
+
+  SET_CHANNEL_ERRORS_SEEN: (state) => {
+    state.channels.unseenErrorExists = false;
+  },
+
+  DELETE_CHANNEL: (state, { channelId }) => {
     const channelIndexToDelete = state.settings.channels.findIndex(
-      (channel) => channel.id === id
+      (channel) => channel.id === channelId
     );
 
     if (channelIndexToDelete >= 0) {
@@ -397,7 +462,12 @@ export default {
     state.settings.integrations.zoom.lastSequenceNumber = lastSequenceNumber;
   },
   INCREMENT_ZOOM_SEQUENCE_NUMBER: (state) => {
-    state.settings.integrations.zoom.lastSequenceNumber++;
+    const zoomChannel = state.settings.channels.find(
+      (channel) => channel.id === 'zoom'
+    );
+    if (zoomChannel) {
+      zoomChannel.lastSequenceNumber++;
+    }
   },
 
   SET_EVENT_LOG: (state, { eventLog }) => {
