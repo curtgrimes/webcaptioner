@@ -24,13 +24,19 @@ const registerActiveChannels = ({ $store, $axios, $socket }) => {
 
     // Register the channel. Registration returns a deregister function,
     // so save that also for future use.
-    deregisterFunctions[activeChannel.id] = channels[activeChannel.type]({
-      $store,
-      $axios,
-      $socket,
-      channelId: activeChannel.id,
-      channelParameters: activeChannel.parameters || {},
-    });
+    if (channels[activeChannel.type]) {
+      deregisterFunctions[activeChannel.id] = channels[activeChannel.type]({
+        $store,
+        $axios,
+        $socket,
+        channelId: activeChannel.id,
+        channelParameters: activeChannel.parameters || {},
+      });
+    } else {
+      console.error(
+        `No registration possible for channel type '${activeChannel.type}'`
+      );
+    }
   });
 };
 

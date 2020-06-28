@@ -11,14 +11,16 @@
     </b-button>
     <hr />
     <div
-      v-for="channel in addedChannels"
+      v-for="(channel, channelIndex) in addedChannels"
       :key="channel.id"
       class="d-flex align-items-center"
       style="width:200px"
+      :class="{ 'mb-1': channelIndex < addedChannels.length - 1 }"
     >
       <b-button
         :to="`/captioner/settings/channels/${channel.id}`"
         class="p-0 mr-auto d-flex align-items-center"
+        size="sm"
         variant="link"
       >
         <img
@@ -28,6 +30,13 @@
           style="max-width:60px"
           :class="{ desaturated: !channel.on }"
         />
+        <span v-else class="text-dark">
+          <fa
+            v-if="channelIconName(channel.type)"
+            :icon="channelIconName(channel.type)"
+            class="mr-1"
+          />{{ channelName(channel.type) }}
+        </span>
       </b-button>
 
       <b-button
@@ -73,6 +82,13 @@ export default {
     channelIconPath(channelType) {
       return this.channels.find((channel) => channel.id === channelType)
         ?.iconPath;
+    },
+    channelIconName(channelType) {
+      return this.channels.find((channel) => channel.id === channelType)
+        ?.iconName;
+    },
+    channelName(channelType) {
+      return this.channels.find((channel) => channel.id === channelType)?.name;
     },
   },
   computed: {

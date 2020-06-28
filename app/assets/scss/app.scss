@@ -815,4 +815,9 @@ input[type='range']::-ms-track {
   transition: all 150ms;
 }
 
+.collapsed > .when-open,
+.not-collapsed > .when-closed {
+  display: none;
+}
+
 @import 'bootstrap-vue/src/index.scss';

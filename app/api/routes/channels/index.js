@@ -32,7 +32,7 @@ const channelsList = [
     name: 'Webhook',
     iconName: 'plug',
     limit: 1,
-    configPagePath: `${configPatePathPrefix}webhooks`,
+    configPagePath: `${configPatePathPrefix}webhook`,
   },
   {
     id: 'obs',

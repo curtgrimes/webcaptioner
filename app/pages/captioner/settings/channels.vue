@@ -12,6 +12,9 @@
       <div
         v-for="(addedChannel, channelIndex) in $store.state.settings.channels"
         :key="channelIndex"
+        :class="{
+          'mb-3': channelIndex < $store.state.settings.channels.length - 1,
+        }"
       >
         <div
           class="card card-body transition-all"
@@ -21,10 +24,21 @@
           <div class="row no-gutters">
             <div class="col-2">
               <img
+                v-if="channelInfo(addedChannel.type).iconPath"
                 :src="channelInfo(addedChannel.type).iconPath"
                 class="w-100 transition-all"
                 :class="!addedChannel.on ? 'desaturated' : ''"
               />
+              <span v-else class="d-flex align-items-center">
+                <fa
+                  :icon="channelInfo(addedChannel.type).iconName"
+                  size="lg"
+                  class="mr-2"
+                />
+                <span class="font-weight-bold">{{
+                  channelInfo(addedChannel.type).name
+                }}</span>
+              </span>
             </div>
             <div
               class="col-10 d-flex align-items-center justify-content-center"
@@ -42,6 +56,7 @@
                 class="py-2 px-3 my-n2 ml-auto mr-4"
                 :variant="addedChannel.on ? 'light' : 'outline-dark'"
                 :to="`/captioner/settings/channels/${addedChannel.id}`"
+                :style="!addedChannel.on ? 'border-color: #ccc' : ''"
               >
                 <fa icon="cog" /> Configure
               </b-button>
