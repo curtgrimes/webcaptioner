@@ -2,9 +2,12 @@ const zoom = require('express').Router();
 const axios = require('axios');
 const rateLimit = require('express-rate-limit');
 
+const rateLimitWindowMinutes = 5;
+const requestsAllowedPerSecond = 1; // Frontend limits to one request per second
+const rateLimitLeeway = 10;
 const zoomRateLimiter = rateLimit({
-  windowMs: 1 * 1000,
-  max: 20,
+  windowMs: rateLimitWindowMinutes * 60 * 1000,
+  max: rateLimitWindowMinutes * requestsAllowedPerSecond * 60 + rateLimitLeeway,
 });
 
 zoom.use('/', zoomRateLimiter);

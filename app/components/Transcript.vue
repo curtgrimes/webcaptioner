@@ -34,7 +34,7 @@
           >{{ interimTranscript }}</span
         ><span
           v-show="typingModeOn && showTypedLiveReadOnly !== true"
-          contenteditable
+          :contenteditable="typingModeOn"
           v-text="transcriptTypedForDisplay"
           @input="typedTranscriptDidChange()"
           ref="typedTranscript"
