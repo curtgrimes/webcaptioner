@@ -144,13 +144,17 @@
               }`
             "
             id="navbar-channels-button"
+            class="px-2"
           >
-            <fa icon="satellite-dish" />
-            <span
-              class="bg-danger d-inline-block px-1 py-0 rounded"
-              v-if="$store.state.channels.unseenErrorExists"
-            >
-              <fa icon="exclamation-triangle" class="text-white" />
+            <span class="d-flex align-items-center ">
+              <fa icon="satellite-dish" />
+              <span class="small pl-1">{{ activeChannels.length }}</span>
+              <span
+                class="bg-danger d-inline-block px-1 py-0 rounded ml-1"
+                v-if="$store.state.channels.unseenErrorExists"
+              >
+                <fa icon="exclamation-triangle" class="text-white" />
+              </span>
             </span>
           </b-button>
           <b-button

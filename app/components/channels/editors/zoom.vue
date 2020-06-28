@@ -81,7 +81,6 @@ export default {
       handler(zoomApiToken) {
         this.$emit('parametersUpdated', {
           zoomApiToken,
-          lastSequenceNumber: 0,
         });
 
         if (this.zoomApiToken) {

@@ -38,11 +38,11 @@
         <h3 class="h4 text-center mb-0">
           {{ experimentToAdd.name }}
         </h3>
-        <p
-          class="mb-0 text-center mt-2 text-muted small"
-          v-if="experimentToAdd.description"
-        >
-          {{ experimentToAdd.description }}
+        <p class="mb-0 text-center mt-2 text-muted small">
+          <span v-if="experimentToAdd.description">
+            {{ experimentToAdd.description }}asdf
+          </span>
+          <span v-else class="font-italic">No description</span>
         </p>
       </div>
       <p class="text-center">
@@ -133,7 +133,12 @@
           <h3 class="h5">
             {{ experiment.name }}
           </h3>
-          <p class="small mb-0">{{ experiment.description }}</p>
+          <p class="small mb-0">
+            <span v-if="experiment.description">{{
+              experiment.description
+            }}</span>
+            <span v-else class="font-italic">No description</span>
+          </p>
           <hr class="mt-auto" />
           <div class="d-flex mb-n2 mt-1 align-items-center">
             <span

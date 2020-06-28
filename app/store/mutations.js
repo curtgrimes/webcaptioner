@@ -452,24 +452,6 @@ export default {
     state.integrations.webhooks.log.push(event);
   },
 
-  SET_ZOOM_ON: (state, { onOrOff }) => {
-    state.settings.integrations.zoom.on = onOrOff;
-  },
-  SET_ZOOM_URL: (state, { url }) => {
-    state.settings.integrations.zoom.url = url;
-  },
-  SET_ZOOM_LAST_SEQUENCE_NUMBER: (state, { lastSequenceNumber }) => {
-    state.settings.integrations.zoom.lastSequenceNumber = lastSequenceNumber;
-  },
-  INCREMENT_ZOOM_SEQUENCE_NUMBER: (state) => {
-    const zoomChannel = state.settings.channels.find(
-      (channel) => channel.id === 'zoom'
-    );
-    if (zoomChannel) {
-      zoomChannel.lastSequenceNumber++;
-    }
-  },
-
   SET_EVENT_LOG: (state, { eventLog }) => {
     state.eventLog.log = eventLog;
   },

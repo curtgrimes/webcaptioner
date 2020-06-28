@@ -1,5 +1,13 @@
 const zoom = require('express').Router();
 const axios = require('axios');
+const rateLimit = require('express-rate-limit');
+
+const zoomRateLimiter = rateLimit({
+  windowMs: 1 * 1000,
+  max: 20,
+});
+
+zoom.use('/', zoomRateLimiter);
 
 zoom.post('/api', async (req, res) => {
   const { apiPath, transcript } = req.body;

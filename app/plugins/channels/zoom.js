@@ -31,6 +31,9 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
   let zoomTranscriptBuffer = [];
   let zoomTranscriptCurrentlyDisplayed = [];
   const zoomMaxCharactersPerLine = 40;
+  let lastSequenceNumber = 0;
+  const zoomSequenceNumberLocalStorageKey =
+    'webcaptioner-channels-zoom-sequence-number';
 
   const unsubscribeFn = $store.subscribe((mutation, state) => {
     if (
@@ -60,12 +63,27 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
       return;
     }
 
+    try {
+      let localStorageValues = JSON.parse(
+        localStorage.getItem(zoomSequenceNumberLocalStorageKey)
+      );
+
+      if (localStorageValues.zoomApiToken === channelParameters.zoomApiToken) {
+        // The stored sequenceNumber is for the current API token and not
+        // a previous one. Restore the value.
+        lastSequenceNumber = Number(localStorageValues.lastSequenceNumber);
+      }
+    } catch (e) {
+      // No local storage value found. Assume we're starting over.
+      lastSequenceNumber = 0;
+    }
+
     // Consume the buffer
     zoomTranscriptCurrentlyDisplayed.push(...zoomTranscriptBuffer);
     zoomTranscriptBuffer = [];
 
     let apiPath = new URL(channelParameters.zoomApiToken);
-    apiPath.searchParams.append('seq', channelParameters.lastSequenceNumber);
+    apiPath.searchParams.append('seq', String(lastSequenceNumber));
     apiPath.searchParams.append(
       'lang',
       $store.state.settings.locale.from || 'en-US'
@@ -145,7 +163,15 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         }
       });
 
-    channelParameters.lastSequenceNumber++;
+    lastSequenceNumber++;
+    localStorage.setItem(
+      zoomSequenceNumberLocalStorageKey,
+      JSON.stringify({
+        lastSequenceNumber,
+        zoomApiToken: channelParameters.zoomApiToken,
+      })
+    );
+
     $store.commit('UPDATE_CHANNEL', {
       channelId,
       parameters: channelParameters,
