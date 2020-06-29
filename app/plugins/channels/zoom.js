@@ -131,7 +131,7 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
       .trim();
 
     $axios
-      .$post('/api/channels/zoom/api', {
+      .$post('/api/channels/zoom', {
         apiPath,
         transcript,
       })

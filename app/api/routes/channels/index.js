@@ -1,6 +1,7 @@
 const channels = require('express').Router();
 
 channels.use('/zoom', require('./zoom'));
+channels.use('/youtube', require('./youtube'));
 
 const iconPrefix = '/static/channel-icons';
 const configPatePathPrefix = '/captioner/settings/channels/new?type=';
@@ -55,12 +56,32 @@ const channelsList = [
     iconPath: `${iconPrefix}/youtube.png`,
     limit: 1,
     configPagePath: `${configPatePathPrefix}youtube`,
+    requiredExperiment: 'youtube',
   },
 ];
 
 channels.get('/', async (req, res, next) => {
-  // Sort alphabetically by name
-  res.send(channelsList.sort((a, b) => a.name.localeCompare(b.name)));
+  let { experiments } = req.query;
+  experiments = experiments ? String(experiments).split(',') : [];
+
+  let channelsToReturn = [
+    ...channelsList.sort((a, b) =>
+      // Sort alphabetically by name
+      a.name.localeCompare(b.name)
+    ),
+  ].map((c) => ({ ...c })); // clone
+
+  // Filter out any channels that require experiments
+  // to be enabled, unless those experiments are enabled
+  channelsToReturn = channelsToReturn.filter(
+    (channel) =>
+      !channel.requiredExperiment ||
+      experiments.includes(channel.requiredExperiment)
+  );
+
+  channelsToReturn.forEach((channel) => delete channel.requiredExperiment);
+
+  res.send(channelsToReturn);
 });
 
 channels.get('/:id', async (req, res, next) => {

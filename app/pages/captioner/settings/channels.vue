@@ -141,11 +141,23 @@ export default {
       channels: [],
     };
   },
-  async asyncData({ $axios }) {
-    const channels = await $axios.$get('/api/channels');
-    return {
-      channels,
-    };
+  async created() {
+    // Wait until settings are loaded
+    if (!this.$store.state.settingsLoaded) {
+      await new Promise((resolve) => {
+        this.$store.watch(
+          (state) => {
+            return state.settingsLoaded;
+          },
+          (loaded) => {
+            if (loaded) {
+              resolve();
+            }
+          }
+        );
+      });
+    }
+    this.channels = await this.$store.dispatch('channels/GET_CHANNELS');
   },
   methods: {
     channelInfo(id) {

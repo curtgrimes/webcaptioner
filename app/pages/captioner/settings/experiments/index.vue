@@ -222,6 +222,12 @@ export default {
           description:
             'After speech is converted to text, convert the text back to speech using speech synthesis.',
         },
+        {
+          id: 'youtube',
+          name: 'YouTube integration',
+          description:
+            'Add an experimental YouTube live closed captions integration. Go to the Channels page to set it up.',
+        },
       ],
 
       experimentIdToAdd: '',

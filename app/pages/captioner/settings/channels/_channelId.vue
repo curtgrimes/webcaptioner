@@ -67,7 +67,7 @@ export default {
   },
   async beforeCreate() {
     try {
-      const channels = await this.$axios.$get('/api/channels');
+      const channels = await this.$store.dispatch('channels/GET_CHANNELS');
 
       await this.settingsLoaded();
 

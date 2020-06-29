@@ -72,8 +72,8 @@ export default {
       channels: [],
     };
   },
-  async mounted() {
-    this.channels = await this.$axios.$get('/api/channels');
+  async created() {
+    this.channels = await this.$store.dispatch('channels/GET_CHANNELS');
   },
   methods: {
     toggleChannel(channelId, onOrOff) {

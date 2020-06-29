@@ -1,8 +1,9 @@
-import zoom from './zoom';
 import webhook from './webhook';
+import youtube from './youtube';
+import zoom from './zoom';
 
 // Available channels
-const channels = { zoom, webhook };
+const channels = { webhook, youtube, zoom };
 
 // Every time a channel is registered, it returns a function
 // we need to run if we need to deregister it in the future
