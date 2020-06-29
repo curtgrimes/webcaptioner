@@ -13,7 +13,6 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
   }
 
   try {
-    // TODO This check may not be working as expected or at all
     new URL(channelParameters.zoomApiToken);
   } catch (e) {
     $store.commit('UPDATE_CHANNEL_ERROR', {
@@ -171,11 +170,6 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         zoomApiToken: channelParameters.zoomApiToken,
       })
     );
-
-    $store.commit('UPDATE_CHANNEL', {
-      channelId,
-      parameters: channelParameters,
-    });
   }, 1000);
 
   return () => {

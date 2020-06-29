@@ -213,56 +213,10 @@ export default {
     });
 
     let lastWebhookEventDate = 0;
-    let sequence = 0;
-    let callWebhook = ({ url, method, transcript }) => {
-      transcript = (transcript || '').toUpperCase();
-
-      fetch(url, {
-        method,
-        mode: 'cors',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({ transcript, sequence }),
-      })
-        .then((response) => {
-          response.text().then(() => {
-            this.$store.commit('APPEND_WEBHOOK_LOG', {
-              event: {
-                type: 'receive',
-                title: response.status + ' ' + response.statusText,
-                error: response.status >= 300,
-              },
-            });
-          });
-        })
-        .catch((error) => {
-          this.$store.commit('APPEND_WEBHOOK_LOG', {
-            event: {
-              type: 'receive',
-              title: error.message,
-              error: true,
-            },
-          });
-        });
-      sequence++;
-    };
 
     RemoteEventBus.$on(
       'sendMutationToReceivers',
       async ({ mutation, payload }) => {
-        if (
-          this.$store.state.settings.integrations.webhooks.on &&
-          mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
-        ) {
-          callWebhook({
-            url: this.$store.state.settings.integrations.webhooks.url,
-            method: this.$store.state.settings.integrations.webhooks.method,
-            transcript: payload ? payload.transcript : '',
-          });
-          lastWebhookEventDate = Date.now();
-        }
-
         if (
           mutation === 'captioner/SET_TRANSCRIPT_INTERIM' &&
           Date.now() - lastWebhookEventDate >= 100
@@ -562,11 +516,6 @@ export default {
           // They are signed in
           // Load settings from Firestore
           this.$store.dispatch('RESTORE_SETTINGS_FROM_FIRESTORE');
-          // Don't do this because it triggers an unnecessary save. Not sure
-          // what the solution is though if we need to do this.
-          // .then(() => {
-          //   return this.$store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
-          // });
         } else {
           // Not signed in
           // Load settings from localstorage

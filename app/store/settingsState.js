@@ -73,12 +73,6 @@ export default () => {
         on: false,
         webControllerAddress: '',
       },
-      webhooks: {
-        on: false,
-        url: '',
-        method: 'POST',
-        throttleMs: 200,
-      },
     },
     channels: [],
     afterNoAudio: {

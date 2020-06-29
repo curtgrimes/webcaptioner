@@ -95,7 +95,6 @@ export default {
             dispatch('SAVE_SETTINGS_TO_FIRESTORE');
           } else {
             // Not their first sign in.
-            dispatch('RESTORE_SETTINGS_FROM_FIRESTORE');
           }
         } else {
           // User is signed out/not signed in
@@ -383,27 +382,6 @@ export default {
       );
 
       commitPropertySetting(
-        'SET_WEBHOOKS_ON',
-        'onOrOff',
-        'integrations.webhooks.on'
-      );
-      commitPropertySetting(
-        'SET_WEBHOOKS_URL',
-        'url',
-        'integrations.webhooks.url'
-      );
-      commitPropertySetting(
-        'SET_WEBHOOKS_METHOD',
-        'method',
-        'integrations.webhooks.method'
-      );
-      commitPropertySetting(
-        'SET_WEBHOOKS_THROTTLE_MS',
-        'throttleMs',
-        'integrations.webhooks.throttleMs'
-      );
-
-      commitPropertySetting(
         'SET_DONATION_DATE',
         'donationDate',
         'donationDate'
@@ -445,7 +423,6 @@ export default {
         .then(function(document) {
           if (document.exists) {
             const data = document.data();
-
             const settings = normalizeSettings({
               localStorageData: {
                 settings: data,

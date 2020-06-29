@@ -134,9 +134,6 @@ export const state = () => ({
       webControllerConnected: null,
       cachedInputGUID: null,
     },
-    webhooks: {
-      log: [],
-    },
   },
   visibleToasts: {
     signedIn: false,

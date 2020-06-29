@@ -64,27 +64,81 @@
         </strong>
         {{ savedChannel.error }}
       </div>
-      <label for="url" class="small">URL</label>
-      <input
-        id="url"
-        name="url"
-        v-model="parameters.url"
-        autofocus
-        class="form-control mb-3"
-        type="url"
-        placeholder="URL"
-      />
+      <div class="form-group">
+        <label for="url" class="small">URL</label>
+        <input
+          id="url"
+          name="url"
+          v-model="parameters.url"
+          autofocus
+          class="form-control"
+          type="url"
+          placeholder="URL"
+        />
+      </div>
 
-      <label for="method" class="small">Method</label>
-      <select
-        class="form-control"
-        id="method"
-        name="method"
-        v-model="parameters.method"
-      >
-        <option value="post">POST</option>
-        <option value="put">PUT</option>
-      </select>
+      <div class="form-group">
+        <label for="method" class="small">Method</label>
+        <select
+          class="form-control"
+          id="method"
+          name="method"
+          v-model="parameters.method"
+        >
+          <option value="post">POST</option>
+          <option value="put">PUT</option>
+        </select>
+      </div>
+
+      <div class="form-group mb-0" v-if="false">
+        <div class="form-check mb-1">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="origin"
+            id="originLocal"
+            value="local"
+            v-model="parameters.origin"
+          />
+          <label class="form-check-label" for="originLocal">
+            Make requests directly from browser
+            <span class="d-block small">
+              Reqeusts will be sent in near-real-time from this browser. Your
+              application must allow
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"
+                target="_blank"
+                >cross-origin resource sharing (CORS)</a
+              >
+              from
+              <client-only placeholder="(loading...)">
+                {{ locationOrigin }}</client-only
+              >
+              for this to work.</span
+            >
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="origin"
+            id="originRemote"
+            value="remote"
+            v-model="parameters.origin"
+            disabled
+          />
+          <label class="form-check-label" for="originRemote">
+            Proxy requests through Web Captioner's servers
+            <span class="badge badge-danger mb-1">Not available yet</span>
+            <span class="d-block small">
+              Requests will be slightly throttled and proxied through Web
+              Captioner's servers. You won't need to change the CORS
+              configuration in your application.
+            </span>
+          </label>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -105,6 +159,7 @@ export default {
     if (this.savedChannel) {
       this.parameters.url = this.savedChannel.parameters?.url;
       this.parameters.method = this.savedChannel.parameters?.method;
+      this.parameters.origin = this.savedChannel.parameters?.origin;
     }
   },
   data() {
@@ -112,17 +167,24 @@ export default {
       parameters: {
         url: null,
         method: 'post',
+        origin: 'local',
       },
     };
+  },
+  computed: {
+    locationOrigin() {
+      return window?.location?.origin;
+    },
   },
   watch: {
     parameters: {
       immediate: true,
       deep: true,
-      handler({ url, method }) {
+      handler({ url, method, origin }) {
         this.$emit('parametersUpdated', {
           url,
           method,
+          origin,
         });
 
         if (url && method) {
