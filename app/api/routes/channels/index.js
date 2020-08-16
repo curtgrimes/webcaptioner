@@ -21,13 +21,13 @@ const channelsList = [
     limit: 1,
     configPagePath: `${configPatePathPrefix}vmix`,
   },
-  {
-    id: 'link',
-    name: 'Link or Embed',
-    iconName: 'link',
-    limit: 1,
-    configPagePath: `${configPatePathPrefix}link`,
-  },
+  // {
+  //   id: 'link',
+  //   name: 'Link or Embed',
+  //   iconName: 'link',
+  //   limit: 1,
+  //   configPagePath: `${configPatePathPrefix}link`,
+  // },
   {
     id: 'webhook',
     name: 'Webhook',

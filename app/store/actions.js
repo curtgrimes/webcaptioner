@@ -363,17 +363,6 @@ export default {
 
       commitPropertySetting('SET_CHANNELS', 'channels', 'channels');
 
-      commitPropertySetting(
-        'SET_DROPBOX_ACCESS_TOKEN',
-        'accessToken',
-        'integrations.dropbox.accessToken'
-      );
-      commitPropertySetting(
-        'SET_DROPBOX_ACCOUNT_ID',
-        'accountId',
-        'integrations.dropbox.accountId'
-      );
-
       commitPropertySetting('SET_SEND_TO_VMIX', 'on', 'integrations.vmix.on');
       commitPropertySetting(
         'SET_VMIX_WEB_CONTROLLER_ADDRESS',
@@ -636,50 +625,6 @@ export default {
       testConnectionWithTimeout,
       testVmixTemplateWithTimeout,
     ]);
-  },
-
-  SAVE_TO_DROPBOX: ({ state, commit }) => {
-    if (!state.captioner.transcript.final) {
-      return;
-    }
-
-    let sessionStartDate = state.integrations.storage.sessionStartDate;
-    if (!sessionStartDate) {
-      commit('INIT_STORAGE_SESSION_DATE');
-      sessionStartDate = state.integrations.storage.sessionStartDate;
-    }
-
-    // I wrote this logic to allow for appending to an existing file in Dropbox
-    // and then discovered that Dropbox doesn't currently provide an API for appending
-    // to an existing file. Left this logic intact (untested though)
-
-    // const lastSyncDateTimestamp = state.integrations.storage.lastStabilizedTranscriptSyncDate ?
-    //   state.integrations.storage.lastStabilizedTranscriptSyncDate.getTime() :
-    //   0,
-    //   now = new Date(),
-    //   nowTimestamp = now.getTime();
-
-    // Get transcript with timings since the last sync date
-    // const transcriptWithTimingsToSync = state.captioner.transcript.stabilizedWithTimings.filter(i =>
-    //   i.time >= lastSyncDateTimestamp && i.time <= nowTimestamp);
-
-    axios.post('/api/storage/dropbox/push', {
-      accessToken: state.settings.integrations.dropbox.accessToken,
-      sessionStartDate,
-      contents: {
-        text: state.captioner.transcript.final,
-        ...(state.settings.exp.includes('saveTranscriptWithTimingsToDropbox')
-          ? {
-              timings: state.captioner.transcript.stabilizedWithTimings,
-            }
-          : {}),
-        // timings: JSON.stringify(transcriptWithTimingsToSync),
-      },
-    });
-
-    // commit('UPDATE_LAST_STABILIZED_TRANSCRIPT_SYNC_DATE', {
-    //   date: now
-    // });
   },
 
   SEND_TO_VMIX: ({ state, commit }, { text, chromeExtensionId }) => {

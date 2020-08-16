@@ -41,12 +41,8 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          class="navbar-brand mr-auto"
-          :class="{ 'mt-3': largerLayout }"
-          style="padding-top:.75rem"
-        >
-          <a href="/">
+        <div class="navbar-brand mr-auto" :class="{ 'mt-3': largerLayout }">
+          <a href="/" class="d-flex align-items-center">
             <img
               src="/logo-solid-bg.svg"
               width="20"
@@ -54,7 +50,9 @@
               class="d-inline-block align-top mr-2 rounded-circle"
               :alt="$t('app.webCaptioner')"
             />
-            <span class="d-none d-md-inline">{{ $t('app.webCaptioner') }}</span>
+            <span class="d-none d-md-inline pl-1">{{
+              $t('app.webCaptioner')
+            }}</span>
           </a>
         </div>
 
@@ -66,7 +64,7 @@
         <div
           v-if="waitingForInitialTranscript"
           class="navbar-text small text-primary mr-3"
-          style="padding-top:.75rem"
+          style="padding-top: 0.75rem;"
         >
           <b-spinner small type="grow" />
           <strong>{{ $t('navbar.captioner.listening') }}</strong>
@@ -138,15 +136,13 @@
               hideAllTooltips();
               $store.commit('SET_CHANNEL_ERRORS_SEEN');
             "
-            :title="
-              `Channels ${
-                $store.state.channels.unseenErrorExists ? '(Error)' : ''
-              }`
-            "
+            :title="`Channels ${
+              $store.state.channels.unseenErrorExists ? '(Error)' : ''
+            }`"
             id="navbar-channels-button"
             class="px-2"
           >
-            <span class="d-flex align-items-center ">
+            <span class="d-flex align-items-center">
               <fa icon="satellite-dish" />
               <span class="small pl-1">{{ activeChannels.length }}</span>
               <span
@@ -205,7 +201,7 @@
           v-b-tooltip.top
           :title="showSettingsMenu ? ' ' : $t('navbar.menu.settings')"
           class="ml-2 text-white px-2 profile-button"
-          style="position:relative"
+          style="position: relative;"
           variant="info"
         >
           <!-- If there's a photo URL, show it on top of the fallback user-circle button -->
@@ -214,7 +210,12 @@
               :src="$store.state.user.photoURL"
               v-if="$store.state.user.signedIn && $store.state.user.photoURL"
               class="rounded-circle"
-              style="max-width: 30px;position: absolute;margin-left: -2px;margin-top: -2px;"
+              style="
+                max-width: 30px;
+                position: absolute;
+                margin-left: -2px;
+                margin-top: -2px;
+              "
             />
           </transition>
           <fa icon="user-circle" />
@@ -260,7 +261,7 @@ export default {
     ShareButton,
     ChannelsPopup,
   },
-  data: function() {
+  data: function () {
     return {
       vmixNotFullySetUpMessageDismissed: false,
       showSettingsMenu: false,
@@ -268,41 +269,41 @@ export default {
     };
   },
   computed: {
-    captioningOn: function() {
+    captioningOn: function () {
       return this.$store.state.captioner.shouldBeOn;
     },
-    typingModeOn: function() {
+    typingModeOn: function () {
       return this.$store.state.captioner.typingModeOn;
     },
-    microphoneName: function() {
+    microphoneName: function () {
       return this.$store.state.captioner.microphoneName;
     },
-    transcriptExcerpt: function() {
+    transcriptExcerpt: function () {
       return (
         this.$store.state.captioner.transcript.final +
         ' ' +
         this.$store.state.captioner.transcript.interim
       ).slice(-60);
     },
-    showCaptioningPreviewPopover: function() {
+    showCaptioningPreviewPopover: function () {
       return this.transcriptExcerpt.length > 0;
     },
-    waitingForInitialTranscript: function() {
+    waitingForInitialTranscript: function () {
       return this.$store.state.captioner.transcript.waitingForInitial;
     },
-    largerLayout: function() {
+    largerLayout: function () {
       return this.$store.state.settings.controls.layout.larger;
     },
-    experiments: function() {
+    experiments: function () {
       return this.$store.state.settings.exp;
     },
-    captioningToggleButtonVariant: function() {
+    captioningToggleButtonVariant: function () {
       return !this.captioningOn ? 'primary' : 'danger';
     },
-    incompatibleBrowser: function() {
+    incompatibleBrowser: function () {
       return this.$store.state.incompatibleBrowser;
     },
-    remoteDisplays: function() {
+    remoteDisplays: function () {
       return this.$store.state.remoteDisplays;
     },
     showVmixNotFullySetUpMessage: {
@@ -332,41 +333,41 @@ export default {
     },
   },
   watch: {
-    showSettingsMenu: function() {
+    showSettingsMenu: function () {
       this.hideAllTooltips();
     },
   },
   methods: {
-    hideAllTooltips: function() {
+    hideAllTooltips: function () {
       this.$root.$emit('bv::hide::tooltip');
     },
-    captioningToggleButtonClick: function() {
+    captioningToggleButtonClick: function () {
       if (this.captioningOn) {
         this.stopCaptioning();
       } else {
         this.startCaptioning();
       }
     },
-    startCaptioning: function() {
+    startCaptioning: function () {
       this.$store.dispatch('captioner/startManual');
       this.$router.push('/captioner');
     },
-    stopCaptioning: function() {
+    stopCaptioning: function () {
       this.$store.dispatch('captioner/stopManual');
     },
-    startTypingMode: function() {
+    startTypingMode: function () {
       this.$store.dispatch('captioner/startTypingMode');
     },
-    stopTypingMode: function() {
+    stopTypingMode: function () {
       this.$store.dispatch('captioner/stopTypingMode');
     },
-    startSaveToFileModal: function() {
+    startSaveToFileModal: function () {
       this.$router.push('/captioner/save-to-file');
     },
-    startClearTranscriptModal: function() {
+    startClearTranscriptModal: function () {
       this.$router.push('/captioner/clear');
     },
-    clearTranscript: function() {
+    clearTranscript: function () {
       if (this.captioningOn) {
         this.$store.dispatch('captioner/restart');
       }

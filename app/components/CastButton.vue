@@ -11,7 +11,7 @@
       :class="largerLayout ? 'px-4 py-3 h-100' : 'h-100'"
     >
       <svg
-        style="vertical-align:middle"
+        style="vertical-align: middle;"
         width="24px"
         height="24px"
         viewBox="0 0 24 24"
@@ -57,7 +57,14 @@
                 fill="#ffffff"
                 sketch:type="MSShapeGroup"
               />
-              <rect id="bounds" sketch:type="MSShapeGroup" x="0" y="0" width="24" height="24" />
+              <rect
+                id="bounds"
+                sketch:type="MSShapeGroup"
+                x="0"
+                y="0"
+                width="24"
+                height="24"
+              />
             </g>
           </g>
           <g
@@ -73,7 +80,7 @@
     <b-button
       id="cast-connected-button"
       v-else-if="connected"
-      v-b-tooltip.hover="$t('googleCast.castingToReceiver', {receiverName})"
+      v-b-tooltip.hover="$t('googleCast.castingToReceiver', { receiverName })"
       variant="secondary"
       @click="stop()"
       :size="largerLayout ? 'lg' : ''"
@@ -103,8 +110,8 @@
         <div class="pb-2 h4">
           <fa icon="exclamation-triangle" size="3x" />
         </div>
-        <h2>{{$t('googleCast.unableToCast')}}</h2>
-        <p class="lead">{{$t('googleCast.pleaseTryAgain')}}</p>
+        <h2>{{ $t('googleCast.unableToCast') }}</h2>
+        <p class="lead">{{ $t('googleCast.pleaseTryAgain') }}</p>
       </div>
     </b-modal>
   </div>
@@ -151,24 +158,24 @@ export default {
   directives: {
     'b-tooltip': VBTooltip,
   },
-  data: function() {
+  data: function () {
     return {
       session: null,
       receiversAvailable: false,
     };
   },
   methods: {
-    initializeCastApi: function() {
+    initializeCastApi: function () {
       let self = this;
       let sessionRequest = new chrome.cast.SessionRequest(
         this.$env.GOOGLE_CAST_APP_ID
       );
-      const onReceivedMessage = function(namespace, message) {
+      const onReceivedMessage = function (namespace, message) {
         // console.log('Received message:');
         // console.log(namespace, message);
       };
 
-      const sessionListener = function(e) {
+      const sessionListener = function (e) {
         self.session = e;
         self.session.addUpdateListener(sessionUpdateListener);
         self.session.addMessageListener(namespace, onReceivedMessage);
@@ -206,23 +213,23 @@ export default {
 
       chrome.cast.initialize(
         apiConfig,
-        function(e) {
+        function (e) {
           // Initialized, but not connected to anything yet
           self.connected = false;
         },
-        function(e) {
+        function (e) {
           // console.log(e);
         }
       );
     },
-    initConnection: function() {
+    initConnection: function () {
       this.initWithMessage();
     },
-    initWithMessage: function(message) {
+    initWithMessage: function (message) {
       let self = this;
       self.connecting = true;
       chrome.cast.requestSession(
-        function(e) {
+        function (e) {
           self.connecting = false;
           self.connected = true;
           self.session = e;
@@ -258,7 +265,7 @@ export default {
             this.sendMessage(message);
           }
         },
-        function(e) {
+        function (e) {
           self.connecting = false;
           self.connected = false;
           self.receiverName = null;
@@ -270,27 +277,27 @@ export default {
         }
       );
     },
-    sendMessage: function(message) {
+    sendMessage: function (message) {
       if (this.session != null) {
         this.session.sendMessage(
           namespace,
           message,
-          function() {},
-          function(e) {}
+          function () {},
+          function (e) {}
         );
       } else {
         this.initWithMessage(message);
       }
     },
-    stop: function() {
+    stop: function () {
       let self = this;
       this.session.stop(
-        function() {
+        function () {
           self.connected = false;
           self.session = null;
           self.receiverName = null;
         },
-        function(e) {
+        function (e) {
           // console.log("error: ");
           // console.log(e);
         }
@@ -334,7 +341,7 @@ export default {
         });
       },
     },
-    largerLayout: function() {
+    largerLayout: function () {
       return this.$store.state.settings.controls.layout.larger;
     },
   },
@@ -353,7 +360,7 @@ export default {
       }
     },
   },
-  mounted: function() {
+  mounted: function () {
     window['__onGCastApiAvailable'] = (isAvailable) => {
       if (isAvailable) {
         let initializeCastApiTimeout = setInterval(() => {
@@ -369,7 +376,7 @@ export default {
     loadScript(
       'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1',
       { async: false },
-      function(err, script) {
+      function (err, script) {
         // if (err) {}
         // else {}
       }

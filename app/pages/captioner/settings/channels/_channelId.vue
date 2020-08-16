@@ -18,11 +18,17 @@
         :saved-channel="savedChannel"
         @formValid="formValid = true"
         @formInvalid="formValid = false"
+        @addChannel="addChannel()"
+        @deleteChannel="deleteChannel()"
         @parametersUpdated="channelParameters = $event"
+        @hideAddButton="showAddButton = false"
+        @hideUpdateButton="showUpdateButton = false"
+        @showRemoveButton="showRemoveButton = true"
+        @hideRemoveButton="showRemoveButton = false"
       />
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button
-          v-if="updatingExistingChannel"
+          v-if="updatingExistingChannel && showRemoveButton"
           variant="outline-danger"
           @click="deleteChannel()"
           class="mr-auto"
@@ -36,6 +42,7 @@
           variant="secondary"
           @click="creatingNewChannel ? addChannel() : updateChannel()"
           :disabled="!formValid"
+          v-if="creatingNewChannel ? showAddButton : showUpdateButton"
         >
           {{ creatingNewChannel ? 'Add Channel' : 'Update Channel' }}
         </b-button>
@@ -60,6 +67,10 @@ export default {
       editorComponent: null,
       channelLoading: true,
       channelLoadingError: false,
+
+      showAddButton: true,
+      showUpdateButton: true,
+      showRemoveButton: true,
 
       formValid: false,
       channelParameters: {},
@@ -94,14 +105,16 @@ export default {
       // It seems to remain cached after the first import attempt so there isn't much
       // of a performance concern here.
       const component = await import(
-        `~/components/channels/editors/${this.channelTypeToSave ||
-          savedChannel.type}`
+        `~/components/channels/editors/${
+          this.channelTypeToSave || savedChannel.type
+        }`
       );
 
       const editorComponent = () => ({
         component: import(
-          `~/components/channels/editors/${this.channelTypeToSave ||
-            savedChannel.type}`
+          `~/components/channels/editors/${
+            this.channelTypeToSave || savedChannel.type
+          }`
         ),
       });
 

@@ -40,6 +40,7 @@
     "node-cache": "^4.2.1",
     "node-vibrant": "^3.0.0",
     "nuxt": "^2.13.2",
+    "obs-websocket-js": "^4.0.1",
     "open-graph-scraper": "^3.6.2",
     "parse-domain": "^2.1.7",
     "query-string": "^6.2.0",

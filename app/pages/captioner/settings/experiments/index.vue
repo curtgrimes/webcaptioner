@@ -18,7 +18,7 @@
       hide-header
       @shown="focusInvalidExperimentModalOkButton()"
     >
-      <div style="font-size:7rem" class="p-0 text-center">&#129300;</div>
+      <div style="font-size: 7rem;" class="p-0 text-center">&#129300;</div>
       <div slot="modal-footer">
         <b-button
           class="float-right"
@@ -79,8 +79,8 @@
         <b-button
           :disabled="
             !acknowledgements.experimentMayNotWorkOrBreakThings ||
-              !acknowledgements.couldGoAwayAtAnyTime ||
-              !acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks
+            !acknowledgements.couldGoAwayAtAnyTime ||
+            !acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks
           "
           class="float-right"
           :variant="
@@ -226,7 +226,7 @@ export default {
           id: 'youtube',
           name: 'YouTube integration',
           description:
-            'Add an experimental YouTube live closed captions integration. Go to the Channels page to set it up.',
+            'Add an experimental YouTube live closed captions integration. After you add this experiment, go to Channels to set it up.',
         },
       ],
 
@@ -272,20 +272,20 @@ export default {
     experimentLoaded(experimentId) {
       return this.loadedExperiments.includes(experimentId);
     },
-    hideInvalidExperimentModal: function() {
+    hideInvalidExperimentModal: function () {
       this.$refs.invalidExperiment.hide();
     },
-    hideExperimentConfirmationModal: function() {
+    hideExperimentConfirmationModal: function () {
       this.$refs.experimentConfirmation.hide();
       Object.keys(this.acknowledgements).forEach(
         (acknowledgementKey) =>
           (this.acknowledgements[acknowledgementKey] = false)
       );
     },
-    hideExperimentAlreadyAddedModal: function() {
+    hideExperimentAlreadyAddedModal: function () {
       this.$refs.experimentAlreadyAdded.hide();
     },
-    isValidExperiment: function() {
+    isValidExperiment: function () {
       return [
         'share',
         'saveTranscriptWithTimingsToDropbox',
@@ -293,7 +293,7 @@ export default {
         ...this.experiments.map((e) => e.id),
       ].includes(this.experimentIdToAdd);
     },
-    addExperiment: function({ withConfirmation }) {
+    addExperiment: function ({ withConfirmation }) {
       if (this.isValidExperiment()) {
         if (withConfirmation) {
           this.$refs.experimentConfirmation.show();
@@ -313,7 +313,7 @@ export default {
           (this.acknowledgements[acknowledgementKey] = false)
       );
     },
-    focusInvalidExperimentModalOkButton: function() {
+    focusInvalidExperimentModalOkButton: function () {
       this.$refs.invalidExperimentModalOkButton.focus();
     },
     parseExperimentFromURL() {

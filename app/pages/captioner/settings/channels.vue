@@ -94,8 +94,12 @@
             <img
               v-if="channel.iconPath"
               :src="channel.iconPath"
-              class="mw-100 py-3"
-              :style="channel.showNameWithIcon ? 'max-height:50%' : ''"
+              class="mw-100"
+              :class="{
+                'py-3': !channel.showNameWithIcon,
+                'pb-2': channel.showNameWithIcon,
+              }"
+              :style="channel.showNameWithIcon ? 'max-height:30%' : ''"
             />
             <fa
               v-if="channel.iconName"
@@ -109,7 +113,7 @@
           </span>
           <span v-if="reachedLimitForChannel(channel.id)">
             <hr class="w-100" />
-            <span class="small text-danger">
+            <span class="small text-danger d-block" style="line-spacing:0.4rem">
               You can only add {{ channel.limit }}
               <span v-if="channel.limit != 1">instances</span
               ><span v-else>instance</span> of this channel at a time.

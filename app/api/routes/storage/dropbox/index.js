@@ -2,28 +2,29 @@ const dropboxRoute = require('express').Router();
 const Dropbox = require('dropbox').Dropbox;
 const axios = require('axios');
 const fetch = require('isomorphic-fetch');
-const {
-  format: dateFormat
-} = require('date-fns');
+const { format: dateFormat } = require('date-fns');
 const Sentry = require('./../../../sentry');
 
 function getDropboxClient() {
   return new Dropbox({
     clientId: process.env.DROPBOX_CLIENT_ID,
-    fetch
+    fetch,
   });
 }
 
 dropboxRoute.get('/auth', async (req, res, next) => {
   // Redirect to login page
   const dropboxClient = getDropboxClient();
-  res.redirect(302, dropboxClient.getAuthenticationUrl(process.env.HOSTNAME + '/captioner/settings/sync/dropbox-oauth'));
+  res.redirect(
+    302,
+    dropboxClient.getAuthenticationUrl(
+      process.env.HOSTNAME + '/captioner/settings/channels/new?type=dropbox'
+    )
+  );
 });
 
 dropboxRoute.post('/auth-revoke', async (req, res, next) => {
-  const {
-    accessToken
-  } = req.body;
+  const { accessToken } = req.body;
 
   if (!accessToken) {
     // Missing required params
@@ -33,25 +34,23 @@ dropboxRoute.post('/auth-revoke', async (req, res, next) => {
 
   const dropboxClient = getDropboxClient();
   dropboxClient.setAccessToken(accessToken);
-  dropboxClient.authTokenRevoke()
-    .then(response => {
+  dropboxClient
+    .authTokenRevoke()
+    .then((response) => {
       res.sendStatus(200);
     })
-    .catch(({
-      error
-    }) => {
-      res.status(400).send(JSON.stringify({
-        error
-      }));
+    .catch(({ error }) => {
+      res.status(400).send(
+        JSON.stringify({
+          error,
+        })
+      );
     });
 });
 
 // Get the current user profile
 dropboxRoute.get('/profile', async (req, res, next) => {
-  const {
-    accessToken,
-    accountId
-  } = req.query;
+  const { accessToken, accountId } = req.query;
 
   if (!accessToken || !accountId) {
     // Missing required params
@@ -62,28 +61,25 @@ dropboxRoute.get('/profile', async (req, res, next) => {
   const dropboxClient = getDropboxClient();
   dropboxClient.setAccessToken(accessToken);
 
-  dropboxClient.usersGetCurrentAccount()
-    .then(response => {
+  dropboxClient
+    .usersGetCurrentAccount()
+    .then((response) => {
       res.json(response);
     })
-    .catch(({
-      error
-    }) => {
-      res.status(400).send(JSON.stringify({
-        error
-      }));
+    .catch(({ error }) => {
+      res.status(400).send(
+        JSON.stringify({
+          error,
+        })
+      );
     });
-
 });
 
 dropboxRoute.post('/push', async (req, res) => {
   const {
-    contents: {
-      text,
-      timings
-    },
+    contents: { text, timings },
     accessToken,
-    sessionStartDate
+    sessionStartDate,
   } = req.body;
 
   if (!text || !accessToken || !sessionStartDate) {
@@ -96,34 +92,39 @@ dropboxRoute.post('/push', async (req, res) => {
   dropboxClient.setAccessToken(accessToken);
 
   let textUpload = dropboxClient.filesUpload({
-    path: '/Transcripts/' + dateFormat(sessionStartDate, 'YYYY-MM-DD HH.mm.ss') + '.txt',
+    path:
+      '/Transcripts/' +
+      dateFormat(sessionStartDate, 'YYYY-MM-DD HH.mm.ss') +
+      '.txt',
     contents: text,
     mode: 'overwrite',
     mute: true, // don't trigger notification
   });
 
-  let timingsUpload = timings ? dropboxClient.filesUpload({
-    path: '/Transcripts/' + dateFormat(sessionStartDate, 'YYYY-MM-DD HH.mm.ss') + '.webcaptioner-timings.json',
-    contents: JSON.stringify(timings),
-    mode: 'overwrite',
-    mute: true, // don't trigger notification
-  }) : Promise.resolve(); // timings may not be sent on every request because we don't figure out timings as quickly as we do final text
+  let timingsUpload = timings
+    ? dropboxClient.filesUpload({
+        path:
+          '/Transcripts/' +
+          dateFormat(sessionStartDate, 'YYYY-MM-DD HH.mm.ss') +
+          '.webcaptioner-timings.json',
+        contents: JSON.stringify(timings),
+        mode: 'overwrite',
+        mute: true, // don't trigger notification
+      })
+    : Promise.resolve(); // timings may not be sent on every request because we don't figure out timings as quickly as we do final text
 
   Promise.all([textUpload, timingsUpload])
-    .then(function (response) {
+    .then(function(response) {
       res.sendStatus(200);
     })
-    .catch(function (error) {
+    .catch(function(error) {
       Sentry.captureException(error);
       res.sendStatus(400);
     });
 });
 
 dropboxRoute.get('/transcripts', async (req, res, next) => {
-  const {
-    accessToken,
-    cursor
-  } = req.query;
+  const { accessToken, cursor } = req.query;
   const MAX_FILE_COUNT = 3000; // stop fetching files if there's over this many
 
   if (!accessToken) {
@@ -153,43 +154,53 @@ dropboxRoute.get('/transcripts', async (req, res, next) => {
           cursor,
         });
       }
-    } catch ({
-      e
-    }) {
-      res.status(400).send(JSON.stringify({
-        error
-      }));
+    } catch ({ e }) {
+      res.status(400).send(
+        JSON.stringify({
+          error,
+        })
+      );
       return;
     }
 
-    files = files.concat((filesResult.entries || []).map(entry => {
-      return {
-        name: entry.name,
-        size: entry.size,
-        modified: new Date(entry.client_modified).getTime(),
-      };
-    }));
+    files = files.concat(
+      (filesResult.entries || []).map((entry) => {
+        return {
+          name: entry.name,
+          size: entry.size,
+          modified: new Date(entry.client_modified).getTime(),
+        };
+      })
+    );
 
-    if (filesResult.has_more && filesResult.cursor && files.length <= MAX_FILE_COUNT) {
+    if (
+      filesResult.has_more &&
+      filesResult.cursor &&
+      files.length <= MAX_FILE_COUNT
+    ) {
       getFiles(filesResult.cursor);
     } else {
       res.json({
         reachedFileCountLimit: files.length > MAX_FILE_COUNT,
-        files: files.sort(function (a, b) {
-          // Sort by modified date descending
-          if (a.modified < b.modified) {
-            return 1;
-          } else if (a.modified > b.modified) {
-            return -1;
-          } else {
-            return 0;
-          }
-        }).map(file => { // remove modified property
-          return {
-            name: file.name,
-            size: file.size,
-          }
-        }).slice(0, 500), // return first x only
+        files: files
+          .sort(function(a, b) {
+            // Sort by modified date descending
+            if (a.modified < b.modified) {
+              return 1;
+            } else if (a.modified > b.modified) {
+              return -1;
+            } else {
+              return 0;
+            }
+          })
+          .map((file) => {
+            // remove modified property
+            return {
+              name: file.name,
+              size: file.size,
+            };
+          })
+          .slice(0, 500), // return first x only
       });
       return;
     }
@@ -199,12 +210,8 @@ dropboxRoute.get('/transcripts', async (req, res, next) => {
 });
 
 dropboxRoute.get('/transcripts/:fileName', async (req, res, next) => {
-  const {
-    accessToken
-  } = req.query;
-  const {
-    fileName
-  } = req.params;
+  const { accessToken } = req.query;
+  const { fileName } = req.params;
 
   if (!accessToken || !fileName) {
     // Missing required param
@@ -215,24 +222,24 @@ dropboxRoute.get('/transcripts/:fileName', async (req, res, next) => {
   const dropboxClient = getDropboxClient();
   dropboxClient.setAccessToken(accessToken);
 
-  dropboxClient.filesGetTemporaryLink({
-      path: '/Transcripts/' + fileName + '.txt'
+  dropboxClient
+    .filesGetTemporaryLink({
+      path: '/Transcripts/' + fileName + '.txt',
     })
-    .then(result => {
+    .then((result) => {
       if (result.link) {
         res.redirect(result.link);
       } else {
         res.sendStatus(400);
       }
     })
-    .catch(({
-      error
-    }) => {
-      res.status(400).send(JSON.stringify({
-        error
-      }));
+    .catch(({ error }) => {
+      res.status(400).send(
+        JSON.stringify({
+          error,
+        })
+      );
     });
-
 });
 
 module.exports = dropboxRoute;
