@@ -3,6 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 export function normalizeSettings({ localStorageData }) {
   if (localStorageData?.settings?.integrations?.webhooks) {
     // Old webhook data. Convert to channel.
+    if (!localStorageData.settings.channels) {
+      localStorageData.settings.channels = [];
+    }
+
     localStorageData.settings.channels.push({
       id: uuidv4(),
       type: 'webhook',
