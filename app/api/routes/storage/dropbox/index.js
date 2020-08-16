@@ -62,9 +62,7 @@ dropboxRoute.get('/profile', async (req, res, next) => {
   const dropboxClient = getDropboxClient();
   dropboxClient.setAccessToken(accessToken);
 
-  dropboxClient.usersGetAccount({
-      account_id: accountId
-    })
+  dropboxClient.usersGetCurrentAccount()
     .then(response => {
       res.json(response);
     })
