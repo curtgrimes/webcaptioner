@@ -391,6 +391,10 @@ export default {
     }
   },
 
+  SET_CHANNELS_PAGE_MESSAGE: (state, { message }) => {
+    state.channels.channelsPageMessage = message;
+  },
+
   INIT_STORAGE_SESSION_DATE: (state) => {
     state.integrations.storage.sessionStartDate = new Date();
   },

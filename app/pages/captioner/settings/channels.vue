@@ -1,6 +1,12 @@
 <template>
   <div>
     <p>Channels let you connect Web Captioner with other services.</p>
+    <b-alert
+      :show="Boolean($store.state.channels.channelsPageMessage)"
+      dismissible
+    >
+      <span v-html="$store.state.channels.channelsPageMessage"></span>
+    </b-alert>
     <b-spinner v-if="!$store.state.settingsLoaded" />
     <div
       v-else-if="$store.state.settings.channels.length === 0"
@@ -79,7 +85,7 @@
         class="col-6 col-sm-12 col-md-4 d-flex mb-4"
         v-for="(channel, index) in channels"
         :key="index"
-        style="min-height:7rem"
+        style="min-height: 7rem;"
       >
         <b-button
           variant="lighter"
@@ -113,7 +119,10 @@
           </span>
           <span v-if="reachedLimitForChannel(channel.id)">
             <hr class="w-100" />
-            <span class="small text-danger d-block" style="line-spacing:0.4rem">
+            <span
+              class="small text-danger d-block"
+              style="line-spacing: 0.4rem;"
+            >
               You can only add {{ channel.limit }}
               <span v-if="channel.limit != 1">instances</span
               ><span v-else>instance</span> of this channel at a time.
@@ -122,7 +131,7 @@
         </b-button>
       </div>
     </div>
-    <nuxt-child />
+    <nuxt-child @showChannelPageMessage="message = $event" />
   </div>
 </template>
 
@@ -143,6 +152,7 @@ export default {
   data() {
     return {
       channels: [],
+      message: null,
     };
   },
   async created() {

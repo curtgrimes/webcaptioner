@@ -462,7 +462,6 @@ export default {
 
       const settings = normalizeSettings({
         localStorageData: localStorageParsed,
-        fromVersionNumber: localStorageParsed.version,
       });
 
       if (!settings) {

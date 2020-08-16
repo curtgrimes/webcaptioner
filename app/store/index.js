@@ -121,6 +121,7 @@ export const state = () => ({
   settingsPageTitle: '',
   channels: {
     unseenErrorExists: false,
+    channelsPageMessage: null,
   },
   integrations: {
     storage: {

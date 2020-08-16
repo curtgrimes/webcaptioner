@@ -160,6 +160,10 @@ export default {
           accessToken: this.accessToken,
           accountId: this.accountId,
         });
+
+        this.$store.commit('SET_CHANNELS_PAGE_MESSAGE', {
+          message: `To finish disconnecting your Dropbox account, <a href="https://www.dropbox.com/account/connected_apps" target="_blank">visit your connected apps in Dropbox</a> and remove Web Captioner.`,
+        });
         this.$emit('deleteChannel');
       }
     },
@@ -174,6 +178,8 @@ export default {
       immediate: true,
       async handler() {
         if (this.accessToken) {
+          this.$emit('hideRemoveButton');
+
           try {
             const {
               email,
@@ -199,8 +205,6 @@ export default {
               this.profile.photoUrl = profile_photo_url;
             }
 
-            this.$emit('hideRemoveButton');
-
             // accessToken and accountId are valid
             if (this.didParseOauthResponse) {
               this.$emit('parametersUpdated', {
@@ -212,7 +216,6 @@ export default {
           } catch (e) {
             // Couldn't get the profile. Access token or account ID must be
             // invalid. Delete them.
-            console.error(e);
             this.accessToken = null;
             this.accountId = null;
             this.$emit('showRemoveButton');

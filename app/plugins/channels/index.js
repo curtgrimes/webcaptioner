@@ -16,7 +16,7 @@ const registerActiveChannels = ({ $store, $axios, $socket }) => {
     (channel) => channel.on
   );
 
-  activeChannels.forEach((activeChannel) => {
+  activeChannels.forEach(async (activeChannel) => {
     const channelAlreadyRegistered = Boolean(
       deregisterFunctions[activeChannel.id]
     );
@@ -29,7 +29,9 @@ const registerActiveChannels = ({ $store, $axios, $socket }) => {
     // Register the channel. Registration returns a deregister function,
     // so save that also for future use.
     if (channels[activeChannel.type]) {
-      deregisterFunctions[activeChannel.id] = channels[activeChannel.type]({
+      deregisterFunctions[activeChannel.id] = await channels[
+        activeChannel.type
+      ]({
         $store,
         $axios,
         $socket,
