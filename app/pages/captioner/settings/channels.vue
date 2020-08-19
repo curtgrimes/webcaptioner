@@ -28,7 +28,7 @@
           :class="addedChannel.on ? 'shadow bg-white' : 'bg-light'"
         >
           <div class="row no-gutters">
-            <div class="col-2">
+            <div class="col-4 col-md-2">
               <img
                 v-if="channelInfo(addedChannel.type).iconPath"
                 :src="channelInfo(addedChannel.type).iconPath"
@@ -41,16 +41,30 @@
                   size="lg"
                   class="mr-2"
                 />
-                <span class="font-weight-bold">{{
-                  channelInfo(addedChannel.type).name
-                }}</span>
+                <span class="font-weight-bold">
+                  {{ channelInfo(addedChannel.type).name }}</span
+                >
               </span>
+              <transition name="fade">
+                <span
+                  class="text-muted small d-md-none"
+                  v-if="!addedChannel.on"
+                >
+                  Channel off
+                  <span v-if="addedChannel.error" class="text-danger">
+                    (Error)
+                  </span>
+                </span>
+              </transition>
             </div>
             <div
-              class="col-10 d-flex align-items-center justify-content-center"
+              class="col-8 col-md-10 d-flex align-items-center justify-content-center flex-wrap"
             >
               <transition name="fade">
-                <span class="text-muted small ml-4" v-if="!addedChannel.on">
+                <span
+                  class="text-muted small ml-4 d-none d-md-inline-block"
+                  v-if="!addedChannel.on"
+                >
                   Channel off
                   <span v-if="addedChannel.error" class="text-danger">
                     (Error)
@@ -89,7 +103,7 @@
       >
         <b-button
           variant="lighter"
-          class="w-100 d-flex align-items-center justify-content-center flex-column p-5 p-md-2 border"
+          class="w-100 d-flex align-items-center justify-content-center flex-column p-3 p-md-2 border"
           :to="channel.configPagePath"
           :disabled="reachedLimitForChannel(channel.id)"
         >

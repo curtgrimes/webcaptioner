@@ -119,10 +119,6 @@ export const state = () => ({
     isConnected: false,
   },
   settingsPageTitle: '',
-  channels: {
-    unseenErrorExists: false,
-    channelsPageMessage: null,
-  },
   integrations: {
     storage: {
       sessionStartDate: null,

@@ -10,3 +10,10 @@ export const actions = {
     return channels;
   },
 };
+
+export const state = () => {
+  return {
+    unseenErrorExists: false,
+    channelsPageMessage: null,
+  };
+};

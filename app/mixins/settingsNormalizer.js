@@ -23,5 +23,24 @@ export function normalizeSettings({ localStorageData }) {
     delete localStorageData.settings.integrations.webhooks;
   }
 
+  if (localStorageData?.settings?.integrations?.dropbox?.accessToken) {
+    // Old Dropbox integration. Convert to channel.
+    if (!localStorageData.settings.channels) {
+      localStorageData.settings.channels = [];
+    }
+
+    localStorageData.settings.channels.push({
+      id: uuidv4(),
+      type: 'dropbox',
+      on: true,
+      parameters: {
+        accessToken: localStorageData.settings.integrations.dropbox.accessToken,
+        accountId: localStorageData.settings.integrations.dropbox.accountId,
+      },
+    });
+
+    delete localStorageData.settings.integrations.dropbox;
+  }
+
   return localStorageData?.settings;
 }

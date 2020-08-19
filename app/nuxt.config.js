@@ -189,6 +189,8 @@ module.exports = {
               'faToggleOn',
               'faToggleOff',
               'faEllipsisV',
+              'faEye',
+              'faEyeSlash',
             ],
           },
           {

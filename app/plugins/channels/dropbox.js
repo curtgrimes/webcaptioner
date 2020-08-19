@@ -70,7 +70,13 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
       .catch((e) => {
         $store.commit('UPDATE_CHANNEL_ERROR', {
           channelId,
-          error: `This channel has been turned off because we received an error when trying to save to Dropbox.`,
+          error: `This channel has been turned off because we received an error when trying to save to Dropbox. Try connecting to Dropbox again.`,
+        });
+
+        // Turn off the channel because it's not configured correctly
+        $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', {
+          channelId,
+          onOrOff: false,
         });
       });
     lastTextSentToDropbox = text;
