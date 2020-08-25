@@ -70,41 +70,100 @@
       </p>
     </transition>
     <div class="clearfix"></div>
-    <hr />
-    <div class="row">
-      <div class="col-md-4">
-        <label
-          for="adjust-speed-accuracy"
-          class="mb-0 form-group form-inline float-left"
-          >Adjust speed/accuracy</label
+    <div v-if="$store.state.settings.exp.includes('captionSpeedSetting')">
+      <hr />
+      <label for="adjust-speed-accuracy" class="mb-2">
+        Caption speed
+      </label>
+      <div class="d-flex">
+        <div
+          class="small font-weight-bold text-right"
+          style="white-space: nowrap;"
         >
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '0'"
+            style="transition: color 0.5s"
+            :class="{
+              'text-secondary': captionSpeed === '0',
+              'text-muted': captionSpeed !== '0',
+            }"
+          >
+            Real-time
+          </a>
+        </div>
+        <div class="mx-auto w-100 px-2">
+          <b-form-input
+            id="adjust-speed-accuracy"
+            v-model="captionSpeed"
+            type="range"
+            min="0"
+            max="2"
+            step="1"
+          ></b-form-input>
+        </div>
+        <div
+          class="small font-weight-bold text-left"
+          style="white-space: nowrap; "
+        >
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '2'"
+            style="transition: color 0.5s"
+            :class="{
+              'text-secondary': captionSpeed !== '0',
+              'text-muted': captionSpeed === '0',
+            }"
+          >
+            More accurate
+          </a>
+        </div>
       </div>
-      <div class="col-md-8">
-        <div class="d-flex">
-          <div class="small text-muted font-weight-bold text-right">
-            More real-time captions
-          </div>
-          <div class="form-group mx-auto w-100 px-2">
-            <b-form-input
-              id="adjust-speed-accuracy"
-              v-model="value"
-              type="range"
-              min="2000"
-              max="5000"
-              step="1000"
-            ></b-form-input>
-          </div>
-          <div class="small text-muted font-weight-bold text-left">
-            More real-time captions
-          </div>
+      <div class="row small">
+        <div class="col-6">
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '0'"
+            class="d-block"
+            style="text-decoration:none;transition: color 0.5s"
+            :class="{
+              'text-info': captionSpeed === '0',
+              'text-muted': captionSpeed !== '0',
+            }"
+          >
+            Words are displayed as soon as possible. The words on the screen may
+            change shortly after they are spoken while Web Captioner figures out
+            the context of the current phrase.
+          </a>
+        </div>
+        <div class="col-6 text-right">
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '2'"
+            class="d-block"
+            style="text-decoration:none;transition: color 0.5s"
+            :class="{
+              'text-info': captionSpeed !== '0',
+              'text-muted': captionSpeed === '0',
+            }"
+          >
+            <span v-if="captionSpeed === '0'">
+              Words are displayed after they remain unchanged for a period of
+              time.
+            </span>
+            <span v-else>
+              Words are displayed after they remain unchanged for
+              {{ $store.state.settings.stabilizedThresholdMs / 1000 }}
+              seconds.
+            </span>
+          </a>
         </div>
       </div>
     </div>
-    <div class="clearfix"></div>
     <hr />
-    <label for="show-volume-meter" class="mb-0"
-      >Show volume meter when volume level is low</label
-    >
+    <label for="show-volume-meter" class="mb-0">
+      Show volume meter when volume level is low
+    </label>
     <b-form-checkbox
       id="show-volume-meter"
       v-model="volumeMeterShow"
@@ -131,9 +190,9 @@
     </transition>
     <div class="clearfix"></div>
     <hr />
-    <label for="large-navigation-bar-buttons" class="mb-0"
-      >Use large navigation bar buttons</label
-    >
+    <label for="large-navigation-bar-buttons" class="mb-0">
+      Use large navigation bar buttons
+    </label>
     <b-form-checkbox
       id="large-navigation-bar-buttons"
       v-model="largerLayout"
@@ -319,14 +378,14 @@ export default {
   meta: {
     settingsPageTitleKey: 'settings.general',
   },
-  data: function () {
+  data: function() {
     return {
       largerPreview: false,
       isMac: false,
       autostartURL: null,
     };
   },
-  mounted: function () {
+  mounted: function() {
     // This has to happen client-side so we put it in mounted()
     this.autostartURL = window.location.origin + '/captioner?autostart';
 
@@ -370,6 +429,39 @@ export default {
         this.$store.commit('SET_CENSOR', { censor });
       },
     },
+    captionSpeed: {
+      get() {
+        switch (this.$store.state.settings.stabilizedThresholdMs) {
+          case 0:
+            return '0';
+          case 500:
+            return '1';
+          case 2000:
+            return '2';
+          default:
+            return '0';
+        }
+      },
+      set(captionSpeed) {
+        let stabilizedThresholdMs;
+        switch (captionSpeed) {
+          case '0':
+            stabilizedThresholdMs = 0;
+            break;
+          case '1':
+            stabilizedThresholdMs = 500;
+            break;
+          case '2':
+            stabilizedThresholdMs = 2000;
+            break;
+          default:
+            stabilizedThresholdMs = 0;
+        }
+        this.$store.commit('SET_STABILIZED_THRESHOLD_MS', {
+          stabilizedThresholdMs,
+        });
+      },
+    },
     censorReplaceWith: {
       get() {
         return this.$store.state.settings.censor.replaceWith;
@@ -402,13 +494,13 @@ export default {
         this.$store.commit('SET_ALWAYS_AUTOSTART_ON_LOAD', { on });
       },
     },
-    backgroundColor: function () {
+    backgroundColor: function() {
       return this.$store.state.settings.appearance.background.color;
     },
-    alignmentPadding: function () {
+    alignmentPadding: function() {
       return this.$store.state.settings.appearance.text.alignment.padding;
     },
-    previewWrapTextPositionClass: function () {
+    previewWrapTextPositionClass: function() {
       return {
         /* Vertical alignments */
         'align-items-start': ['full', 'top'].includes(this.alignmentVertical),
@@ -418,10 +510,10 @@ export default {
         ),
       };
     },
-    textColor: function () {
+    textColor: function() {
       return this.$store.state.settings.appearance.text.textColor;
     },
-    previewTextPositionClass: function () {
+    previewTextPositionClass: function() {
       return {
         /* Horizontal alignments */
         'w-100 mx-0': this.alignmentHorizontal == 'full',

@@ -22,14 +22,19 @@
       @scroll="onManualScroll"
       ref="scroller"
     >
-      <!--prettyhtml-ignore-->
       <span class="transcript-scroller-child">
-        <span :class="{ 'd-block w-100': finalTranscriptEndsInNewline }">{{
-          finalTranscript
+        <span v-if="$store.state.settings.stabilizedThresholdMs !== 0">{{
+          stabilizedTranscript
         }}</span
         ><span
-          data-test="transcriptInterim"
-          v-if="interimTranscript"
+          v-else
+          :class="{ 'd-block w-100': finalTranscriptEndsInNewline }"
+          >{{ finalTranscript }}</span
+        ><span
+          v-if="
+            interimTranscript &&
+              $store.state.settings.stabilizedThresholdMs === 0
+          "
           v-bind:style="{ color: interimColor }"
           >{{ interimTranscript }}</span
         ><span
@@ -281,6 +286,10 @@ export default {
     interimTranscript() {
       this.scrollToBottom();
       return this.$store.state.captioner.transcript.interim;
+    },
+    stabilizedTranscript() {
+      this.scrollToBottom();
+      return this.$store.state.captioner.transcript.stabilized;
     },
     typingModeOn() {
       return this.$store.state.captioner.typingModeOn;

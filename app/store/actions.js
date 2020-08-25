@@ -287,6 +287,13 @@ export default {
       });
 
       commitPropertySetting('SET_CENSOR', 'censor', 'censor.on');
+
+      commitPropertySetting(
+        'SET_STABILIZED_THRESHOLD_MS',
+        'stabilizedThresholdMs',
+        'stabilizedThresholdMs'
+      );
+
       commitPropertySetting(
         'SET_CENSOR_REPLACE_WITH',
         'replaceWith',

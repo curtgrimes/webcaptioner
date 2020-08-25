@@ -183,6 +183,10 @@ export default {
     state.settings.censor.replaceWith = replaceWith;
   },
 
+  SET_STABILIZED_THRESHOLD_MS: (state, { stabilizedThresholdMs }) => {
+    state.settings.stabilizedThresholdMs = stabilizedThresholdMs;
+  },
+
   SET_AFTER_NO_AUDIO_SECONDS: (state, { seconds }) => {
     state.settings.afterNoAudio.seconds = seconds;
   },

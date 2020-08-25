@@ -40,7 +40,7 @@
         </h3>
         <p class="mb-0 text-center mt-2 text-muted small">
           <span v-if="experimentToAdd.description">
-            {{ experimentToAdd.description }}asdf
+            {{ experimentToAdd.description }}
           </span>
           <span v-else class="font-italic">No description</span>
         </p>
@@ -79,8 +79,8 @@
         <b-button
           :disabled="
             !acknowledgements.experimentMayNotWorkOrBreakThings ||
-            !acknowledgements.couldGoAwayAtAnyTime ||
-            !acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks
+              !acknowledgements.couldGoAwayAtAnyTime ||
+              !acknowledgements.iWillGiveFeedbackOnHowTheExperimentWorks
           "
           class="float-right"
           :variant="
@@ -272,28 +272,28 @@ export default {
     experimentLoaded(experimentId) {
       return this.loadedExperiments.includes(experimentId);
     },
-    hideInvalidExperimentModal: function () {
+    hideInvalidExperimentModal: function() {
       this.$refs.invalidExperiment.hide();
     },
-    hideExperimentConfirmationModal: function () {
+    hideExperimentConfirmationModal: function() {
       this.$refs.experimentConfirmation.hide();
       Object.keys(this.acknowledgements).forEach(
         (acknowledgementKey) =>
           (this.acknowledgements[acknowledgementKey] = false)
       );
     },
-    hideExperimentAlreadyAddedModal: function () {
+    hideExperimentAlreadyAddedModal: function() {
       this.$refs.experimentAlreadyAdded.hide();
     },
-    isValidExperiment: function () {
+    isValidExperiment: function() {
       return [
         'share',
         'saveTranscriptWithTimingsToDropbox',
-        'zoom',
+        'captionSpeedSetting',
         ...this.experiments.map((e) => e.id),
       ].includes(this.experimentIdToAdd);
     },
-    addExperiment: function ({ withConfirmation }) {
+    addExperiment: function({ withConfirmation }) {
       if (this.isValidExperiment()) {
         if (withConfirmation) {
           this.$refs.experimentConfirmation.show();
@@ -313,7 +313,7 @@ export default {
           (this.acknowledgements[acknowledgementKey] = false)
       );
     },
-    focusInvalidExperimentModalOkButton: function () {
+    focusInvalidExperimentModalOkButton: function() {
       this.$refs.invalidExperimentModalOkButton.focus();
     },
     parseExperimentFromURL() {
