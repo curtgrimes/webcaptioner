@@ -2,14 +2,14 @@
   <div
     class="settings-view"
     :style="{ height }"
-    style="overflow:auto"
+    style="overflow: auto;"
     ref="settingsView"
   >
     <router-link
       aria-label="Close Settings"
       :to="localePath('captioner')"
       class="btn btn-light d-none d-sm-block position-fixed py-md-3 px-3 px-md-4"
-      style="z-index:2;right:0;top:0"
+      style="z-index: 2; right: 0; top: 0;"
       role="tab"
       active-class
     >
@@ -19,7 +19,7 @@
     <nav
       class="d-sm-none navbar sticky-top navbar-light bg-primary pr-2"
       :class="{ 'pl-2': showBackButton }"
-      style="z-index:1025"
+      style="z-index: 1025;"
     >
       <div class="mr-auto">
         <router-link
@@ -31,7 +31,7 @@
         </router-link>
         <div
           class="navbar-text font-weight-bold"
-          style="position: relative;top: 2px;"
+          style="position: relative; top: 2px;"
         >
           {{ navbarTitle }}
         </div>
@@ -40,7 +40,7 @@
         <fa icon="times" aria-label="Close" />
       </router-link>
     </nav>
-    <div class="row mx-0" style="min-height:100%">
+    <div class="row mx-0" style="min-height: 100%;">
       <!-- xs navigation -->
       <div
         :hidden="showBackButton"
@@ -61,11 +61,11 @@
       <!-- non-xs navigation -->
       <div
         class="d-none d-sm-block col-sm-4 py-5 pr-md-4 pr-xl-5 bg-primary"
-        style="min-height:100%"
+        style="min-height: 100%;"
       >
         <div class="row h-100">
           <div class="col-lg-9 col-xl-7 ml-auto mb-5">
-            <div class="position-sticky" style="top:20px">
+            <div class="position-sticky" style="top: 20px;">
               <h2 class="d-none d-sm-block pl-3 text-dark">
                 Settings
               </h2>
@@ -76,9 +76,10 @@
                     :key="index"
                     active-class="active"
                     :to="to"
+                    link-classes="d-flex align-items-center"
                   >
-                    <fa :icon="icon" class="mr-1" size="lg" fixed-width />
-                    {{ name }}
+                    <fa :icon="icon" class="mr-2" size="lg" fixed-width />
+                    <span>{{ name }}</span>
                   </b-nav-item>
                 </b-nav>
               </nav>
@@ -151,7 +152,7 @@ export default {
     BBadge,
     BButton,
   },
-  data: function() {
+  data: function () {
     return {
       logTimeRemainingMinutes: '00',
       logTimeRemainingSeconds: '00',
@@ -198,16 +199,16 @@ export default {
       ],
     };
   },
-  mounted: function() {
+  mounted: function () {
     let self = this;
     this.escShortcut = new Combokeys(document.documentElement);
-    this.escShortcut.bind('esc', function() {
+    this.escShortcut.bind('esc', function () {
       self.$router.push('/captioner');
     });
 
     this.startLogTimer();
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     if (this.escShortcut) {
       this.escShortcut.detach();
     }
@@ -217,7 +218,7 @@ export default {
     }
   },
   watch: {
-    eventLogStopTime: function() {
+    eventLogStopTime: function () {
       this.startLogTimer();
     },
     $route(to, from) {
@@ -228,7 +229,7 @@ export default {
     },
   },
   methods: {
-    startLogTimer: function() {
+    startLogTimer: function () {
       if (this.eventLogStopTime) {
         let logTick = () => {
           let now = Date.now();
@@ -261,31 +262,31 @@ export default {
     },
   },
   computed: {
-    eventLog: function() {
+    eventLog: function () {
       return (
         Boolean(this.$store.state.eventLog.onUntilStopTime) ||
         this.$store.state.eventLog.log.length > 0
       );
     },
-    eventLogCount: function() {
+    eventLogCount: function () {
       return this.$store.state.eventLog.log.length;
     },
-    eventLogStopTime: function() {
+    eventLogStopTime: function () {
       return this.$store.state.eventLog.onUntilStopTime;
     },
-    currentlyOnExperiments: function() {
+    currentlyOnExperiments: function () {
       return this.$route.path === '/captioner/settings/experiments';
     },
-    experiments: function() {
+    experiments: function () {
       return this.$store.state.settings.exp;
     },
-    showBackButton: function() {
+    showBackButton: function () {
       return this.$route.path !== '/captioner/settings';
     },
-    navbarTitle: function() {
+    navbarTitle: function () {
       return this.$store.state.settingsPageTitle || '';
     },
-    largerLayout: function() {
+    largerLayout: function () {
       return this.$store.state.settings.controls.layout.larger;
     },
   },

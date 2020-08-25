@@ -71,17 +71,19 @@
     </transition>
     <div class="clearfix"></div>
     <hr />
-    <!--
     <div class="row">
       <div class="col-md-4">
         <label
           for="adjust-speed-accuracy"
           class="mb-0 form-group form-inline float-left"
-        >Adjust speed/accuracy</label>
+          >Adjust speed/accuracy</label
+        >
       </div>
       <div class="col-md-8">
         <div class="d-flex">
-          <div class="small text-muted font-weight-bold text-right">More real-time captions</div>
+          <div class="small text-muted font-weight-bold text-right">
+            More real-time captions
+          </div>
           <div class="form-group mx-auto w-100 px-2">
             <b-form-input
               id="adjust-speed-accuracy"
@@ -92,13 +94,14 @@
               step="1000"
             ></b-form-input>
           </div>
-          <div class="small text-muted font-weight-bold text-left">More real-time captions</div>
+          <div class="small text-muted font-weight-bold text-left">
+            More real-time captions
+          </div>
         </div>
       </div>
     </div>
     <div class="clearfix"></div>
-    <hr>
-    -->
+    <hr />
     <label for="show-volume-meter" class="mb-0"
       >Show volume meter when volume level is low</label
     >
@@ -316,14 +319,14 @@ export default {
   meta: {
     settingsPageTitleKey: 'settings.general',
   },
-  data: function() {
+  data: function () {
     return {
       largerPreview: false,
       isMac: false,
       autostartURL: null,
     };
   },
-  mounted: function() {
+  mounted: function () {
     // This has to happen client-side so we put it in mounted()
     this.autostartURL = window.location.origin + '/captioner?autostart';
 
@@ -399,13 +402,13 @@ export default {
         this.$store.commit('SET_ALWAYS_AUTOSTART_ON_LOAD', { on });
       },
     },
-    backgroundColor: function() {
+    backgroundColor: function () {
       return this.$store.state.settings.appearance.background.color;
     },
-    alignmentPadding: function() {
+    alignmentPadding: function () {
       return this.$store.state.settings.appearance.text.alignment.padding;
     },
-    previewWrapTextPositionClass: function() {
+    previewWrapTextPositionClass: function () {
       return {
         /* Vertical alignments */
         'align-items-start': ['full', 'top'].includes(this.alignmentVertical),
@@ -415,10 +418,10 @@ export default {
         ),
       };
     },
-    textColor: function() {
+    textColor: function () {
       return this.$store.state.settings.appearance.text.textColor;
     },
-    previewTextPositionClass: function() {
+    previewTextPositionClass: function () {
       return {
         /* Horizontal alignments */
         'w-100 mx-0': this.alignmentHorizontal == 'full',

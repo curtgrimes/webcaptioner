@@ -96,7 +96,8 @@ export default {
     },
   },
   mounted() {
-    this.zoomApiToken = this.savedChannel?.parameters?.zoomApiToken;
+    this.port = this.savedChannel?.parameters?.port;
+    this.password = this.savedChannel?.parameters?.password;
   },
   data() {
     return {
