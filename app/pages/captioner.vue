@@ -198,10 +198,20 @@ export default {
       return false;
     }
 
+    const isEdge = () => {
+      return navigator.userAgent && /(Edg\/|Edge)/.test(navigator.userAgent);
+    };
+
+    const isChromeiOS = () => {
+      return navigator.userAgent && navigator.userAgent.match('CriOS');
+    };
+
     if (
       (!('webkitSpeechRecognition' in window) ||
         navigator.userAgent.indexOf('Opera') !== -1 ||
-        isChromium()) &&
+        isChromium() ||
+        isEdge() ||
+        isChromeiOS()) &&
       !window.Cypress
     ) {
       this.$store.commit('SET_INCOMPATIBLE_BROWSER_ON');
