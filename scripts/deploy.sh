@@ -6,7 +6,7 @@ pip install awscli --upgrade
 # according to the current CI environment
 node scripts/write-task-definition.js >> task-definition-generated.json
 
-docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 # AWS configs used during get-login
 export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
@@ -15,7 +15,7 @@ export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 # Log into AWS docker registry
 $(aws ecr get-login --no-include-email --region $AWS_REGION | tr -d '\r')
 
-docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME $AWS_REGISTRY_IMAGE:$CI_ENVIRONMENT_SLUG
+docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG $AWS_REGISTRY_IMAGE:$CI_ENVIRONMENT_SLUG
 docker push $AWS_REGISTRY_IMAGE:$CI_ENVIRONMENT_SLUG
 
 # Create a new version of the task definition
