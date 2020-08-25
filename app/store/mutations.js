@@ -406,28 +406,6 @@ export default {
     state.integrations.storage.lastStabilizedTranscriptSyncDate = date;
   },
 
-  SET_SEND_TO_VMIX: (state, { on }) => {
-    state.settings.integrations.vmix.on = on;
-  },
-  SET_VMIX_WEB_CONTROLLER_ADDRESS: (state, { webControllerAddress }) => {
-    state.settings.integrations.vmix.webControllerAddress = webControllerAddress;
-  },
-  SET_VMIX_CHROME_EXTENSION_INSTALLED: (state, { installed }) => {
-    state.integrations.vmix.chromeExtensionInstalled = Boolean(installed);
-  },
-  SET_VMIX_WEB_CONTROLLER_CONNECTED: (state, { connected }) => {
-    state.integrations.vmix.webControllerConnected = Boolean(connected);
-  },
-  RESET_WEB_CONTROLLER_CONNECTED_STATUS: (state) => {
-    state.integrations.vmix.webControllerConnected = null;
-  },
-  SET_VMIX_CACHED_INPUT_GUID: (state, { guid }) => {
-    state.integrations.vmix.cachedInputGUID = guid;
-  },
-  SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE: (state, { on }) => {
-    state.integrations.vmix.showNotFullySetUpMessage = on;
-  },
-
   SET_EVENT_LOG: (state, { eventLog }) => {
     state.eventLog.log = eventLog;
   },

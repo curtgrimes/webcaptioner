@@ -3,15 +3,8 @@ import supportedLocales from '~/mixins/data/locales';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
 import ChromelessWindowManager from '~/mixins/ChromelessWindowManager';
 import get from 'lodash.get';
-import vmixSetup from '~/mixins/vmixSetup';
 import throttle from 'lodash.throttle';
 import { normalizeSettings } from '~/mixins/settingsNormalizer';
-
-import axios from 'axios';
-
-function getVmixPath(webControllerAddress) {
-  return (webControllerAddress || '').trim().replace(/\/$/, '') + '/API';
-}
 
 var saveSettingsToFirestore = throttle((state, db) => {
   db.collection('users')
@@ -370,13 +363,6 @@ export default {
 
       commitPropertySetting('SET_CHANNELS', 'channels', 'channels');
 
-      commitPropertySetting('SET_SEND_TO_VMIX', 'on', 'integrations.vmix.on');
-      commitPropertySetting(
-        'SET_VMIX_WEB_CONTROLLER_ADDRESS',
-        'webControllerAddress',
-        'integrations.vmix.webControllerAddress'
-      );
-
       commitPropertySetting(
         'SET_DONATION_DATE',
         'donationDate',
@@ -513,157 +499,6 @@ export default {
     setTimeout(function() {
       commit('SET_INCOMPATIBLE_BROWSER_MODAL_INVISIBLE');
     }, 1000);
-  },
-
-  REFRESH_VMIX_SETUP_STATUS: (
-    { commit, dispatch, state },
-    { chromeExtensionId }
-  ) => {
-    eventLogger(commit, state, {
-      action: 'REFRESH_VMIX_SETUP_STATUS',
-    });
-
-    let {
-      checkIfExtensionInstalled,
-      testWebControllerConnectivity,
-      sendMessage,
-    } = vmixSetup;
-
-    function getConnectionTimeoutPromise() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(false);
-        }, 2000);
-      });
-    }
-
-    let extensionCheck = checkIfExtensionInstalled(chromeExtensionId).then(
-      function(installed) {
-        commit('SET_VMIX_CHROME_EXTENSION_INSTALLED', {
-          installed,
-        });
-      }
-    );
-
-    let testConnection = new Promise((resolve, reject) => {
-      testWebControllerConnectivity(
-        getVmixPath(state.settings.integrations.vmix.webControllerAddress),
-        chromeExtensionId
-      ).then(function(connected) {
-        resolve(connected);
-      });
-    });
-
-    let testVmixTemplate = new Promise((resolve, reject) => {
-      // Reset GUID
-      commit('SET_VMIX_CACHED_INPUT_GUID', {
-        guid: null,
-      });
-
-      sendMessage(
-        getVmixPath(state.settings.integrations.vmix.webControllerAddress),
-        chromeExtensionId
-      ).then(function(response) {
-        if (!response || (response && !response.text)) {
-          return resolve(false);
-        }
-
-        let xml = response.text,
-          textElement;
-
-        // There is an <input></input> element in vMix's response that isn't a proper
-        // <input> element. The browser automatically interprets it as a self-closing
-        // <input> tag. We need to rename it to something unique so we can get its children.
-        xml = xml
-          .replace(/<input /gi, '<webcaptioner-vmix-input ')
-          .replace(/\<\/input\>/gi, '</webcaptioner-vmix-input>');
-
-        try {
-          const parser = new DOMParser();
-          const xmlDOM = parser.parseFromString(xml, 'application/xml');
-          textElement = xmlDOM.querySelector(
-            'text[name="WebCaptionerCaptions"]'
-          );
-        } catch (e) {
-          // Unable to parse
-          resolve(false);
-        }
-
-        // Timeout is totally unnecessary here. It usually resolves instantly, but that seems
-        // to lead to some confusion on whether it really checked or not -- so introduce a short
-        // artifical delay.
-        setTimeout(function() {
-          if (textElement) {
-            let parent = textElement.parentElement;
-            commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
-              on: false,
-            });
-            resolve(parent.getAttribute('key'));
-          } else {
-            resolve(false);
-          }
-        }, 200);
-      });
-    });
-
-    let testConnectionWithTimeout = Promise.race([
-      testConnection,
-      getConnectionTimeoutPromise(),
-    ]).then((connected) => {
-      commit('SET_VMIX_WEB_CONTROLLER_CONNECTED', {
-        connected,
-      });
-    });
-
-    let testVmixTemplateWithTimeout = Promise.race([
-      testVmixTemplate,
-      getConnectionTimeoutPromise(),
-    ]).then((guid) => {
-      if (guid) {
-        commit('SET_VMIX_CACHED_INPUT_GUID', {
-          guid,
-        });
-      }
-    });
-
-    return Promise.all([
-      extensionCheck,
-      testConnectionWithTimeout,
-      testVmixTemplateWithTimeout,
-    ]);
-  },
-
-  SEND_TO_VMIX: ({ state, commit }, { text, chromeExtensionId }) => {
-    eventLogger(commit, state, {
-      action: 'SEND_TO_VMIX',
-      payload: {
-        text,
-      },
-    });
-    let inputGUID = state.integrations.vmix.cachedInputGUID;
-
-    if (!inputGUID) {
-      commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
-        on: true,
-      });
-      return;
-    }
-
-    let { sendMessage } = vmixSetup;
-    sendMessage(
-      getVmixPath(state.settings.integrations.vmix.webControllerAddress) +
-        '/?Function=SetText&Input=' +
-        inputGUID +
-        '&SelectedName=WebCaptionerCaptions&Value=' +
-        encodeURIComponent(text.slice(-1000)),
-      chromeExtensionId
-    ).then(function(response) {
-      if (!response && !response.success) {
-        commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
-          on: true,
-        });
-      }
-    });
   },
 
   START_SUPPORT_POPUP: ({ rootState }) => {

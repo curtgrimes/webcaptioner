@@ -256,7 +256,9 @@
     </p>
     <hr />
 
-    <h3 class="mt-5">{{ $t('settings.controls.keyboardShortcuts') }}</h3>
+    <h3 class="mt-5" id="shortcuts">
+      {{ $t('settings.controls.keyboardShortcuts') }}
+    </h3>
     <div class="list-group mt-sm-3">
       <div class="list-group-item">
         <div class="row">

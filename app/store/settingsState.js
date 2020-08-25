@@ -69,16 +69,6 @@ export default () => {
       from: null,
       userDefault: null,
     },
-    integrations: {
-      dropbox: {
-        accessToken: null,
-        accountId: null,
-      },
-      vmix: {
-        on: false,
-        webControllerAddress: '',
-      },
-    },
     channels: [],
     afterNoAudio: {
       seconds: 2,

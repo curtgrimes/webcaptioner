@@ -76,33 +76,6 @@
         <transition name="fade">
           <share-button v-if="experiments.includes('share')"></share-button>
         </transition>
-        <div
-          v-if="
-            showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed
-          "
-          class="mr-4"
-        >
-          <span class="navbar-text text-white pr-3 text-primary">
-            <fa icon="exclamation-triangle" />
-            {{ $t('navbar.vmixNotConnected') }}
-          </span>
-          <b-button-group size="sm">
-            <b-button
-              :to="localePath('captioner-settings-vmix')"
-              @click="vmixNotFullySetUpMessageDismissed = true"
-              variant="secondary"
-              v-if="showVmixNotFullySetUpMessage"
-              class="btn-sm"
-              >{{ $t('common.setUpVerb') }}</b-button
-            >
-            <b-button
-              @click="sendToVmix = false"
-              :aria-label="$t('common.dismiss')"
-            >
-              <fa icon="times" />
-            </b-button>
-          </b-button-group>
-        </div>
         <b-button-group
           :size="largerLayout ? 'lg' : ''"
           class="captioning-split-button"
@@ -136,9 +109,11 @@
               hideAllTooltips();
               $store.commit('SET_CHANNEL_ERRORS_SEEN');
             "
-            :title="`Channels ${
-              $store.state.channels.unseenErrorExists ? '(Error)' : ''
-            }`"
+            :title="
+              `Channels ${
+                $store.state.channels.unseenErrorExists ? '(Error)' : ''
+              }`
+            "
             id="navbar-channels-button"
             class="px-2"
           >
@@ -261,70 +236,49 @@ export default {
     ShareButton,
     ChannelsPopup,
   },
-  data: function () {
+  data: function() {
     return {
-      vmixNotFullySetUpMessageDismissed: false,
       showSettingsMenu: false,
       showChannelsMenu: false,
     };
   },
   computed: {
-    captioningOn: function () {
+    captioningOn: function() {
       return this.$store.state.captioner.shouldBeOn;
     },
-    typingModeOn: function () {
+    typingModeOn: function() {
       return this.$store.state.captioner.typingModeOn;
     },
-    microphoneName: function () {
+    microphoneName: function() {
       return this.$store.state.captioner.microphoneName;
     },
-    transcriptExcerpt: function () {
+    transcriptExcerpt: function() {
       return (
         this.$store.state.captioner.transcript.final +
         ' ' +
         this.$store.state.captioner.transcript.interim
       ).slice(-60);
     },
-    showCaptioningPreviewPopover: function () {
+    showCaptioningPreviewPopover: function() {
       return this.transcriptExcerpt.length > 0;
     },
-    waitingForInitialTranscript: function () {
+    waitingForInitialTranscript: function() {
       return this.$store.state.captioner.transcript.waitingForInitial;
     },
-    largerLayout: function () {
+    largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },
-    experiments: function () {
+    experiments: function() {
       return this.$store.state.settings.exp;
     },
-    captioningToggleButtonVariant: function () {
+    captioningToggleButtonVariant: function() {
       return !this.captioningOn ? 'primary' : 'danger';
     },
-    incompatibleBrowser: function () {
+    incompatibleBrowser: function() {
       return this.$store.state.incompatibleBrowser;
     },
-    remoteDisplays: function () {
+    remoteDisplays: function() {
       return this.$store.state.remoteDisplays;
-    },
-    showVmixNotFullySetUpMessage: {
-      // User wanted vMix to be on but it can't. Show a message in the navbar.
-      get() {
-        return (
-          this.sendToVmix &&
-          this.$store.state.integrations.vmix.showNotFullySetUpMessage
-        );
-      },
-      set(on) {
-        this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', { on });
-      },
-    },
-    sendToVmix: {
-      get() {
-        return this.$store.state.settings.integrations.vmix.on;
-      },
-      set() {
-        this.$store.commit('SET_SEND_TO_VMIX', { on: false });
-      },
     },
     activeChannels() {
       return this.$store.state.settings.channels.filter(
@@ -333,41 +287,41 @@ export default {
     },
   },
   watch: {
-    showSettingsMenu: function () {
+    showSettingsMenu: function() {
       this.hideAllTooltips();
     },
   },
   methods: {
-    hideAllTooltips: function () {
+    hideAllTooltips: function() {
       this.$root.$emit('bv::hide::tooltip');
     },
-    captioningToggleButtonClick: function () {
+    captioningToggleButtonClick: function() {
       if (this.captioningOn) {
         this.stopCaptioning();
       } else {
         this.startCaptioning();
       }
     },
-    startCaptioning: function () {
+    startCaptioning: function() {
       this.$store.dispatch('captioner/startManual');
       this.$router.push('/captioner');
     },
-    stopCaptioning: function () {
+    stopCaptioning: function() {
       this.$store.dispatch('captioner/stopManual');
     },
-    startTypingMode: function () {
+    startTypingMode: function() {
       this.$store.dispatch('captioner/startTypingMode');
     },
-    stopTypingMode: function () {
+    stopTypingMode: function() {
       this.$store.dispatch('captioner/stopTypingMode');
     },
-    startSaveToFileModal: function () {
+    startSaveToFileModal: function() {
       this.$router.push('/captioner/save-to-file');
     },
-    startClearTranscriptModal: function () {
+    startClearTranscriptModal: function() {
       this.$router.push('/captioner/clear');
     },
-    clearTranscript: function () {
+    clearTranscript: function() {
       if (this.captioningOn) {
         this.$store.dispatch('captioner/restart');
       }

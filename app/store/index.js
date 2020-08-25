@@ -124,13 +124,6 @@ export const state = () => ({
       sessionStartDate: null,
       lastStabilizedTranscriptSyncDate: null,
     },
-    vmix: {
-      showNotFullySetUpMessage: false,
-      webControllerAddress: '',
-      chromeExtensionInstalled: null,
-      webControllerConnected: null,
-      cachedInputGUID: null,
-    },
   },
   visibleToasts: {
     signedIn: false,
