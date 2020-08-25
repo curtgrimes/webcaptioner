@@ -33,7 +33,7 @@ Demo1:
     - docker:dind
   environment:
     name: demo1
-    url: https://demo1.webcaptioner.com
+    url: https://demo4591891495012598120529813.webcaptioner.com
   script:
     - source scripts/deploy.sh
   when: manual
