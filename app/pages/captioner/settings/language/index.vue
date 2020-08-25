@@ -12,6 +12,15 @@
         }}</a
       >
     </i18n>
+    <p>
+      Web Captioner currently doesn't translate between different languages in
+      real-time. If this is something you would like to see, vote up this
+      <a
+        href="https://feedback.webcaptioner.com/posts/5/automatically-translate-into-another-language"
+        target="_blank"
+        >feedback submission on translation</a
+      >.
+    </p>
     <div class="row mb-3">
       <div class="col-sm-7" :class="{ 'col-9': showClearButton }">
         <input
