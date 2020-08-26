@@ -4,7 +4,7 @@
       <li
         v-for="article in articles"
         :key="article.id"
-        class="mb-2 col-md-6 position-relative"
+        class="col-md-6 position-relative"
       >
         <div class="border-top w-100 py-3">
           <nuxt-link

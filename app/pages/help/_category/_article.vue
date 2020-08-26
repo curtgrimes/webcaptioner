@@ -24,7 +24,10 @@
         </main>
       </div>
       <div class="col-md-4">
-        <div class="sticky-top card card-body mt-4 mt-md-0" style="top: 5.5rem">
+        <div
+          class="sticky-top card card-body mt-4 mt-md-0"
+          style="top: 5.5rem;z-index:5"
+        >
           <h2 class="h4 mb-3 text-muted">
             <nuxt-link :to="categoryUrl" class="text-dark font-weight-normal">
               {{ categoryName }}

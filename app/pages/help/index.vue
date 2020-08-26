@@ -48,7 +48,7 @@
       <h2 class="mb-3">Getting Started</h2>
       <article-list :articles="articles.gettingStarted" />
 
-      <h2 class="mb-3">Third-party integrations</h2>
+      <h2 class="mb-3">Integrations</h2>
       <article-list :articles="articles.integrations" />
     </div>
   </div>
