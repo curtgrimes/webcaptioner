@@ -278,6 +278,12 @@ module.exports = {
     hook('listen', (server) => {
       wsServer.createSocket(server);
     }),
+      hook('modules:before', (nuxt) => {
+        // https://github.com/nuxt/nuxt.js/pull/6026#issuecomment-519030254
+        nuxt.options.devModules = (nuxt.options.devModules || []).filter(
+          (name) => name !== '@nuxt/loading-screen'
+        );
+      }),
       hook('render:setupMiddleware', (app) => {
         app.use('/health-check', healthCheckMiddleware);
 

@@ -28,7 +28,7 @@
     <div class="container mt-4 mt-sm-5 pb-5">
       <div
         class="card card-body bg-light d-flex flex-row flex-wrap py-4 mb-5"
-        style="margin-top:-5rem"
+        style="margin-top: -5rem;"
       >
         <div class="mr-auto">
           <h2>New to Web Captioner?</h2>
@@ -50,6 +50,9 @@
 
       <h2 class="mb-3">Integrations</h2>
       <article-list :articles="articles.integrations" />
+
+      <h2 class="mb-3">Troubleshooting</h2>
+      <article-list :articles="articles.troubleshooting" />
     </div>
   </div>
 </template>
@@ -72,13 +75,14 @@ export default {
         '/api/docs/categories/integrations/articles'
       );
 
-      // let troubleshootingArticles = await app.$axios.$get(
-      //   '/api/docs/categories/5e10265604286364bc937611/articles'
-      // );
+      let troubleshooting = await app.$axios.$get(
+        '/api/docs/categories/troubleshooting/articles'
+      );
       return {
         articles: {
           gettingStarted,
           integrations,
+          troubleshooting,
         },
       };
     } catch (error) {
@@ -88,7 +92,7 @@ export default {
       // }
     }
   },
-  data: function() {
+  data: function () {
     return {
       articles: {
         gettingStarted: [],
