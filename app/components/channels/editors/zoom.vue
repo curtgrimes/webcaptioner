@@ -41,7 +41,7 @@
         </strong>
         {{ savedChannel.error }}
       </div>
-      <label for="zoomApiToken" class="small">Zoom API Token</label>
+      <label for="zoomApiToken" class="font-weight-bold">Zoom API Token</label>
       <input
         id="zoomApiToken"
         name="zoomApiToken"
@@ -51,6 +51,32 @@
         type="url"
         placeholder="Zoom API Token"
       />
+
+      <b-form-group label="Update Frequency" class="mt-3 mb-0">
+        <b-form-radio
+          v-model="frequentUpdates"
+          name="some-radios"
+          :value="false"
+          class="mb-2"
+        >
+          Send captions to Zoom only when two full lines of text are available.
+          <span class="d-block text-muted small">
+            Captions will be delayed, but Zoom's copy of the transcript will not
+            have duplicate text.
+          </span>
+        </b-form-radio>
+        <b-form-radio
+          v-model="frequentUpdates"
+          name="some-radios"
+          :value="true"
+        >
+          Send captions as soon as possible.
+          <span class="d-block text-muted small">
+            Captions will appear sooner, but Zoom's copy of the transcript will
+            have duplicate text.
+          </span>
+        </b-form-radio>
+      </b-form-group>
     </div>
   </div>
 </template>
@@ -68,26 +94,42 @@ export default {
     },
   },
   mounted() {
-    this.zoomApiToken = this.savedChannel?.parameters?.zoomApiToken;
+    this.zoomApiToken =
+      this.savedChannel?.parameters?.zoomApiToken || this.zoomApiToken;
+    this.frequentUpdates =
+      this.savedChannel?.parameters?.frequentUpdates || this.frequentUpdates;
   },
   data() {
     return {
       zoomApiToken: null,
+      frequentUpdates: false,
     };
+  },
+  methods: {
+    updateParameters() {
+      this.$emit('parametersUpdated', {
+        zoomApiToken: this.zoomApiToken,
+        frequentUpdates: this.frequentUpdates,
+      });
+
+      if (this.zoomApiToken) {
+        this.$emit('formValid');
+      } else {
+        this.$emit('formInvalid');
+      }
+    },
   },
   watch: {
     zoomApiToken: {
       immediate: true,
-      handler(zoomApiToken) {
-        this.$emit('parametersUpdated', {
-          zoomApiToken,
-        });
-
-        if (this.zoomApiToken) {
-          this.$emit('formValid');
-        } else {
-          this.$emit('formInvalid');
-        }
+      handler() {
+        this.updateParameters();
+      },
+    },
+    frequentUpdates: {
+      immediate: true,
+      handler(frequentUpdates) {
+        this.updateParameters();
       },
     },
   },

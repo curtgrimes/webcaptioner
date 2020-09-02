@@ -176,6 +176,9 @@ export default {
           this.$store.commit('TURN_OFF_CHANNEL', { channelId });
           await this.$nextTick();
           this.$store.commit('TURN_ON_CHANNEL', { channelId });
+        } else {
+          // Assume that they want the channel on if they are updating it now.
+          this.$store.commit('TURN_ON_CHANNEL', { channelId });
         }
 
         this.$refs['modal'].hide();
