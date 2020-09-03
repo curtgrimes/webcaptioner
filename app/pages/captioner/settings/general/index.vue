@@ -1,81 +1,175 @@
 <template>
   <div>
     <hr />
-    <label for="censor-profane-language" class="mb-0">Censor profane language</label>
-    <b-form-checkbox id="censor-profane-language" v-model="censor" switch class="float-right"></b-form-checkbox>
+    <label for="censor-profane-language" class="mb-0"
+      >Censor profane language</label
+    >
+    <b-form-checkbox
+      id="censor-profane-language"
+      v-model="censor"
+      switch
+      class="float-right"
+    ></b-form-checkbox>
     <div class="clearfix"></div>
     <transition name="fade-in">
       <div v-if="censor">
         <div class="form-inline small mt-1">
           <div class="form-group">
             <label>
-              <span class="pr-2">{{$t('settings.censor.replaceCensoredWordsWith')}}</span>
+              <span class="pr-2">{{
+                $t('settings.censor.replaceCensoredWordsWith')
+              }}</span>
               <select
                 v-model="censorReplaceWith"
                 class="form-control form-control-sm"
                 id="volumeMeterSensitivity"
               >
-                <option value="nothing">{{$t('settings.censor.nothing')}}</option>
-                <option value="asterisks">{{$t('settings.censor.asterisks')}} (*****)</option>
+                <option value="nothing">{{
+                  $t('settings.censor.nothing')
+                }}</option>
+                <option value="asterisks"
+                  >{{ $t('settings.censor.asterisks') }} (*****)</option
+                >
               </select>
             </label>
           </div>
         </div>
         <p class="mb-0 small text-muted mt-2">
-          {{$t('settings.censor.usEnglishOnly')}}
-          <i18n path="settings.censor.censorProfaneLanguageDescription.text" tag="span">
+          {{ $t('settings.censor.usEnglishOnly') }}
+          <i18n
+            path="settings.censor.censorProfaneLanguageDescription.text"
+            tag="span"
+          >
             <a
               place="seeThisList"
               href="https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words"
               target="_blank"
-            >{{$t('settings.censor.censorProfaneLanguageDescription.seeThisList')}}</a>
-            <router-link
-              place="useWordReplacements"
-              to="word-replacements"
-            >{{$t('settings.censor.censorProfaneLanguageDescription.useWordReplacements')}}</router-link>
+              >{{
+                $t(
+                  'settings.censor.censorProfaneLanguageDescription.seeThisList'
+                )
+              }}</a
+            >
+            <router-link place="useWordReplacements" to="word-replacements">{{
+              $t(
+                'settings.censor.censorProfaneLanguageDescription.useWordReplacements'
+              )
+            }}</router-link>
           </i18n>
         </p>
       </div>
       <p v-else class="mb-0 text-muted small mt-2">
-        Censorship is off. However, the speech-to-text service that Web Captioner runs on currently does not give an option to completely disable censorship. Web Captioner applies a heuristic to uncensor words that are returned from this service that still appear to be censored. If you are running into issues with words being censored even when censorship is off,
-        <a
-          href="https://feedback.webcaptioner.com/"
-        >leave feedback</a> or
+        Censorship is off. However, the speech-to-text service that Web
+        Captioner runs on currently does not give an option to completely
+        disable censorship. Web Captioner applies a heuristic to uncensor words
+        that are returned from this service that still appear to be censored. If
+        you are running into issues with words being censored even when
+        censorship is off,
+        <a href="https://feedback.webcaptioner.com/">leave feedback</a> or
         <a href="https://m.me/webcaptioner">contact Web Captioner</a>.
       </p>
     </transition>
     <div class="clearfix"></div>
-    <hr />
-    <!--
-    <div class="row">
-      <div class="col-md-4">
-        <label
-          for="adjust-speed-accuracy"
-          class="mb-0 form-group form-inline float-left"
-        >Adjust speed/accuracy</label>
+    <div v-if="$store.state.settings.exp.includes('captionSpeedSetting')">
+      <hr />
+      <label for="adjust-speed-accuracy" class="mb-2">
+        Caption speed
+      </label>
+      <div class="d-flex">
+        <div
+          class="small font-weight-bold text-right"
+          style="white-space: nowrap;"
+        >
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '0'"
+            style="transition: color 0.5s"
+            :class="{
+              'text-secondary': captionSpeed === '0',
+              'text-muted': captionSpeed !== '0',
+            }"
+          >
+            Real-time
+          </a>
+        </div>
+        <div class="mx-auto w-100 px-2">
+          <b-form-input
+            id="adjust-speed-accuracy"
+            v-model="captionSpeed"
+            type="range"
+            min="0"
+            max="2"
+            step="1"
+          ></b-form-input>
+        </div>
+        <div
+          class="small font-weight-bold text-left"
+          style="white-space: nowrap; "
+        >
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '2'"
+            style="transition: color 0.5s"
+            :class="{
+              'text-secondary': captionSpeed !== '0',
+              'text-muted': captionSpeed === '0',
+            }"
+          >
+            More accurate
+          </a>
+        </div>
       </div>
-      <div class="col-md-8">
-        <div class="d-flex">
-          <div class="small text-muted font-weight-bold text-right">More real-time captions</div>
-          <div class="form-group mx-auto w-100 px-2">
-            <b-form-input
-              id="adjust-speed-accuracy"
-              v-model="value"
-              type="range"
-              min="2000"
-              max="5000"
-              step="1000"
-            ></b-form-input>
-          </div>
-          <div class="small text-muted font-weight-bold text-left">More real-time captions</div>
+      <div class="row small">
+        <div class="col-6">
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '0'"
+            class="d-block"
+            style="text-decoration:none;transition: color 0.5s"
+            :class="{
+              'text-info': captionSpeed === '0',
+              'text-muted': captionSpeed !== '0',
+            }"
+          >
+            Words are displayed as soon as possible. The words on the screen may
+            change shortly after they are spoken while Web Captioner figures out
+            the context of the current phrase.
+          </a>
+        </div>
+        <div class="col-6 text-right">
+          <a
+            href="javascript:void(0)"
+            @click="captionSpeed = '2'"
+            class="d-block"
+            style="text-decoration:none;transition: color 0.5s"
+            :class="{
+              'text-info': captionSpeed !== '0',
+              'text-muted': captionSpeed === '0',
+            }"
+          >
+            <span v-if="captionSpeed === '0'">
+              Words are displayed after they remain unchanged for a period of
+              time.
+            </span>
+            <span v-else>
+              Words are displayed after they remain unchanged for
+              {{ $store.state.settings.stabilizedThresholdMs / 1000 }}
+              seconds.
+            </span>
+          </a>
         </div>
       </div>
     </div>
-    <div class="clearfix"></div>
-    <hr>
-    -->
-    <label for="show-volume-meter" class="mb-0">Show volume meter when volume level is low</label>
-    <b-form-checkbox id="show-volume-meter" v-model="volumeMeterShow" switch class="float-right"></b-form-checkbox>
+    <hr />
+    <label for="show-volume-meter" class="mb-0">
+      Show volume meter when volume level is low
+    </label>
+    <b-form-checkbox
+      id="show-volume-meter"
+      v-model="volumeMeterShow"
+      switch
+      class="float-right"
+    ></b-form-checkbox>
     <div class="clearfix"></div>
     <transition name="fade-in">
       <div class="form-inline small mt-1" v-if="volumeMeterShow">
@@ -96,7 +190,9 @@
     </transition>
     <div class="clearfix"></div>
     <hr />
-    <label for="large-navigation-bar-buttons" class="mb-0">Use large navigation bar buttons</label>
+    <label for="large-navigation-bar-buttons" class="mb-0">
+      Use large navigation bar buttons
+    </label>
     <b-form-checkbox
       id="large-navigation-bar-buttons"
       v-model="largerLayout"
@@ -105,10 +201,21 @@
     ></b-form-checkbox>
     <div class="clearfix"></div>
     <hr />
-    <label for="action-after-no-audio" class="mb-0 form-group form-inline float-left">
+    <label
+      for="action-after-no-audio"
+      class="mb-0 form-group form-inline float-left"
+    >
       After
-      <select class="form-control form-control-sm mx-2" v-model="afterNoAudioSeconds">
-        <option v-for="val in [1,2,3,4,5,10,20,30]" :key="val" :value="val">{{val}}</option>
+      <select
+        class="form-control form-control-sm mx-2"
+        v-model="afterNoAudioSeconds"
+      >
+        <option
+          v-for="val in [1, 2, 3, 4, 5, 10, 20, 30]"
+          :key="val"
+          :value="val"
+          >{{ val }}</option
+        >
       </select>
       <span v-if="afterNoAudioSeconds === 1">second&nbsp;</span>
       <span v-else>seconds&nbsp;</span>of no audio while captioning
@@ -129,10 +236,9 @@
     </div>
     <div class="clearfix"></div>
     <hr />
-    <label
-      for="always-autostart-on-load"
-      class="mb-0"
-    >Always automatically start captioning on page load</label>
+    <label for="always-autostart-on-load" class="mb-0"
+      >Always automatically start captioning on page load</label
+    >
     <b-form-checkbox
       id="always-autostart-on-load"
       v-model="alwaysAutostartOnLoad"
@@ -140,107 +246,125 @@
       class="float-right"
     ></b-form-checkbox>
     <div class="clearfix"></div>
-    <p
-      class="small mb-1 mt-1"
-    >You'll need to grant Web Captioner permission to use your microphone the first time, if you haven't already.</p>
+    <p class="small mb-1 mt-1">
+      You'll need to grant Web Captioner permission to use your microphone the
+      first time, if you haven't already.
+    </p>
     <p class="small mb-0">
       Alternatively, you can use this link to automatically start captions:
-      <a
-        :href="autostartURL"
-        target="_blank"
-      >{{autostartURL}}</a>
+      <a :href="autostartURL" target="_blank">{{ autostartURL }}</a>
     </p>
     <hr />
 
-    <h3 class="mt-5">{{$t('settings.controls.keyboardShortcuts')}}</h3>
+    <h3 class="mt-5" id="shortcuts">
+      {{ $t('settings.controls.keyboardShortcuts') }}
+    </h3>
     <div class="list-group mt-sm-3">
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.toggleCaptioning')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.toggleCaptioning') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd>w</kbd>
-            {{$t('settings.controls.then')}}
+            {{ $t('settings.controls.then') }}
             <kbd>c</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.toggleFullscreen')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.toggleFullscreen') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd>w</kbd>
-            {{$t('settings.controls.then')}}
+            {{ $t('settings.controls.then') }}
             <kbd>x</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.showNewWindow')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.showNewWindow') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd>w</kbd>
-            {{$t('settings.controls.then')}}
+            {{ $t('settings.controls.then') }}
             <kbd>n</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.openSettings')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.openSettings') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd>w</kbd>
-            {{$t('settings.controls.then')}}
+            {{ $t('settings.controls.then') }}
             <kbd>s</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.increaseTextSize')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.increaseTextSize') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd v-if="isMac">&#8984;</kbd>
-            <kbd v-else>{{$t('settings.controls.ctrl')}}</kbd> +
-            <kbd>{{$t('settings.controls.shift')}}</kbd> +
+            <kbd v-else>{{ $t('settings.controls.ctrl') }}</kbd> +
+            <kbd>{{ $t('settings.controls.shift') }}</kbd> +
             <kbd>&gt;</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.decreaseTextSize')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.decreaseTextSize') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd v-if="isMac">&#8984;</kbd>
-            <kbd v-else>{{$t('settings.controls.ctrl')}}</kbd> +
-            <kbd>{{$t('settings.controls.shift')}}</kbd> +
+            <kbd v-else>{{ $t('settings.controls.ctrl') }}</kbd> +
+            <kbd>{{ $t('settings.controls.shift') }}</kbd> +
             <kbd>&lt;</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.openSave')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.openSave') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd>w</kbd>
-            {{$t('settings.controls.then')}}
+            {{ $t('settings.controls.then') }}
             <kbd>f</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.clearTranscript')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.clearTranscript') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd>w</kbd>
-            {{$t('settings.controls.then')}}
+            {{ $t('settings.controls.then') }}
             <kbd>p</kbd>
-            {{$t('settings.controls.then')}}
+            {{ $t('settings.controls.then') }}
             <kbd>p</kbd>
           </div>
         </div>
       </div>
       <div class="list-group-item">
         <div class="row">
-          <div class="col-sm-6 mb-1 mb-sm-0">{{$t('settings.controls.listKeyboardShortcuts')}}</div>
+          <div class="col-sm-6 mb-1 mb-sm-0">
+            {{ $t('settings.controls.listKeyboardShortcuts') }}
+          </div>
           <div class="col-sm-6 text-sm-right">
             <kbd>?</kbd>
           </div>
@@ -251,24 +375,7 @@
 </template>
 
 <script>
-import bBtn from 'bootstrap-vue/es/components/button/button';
-import bFormInput from 'bootstrap-vue/es/components/form-input/form-input';
-import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
-import bListGroup from 'bootstrap-vue/es/components/list-group/list-group';
-import bListGroupItem from 'bootstrap-vue/es/components/list-group/list-group-item';
-import bNavbar from 'bootstrap-vue/es/components/navbar/navbar';
-import bDropdown from 'bootstrap-vue/es/components/dropdown/dropdown';
-
 export default {
-  components: {
-    bBtn,
-    bFormInput,
-    bFormCheckbox,
-    bListGroup,
-    bListGroupItem,
-    bNavbar,
-    bDropdown,
-  },
   middleware: ['settings-meta'],
   meta: {
     settingsPageTitleKey: 'settings.general',
@@ -322,6 +429,39 @@ export default {
       },
       set(censor) {
         this.$store.commit('SET_CENSOR', { censor });
+      },
+    },
+    captionSpeed: {
+      get() {
+        switch (this.$store.state.settings.stabilizedThresholdMs) {
+          case 0:
+            return '0';
+          case 500:
+            return '1';
+          case 2000:
+            return '2';
+          default:
+            return '0';
+        }
+      },
+      set(captionSpeed) {
+        let stabilizedThresholdMs;
+        switch (captionSpeed) {
+          case '0':
+            stabilizedThresholdMs = 0;
+            break;
+          case '1':
+            stabilizedThresholdMs = 500;
+            break;
+          case '2':
+            stabilizedThresholdMs = 2000;
+            break;
+          default:
+            stabilizedThresholdMs = 0;
+        }
+        this.$store.commit('SET_STABILIZED_THRESHOLD_MS', {
+          stabilizedThresholdMs,
+        });
       },
     },
     censorReplaceWith: {

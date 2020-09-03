@@ -300,7 +300,7 @@ export default {
       zoom: 'Zoom',
     },
     exportRestore: {
-      exportRestoreSettings: 'Export/Restore Settings',
+      exportRestoreSettings: 'Export and Restore Settings',
       restore: 'Restore',
       restoreDescription:
         'Restore settings (appearance, censor settings, word replacements, vMix settings, etc.) from a settings file you previously exported.',

@@ -2,7 +2,7 @@
   <div
     id="app"
     class="w-100"
-    style="display: flex;flex-direction: column;height: 100vh;"
+    style="display: flex; flex-direction: column; height: 100vh;"
   >
     <nuxt-child />
     <incompatible-browser-modal ref="incompatibleBrowserModal" />
@@ -41,6 +41,7 @@ import { getCurrentVersionNumber } from '~/mixins/settingsNormalizer.js';
 import versionSort from 'semver-compare';
 import '~/components/_globals';
 import { BToast, BToaster } from 'bootstrap-vue';
+import channels from '~/plugins/channels';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -102,7 +103,7 @@ export default {
         })
         .bind('?', () => {
           if (!this.typingModeOn) {
-            this.$router.push('/captioner/settings/controls');
+            this.$router.push('/captioner/settings/general#shortcuts');
           }
         })
         .bind('w x', () => {
@@ -197,71 +198,31 @@ export default {
       return false;
     }
 
+    const isEdge = () => {
+      return navigator.userAgent && /(Edg\/|Edge)/.test(navigator.userAgent);
+    };
+
+    const isChromeiOS = () => {
+      return navigator.userAgent && navigator.userAgent.match('CriOS');
+    };
+
     if (
       (!('webkitSpeechRecognition' in window) ||
         navigator.userAgent.indexOf('Opera') !== -1 ||
-        isChromium()) &&
+        isChromium() ||
+        isEdge() ||
+        isChromeiOS()) &&
       !window.Cypress
     ) {
       this.$store.commit('SET_INCOMPATIBLE_BROWSER_ON');
       this.$store.dispatch('SHOW_INCOMPATIBLE_BROWSER_MODAL');
     }
 
-    this.$nextTick(() => {
-      this.refreshVmixStatus();
-    });
-
     let lastWebhookEventDate = 0;
-    let sequence = 0;
-    let callWebhook = ({ url, method, transcript }) => {
-      transcript = (transcript || '').toUpperCase();
-
-      fetch(url, {
-        method,
-        mode: 'cors',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({ transcript, sequence }),
-      })
-        .then((response) => {
-          response.text().then(() => {
-            this.$store.commit('APPEND_WEBHOOK_LOG', {
-              event: {
-                type: 'receive',
-                title: response.status + ' ' + response.statusText,
-                error: response.status >= 300,
-              },
-            });
-          });
-        })
-        .catch((error) => {
-          this.$store.commit('APPEND_WEBHOOK_LOG', {
-            event: {
-              type: 'receive',
-              title: error.message,
-              error: true,
-            },
-          });
-        });
-      sequence++;
-    };
 
     RemoteEventBus.$on(
       'sendMutationToReceivers',
       async ({ mutation, payload }) => {
-        if (
-          this.$store.state.settings.integrations.webhooks.on &&
-          mutation === 'captioner/APPEND_TRANSCRIPT_STABILIZED'
-        ) {
-          callWebhook({
-            url: this.$store.state.settings.integrations.webhooks.url,
-            method: this.$store.state.settings.integrations.webhooks.method,
-            transcript: payload ? payload.transcript : '',
-          });
-          lastWebhookEventDate = Date.now();
-        }
-
         if (
           mutation === 'captioner/SET_TRANSCRIPT_INTERIM' &&
           Date.now() - lastWebhookEventDate >= 100
@@ -317,22 +278,6 @@ export default {
             });
           }
         }
-        if (
-          [
-            'captioner/APPEND_TRANSCRIPT_FINAL',
-            'captioner/SET_CAPTIONER_OFF',
-            'captioner/APPEND_TRANSCRIPT_STABILIZED',
-          ].includes(mutation) &&
-          this.$store.state.settings.integrations.dropbox.accessToken &&
-          this.$store.state.captioner.transcript.final
-        ) {
-          if ('captioner/SET_CAPTIONER_OFF' === mutation) {
-            // immediate
-            this.$store.dispatch('SAVE_TO_DROPBOX');
-          } else {
-            this.saveToDropboxThrottled();
-          }
-        }
 
         if (
           [
@@ -361,102 +306,6 @@ export default {
         }
       }
     );
-
-    // Zoom integration
-    let zoomTranscriptBuffer = [];
-    let zoomTranscriptCurrentlyDisplayed = [];
-    const zoomMaxCharactersPerLine = 40;
-    this.$store.subscribe((mutation, state) => {
-      if (
-        this.$store.state.settings.integrations.zoom.on &&
-        this.$store.state.settings.integrations.zoom.url &&
-        [
-          'captioner/APPEND_TRANSCRIPT_STABILIZED',
-          'captioner/APPEND_TRANSCRIPT_FINAL',
-          'captioner/CLEAR_TRANSCRIPT',
-        ].includes(mutation.type)
-      ) {
-        if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
-          zoomTranscriptBuffer.push(mutation.payload.transcript);
-        } else if (
-          (mutation.type === 'captioner/APPEND_TRANSCRIPT_FINAL' &&
-            mutation.payload.clearLimitedSpaceReceivers) ||
-          mutation.type === 'captioner/CLEAR_TRANSCRIPT'
-        ) {
-          // Clear the output (this doesn't work completely yet)
-          zoomTranscriptBuffer = ['\n', '\n'];
-        }
-      }
-    });
-
-    setInterval(() => {
-      if (!zoomTranscriptBuffer.length) {
-        return;
-      }
-
-      // Consume the buffer
-      zoomTranscriptCurrentlyDisplayed.push(...zoomTranscriptBuffer);
-      zoomTranscriptBuffer = [];
-
-      let apiPath = new URL(this.$store.state.settings.integrations.zoom.url);
-      apiPath.searchParams.append(
-        'seq',
-        this.$store.state.settings.integrations.zoom.lastSequenceNumber
-      );
-      apiPath.searchParams.append(
-        'lang',
-        this.$store.state.settings.locale.from || 'en-US'
-      );
-
-      // Add line breaks if necessary
-      const firstWordAfterLastLineBreakIndex =
-        zoomTranscriptCurrentlyDisplayed.lastIndexOf('\n') + 1; // or this may be '0' if there are no line breaks yet
-      for (
-        let i = firstWordAfterLastLineBreakIndex;
-        i < zoomTranscriptCurrentlyDisplayed.length;
-        i++
-      ) {
-        // Check the length by adding one more word at a time
-        // up to but not including last
-        const someWordsAfterLastLineBreak = zoomTranscriptCurrentlyDisplayed.slice(
-          firstWordAfterLastLineBreakIndex,
-          i + 1
-        );
-
-        if (
-          someWordsAfterLastLineBreak.join(' ').length >
-          zoomMaxCharactersPerLine
-        ) {
-          // Add a line break before the `i`th word
-          zoomTranscriptCurrentlyDisplayed.splice(i, 0, '\n');
-          break;
-        }
-      }
-
-      // Enforce two lines max by removing content before the
-      // first line break if we now have two line breaks
-      if (
-        zoomTranscriptCurrentlyDisplayed.filter((word) => word === '\n')
-          .length >= 2
-      ) {
-        const firstLineBreakIndex = zoomTranscriptCurrentlyDisplayed.findIndex(
-          (word) => word === '\n'
-        );
-
-        zoomTranscriptCurrentlyDisplayed.splice(0, firstLineBreakIndex + 1);
-      }
-
-      const transcript = zoomTranscriptCurrentlyDisplayed
-        .join(' ')
-        .replace(' \n ', '\n') // remove spaces around line breaks
-        .trim();
-
-      this.$axios.$post('/api/zoom/api', {
-        apiPath,
-        transcript,
-      });
-      this.$store.commit('INCREMENT_ZOOM_SEQUENCE_NUMBER');
-    }, 1000);
   },
   watch: {
     socketConnected: function() {
@@ -472,22 +321,9 @@ export default {
     $route(toRoute) {
       this.redirectSettingsRouteOnMobile(toRoute.name);
     },
-    captioningShouldBeOn: function(shouldBeOn) {
-      if (shouldBeOn) {
-        this.refreshVmixStatus();
-      }
-    },
     incompatibleBrowserModalVisible: function() {
       if (this.incompatibleBrowserModalVisible) {
         this.$refs.incompatibleBrowserModal.showModal();
-      }
-    },
-    transcript: function() {
-      if (this.vmixOn) {
-        this.$store.dispatch('SEND_TO_VMIX', {
-          text: this.transcript,
-          chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
-        });
       }
     },
     microphonePermissionNeeded: function() {
@@ -525,6 +361,17 @@ export default {
         }
       },
       deep: true,
+    },
+    '$store.state.settings.channels': {
+      immediate: true,
+      deep: true,
+      handler() {
+        channels.updateRegistrations({
+          $store: this.$store,
+          $socket: this.$socket,
+          $axios: this.$axios,
+        });
+      },
     },
   },
   beforeDestroy: function() {
@@ -580,9 +427,6 @@ export default {
     settingsLoaded: function() {
       return this.$store.state.settingsLoaded;
     },
-    vmixOn: function() {
-      return this.$store.state.settings.integrations.vmix.on;
-    },
   },
   methods: {
     startCaptioning: function() {
@@ -596,25 +440,10 @@ export default {
       // doing a redirection based on screen width.
       // xs screen size has a standalone settings menu.
       if (
-        currentName.indexOf('captioner-settings___') === 0 && // Route name starts with that
+        currentName?.indexOf('captioner-settings___') === 0 && // Route name starts with that
         window.outerWidth > 575
       ) {
         this.$router.replace(this.localePath('captioner-settings-general'));
-      }
-    },
-    refreshVmixStatus: function() {
-      if (this.vmixOn) {
-        this.$store
-          .dispatch('REFRESH_VMIX_SETUP_STATUS', {
-            chromeExtensionId: this.$env.CHROME_EXTENSION_ID,
-          })
-          .then(() => {
-            if (!this.$store.state.integrations.vmix.cachedInputGUID) {
-              this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
-                on: true,
-              });
-            }
-          });
       }
     },
     initRoom: function() {
@@ -646,11 +475,6 @@ export default {
           // They are signed in
           // Load settings from Firestore
           this.$store.dispatch('RESTORE_SETTINGS_FROM_FIRESTORE');
-          // Don't do this because it triggers an unnecessary save. Not sure
-          // what the solution is though if we need to do this.
-          // .then(() => {
-          //   return this.$store.dispatch('SET_LOCALE_FROM_USER_DEFAULT');
-          // });
         } else {
           // Not signed in
           // Load settings from localstorage
@@ -690,9 +514,6 @@ export default {
         { deep: true }
       );
     },
-    saveToDropboxThrottled: throttle(function() {
-      this.$store.dispatch('SAVE_TO_DROPBOX');
-    }, 1000 * 30),
   },
 };
 </script>

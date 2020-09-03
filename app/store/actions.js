@@ -3,15 +3,8 @@ import supportedLocales from '~/mixins/data/locales';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
 import ChromelessWindowManager from '~/mixins/ChromelessWindowManager';
 import get from 'lodash.get';
-import vmixSetup from '~/mixins/vmixSetup';
 import throttle from 'lodash.throttle';
 import { normalizeSettings } from '~/mixins/settingsNormalizer';
-
-import axios from 'axios';
-
-function getVmixPath(webControllerAddress) {
-  return (webControllerAddress || '').trim().replace(/\/$/, '') + '/API';
-}
 
 var saveSettingsToFirestore = throttle((state, db) => {
   db.collection('users')
@@ -95,7 +88,6 @@ export default {
             dispatch('SAVE_SETTINGS_TO_FIRESTORE');
           } else {
             // Not their first sign in.
-            dispatch('RESTORE_SETTINGS_FROM_FIRESTORE');
           }
         } else {
           // User is signed out/not signed in
@@ -288,6 +280,13 @@ export default {
       });
 
       commitPropertySetting('SET_CENSOR', 'censor', 'censor.on');
+
+      commitPropertySetting(
+        'SET_STABILIZED_THRESHOLD_MS',
+        'stabilizedThresholdMs',
+        'stabilizedThresholdMs'
+      );
+
       commitPropertySetting(
         'SET_CENSOR_REPLACE_WITH',
         'replaceWith',
@@ -362,52 +361,7 @@ export default {
         'roomMembershipId'
       );
 
-      commitPropertySetting(
-        'SET_DROPBOX_ACCESS_TOKEN',
-        'accessToken',
-        'integrations.dropbox.accessToken'
-      );
-      commitPropertySetting(
-        'SET_DROPBOX_ACCOUNT_ID',
-        'accountId',
-        'integrations.dropbox.accountId'
-      );
-
-      commitPropertySetting('SET_SEND_TO_VMIX', 'on', 'integrations.vmix.on');
-      commitPropertySetting(
-        'SET_VMIX_WEB_CONTROLLER_ADDRESS',
-        'webControllerAddress',
-        'integrations.vmix.webControllerAddress'
-      );
-
-      commitPropertySetting(
-        'SET_WEBHOOKS_ON',
-        'onOrOff',
-        'integrations.webhooks.on'
-      );
-      commitPropertySetting(
-        'SET_WEBHOOKS_URL',
-        'url',
-        'integrations.webhooks.url'
-      );
-      commitPropertySetting(
-        'SET_WEBHOOKS_METHOD',
-        'method',
-        'integrations.webhooks.method'
-      );
-      commitPropertySetting(
-        'SET_WEBHOOKS_THROTTLE_MS',
-        'throttleMs',
-        'integrations.webhooks.throttleMs'
-      );
-
-      commitPropertySetting('SET_ZOOM_ON', 'onOrOff', 'integrations.zoom.on');
-      commitPropertySetting('SET_ZOOM_URL', 'url', 'integrations.zoom.url');
-      commitPropertySetting(
-        'SET_ZOOM_LAST_SEQUENCE_NUMBER',
-        'lastSequenceNumber',
-        'integrations.zoom.lastSequenceNumber'
-      );
+      commitPropertySetting('SET_CHANNELS', 'channels', 'channels');
 
       commitPropertySetting(
         'SET_DONATION_DATE',
@@ -451,7 +405,6 @@ export default {
         .then(function(document) {
           if (document.exists) {
             const data = document.data();
-
             const settings = normalizeSettings({
               localStorageData: {
                 settings: data,
@@ -502,7 +455,6 @@ export default {
 
       const settings = normalizeSettings({
         localStorageData: localStorageParsed,
-        fromVersionNumber: localStorageParsed.version,
       });
 
       if (!settings) {
@@ -547,201 +499,6 @@ export default {
     setTimeout(function() {
       commit('SET_INCOMPATIBLE_BROWSER_MODAL_INVISIBLE');
     }, 1000);
-  },
-
-  REFRESH_VMIX_SETUP_STATUS: (
-    { commit, dispatch, state },
-    { chromeExtensionId }
-  ) => {
-    eventLogger(commit, state, {
-      action: 'REFRESH_VMIX_SETUP_STATUS',
-    });
-
-    let {
-      checkIfExtensionInstalled,
-      testWebControllerConnectivity,
-      sendMessage,
-    } = vmixSetup;
-
-    function getConnectionTimeoutPromise() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(false);
-        }, 2000);
-      });
-    }
-
-    let extensionCheck = checkIfExtensionInstalled(chromeExtensionId).then(
-      function(installed) {
-        commit('SET_VMIX_CHROME_EXTENSION_INSTALLED', {
-          installed,
-        });
-      }
-    );
-
-    let testConnection = new Promise((resolve, reject) => {
-      testWebControllerConnectivity(
-        getVmixPath(state.settings.integrations.vmix.webControllerAddress),
-        chromeExtensionId
-      ).then(function(connected) {
-        resolve(connected);
-      });
-    });
-
-    let testVmixTemplate = new Promise((resolve, reject) => {
-      // Reset GUID
-      commit('SET_VMIX_CACHED_INPUT_GUID', {
-        guid: null,
-      });
-
-      sendMessage(
-        getVmixPath(state.settings.integrations.vmix.webControllerAddress),
-        chromeExtensionId
-      ).then(function(response) {
-        if (!response || (response && !response.text)) {
-          return resolve(false);
-        }
-
-        let xml = response.text,
-          textElement;
-
-        // There is an <input></input> element in vMix's response that isn't a proper
-        // <input> element. The browser automatically interprets it as a self-closing
-        // <input> tag. We need to rename it to something unique so we can get its children.
-        xml = xml
-          .replace(/<input /gi, '<webcaptioner-vmix-input ')
-          .replace(/\<\/input\>/gi, '</webcaptioner-vmix-input>');
-
-        try {
-          const parser = new DOMParser();
-          const xmlDOM = parser.parseFromString(xml, 'application/xml');
-          textElement = xmlDOM.querySelector(
-            'text[name="WebCaptionerCaptions"]'
-          );
-        } catch (e) {
-          // Unable to parse
-          resolve(false);
-        }
-
-        // Timeout is totally unnecessary here. It usually resolves instantly, but that seems
-        // to lead to some confusion on whether it really checked or not -- so introduce a short
-        // artifical delay.
-        setTimeout(function() {
-          if (textElement) {
-            let parent = textElement.parentElement;
-            commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
-              on: false,
-            });
-            resolve(parent.getAttribute('key'));
-          } else {
-            resolve(false);
-          }
-        }, 200);
-      });
-    });
-
-    let testConnectionWithTimeout = Promise.race([
-      testConnection,
-      getConnectionTimeoutPromise(),
-    ]).then((connected) => {
-      commit('SET_VMIX_WEB_CONTROLLER_CONNECTED', {
-        connected,
-      });
-    });
-
-    let testVmixTemplateWithTimeout = Promise.race([
-      testVmixTemplate,
-      getConnectionTimeoutPromise(),
-    ]).then((guid) => {
-      if (guid) {
-        commit('SET_VMIX_CACHED_INPUT_GUID', {
-          guid,
-        });
-      }
-    });
-
-    return Promise.all([
-      extensionCheck,
-      testConnectionWithTimeout,
-      testVmixTemplateWithTimeout,
-    ]);
-  },
-
-  SAVE_TO_DROPBOX: ({ state, commit }) => {
-    if (!state.captioner.transcript.final) {
-      return;
-    }
-
-    let sessionStartDate = state.integrations.storage.sessionStartDate;
-    if (!sessionStartDate) {
-      commit('INIT_STORAGE_SESSION_DATE');
-      sessionStartDate = state.integrations.storage.sessionStartDate;
-    }
-
-    // I wrote this logic to allow for appending to an existing file in Dropbox
-    // and then discovered that Dropbox doesn't currently provide an API for appending
-    // to an existing file. Left this logic intact (untested though)
-
-    // const lastSyncDateTimestamp = state.integrations.storage.lastStabilizedTranscriptSyncDate ?
-    //   state.integrations.storage.lastStabilizedTranscriptSyncDate.getTime() :
-    //   0,
-    //   now = new Date(),
-    //   nowTimestamp = now.getTime();
-
-    // Get transcript with timings since the last sync date
-    // const transcriptWithTimingsToSync = state.captioner.transcript.stabilizedWithTimings.filter(i =>
-    //   i.time >= lastSyncDateTimestamp && i.time <= nowTimestamp);
-
-    axios.post('/api/storage/dropbox/push', {
-      accessToken: state.settings.integrations.dropbox.accessToken,
-      sessionStartDate,
-      contents: {
-        text: state.captioner.transcript.final,
-        ...(state.settings.exp.includes('saveTranscriptWithTimingsToDropbox')
-          ? {
-              timings: state.captioner.transcript.stabilizedWithTimings,
-            }
-          : {}),
-        // timings: JSON.stringify(transcriptWithTimingsToSync),
-      },
-    });
-
-    // commit('UPDATE_LAST_STABILIZED_TRANSCRIPT_SYNC_DATE', {
-    //   date: now
-    // });
-  },
-
-  SEND_TO_VMIX: ({ state, commit }, { text, chromeExtensionId }) => {
-    eventLogger(commit, state, {
-      action: 'SEND_TO_VMIX',
-      payload: {
-        text,
-      },
-    });
-    let inputGUID = state.integrations.vmix.cachedInputGUID;
-
-    if (!inputGUID) {
-      commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
-        on: true,
-      });
-      return;
-    }
-
-    let { sendMessage } = vmixSetup;
-    sendMessage(
-      getVmixPath(state.settings.integrations.vmix.webControllerAddress) +
-        '/?Function=SetText&Input=' +
-        inputGUID +
-        '&SelectedName=WebCaptionerCaptions&Value=' +
-        encodeURIComponent(text.slice(-1000)),
-      chromeExtensionId
-    ).then(function(response) {
-      if (!response && !response.success) {
-        commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', {
-          on: true,
-        });
-      }
-    });
   },
 
   START_SUPPORT_POPUP: ({ rootState }) => {

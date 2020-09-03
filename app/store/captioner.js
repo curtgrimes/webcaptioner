@@ -459,10 +459,7 @@ export const actions = {
     }
   },
 
-  cursorThroughTranscript({ state, commit }) {
-    // word must be unchaged for this many MS before being considered stable
-    let stabilizedThresholdMs = 2500;
-
+  cursorThroughTranscript({ state, rootState, commit }) {
     if (!cursorInterval) {
       cursorInterval = setInterval(() => {
         const now = Date.now();
@@ -480,7 +477,7 @@ export const actions = {
             if (
               now >
               state.transcript.cursorable[i][j].firstSeen +
-                stabilizedThresholdMs
+                Math.max(rootState.settings.stabilizedThresholdMs, 500) // hardcoded minimum
             ) {
               // This word is stable
               Vue.set(state.transcript.cursorable[i][j], 'stable', true);

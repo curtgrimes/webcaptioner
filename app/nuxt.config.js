@@ -67,7 +67,7 @@ module.exports = {
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css?family=Cousine:400,700|Source+Sans+Pro:400,700',
+          'https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&family=Inter:wght@400;700;900&display=swap',
       },
     ],
   },
@@ -152,10 +152,17 @@ module.exports = {
               'faDesktop',
               'faExternalLinkAlt',
               'faSave',
+              'faSyncAlt',
               'faTrashAlt',
               'faCog',
+              'faPaintBrush',
+              'faGlobeAsia',
+              'faFileDownload',
               'faCheckCircle',
+              'faCheck',
               'faSpinner',
+              'faLink',
+              'faPlug',
               'faCircleNotch',
               'faChevronLeft',
               'faChevronDown',
@@ -164,6 +171,7 @@ module.exports = {
               'faMinusCircle',
               'faPlusCircle',
               'faPlus',
+              'faSatelliteDish',
               'faMinus',
               'faCommentAlt',
               'faArrowLeft',
@@ -181,6 +189,8 @@ module.exports = {
               'faToggleOn',
               'faToggleOff',
               'faEllipsisV',
+              'faEye',
+              'faEyeSlash',
             ],
           },
           {
@@ -203,6 +213,7 @@ module.exports = {
         ],
       },
     ],
+    ['bootstrap-vue/nuxt'],
   ],
   plugins: [
     {
@@ -213,8 +224,8 @@ module.exports = {
       src: '~/plugins/firebase.js',
       mode: 'client',
     },
-    '~/plugins/vue-timeago',
-    '~/plugins/performance.js',
+    { src: '~/plugins/vue-timeago' },
+    { src: '~/plugins/performance.js' },
   ],
   sentry: {
     public_key: 'REMOVED',
@@ -263,15 +274,9 @@ module.exports = {
     },
   },
   hooks(hook) {
-    hook('modules:before', (nuxt) => {
-      // https://github.com/nuxt/nuxt.js/pull/6026#issuecomment-519030254
-      nuxt.options.devModules = nuxt.options.devModules.filter(
-        (name) => name !== '@nuxt/loading-screen'
-      );
+    hook('listen', (server) => {
+      wsServer.createSocket(server);
     }),
-      hook('listen', (server) => {
-        wsServer.createSocket(server);
-      }),
       hook('render:setupMiddleware', (app) => {
         app.use('/health-check', healthCheckMiddleware);
 

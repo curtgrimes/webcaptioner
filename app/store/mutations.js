@@ -1,4 +1,6 @@
+import Vue from 'vue';
 import CircularJson from 'circular-json';
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   SET_SETTINGS_PAGE_TITLE: (state, { settingsPageTitle }) => {
@@ -181,6 +183,10 @@ export default {
     state.settings.censor.replaceWith = replaceWith;
   },
 
+  SET_STABILIZED_THRESHOLD_MS: (state, { stabilizedThresholdMs }) => {
+    state.settings.stabilizedThresholdMs = stabilizedThresholdMs;
+  },
+
   SET_AFTER_NO_AUDIO_SECONDS: (state, { seconds }) => {
     state.settings.afterNoAudio.seconds = seconds;
   },
@@ -294,78 +300,110 @@ export default {
     state.delayedEvents = [];
   },
 
-  SET_DROPBOX_ACCESS_TOKEN: (state, { accessToken }) => {
-    state.settings.integrations.dropbox.accessToken = accessToken;
+  SET_CHANNELS: (state, { channels }) => {
+    state.settings.channels = channels;
   },
-  SET_DROPBOX_ACCOUNT_ID: (state, { accountId }) => {
-    state.settings.integrations.dropbox.accountId = accountId;
+
+  ADD_CHANNEL: (state, { type, parameters }) => {
+    const newChannel = {
+      id: uuidv4(),
+      type,
+      on: true,
+      parameters,
+    };
+    state.settings.channels.push(newChannel);
+    return newChannel;
   },
+
+  UPDATE_CHANNEL: (state, { channelId, parameters }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+    if (channelIndexToUpdate >= 0) {
+      state.settings.channels[channelIndexToUpdate].parameters = parameters;
+      state.settings.channels[channelIndexToUpdate].error = null;
+
+      if (!state.settings.channels.find((channel) => channel.error)) {
+        // After this update, no channels have any errors, so turn off this flag
+        state.channels.unseenErrorExists = false;
+      }
+    } else {
+      throw new Error(
+        'Sorry, unable to save channel. That channel could not be found. Try creating it again.'
+      );
+    }
+  },
+
+  TOGGLE_CHANNEL_ON_OR_OFF: (state, { channelId, onOrOff }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+
+    if (channelIndexToUpdate >= 0) {
+      Vue.set(state.settings.channels[channelIndexToUpdate], 'on', onOrOff);
+    }
+  },
+
+  TURN_ON_CHANNEL: (state, { channelId }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+
+    if (channelIndexToUpdate >= 0) {
+      Vue.set(state.settings.channels[channelIndexToUpdate], 'on', true);
+    }
+  },
+
+  TURN_OFF_CHANNEL: (state, { channelId }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+
+    if (channelIndexToUpdate >= 0) {
+      Vue.set(state.settings.channels[channelIndexToUpdate], 'on', false);
+    }
+  },
+
+  UPDATE_CHANNEL_ERROR: (state, { channelId, error }) => {
+    const channelIndexToUpdate = state.settings.channels.findIndex(
+      (c) => c.id === channelId
+    );
+    if (channelIndexToUpdate >= 0) {
+      state.settings.channels[channelIndexToUpdate].error = error;
+
+      if (state.settings.channels.find((channel) => channel.error)) {
+        // At least one channel has an error after this update
+        state.channels.unseenErrorExists = true;
+      } else {
+        state.channels.unseenErrorExists = false;
+      }
+    }
+  },
+
+  SET_CHANNEL_ERRORS_SEEN: (state) => {
+    state.channels.unseenErrorExists = false;
+  },
+
+  DELETE_CHANNEL: (state, { channelId }) => {
+    const channelIndexToDelete = state.settings.channels.findIndex(
+      (channel) => channel.id === channelId
+    );
+
+    if (channelIndexToDelete >= 0) {
+      // Found a chanel to replace
+      state.settings.channels.splice(channelIndexToDelete, 1);
+    }
+  },
+
+  SET_CHANNELS_PAGE_MESSAGE: (state, { message }) => {
+    state.channels.channelsPageMessage = message;
+  },
+
   INIT_STORAGE_SESSION_DATE: (state) => {
     state.integrations.storage.sessionStartDate = new Date();
   },
   UPDATE_LAST_STABILIZED_TRANSCRIPT_SYNC_DATE: (state, { date }) => {
     state.integrations.storage.lastStabilizedTranscriptSyncDate = date;
-  },
-
-  SET_SEND_TO_VMIX: (state, { on }) => {
-    state.settings.integrations.vmix.on = on;
-  },
-  SET_VMIX_WEB_CONTROLLER_ADDRESS: (state, { webControllerAddress }) => {
-    state.settings.integrations.vmix.webControllerAddress = webControllerAddress;
-  },
-  SET_VMIX_CHROME_EXTENSION_INSTALLED: (state, { installed }) => {
-    state.integrations.vmix.chromeExtensionInstalled = Boolean(installed);
-  },
-  SET_VMIX_WEB_CONTROLLER_CONNECTED: (state, { connected }) => {
-    state.integrations.vmix.webControllerConnected = Boolean(connected);
-  },
-  RESET_WEB_CONTROLLER_CONNECTED_STATUS: (state) => {
-    state.integrations.vmix.webControllerConnected = null;
-  },
-  SET_VMIX_CACHED_INPUT_GUID: (state, { guid }) => {
-    state.integrations.vmix.cachedInputGUID = guid;
-  },
-  SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE: (state, { on }) => {
-    state.integrations.vmix.showNotFullySetUpMessage = on;
-  },
-
-  SET_WEBHOOKS_ON: (state, { onOrOff }) => {
-    state.settings.integrations.webhooks.on = onOrOff;
-  },
-  SET_WEBHOOKS_URL: (state, { url }) => {
-    state.settings.integrations.webhooks.url = url;
-  },
-  SET_WEBHOOKS_METHOD: (state, { method }) => {
-    // Should be one of this set of options; otherwise set default
-    let methodValidated = ['POST', 'PUT'].includes(method) ? method : 'POST';
-    state.settings.integrations.webhooks.method = methodValidated;
-  },
-  SET_WEBHOOKS_THROTTLE_MS: (state, { throttleMs }) => {
-    let throttleMsValidated = Number(throttleMs);
-    if (Number.isNaN(throttleMsValidated)) {
-      throttleMsValidated = 0;
-    }
-    if (throttleMsValidated > 60000) {
-      throttleMsValidated = 60000;
-    }
-
-    state.settings.integrations.webhooks.throttleMs = throttleMsValidated;
-  },
-  APPEND_WEBHOOK_LOG: (state, { event }) => {
-    state.integrations.webhooks.log.push(event);
-  },
-
-  SET_ZOOM_ON: (state, { onOrOff }) => {
-    state.settings.integrations.zoom.on = onOrOff;
-  },
-  SET_ZOOM_URL: (state, { url }) => {
-    state.settings.integrations.zoom.url = url;
-  },
-  SET_ZOOM_LAST_SEQUENCE_NUMBER: (state, { lastSequenceNumber }) => {
-    state.settings.integrations.zoom.lastSequenceNumber = lastSequenceNumber;
-  },
-  INCREMENT_ZOOM_SEQUENCE_NUMBER: (state) => {
-    state.settings.integrations.zoom.lastSequenceNumber++;
   },
 
   SET_EVENT_LOG: (state, { eventLog }) => {

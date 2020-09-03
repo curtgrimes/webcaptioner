@@ -5,10 +5,8 @@
   src: url('~static/redacted-regular.ttf');
 }
 
-$font-family-sans-serif: 'Source Sans Pro',
-sans-serif;
-$headings-font-family: 'Cousine',
-monopsace;
+$font-family-sans-serif: 'Inter', sans-serif;
+$headings-font-family: $font-family-sans-serif;
 $headings-font-weight: 700;
 
 $h3-font-size: 1.25rem;
@@ -16,16 +14,17 @@ $h4-font-size: 1.25rem;
 $h5-font-size: 1rem;
 $h6-font-size: 0.75rem;
 
-$theme-colors: (primary: #ffe200,
-secondary: #274de6,
-success: #39ad53,
-info: #000,
-warning: #ffc107,
-// $yellow
-danger: #e83f6f,
-light: #f4f4f4,
-lighter: #fafafa,
-dark: #292b2c,
+$theme-colors: (
+  primary: #ffe200,
+  secondary: #274de6,
+  success: #39ad53,
+  info: #000,
+  warning: #ffc107,
+  // $yellow
+    danger: #e83f6f,
+  light: #f4f4f4,
+  lighter: #fafafa,
+  dark: #292b2c,
 ) !default;
 
 $link-color: theme-color('secondary');
@@ -61,14 +60,16 @@ $navbar-light-color: #000;
 $navbar-light-hover-color: inherit;
 
 $nav-tabs-border-color: $modal-header-border-color;
-$nav-tabs-link-active-border-color: $modal-header-border-color $modal-header-border-color rgba(0, 0, 0, 0);
-$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%) lighten($modal-header-border-color, 5%) rgba(0, 0, 0, 0);
+$nav-tabs-link-active-border-color: $modal-header-border-color
+  $modal-header-border-color rgba(0, 0, 0, 0);
+$nav-tabs-link-hover-border-color: lighten($modal-header-border-color, 5%)
+  lighten($modal-header-border-color, 5%) rgba(0, 0, 0, 0);
 $nav-tabs-link-active-color: #000;
 $nav-tabs-link-active-bg: theme-color('primary');
 $nav-tabs-active-link-hover-bg: theme-color('primary');
 
-$nav-pills-link-active-color: #fff;
-$nav-pills-link-active-bg: theme-color('info');
+$nav-pills-link-active-bg: darken(theme-color('primary'), 5%);
+$nav-pills-link-active-color: #000;
 
 $list-group-bg: #fff;
 $list-group-hover-bg: darken($list-group-bg, 5%);
@@ -80,9 +81,10 @@ $list-group-action-active-bg: darken(theme-color('secondary'), 10%);
 $thumbnail-bg: theme-color('primary');
 $thumbnail-border-color: $modal-header-border-color;
 
-$container-max-widths: (sm: 540px,
-md: 860px,
-lg: 910px,
+$container-max-widths: (
+  sm: 540px,
+  md: 860px,
+  lg: 910px,
 );
 
 $pagination-active-bg: theme-color('secondary');
@@ -143,29 +145,18 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 
 @import 'bootstrap-vue/src/index.scss';
 
+h1,
+h2,
+.h1,
+.h2 {
+  font-weight: 900;
+}
+
 .logo-text {
   font-family: $headings-font-family;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.5rem;
-}
-
-h1,
-h2,
-.h1,
-.h2 {
-  text-transform: uppercase;
-}
-
-h3,
-h4,
-h5,
-h6,
-.h3,
-.h4,
-.h5,
-.h6 {
-  font-family: $font-family-sans-serif;
 }
 
 input[type='color'] {
@@ -177,22 +168,13 @@ input[type='color'] {
   font-weight: bold;
 }
 
-.btn {
-  font-family: $headings-font-family;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0.575rem 1rem 0.425rem 1rem;
-  white-space: nowrap;
-}
-
 .btn .normal-text {
   font-family: $font-family-sans-serif;
   font-weight: normal;
   text-transform: none;
 }
 
-.btn-group.captioning-split-button>* {
+.btn-group.captioning-split-button > * {
   border-left: 1px solid rgba(0, 0, 0, 0.2);
 }
 
@@ -213,7 +195,6 @@ input[type='color'] {
   font-family: $headings-font-family;
   font-size: 1.1rem;
   line-height: 1.55rem;
-  text-transform: uppercase;
   padding: 9px 9px 8px 9px;
   margin-left: -9px;
   margin-right: -9px;
@@ -227,17 +208,6 @@ input[type='color'] {
 
 .navbar-toggler {
   z-index: 15;
-}
-
-.nav-pills {
-  font-family: $headings-font-family;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.nav-link {
-  /* Adjust for Cousine baseline issue */
-  padding: 0.65rem 1rem 0.5rem 1rem;
 }
 
 .btn-info:focus,
@@ -310,10 +280,6 @@ a.navbar-brand:hover {
 
 a.nav-link.active {
   font-weight: bold;
-}
-
-.rgb-label {
-  font-family: 'Cousine';
 }
 
 .screen-preview .screen {
@@ -470,7 +436,7 @@ html.static-site body {
   display: inline-block;
 }
 
-.lds-message>div {
+.lds-message > div {
   position: absolute;
   width: 24px;
   height: 24px;
@@ -480,35 +446,35 @@ html.static-site body {
   animation: lds-message 1s cubic-bezier(0.3, 0, 0.7, 1) infinite;
 }
 
-.lds-message>div:nth-of-type(4n + 1) {
+.lds-message > div:nth-of-type(4n + 1) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n + 2) {
+.lds-message > div:nth-of-type(4n + 2) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n + 3) {
+.lds-message > div:nth-of-type(4n + 3) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n) {
+.lds-message > div:nth-of-type(4n) {
   background: #ffffff;
 }
 
-.lds-message>div:nth-of-type(4n + 1) {
+.lds-message > div:nth-of-type(4n + 1) {
   left: 38px;
   -webkit-animation-delay: -0.666666666666667s;
   animation-delay: -0.666666666666667s;
 }
 
-.lds-message>div:nth-of-type(4n + 2) {
+.lds-message > div:nth-of-type(4n + 2) {
   left: 88px;
   -webkit-animation-delay: -0.333333333333333s;
   animation-delay: -0.333333333333333s;
 }
 
-.lds-message>div:nth-of-type(4n + 3) {
+.lds-message > div:nth-of-type(4n + 3) {
   left: 138px;
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
@@ -747,98 +713,16 @@ a.hover-no-underline:focus {
   }
 }
 
-/* Range slider */
-// https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
-
-input[type='range'] {
-  -webkit-appearance: none;
-  /* Hides the slider so that custom slider can be made */
-  width: 100%;
-  /* Specific width is required for Firefox. */
-  background: transparent;
-  /* Otherwise white in Chrome */
+.desaturated {
+  filter: saturate(0);
+}
+.transition-all {
+  transition: all 150ms;
 }
 
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-}
-
-input[type='range']:focus {
-  outline: none;
-  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-}
-
-input[type='range']::-ms-track {
+.collapsed > .when-open,
+.not-collapsed > .when-closed {
   display: none;
-  /* Hide progress bar until MS can figure out how to follow the standard */
-
-  width: 100%;
-  cursor: pointer;
-
-  /* Hides the slider so custom styles can be added */
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-
-/* Special styling for WebKit/Blink */
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 16px;
-  width: 16px;
-  border-radius: 20px;
-  background: #000;
-  cursor: pointer;
-  margin-top: -7px;
-  /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-}
-
-/* All the same stuff for Firefox */
-input[type='range']::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 16px;
-  width: 16px;
-  border-radius: 20px;
-  background: #000;
-  cursor: pointer;
-}
-
-/* All the same stuff for IE */
-input[type='range']::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 16px;
-  width: 16px;
-  border-radius: 20px;
-  background: #000;
-  cursor: pointer;
-}
-
-input[type='range']::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 2px;
-  margin-top: 9px;
-  cursor: pointer;
-  background: #000;
-}
-
-input[type='range']:focus::-webkit-slider-runnable-track {
-  background: #000;
-}
-
-input[type='range']::-moz-range-track {
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-  background: #000;
-}
-
-input[type='range']::-ms-track {
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-  background: #000;
 }
 
 @import 'bootstrap-vue/src/index.scss';

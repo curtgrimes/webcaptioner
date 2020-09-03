@@ -2,14 +2,14 @@
   <div
     class="settings-view"
     :style="{ height }"
-    style="overflow:auto"
+    style="overflow: auto;"
     ref="settingsView"
   >
     <router-link
       aria-label="Close Settings"
       :to="localePath('captioner')"
       class="btn btn-light d-none d-sm-block position-fixed py-md-3 px-3 px-md-4"
-      style="z-index:2;right:0;top:0"
+      style="z-index: 2; right: 0; top: 0;"
       role="tab"
       active-class
     >
@@ -19,11 +19,11 @@
     <nav
       class="d-sm-none navbar sticky-top navbar-light bg-primary pr-2"
       :class="{ 'pl-2': showBackButton }"
-      style="z-index:1025"
+      style="z-index: 1025;"
     >
       <div class="mr-auto">
         <router-link
-          :to="localePath('captioner-settings')"
+          to="/captioner/settings"
           class="btn btn-primary mr-2"
           v-if="showBackButton"
         >
@@ -31,7 +31,7 @@
         </router-link>
         <div
           class="navbar-text font-weight-bold"
-          style="position: relative;top: 2px;"
+          style="position: relative; top: 2px;"
         >
           {{ navbarTitle }}
         </div>
@@ -40,7 +40,7 @@
         <fa icon="times" aria-label="Close" />
       </router-link>
     </nav>
-    <div class="row mx-0" style="min-height:100%">
+    <div class="row mx-0" style="min-height: 100%;">
       <!-- xs navigation -->
       <div
         :hidden="showBackButton"
@@ -48,169 +48,39 @@
       >
         <!--  pb-5 mb-3 for bottom navbar space -->
         <b-list-group flush>
-          <b-list-group-item :to="localePath('captioner-settings-general')">{{
-            $t('settings.general')
-          }}</b-list-group-item>
           <b-list-group-item
-            v-if="eventLog"
-            :to="localePath('captioner-settings-event-log')"
-            >{{ $t('settings.eventLog.eventLog') }}</b-list-group-item
+            v-for="({ name, to, icon }, index) in settingsPages"
+            :key="index"
+            :to="to"
+            ><fa :icon="icon" class="mr-1" fixed-width />
+            {{ name }}</b-list-group-item
           >
-          <b-list-group-item
-            v-if="experiments.length || currentlyOnExperiments"
-            :to="localePath('captioner-settings-experiments')"
-            >{{ $t('settings.experiments.experiments') }}</b-list-group-item
-          >
-        </b-list-group>
-        <b-list-group flush>
-          <b-list-group-item
-            :to="localePath('captioner-settings-appearance')"
-            >{{ $t('settings.appearance.appearance') }}</b-list-group-item
-          >
-          <b-list-group-item :to="localePath('captioner-settings-language')">{{
-            $t('settings.language.language')
-          }}</b-list-group-item>
-          <b-list-group-item :to="localePath('captioner-settings-sync')"
-            >Sync</b-list-group-item
-          >
-          <b-list-group-item
-            :to="localePath('captioner-settings-word-replacements')"
-            >{{
-              $t('settings.wordReplacements.wordReplacements')
-            }}</b-list-group-item
-          >
-          <b-list-group-item :to="localePath('captioner-settings-vmix')">{{
-            $t('settings.vmix.vmix')
-          }}</b-list-group-item>
-          <b-list-group-item :to="localePath('captioner-settings-webhooks')">{{
-            $t('settings.webhooks.webhooks')
-          }}</b-list-group-item>
-          <b-list-group-item
-            v-if="experiments.length && experiments.includes('zoom')"
-            :to="localePath('captioner-settings-zoom')"
-            >{{ $t('settings.zoom.zoom') }}</b-list-group-item
-          >
-          <b-list-group-item :to="localePath('captioner-settings-about')">{{
-            $t('settings.about.whatsNew')
-          }}</b-list-group-item>
-          <b-list-group-item
-            :to="localePath('captioner-settings-export-restore')"
-            >{{
-              $t('settings.exportRestore.exportRestoreSettings')
-            }}</b-list-group-item
-          >
-          <!-- <b-list-group-item :to="localePath('captioner-settings-stats')">{{$t('settings.stats')}}</b-list-group-item> -->
         </b-list-group>
       </div>
 
       <!-- non-xs navigation -->
       <div
         class="d-none d-sm-block col-sm-4 py-5 pr-md-4 pr-xl-5 bg-primary"
-        style="min-height:100%"
+        style="min-height: 100%;"
       >
         <div class="row h-100">
           <div class="col-lg-9 col-xl-7 ml-auto mb-5">
-            <div class="position-sticky" style="top:20px">
-              <h2
-                class="d-none d-sm-block lead pl-3 text-dark"
-                style="padding-top:.6rem"
-              >
-                {{ $t('settings.settings') }}
+            <div class="position-sticky" style="top: 20px;">
+              <h2 class="d-none d-sm-block pl-3 text-dark">
+                Settings
               </h2>
               <nav>
                 <b-nav vertical pills>
                   <b-nav-item
+                    v-for="({ name, to, icon }, index) in settingsPages"
+                    :key="index"
                     active-class="active"
-                    :to="localePath('captioner-settings-general')"
-                    >{{ $t('settings.general') }}</b-nav-item
+                    :to="to"
+                    link-classes="d-flex align-items-center"
                   >
-                  <b-nav-item
-                    v-if="eventLog"
-                    :to="localePath('captioner-settings-event-log')"
-                  >
-                    {{ $t('settings.eventLog.eventLog') }}
-                    <span v-if="eventLogStopTime"
-                      >({{ logTimeRemainingMinutes }}:{{
-                        logTimeRemainingSeconds
-                      }})</span
-                    >
-                    <b-badge variant="light" class="nav-badge">
-                      {{ eventLogCount }}
-                      <span class="sr-only">events</span>
-                    </b-badge>
+                    <fa :icon="icon" class="mr-2" size="lg" fixed-width />
+                    <span>{{ name }}</span>
                   </b-nav-item>
-                  <b-nav-item
-                    active-class="active"
-                    class="nav-item-rainbow"
-                    v-if="experiments.length || currentlyOnExperiments"
-                    :to="localePath('captioner-settings-experiments')"
-                  >
-                    <fa icon="flask" />
-                    {{ $t('settings.experiments.experiments') }}
-                  </b-nav-item>
-                </b-nav>
-                <b-nav vertical pills>
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-appearance')"
-                    >{{ $t('settings.appearance.appearance') }}</b-nav-item
-                  >
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-language')"
-                    >{{ $t('settings.language.language') }}</b-nav-item
-                  >
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-sync')"
-                    >Sync</b-nav-item
-                  >
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-word-replacements')"
-                    >{{
-                      $t('settings.wordReplacements.wordReplacements')
-                    }}</b-nav-item
-                  >
-                </b-nav>
-                <b-nav vertical pills>
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-vmix')"
-                    >{{ $t('settings.vmix.vmix') }}</b-nav-item
-                  >
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-webhooks')"
-                    >{{ $t('settings.webhooks.webhooks') }}</b-nav-item
-                  >
-                  <b-nav-item
-                    v-if="experiments.length && experiments.includes('zoom')"
-                    active-class="active"
-                    :to="localePath('captioner-settings-zoom')"
-                    >{{ $t('settings.zoom.zoom') }}</b-nav-item
-                  >
-                </b-nav>
-                <hr />
-                <b-nav vertical pills>
-                  <b-nav-item
-                    active-class="active"
-                    :to="localePath('captioner-settings-about')"
-                    >{{ $t('settings.about.whatsNew') }}</b-nav-item
-                  >
-                  <b-nav-item
-                    active-class="active"
-                    class="small"
-                    :to="localePath('captioner-settings-export-restore')"
-                    >{{
-                      $t('settings.exportRestore.exportRestoreSettings')
-                    }}</b-nav-item
-                  >
-                  <!-- <b-nav-item
-                    active-class="active"
-                    class="small"
-                    :to="localePath('captioner-settings-stats')"
-                  >{{$t('settings.stats')}}</b-nav-item>-->
                 </b-nav>
               </nav>
             </div>
@@ -258,40 +128,7 @@
   top: 2px;
   float: right;
 }
-
-.nav-item-rainbow .nav-link.active {
-  animation: rainbow 5s linear infinite alternate;
-  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-}
-
-@keyframes rainbow {
-  0% {
-    background-color: hsl(0, 50%, 50%);
-    box-shadow: 0 0 10px hsl(0, 50%, 50%);
-  }
-  20% {
-    background-color: hsl(50, 70%, 50%);
-    box-shadow: 0 0 10px hsl(50, 70%, 50%);
-  }
-  40% {
-    background-color: hsl(100, 50%, 50%);
-    box-shadow: 0 0 10px hsl(100, 50%, 50%);
-  }
-  60% {
-    background-color: hsl(150, 50%, 50%);
-    box-shadow: 0 0 10px hsl(150, 50%, 50%);
-  }
-  80% {
-    background-color: hsl(200, 50%, 50%);
-    box-shadow: 0 0 10px hsl(200, 50%, 50%);
-  }
-  100% {
-    background-color: hsl(255, 50%, 50%);
-    box-shadow: 0 0 10px hsl(255, 50%, 50%);
-  }
-}
 </style>
-
 
 <script>
 import Combokeys from 'combokeys';
@@ -315,25 +152,63 @@ export default {
     BBadge,
     BButton,
   },
-  data: function() {
+  data: function () {
     return {
       logTimeRemainingMinutes: '00',
       logTimeRemainingSeconds: '00',
       escShortcut: null,
       height: '100vh',
       tickInterval: null,
+
+      settingsPages: [
+        {
+          name: 'General',
+          to: '/captioner/settings/general',
+          icon: 'cog',
+        },
+        {
+          name: 'Appearance',
+          to: '/captioner/settings/appearance',
+          icon: 'paint-brush',
+        },
+        {
+          name: 'Channels',
+          to: '/captioner/settings/channels',
+          icon: 'satellite-dish',
+        },
+        {
+          name: 'Experiments',
+          to: '/captioner/settings/experiments',
+          icon: 'flask',
+        },
+        {
+          name: 'Language',
+          to: '/captioner/settings/language',
+          icon: 'globe-asia',
+        },
+        {
+          name: 'Word Replacements',
+          to: '/captioner/settings/word-replacements',
+          icon: 'sync-alt',
+        },
+        {
+          name: 'Export and Restore',
+          to: '/captioner/settings/export-restore',
+          icon: 'file-download',
+        },
+      ],
     };
   },
-  mounted: function() {
+  mounted: function () {
     let self = this;
     this.escShortcut = new Combokeys(document.documentElement);
-    this.escShortcut.bind('esc', function() {
+    this.escShortcut.bind('esc', function () {
       self.$router.push('/captioner');
     });
 
     this.startLogTimer();
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     if (this.escShortcut) {
       this.escShortcut.detach();
     }
@@ -343,7 +218,7 @@ export default {
     }
   },
   watch: {
-    eventLogStopTime: function() {
+    eventLogStopTime: function () {
       this.startLogTimer();
     },
     $route(to, from) {
@@ -354,7 +229,7 @@ export default {
     },
   },
   methods: {
-    startLogTimer: function() {
+    startLogTimer: function () {
       if (this.eventLogStopTime) {
         let logTick = () => {
           let now = Date.now();
@@ -387,39 +262,36 @@ export default {
     },
   },
   computed: {
-    eventLog: function() {
+    eventLog: function () {
       return (
         Boolean(this.$store.state.eventLog.onUntilStopTime) ||
         this.$store.state.eventLog.log.length > 0
       );
     },
-    eventLogCount: function() {
+    eventLogCount: function () {
       return this.$store.state.eventLog.log.length;
     },
-    eventLogStopTime: function() {
+    eventLogStopTime: function () {
       return this.$store.state.eventLog.onUntilStopTime;
     },
-    currentlyOnExperiments: function() {
+    currentlyOnExperiments: function () {
       return this.$route.path === '/captioner/settings/experiments';
     },
-    experiments: function() {
+    experiments: function () {
       return this.$store.state.settings.exp;
     },
-    showBackButton: function() {
+    showBackButton: function () {
       return this.$route.path !== '/captioner/settings';
     },
-    navbarTitle: function() {
+    navbarTitle: function () {
       return this.$store.state.settingsPageTitle || '';
     },
-    largerLayout: function() {
+    largerLayout: function () {
       return this.$store.state.settings.controls.layout.larger;
     },
   },
 };
 </script>
-
-
-
 
 <style scoped>
 h3 {

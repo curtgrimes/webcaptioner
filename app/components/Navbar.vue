@@ -4,14 +4,27 @@
       class="navbar navbar-expand navbar-inverse bg-dark d-flex flex-column"
       :class="largerLayout ? 'pt-3 pb-4' : 'pr-2'"
     >
-      <div class="w-100 pb-3" :class="{'d-flex' : largerLayout, 'd-none': !largerLayout}">
+      <div
+        class="w-100 pb-3"
+        :class="{ 'd-flex': largerLayout, 'd-none': !largerLayout }"
+      >
         <div class="mr-auto">
-          <b-button @click="clearTranscript" size="lg" variant="danger" class="px-4 py-3">
+          <b-button
+            @click="clearTranscript"
+            size="lg"
+            variant="danger"
+            class="px-4 py-3"
+          >
             Clear
             <kbd class="small ml-3">p</kbd>
           </b-button>
         </div>
-        <b-button @click="startSaveToTextFile" variant="info" size="lg" class="px-4 py-3">
+        <b-button
+          @click="startSaveToTextFile"
+          variant="info"
+          size="lg"
+          class="px-4 py-3"
+        >
           Save to File
           <kbd class="small ml-3">f</kbd>
         </b-button>
@@ -28,12 +41,8 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          class="navbar-brand mr-auto"
-          :class="{'mt-3' : largerLayout}"
-          style="padding-top:.75rem"
-        >
-          <a href="/">
+        <div class="navbar-brand mr-auto" :class="{ 'mt-3': largerLayout }">
+          <a href="/" class="d-flex align-items-center">
             <img
               src="/logo-solid-bg.svg"
               width="20"
@@ -41,62 +50,83 @@
               class="d-inline-block align-top mr-2 rounded-circle"
               :alt="$t('app.webCaptioner')"
             />
-            <span class="d-none d-md-inline">{{$t('app.webCaptioner')}}</span>
+            <span class="d-none d-md-inline pl-1">{{
+              $t('app.webCaptioner')
+            }}</span>
           </a>
         </div>
 
         <!-- Do not remove this from the DOM with v-if. Currently the volume meter needs to exist in order to populate microphoneName. -->
-        <volume-meter v-bind:hidden="!captioningOn || waitingForInitialTranscript"></volume-meter>
+        <volume-meter
+          v-bind:hidden="!captioningOn || waitingForInitialTranscript"
+        ></volume-meter>
 
         <div
           v-if="waitingForInitialTranscript"
           class="navbar-text small text-primary mr-3"
-          style="padding-top:.75rem"
+          style="padding-top: 0.75rem;"
         >
           <b-spinner small type="grow" />
-          <strong>{{$t('navbar.captioner.listening')}}</strong>
+          <strong>{{ $t('navbar.captioner.listening') }}</strong>
           <transition name="fade">
-            <span v-if="microphoneName">&middot; {{microphoneName}}</span>
+            <span v-if="microphoneName">&middot; {{ microphoneName }}</span>
           </transition>
         </div>
         <cast-button></cast-button>
         <transition name="fade">
           <share-button v-if="experiments.includes('share')"></share-button>
         </transition>
-        <div v-if="showVmixNotFullySetUpMessage && !vmixNotFullySetUpMessageDismissed" class="mr-4">
-          <span class="navbar-text text-white pr-3 text-primary">
-            <fa icon="exclamation-triangle" />
-            {{$t('navbar.vmixNotConnected')}}
-          </span>
-          <b-button-group size="sm">
-            <b-button
-              :to="localePath('captioner-settings-vmix')"
-              @click="vmixNotFullySetUpMessageDismissed = true"
-              variant="secondary"
-              v-if="showVmixNotFullySetUpMessage"
-              class="btn-sm"
-            >{{$t('common.setUpVerb')}}</b-button>
-            <b-button @click="sendToVmix = false" :aria-label="$t('common.dismiss')">
-              <fa icon="times" />
-            </b-button>
-          </b-button-group>
-        </div>
-        <b-button-group :size="largerLayout ? 'lg' : ''" class="captioning-split-button">
+        <b-button-group
+          :size="largerLayout ? 'lg' : ''"
+          class="captioning-split-button"
+        >
           <b-button
             id="startCaptioningDropdown"
-            :class="incompatibleBrowser ? 'button-only-disabled' : ''"
+            :class="{
+              'button-only-disabled': incompatibleBrowser,
+              'rounded-right': $store.state.settings.channels.length === 0,
+            }"
             :variant="captioningToggleButtonVariant"
             @click="captioningToggleButtonClick"
             :disabled="$store.state.user.signedIn === null"
           >
-            <div :class="{'px-4 py-2' : largerLayout}">
+            <div :class="{ 'px-4 py-2': largerLayout }">
               <span v-if="!this.captioningOn">
-                <fa icon="microphone" />
-                <span v-show="!typingModeOn">{{$t('navbar.captioner.startCaptioning')}}</span>
+                <fa icon="microphone" fixed-width />
+                <span v-show="!typingModeOn">{{
+                  $t('navbar.captioner.startCaptioning')
+                }}</span>
               </span>
-              <span v-else>{{$t('navbar.captioner.stopCaptioning')}}</span>
+              <span v-else>{{ $t('navbar.captioner.stopCaptioning') }}</span>
               <kbd v-show="largerLayout" class="small ml-3">c</kbd>
             </div>
+          </b-button>
+          <b-button
+            v-show="$store.state.settings.channels.length > 0"
+            :variant="captioningToggleButtonVariant"
+            v-b-tooltip.top
+            @click="
+              hideAllTooltips();
+              $store.commit('SET_CHANNEL_ERRORS_SEEN');
+            "
+            :title="
+              `Channels ${
+                $store.state.channels.unseenErrorExists ? '(Error)' : ''
+              }`
+            "
+            id="navbar-channels-button"
+            class="px-2"
+          >
+            <span class="d-flex align-items-center">
+              <fa icon="satellite-dish" />
+              <span class="small pl-1">{{ activeChannels.length }}</span>
+              <span
+                class="bg-danger d-inline-block px-1 py-0 rounded ml-1"
+                v-if="$store.state.channels.unseenErrorExists"
+              >
+                <fa icon="exclamation-triangle" class="text-white" />
+              </span>
+            </span>
           </b-button>
           <b-button
             v-if="experiments.includes('typingMode') && !typingModeOn"
@@ -107,7 +137,11 @@
           >
             <fa icon="keyboard" />
           </b-button>
-          <b-button v-if="typingModeOn" variant="danger" @click="stopTypingMode">
+          <b-button
+            v-if="typingModeOn"
+            variant="danger"
+            @click="stopTypingMode"
+          >
             <fa icon="keyboard" />Done Typing
             <kbd>ESC</kbd>
           </b-button>
@@ -120,7 +154,20 @@
           boundary="viewport"
           title
         >
-          <settings-popup :shown="showSettingsMenu" @dismiss="showSettingsMenu = false" />
+          <settings-popup
+            :shown="showSettingsMenu"
+            @dismiss="showSettingsMenu = false"
+          />
+        </b-popover>
+        <b-popover
+          id="navbar-channels-popover"
+          target="navbar-channels-button"
+          placement="top"
+          triggers="click blur"
+          boundary="viewport"
+          title
+        >
+          <channels-popup />
         </b-popover>
 
         <b-button
@@ -129,7 +176,7 @@
           v-b-tooltip.top
           :title="showSettingsMenu ? ' ' : $t('navbar.menu.settings')"
           class="ml-2 text-white px-2 profile-button"
-          style="position:relative"
+          style="position: relative;"
           variant="info"
         >
           <!-- If there's a photo URL, show it on top of the fallback user-circle button -->
@@ -138,7 +185,12 @@
               :src="$store.state.user.photoURL"
               v-if="$store.state.user.signedIn && $store.state.user.photoURL"
               class="rounded-circle"
-              style="max-width: 30px;position: absolute;margin-left: -2px;margin-top: -2px;"
+              style="
+                max-width: 30px;
+                position: absolute;
+                margin-left: -2px;
+                margin-top: -2px;
+              "
             />
           </transition>
           <fa icon="user-circle" />
@@ -155,7 +207,6 @@
 }
 </style>
 
-
 <style scoped>
 .button-only-disabled > .btn-primary:first-child {
   opacity: 0.6;
@@ -167,23 +218,14 @@
 }
 </style>
 
-
-
 <script>
 import VolumeMeter from './VolumeMeter.vue';
 import CastButton from '../components/CastButton.vue';
 import ShareButton from '../components/ShareButton.vue';
 import SettingsPopup from '../components/SettingsPopup.vue';
+import ChannelsPopup from '~/components/channels/ChannelsPopup';
 import saveToFile from '~/mixins/saveToFile';
 import dateFormat from '~/mixins/dateFormat';
-import {
-  BButton,
-  BButtonGroup,
-  BTooltip,
-  VBTooltip,
-  BPopover,
-  BSpinner,
-} from 'bootstrap-vue';
 
 export default {
   mixins: [saveToFile, dateFormat],
@@ -192,19 +234,12 @@ export default {
     CastButton,
     SettingsPopup,
     ShareButton,
-    BButton,
-    BButtonGroup,
-    BPopover,
-    BSpinner,
-    BTooltip,
-  },
-  directives: {
-    'b-tooltip': VBTooltip,
+    ChannelsPopup,
   },
   data: function() {
     return {
-      vmixNotFullySetUpMessageDismissed: false,
       showSettingsMenu: false,
+      showChannelsMenu: false,
     };
   },
   computed: {
@@ -245,25 +280,10 @@ export default {
     remoteDisplays: function() {
       return this.$store.state.remoteDisplays;
     },
-    showVmixNotFullySetUpMessage: {
-      // User wanted vMix to be on but it can't. Show a message in the navbar.
-      get() {
-        return (
-          this.sendToVmix &&
-          this.$store.state.integrations.vmix.showNotFullySetUpMessage
-        );
-      },
-      set(on) {
-        this.$store.commit('SET_VMIX_SHOW_NOT_FULLY_SET_UP_MESSAGE', { on });
-      },
-    },
-    sendToVmix: {
-      get() {
-        return this.$store.state.settings.integrations.vmix.on;
-      },
-      set() {
-        this.$store.commit('SET_SEND_TO_VMIX', { on: false });
-      },
+    activeChannels() {
+      return this.$store.state.settings.channels.filter(
+        (channel) => channel.on
+      );
     },
   },
   watch: {

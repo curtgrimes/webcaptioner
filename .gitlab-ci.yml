@@ -16,9 +16,9 @@ before_script:
 Build:
   stage: build
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME || echo Could not fetch $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME from registry.
-    - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG || echo Could not fetch $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG from registry.
+    - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 e2e:
   stage: test
@@ -33,7 +33,7 @@ Demo1:
     - docker:dind
   environment:
     name: demo1
-    url: https://demo1.webcaptioner.com
+    url: https://demo4591891495012598120529813.webcaptioner.com
   script:
     - source scripts/deploy.sh
   when: manual

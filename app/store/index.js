@@ -1,25 +1,22 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import allActions from './actions'
-import allMutations from './mutations'
-import remoteMutationBlacklist from '~/mixins/data/remoteMutationBlacklist'
-import RemoteEventBus from '~/mixins/RemoteEventBus'
-import getSettingsState from './settingsState'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import allActions from './actions';
+import allMutations from './mutations';
+import remoteMutationBlacklist from '~/mixins/data/remoteMutationBlacklist';
+import RemoteEventBus from '~/mixins/RemoteEventBus';
+import getSettingsState from './settingsState';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const strict = false;
 
-let mutationInterceptorPlugin = store => {
-  store.subscribe(({
-    type,
-    payload
-  }, state) => {
+let mutationInterceptorPlugin = (store) => {
+  store.subscribe(({ type, payload }, state) => {
     if (remoteMutationBlacklist.indexOf(type) === -1) {
       // This mutation type is not in the blacklist. Send it to remotely listening devices.
       RemoteEventBus.$emit('sendMutationToReceivers', {
         mutation: type,
-        payload
+        payload,
       });
     }
 
@@ -37,8 +34,11 @@ let mutationInterceptorPlugin = store => {
         'share/SET_EXPIRED',
       ];
 
-      return ((payload && !payload.omitFromGoogleAnalytics) || !payload) &&
-        !type.includes('route/') && !ignoredMutationTypes.includes(type);
+      return (
+        ((payload && !payload.omitFromGoogleAnalytics) || !payload) &&
+        !type.includes('route/') &&
+        !ignoredMutationTypes.includes(type)
+      );
     }
 
     // Track mutations with Google Analytics
@@ -47,7 +47,9 @@ let mutationInterceptorPlugin = store => {
 
       if (payload) {
         // Use the first value of the payload
-        eventLabel = payload[Object.keys(payload)[0]] ? payload[Object.keys(payload)[0]].toString() : null;
+        eventLabel = payload[Object.keys(payload)[0]]
+          ? payload[Object.keys(payload)[0]].toString()
+          : null;
       }
 
       if (Vue.$ga && Vue.$ga.event) {
@@ -57,25 +59,28 @@ let mutationInterceptorPlugin = store => {
           eventLabel,
         });
       }
-
     }
 
-    if (type !== 'APPEND_EVENT_LOG') { // prevent loop
+    if (type !== 'APPEND_EVENT_LOG') {
+      // prevent loop
       if (Date.now() < state.eventLog.onUntilStopTime) {
         store.commit('APPEND_EVENT_LOG', {
           event: {
             event: 'mutation',
             type,
-            payload: type === 'route/ROUTE_CHANGED' ? {
-              from: payload.from.path,
-              to: payload.to.path,
-            } : payload,
+            payload:
+              type === 'route/ROUTE_CHANGED'
+                ? {
+                    from: payload.from.path,
+                    to: payload.to.path,
+                  }
+                : payload,
           },
           omitFromGoogleAnalytics: true,
         });
       }
     }
-  })
+  });
 };
 
 export const state = () => ({
@@ -119,16 +124,6 @@ export const state = () => ({
       sessionStartDate: null,
       lastStabilizedTranscriptSyncDate: null,
     },
-    vmix: {
-      showNotFullySetUpMessage: false,
-      webControllerAddress: '',
-      chromeExtensionInstalled: null,
-      webControllerConnected: null,
-      cachedInputGUID: null,
-    },
-    webhooks: {
-      log: [],
-    },
   },
   visibleToasts: {
     signedIn: false,
@@ -142,7 +137,7 @@ export const state = () => ({
     log: [],
   },
   delayedEvents: [],
-})
+});
 
 export const mutations = allMutations;
 export const actions = allActions;

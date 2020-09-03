@@ -36,7 +36,7 @@
       <hr />
     </div>
     <b-button href="/" block variant="light" size="sm" class="mb-2 text-left"
-      ><fa icon="info-circle" fixed-width />
+      ><fa icon="info-circle" fixed-width class="mr-1" />
       {{ $t('navbar.menu.about') }}</b-button
     >
     <b-button
@@ -46,7 +46,7 @@
       size="sm"
       class="mb-2 text-left"
     >
-      <fa icon="heart" fixed-width /> Donate
+      <fa icon="heart" fixed-width class="mr-1" /> Donate
     </b-button>
     <b-button
       @click="$emit('dismiss') && $store.dispatch('START_SUPPORT_POPUP')"
@@ -55,7 +55,7 @@
       size="sm"
       class="mb-2 text-left"
     >
-      <fa icon="comment-alt" fixed-width /> Chat with Support
+      <fa icon="comment-alt" fixed-width class="mr-1" /> Chat with Support
     </b-button>
     <hr />
     <b-button-group class="d-flex mb-2">
@@ -144,7 +144,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import {
