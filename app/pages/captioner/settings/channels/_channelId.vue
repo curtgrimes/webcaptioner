@@ -181,6 +181,12 @@ export default {
           this.$store.commit('TURN_ON_CHANNEL', { channelId });
         }
 
+        // Clear any errors
+        this.$store.commit('UPDATE_CHANNEL_ERROR', {
+          channelId,
+          error: null,
+        });
+
         this.$refs['modal'].hide();
       } catch (e) {
         this.$bvModal.msgBoxOk(e.message, { okVariant: 'secondary' });

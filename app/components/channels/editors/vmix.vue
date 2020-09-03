@@ -100,6 +100,7 @@ export default {
   mounted() {
     this.vmixAddress = this.savedChannel?.parameters?.vmixAddress;
     this.captionElementGuid = this.savedChannel?.parameters?.captionElementGuid;
+    this.silentlyUseLocalhostInsteadOfGivenHost = this.savedChannel?.parameters?.silentlyUseLocalhostInsteadOfGivenHost;
 
     if (this.vmixAddress && this.captionElementGuid) {
       // This channel was already set up and now we're updating it.
@@ -113,6 +114,8 @@ export default {
     return {
       vmixAddress: null,
       captionElementGuid: null,
+      silentlyUseLocalhostInsteadOfGivenHost: null,
+
       vmixAddressFromUser: null, // the URL from the user, not cleaned up
       checkingVmixAddress: false,
       checkingVmixAddressSuccess: false,
@@ -128,13 +131,38 @@ export default {
       this.checkingVmixAddress = true;
       this.checkingVmixAddressSuccess = false;
 
-      try {
-        let vmixResponse = await Promise.race([
-          this.$axios.get(this.vmixAddress),
+      this.silentlyUseLocalhostInsteadOfGivenHost = false;
 
-          // if it doesn't respond quickly enough, reject any future response and assume we can't connect
-          new Promise((resolve) => setTimeout(resolve, 1500)),
-        ]);
+      let localhostUrlAlternative = new URL(this.vmixAddress);
+      localhostUrlAlternative.hostname = 'localhost';
+      localhostUrlAlternative.protocol = 'http:';
+
+      try {
+        let vmixResponse;
+        try {
+          vmixResponse = await Promise.race([
+            this.$axios.get(this.vmixAddress),
+            // if it doesn't respond quickly enough, reject any future response and assume we can't connect
+            new Promise((resolve) => setTimeout(resolve, 1500)),
+          ]);
+        } catch (e) {}
+
+        if (!vmixResponse) {
+          // Try localhost instead
+          try {
+            vmixResponse = await Promise.race([
+              this.$axios.get(localhostUrlAlternative),
+
+              // if it doesn't respond quickly enough, reject any future response and assume we can't connect
+              new Promise((resolve) => setTimeout(resolve, 1500)),
+            ]);
+          } catch (e) {}
+
+          if (vmixResponse) {
+            // That worked -- use localhost instead (silently -- don't show any indiciation in the UI)
+            this.silentlyUseLocalhostInsteadOfGivenHost = true;
+          }
+        }
 
         if (!vmixResponse) {
           throw new Error(
@@ -171,6 +199,8 @@ export default {
         this.$emit('parametersUpdated', {
           vmixAddress: this.vmixAddress,
           captionElementGuid: this.captionElementGuid,
+          silentlyUseLocalhostInsteadOfGivenHost: this
+            .silentlyUseLocalhostInsteadOfGivenHost,
         });
         this.checkingVmixAddressSuccess = true;
         this.$emit('formValid');

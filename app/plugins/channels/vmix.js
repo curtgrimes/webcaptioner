@@ -29,7 +29,6 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
 
   let transcriptBuffer = [];
   let transcriptCurrentlyDisplayed = [];
-  const zoomMaxCharactersPerLine = 40;
 
   const unsubscribeFn = $store.subscribe((mutation, state) => {
     if (
@@ -104,12 +103,17 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
       .replace(' \n ', '\n') // remove spaces around line breaks
       .trim();
 
-    // This is a vMix API call now
-    const url = new URL(channelParameters.vmixAddress);
+    // This is a vMix API call
+    let url = new URL(channelParameters.vmixAddress);
     url.searchParams.set('Function', 'SetText');
     url.searchParams.set('Input', channelParameters.captionElementGuid);
     url.searchParams.set('SelectedName', 'WebCaptionerCaptions');
     url.searchParams.set('Value', transcript);
+
+    if (channelParameters.silentlyUseLocalhostInsteadOfGivenHost) {
+      url.hostname = 'localhost';
+      url.protocol = 'http:';
+    }
 
     try {
       await Promise.race([
@@ -120,7 +124,7 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         new Promise((resolve, reject) => setTimeout(reject, 3000)),
       ]);
     } catch (e) {
-      console.error('vmix error');
+      console.error('vMix error', e);
       errorDates.push(new Date());
 
       const errorPeriodSeconds = 30;
