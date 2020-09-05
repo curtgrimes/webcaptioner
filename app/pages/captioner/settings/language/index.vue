@@ -1,16 +1,13 @@
 <template>
   <div class="settings-language-view">
     <i18n path="settings.language.spokenDescription.text" tag="p">
-      <a
-        place="supportedLanguagesAndDialects"
-        href="/help/general/supported-languages/"
-        target="_blank"
-        >{{
+      <template v-slot:supportedLanguagesAndDialects>
+        <a href="/help/general/supported-languages/" target="_blank">{{
           $t(
             'settings.language.spokenDescription.supportedLanguagesAndDialects'
           )
-        }}</a
-      >
+        }}</a>
+      </template>
     </i18n>
     <p>
       Web Captioner currently doesn't translate between different languages in

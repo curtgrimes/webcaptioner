@@ -191,15 +191,6 @@ input[type='color'] {
   font-weight: bold;
 }
 
-.btn {
-  font-family: 'Cousine';
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0.575rem 1rem 0.425rem 1rem;
-  white-space: nowrap;
-}
-
 .btn .normal-text {
   font-family: $font-family-sans-serif;
   font-weight: normal;
@@ -240,16 +231,6 @@ input[type='color'] {
 
 .navbar-toggler {
   z-index: 15;
-}
-
-.nav-pills {
-  font-family: $headings-font-family;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.nav-link.active {
-  text-decoration: underline;
 }
 
 .btn-info:focus,
