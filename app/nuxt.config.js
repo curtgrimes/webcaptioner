@@ -8,6 +8,7 @@ import sourcemapMiddleware from './middleware/server/sourcemaps.js';
 import vanityRedirectMiddleware from './server/middleware/vanityRedirect.js';
 import wwwRedirectMiddleware from './server/middleware/wwwRedirect.js';
 import wsServer from './socket.io/server';
+import redirectRules from './redirects';
 
 // import gitRevision from 'git-rev-sync';
 
@@ -215,6 +216,12 @@ module.exports = {
       },
     ],
     ['bootstrap-vue/nuxt'],
+    [
+      '@nuxtjs/redirect-module',
+      {
+        rules: redirectRules,
+      },
+    ],
   ],
   plugins: [
     {

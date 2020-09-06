@@ -35,14 +35,14 @@ const channelsList = [
     limit: 1,
     configPagePath: `${configPatePathPrefix}webhook`,
   },
-  // {
-  //   id: 'obs',
-  //   name: 'OBS Studio',
-  //   iconPath: `${iconPrefix}/obs.svg`,
-  //   showNameWithIcon: true,
-  //   limit: 1,
-  //   configPagePath: `${configPatePathPrefix}obs`,
-  // },
+  {
+    id: 'obs',
+    name: 'OBS Studio',
+    iconPath: `${iconPrefix}/obs.svg`,
+    showNameWithIcon: true,
+    limit: 1,
+    configPagePath: `${configPatePathPrefix}obs`,
+  },
   {
     id: 'zoom',
     name: 'Zoom',
