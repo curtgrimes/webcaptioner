@@ -84,12 +84,14 @@ module.exports = {
       cache.set('docs-category-articles-' + category.id, articlesForCategory);
     }
 
-    return articlesForCategory.map((article) => {
-      return {
-        name: article.name,
-        url: `/help/${categorySlug}/${article.slug}`,
-      };
-    });
+    return articlesForCategory
+      .filter((article) => article.status === 'published')
+      .map((article) => {
+        return {
+          name: article.name,
+          url: `/help/${categorySlug}/${article.slug}`,
+        };
+      });
   },
   article: async ({ categorySlug, articleSlug }) => {
     // Get category ID for given category slug
@@ -129,7 +131,14 @@ module.exports = {
       cache.set('docs-category-' + category.id + '-articles', articles);
     }
 
-    let article = articles.find((article) => article.slug === articleSlug);
+    let article = articles.find(
+      (article) =>
+        article.slug === articleSlug && article.status === 'published'
+    );
+
+    if (!article) {
+      return;
+    }
 
     const cachedArticleData = cache.get('docs-articles-' + article.id);
     let articleData;
