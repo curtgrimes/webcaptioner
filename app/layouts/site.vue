@@ -45,7 +45,11 @@
                 <a
                   class="nav-link mr-3 mr-md-0 py-2"
                   href="/help"
-                  :class="$route.name.startsWith('help') ? 'active' : ''"
+                  :class="
+                    $route.name && $route.name.startsWith('help')
+                      ? 'active'
+                      : ''
+                  "
                 >
                   Help Center
                 </a>
@@ -78,7 +82,7 @@
 <script>
 export default {
   mounted() {
-    if (this.$route.path.startsWith('/help')) {
+    if (this.$route.path?.startsWith('/help')) {
       this.showHelpButton(true);
     }
 
@@ -100,7 +104,7 @@ export default {
   },
   watch: {
     $route() {
-      if (this.$route.path.startsWith('/help')) {
+      if (this.$route.path?.startsWith('/help')) {
         this.showHelpButton(true);
       } else {
         this.showHelpButton(false);
