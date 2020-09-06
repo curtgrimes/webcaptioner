@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="jumbotron d-flex flex-column justify-content-center">
+    <div class="jumbotron d-flex flex-column justify-content-center rounded-0">
       <div class="container">
         <h1 class="text-center mb-4">Web Captioner Help Center</h1>
         <!-- <div class="row mb-4">
