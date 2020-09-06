@@ -92,11 +92,7 @@ $pagination-active-border: theme-color('secondary');
 $pagination-disabled-color: #999;
 
 $breadcrumb-divider: quote('›');
-$breadcrumb-bg: none;
-$breadcrumb-padding-x: 0;
-$breadcrumb-padding-y: 0;
-$breadcrumb-font-size: 1rem;
-$breadcrumb-margin-bottom: 1.5rem;
+$breadcrumb-margin-bottom: 2rem;
 
 $carousel-indicator-width: 50px;
 $carousel-indicator-height: 10px;
@@ -597,6 +593,28 @@ a.block-partial-highlight-children:hover .btn-primary {
 .help-search-header:focus,
 .help-search-header:active {
   opacity: 1;
+}
+
+details summary {
+  background: theme-color('light');
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+details summary div {
+  margin-left: 0.5rem;
+}
+
+details summary h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: inline-block;
+  margin: 0;
+}
+details summary div > *:last-child {
+  margin-bottom: 0;
 }
 
 .blog-article-list .inner-link-no-highlight p {

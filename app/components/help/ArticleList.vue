@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="list-unstyled row mb-4" style="font-size: 1.2rem;">
+    <ul class="list-unstyled row mb-4" style="font-size: 1.2rem">
       <li
         v-for="article in articles"
         :key="article.id"
@@ -12,7 +12,9 @@
             class="stretched-link d-flex align-items-center w-100"
           >
             {{ article.name }}
-            <fa icon="arrow-right" class="text-muted ml-auto mr-2" />
+            <span class="ml-auto">
+              <fa icon="arrow-right" class="text-muted mx-2" />
+            </span>
           </nuxt-link>
         </div>
       </li>

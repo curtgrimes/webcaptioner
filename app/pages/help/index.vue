@@ -2,10 +2,8 @@
   <div>
     <div class="jumbotron d-flex flex-column justify-content-center">
       <div class="container">
-        <h1 class="text-center mb-4">
-          Web Captioner Help Center
-        </h1>
-        <div class="row mb-4">
+        <h1 class="text-center mb-4">Web Captioner Help Center</h1>
+        <!-- <div class="row mb-4">
           <div class="col-md-8 mx-auto">
             <div class="input-group">
               <input
@@ -22,13 +20,13 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="container mt-4 mt-sm-5 pb-5">
-      <div
+      <!-- <div
         class="card card-body bg-light d-flex flex-row flex-wrap py-4 mb-5"
-        style="margin-top: -5rem;"
+        style="margin-top: -5rem"
       >
         <div class="mr-auto">
           <h2>New to Web Captioner?</h2>
@@ -43,7 +41,7 @@
             Start <fa icon="arrow-right" />
           </nuxt-link>
         </div>
-      </div>
+      </div> -->
 
       <h2 class="mb-3">Getting Started</h2>
       <article-list :articles="articles.gettingStarted" />
@@ -53,6 +51,9 @@
 
       <h2 class="mb-3">Troubleshooting</h2>
       <article-list :articles="articles.troubleshooting" />
+
+      <h2 class="mb-3">Other Topics</h2>
+      <article-list :articles="articles.otherTopics" />
     </div>
   </div>
 </template>
@@ -67,22 +68,27 @@ export default {
   },
   async asyncData({ app, params, res }) {
     try {
-      let gettingStarted = await app.$axios.$get(
+      const gettingStarted = await app.$axios.$get(
         '/api/docs/categories/getting-started/articles'
       );
 
-      let integrations = await app.$axios.$get(
+      const integrations = await app.$axios.$get(
         '/api/docs/categories/integrations/articles'
       );
 
-      let troubleshooting = await app.$axios.$get(
+      const troubleshooting = await app.$axios.$get(
         '/api/docs/categories/troubleshooting/articles'
+      );
+
+      const otherTopics = await app.$axios.$get(
+        '/api/docs/categories/other-topics/articles'
       );
       return {
         articles: {
           gettingStarted,
           integrations,
           troubleshooting,
+          otherTopics,
         },
       };
     } catch (error) {

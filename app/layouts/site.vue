@@ -60,7 +60,7 @@
               </li>
               <li>
                 <nuxt-link
-                  class="btn btn-sm btn-secondary text-white px-3 ml-md-2 mr-0 mr-md-0"
+                  class="btn btn-sm btn-secondary text-white px-3 py-2 ml-md-2 mr-0 mr-md-0"
                   to="/captioner"
                 >
                   Start Captioning
@@ -81,6 +81,22 @@ export default {
     if (this.$route.path.startsWith('/help')) {
       this.showHelpButton(true);
     }
+
+    // Open details element if location.hash. points to one
+    function openTarget() {
+      const hash = location.hash.substring(1);
+      if (!hash) {
+        return;
+      }
+
+      const details = document.getElementById(hash);
+      if (details && details.tagName.toLowerCase() === 'details') {
+        details.open = true;
+        details.querySelector('summary')?.focus();
+      }
+    }
+    window.addEventListener('hashchange', openTarget);
+    openTarget();
   },
   watch: {
     $route() {
