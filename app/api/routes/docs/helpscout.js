@@ -151,6 +151,7 @@ module.exports = {
     }
 
     return {
+      articleId: article.id,
       title: articleData.name,
       body: articleData.text,
       url:
@@ -216,5 +217,15 @@ module.exports = {
     });
 
     return articles;
+  },
+
+  updateViewCount: async ({ articleId, count }) => {
+    try {
+      await helpscout.put(`/articles/${articleId}/views`, {
+        count,
+      });
+    } catch (e) {
+      console.error('Could not update view count for article ' + articleId);
+    }
   },
 };

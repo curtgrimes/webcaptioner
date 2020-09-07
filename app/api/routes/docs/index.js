@@ -1,6 +1,24 @@
 const docs = require('express').Router();
 const helpscout = require('./helpscout');
 
+let viewCounts = {};
+
+const logViewCount = (articleId) => {
+  if (!viewCounts[articleId]) {
+    viewCounts[articleId] = 0;
+  }
+
+  viewCounts[articleId]++;
+
+  // For bandwidth, wait until view count reaches a certain
+  // point before logging hits with the Helpscout service.
+  if (viewCounts[articleId] >= 10) {
+    // Log the hits
+    helpscout.updateViewCount({ articleId, count: viewCounts[articleId] });
+    viewCounts[articleId] = 0;
+  }
+};
+
 docs.get('/categories/:categorySlug', async (req, res) => {
   let { categorySlug } = req.params;
 
@@ -45,6 +63,7 @@ docs.get(
         maxAge: 60 * 5,
       };
       res.send(article);
+      logViewCount(article.articleId);
     } catch (e) {
       return res.sendStatus(404);
     }
