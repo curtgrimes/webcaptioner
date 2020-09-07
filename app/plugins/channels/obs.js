@@ -43,7 +43,6 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
     return;
   }
 
-  console.log('channelParameters', channelParameters);
   let obs = new OBSWebSocket();
   try {
     await obs.connect({
