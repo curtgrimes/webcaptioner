@@ -51,8 +51,20 @@ export default [
     to: '/help/integrations/vmix',
   },
   {
+    from: '^/vmix/?$',
+    to: '/help/integrations/vmix',
+  },
+  {
     from: '^/help/integrations/add-captions-in-obs/?$',
     to: '/help/integrations/obs',
+  },
+  {
+    from: '^/obs/?$',
+    to: '/help/integrations/obs',
+  },
+  {
+    from: '^/zoom/?$',
+    to: '/help/integrations/zoom',
   },
   {
     from: '^/help/integrations/export-to-word/?$',
