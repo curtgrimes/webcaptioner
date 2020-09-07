@@ -51,7 +51,7 @@ export default [
     to: '/help/integrations/vmix',
   },
   {
-    from: '^/vmix/?$',
+    from: `^\\/vmix\\/?(\\?.*)?$`,
     to: '/help/integrations/vmix',
   },
   {
@@ -59,12 +59,16 @@ export default [
     to: '/help/integrations/obs',
   },
   {
-    from: '^/obs/?$',
+    from: `^\\/obs\\/?(\\?.*)?$`,
     to: '/help/integrations/obs',
   },
   {
-    from: '^/zoom/?$',
+    from: `^\\/zoom\\/?(\\?.*)?$`,
     to: '/help/integrations/zoom',
+  },
+  {
+    from: `^\\/dropbox\\/?(\\?.*)?$`,
+    to: '/help/integrations/dropbox',
   },
   {
     from: '^/help/integrations/export-to-word/?$',
