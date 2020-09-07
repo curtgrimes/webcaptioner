@@ -35,9 +35,7 @@
         >
           Remove Channel
         </b-button>
-        <b-button size="sm" variant="link" @click="cancel()">
-          Cancel
-        </b-button>
+        <b-button size="sm" variant="link" @click="cancel()"> Cancel </b-button>
         <b-button
           variant="secondary"
           @click="creatingNewChannel ? addChannel() : updateChannel()"
@@ -74,6 +72,8 @@ export default {
 
       formValid: false,
       channelParameters: {},
+
+      channels: null,
     };
   },
   async beforeCreate() {
@@ -128,8 +128,15 @@ export default {
       this.channelLoading = false;
     }
   },
-  mounted() {
-    this.$refs['modal'].show();
+  async mounted() {
+    this.channels = await this.$store.dispatch('channels/GET_CHANNELS');
+
+    if (this.reachedLimitForChannelType && this.creatingNewChannel) {
+      // Don't allow creating a channel
+      this.$route.replace('/captioner/settings/channels');
+    } else {
+      this.$refs['modal'].show();
+    }
   },
   computed: {
     channelIdToUpdate() {
@@ -147,6 +154,15 @@ export default {
     },
     updatingExistingChannel() {
       return this.$route.params.channelId !== 'new';
+    },
+    reachedLimitForChannelType() {
+      const existingChannelsOfThisType = this.$store.state.settings.channels.filter(
+        (channel) => channel.type === this.$route.query.type
+      );
+
+      console.log('here', existingChannelsOfThisType, this.channel);
+
+      return existingChannelsOfThisType.length >= this.channel?.limit;
     },
   },
   methods: {
@@ -213,6 +229,17 @@ export default {
           );
         }
       });
+    },
+    channelInfo(id) {
+      return this.channels.find((channel) => channel.id === id);
+    },
+  },
+  watch: {
+    reachedLimitForChannelType() {
+      if (this.reachedLimitForChannelType) {
+        console.log('reachedLimitForChannelType');
+        this.$router.replace('/captioner/settings/channels');
+      }
     },
   },
 };

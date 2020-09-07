@@ -137,6 +137,9 @@ export const state = () => ({
     log: [],
   },
   delayedEvents: [],
+  help: {
+    query: '',
+  },
 });
 
 export const mutations = allMutations;

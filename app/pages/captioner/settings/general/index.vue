@@ -40,21 +40,24 @@
             path="settings.censor.censorProfaneLanguageDescription.text"
             tag="span"
           >
-            <a
-              place="seeThisList"
-              href="https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words"
-              target="_blank"
-              >{{
+            <template v-slot:seeThisList>
+              <a
+                href="https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words"
+                target="_blank"
+                >{{
+                  $t(
+                    'settings.censor.censorProfaneLanguageDescription.seeThisList'
+                  )
+                }}</a
+              >
+            </template>
+            <template v-slot:useWordReplacements>
+              <router-link to="word-replacements">{{
                 $t(
-                  'settings.censor.censorProfaneLanguageDescription.seeThisList'
+                  'settings.censor.censorProfaneLanguageDescription.useWordReplacements'
                 )
-              }}</a
-            >
-            <router-link place="useWordReplacements" to="word-replacements">{{
-              $t(
-                'settings.censor.censorProfaneLanguageDescription.useWordReplacements'
-              )
-            }}</router-link>
+              }}</router-link>
+            </template>
           </i18n>
         </p>
       </div>

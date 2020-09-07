@@ -1,14 +1,16 @@
 <template>
   <div class="settings-event-log-view">
-    <p>
+    <!-- <p>
       <i18n path="settings.eventLog.instructions.i0" tag="span">
         <a
           place="sendItToMeOnFacebook"
           href="https://m.me/webcaptioner"
         >{{$t('settings.eventLog.instructions.sendItToMeOnFacebook')}}</a>
       </i18n>
+    </p> -->
+    <p>
+      {{ $t('settings.eventLog.instructions.i1', { loggingDurationMinutes }) }}
     </p>
-    <p>{{$t('settings.eventLog.instructions.i1', {loggingDurationMinutes})}}</p>
     <div class="card bg-white mb-3">
       <div class="card-header px-3">
         <div class="row">
@@ -19,35 +21,42 @@
               variant="secondary"
               class="mr-2"
               @click="copyLogMode = true"
-            >{{$t('settings.eventLog.copyLog')}}</b-button>
+              >{{ $t('settings.eventLog.copyLog') }}</b-button
+            >
             <b-button
               size="sm"
               v-if="copyLogMode"
               variant="outline-secondary"
               class="mr-2"
               @click="copyLogMode = false"
-            >{{$t('common.done')}}</b-button>
+              >{{ $t('common.done') }}</b-button
+            >
             <b-button
               class="d-lg-none"
               size="sm"
               v-if="tickInterval"
               variant="danger"
               @click="stopLogging()"
-            >{{$t('settings.eventLog.stopLogging')}}</b-button>
+              >{{ $t('settings.eventLog.stopLogging') }}</b-button
+            >
             <b-button
               class="d-lg-none"
               size="sm"
               v-if="!tickInterval"
               variant="default"
               @click="initEventLog()"
-            >{{$t('settings.eventLog.restartLogging')}}</b-button>
+              >{{ $t('settings.eventLog.restartLogging') }}</b-button
+            >
           </div>
           <div class="col-lg-8 small text-lg-right">
             <span class="pt-2 pr-2 d-inline-block">
-              <span
-                v-if="tickInterval"
-              >{{$t('settings.eventLog.loggingTurnsOffIn', {timeRemainingMinutes, timeRemainingSeconds})}}</span>
-              <span v-else>{{$t('settings.eventLog.loggingOff')}}</span>
+              <span v-if="tickInterval">{{
+                $t('settings.eventLog.loggingTurnsOffIn', {
+                  timeRemainingMinutes,
+                  timeRemainingSeconds,
+                })
+              }}</span>
+              <span v-else>{{ $t('settings.eventLog.loggingOff') }}</span>
             </span>
             <b-button
               class="d-none d-lg-inline-block"
@@ -55,14 +64,16 @@
               v-if="tickInterval"
               variant="danger"
               @click="stopLogging()"
-            >{{$t('settings.eventLog.stopLogging')}}</b-button>
+              >{{ $t('settings.eventLog.stopLogging') }}</b-button
+            >
             <b-button
               class="d-none d-lg-inline-block"
               size="sm"
               v-if="!tickInterval"
               variant="default"
               @click="initEventLog()"
-            >{{$t('settings.eventLog.restartLogging')}}</b-button>
+              >{{ $t('settings.eventLog.restartLogging') }}</b-button
+            >
           </div>
         </div>
       </div>
@@ -87,23 +98,31 @@
         <li
           v-if="notShowingCount > 0"
           class="list-group-item list-group-item-light py-3 text-muted text-center"
-        >{{$t('settings.eventLog.eventsHidden', {notShowingCount})}}</li>
+        >
+          {{ $t('settings.eventLog.eventsHidden', { notShowingCount }) }}
+        </li>
         <li
           class="list-group-item list-group-item-light p-2 text-monospace"
           v-for="(eventLogItem, index) in eventLogLimited"
           :key="index"
         >
           <div class="row m-0">
-            <div class="col-sm-2">{{formatLogTime(eventLogItem.time)}}</div>
-            <div class="col-sm-9" style="word-break:break-all">{{eventLogItem.event}}</div>
+            <div class="col-sm-2">{{ formatLogTime(eventLogItem.time) }}</div>
+            <div class="col-sm-9" style="word-break:break-all">
+              {{ eventLogItem.event }}
+            </div>
           </div>
         </li>
       </div>
       <div class="card-footer text-muted small">
         <div class="row">
-          <div
-            class="col-6"
-          >{{$tc('settings.eventLog.events', eventLog.length, {count: eventLog.length})}}</div>
+          <div class="col-6">
+            {{
+              $tc('settings.eventLog.events', eventLog.length, {
+                count: eventLog.length,
+              })
+            }}
+          </div>
           <div class="col-6 text-right">
             <label class="mb-0">
               <input
@@ -112,7 +131,7 @@
                 style="position:relative;top:-1px;"
                 class="mr-1"
               />
-              {{$t('settings.eventLog.autoScroll')}}
+              {{ $t('settings.eventLog.autoScroll') }}
             </label>
           </div>
         </div>

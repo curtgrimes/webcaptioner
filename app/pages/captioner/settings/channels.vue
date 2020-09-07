@@ -99,7 +99,7 @@
         class="col-6 col-sm-12 col-md-4 d-flex mb-4"
         v-for="(channel, index) in channels"
         :key="index"
-        style="min-height: 7rem;"
+        style="min-height: 7rem"
       >
         <b-button
           variant="lighter"
@@ -135,7 +135,7 @@
             <hr class="w-100" />
             <span
               class="small text-danger d-block"
-              style="line-spacing: 0.4rem;"
+              style="line-spacing: 0.4rem"
             >
               You can only add {{ channel.limit }}
               <span v-if="channel.limit != 1">instances</span
@@ -201,9 +201,7 @@ export default {
         (channel) => channel.type === channelType
       );
 
-      if (savedChannelsOfType.length >= channelLimit) {
-        return true;
-      }
+      return savedChannelsOfType.length >= channelLimit;
     },
   },
 };

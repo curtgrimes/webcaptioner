@@ -91,6 +91,9 @@ $pagination-active-bg: theme-color('secondary');
 $pagination-active-border: theme-color('secondary');
 $pagination-disabled-color: #999;
 
+$breadcrumb-divider: quote('›');
+$breadcrumb-margin-bottom: 2rem;
+
 $carousel-indicator-width: 50px;
 $carousel-indicator-height: 10px;
 $carousel-control-opacity: 0.8;
@@ -127,7 +130,7 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 @import '~bootstrap/scss/_pagination.scss';
 @import '~bootstrap/scss/_badge.scss';
 @import '~bootstrap/scss/_toasts.scss';
-//@import "~bootstrap/scss/_jumbotron.scss";
+@import '~bootstrap/scss/_jumbotron.scss';
 @import '~bootstrap/scss/_alert.scss';
 @import '~bootstrap/scss/_progress.scss';
 @import '~bootstrap/scss/_media.scss';
@@ -144,6 +147,17 @@ $modal-content-box-shadow-xs: $modal-content-box-shadow-sm-up;
 @import '~bootstrap/scss/_print.scss';
 
 @import 'bootstrap-vue/src/index.scss';
+h2,
+.h2 {
+  font-weight: 700;
+}
+
+.logo-text {
+  font-family: $headings-font-family;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
 
 h1,
 h2,
@@ -157,6 +171,11 @@ h2,
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.5rem;
+}
+
+.jumbotron {
+  background: linear-gradient(to top, #fff399, #ffe200);
+  height: 350px;
 }
 
 input[type='color'] {
@@ -555,15 +574,47 @@ a.block-partial-highlight-children:hover .btn-primary {
   // border-color: darken(theme-color("primary"), 10%); /* Get this percentage from _buttons.scss mixin */
 }
 
-.blog-article-list h2 {
-  text-transform: none;
-  font-family: $font-family-sans-serif;
-  font-size: 2.2rem;
-  font-weight: normal;
-}
-
 .inner-link-no-highlight {
   color: #000;
+}
+
+.help-search-header {
+  // opacity: 0.5;
+  background: rgba(darken(theme-color('primary'), 5%), 0.8);
+  border: 1px solid theme-color('primary');
+  color: darken(theme-color('primary'), 40%);
+}
+
+.help-search-header::placeholder {
+  color: darken(theme-color('primary'), 25%);
+}
+
+.help-search-header:hover,
+.help-search-header:focus,
+.help-search-header:active {
+  opacity: 1;
+}
+
+details summary {
+  background: theme-color('light');
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+details summary div {
+  margin-left: 0.5rem;
+}
+
+details summary h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: inline-block;
+  margin: 0;
+}
+details summary div > *:last-child {
+  margin-bottom: 0;
 }
 
 .blog-article-list .inner-link-no-highlight p {
@@ -573,19 +624,6 @@ a.block-partial-highlight-children:hover .btn-primary {
 .blog-article-date {
   text-transform: uppercase;
   font-family: $headings-font-family;
-}
-
-html.blog h2,
-html.blog h3,
-html.blog h4,
-html.blog h5,
-html.blog h6 {
-  font-family: $font-family-sans-serif;
-  text-transform: none;
-}
-
-html.blog h2 {
-  margin: 2rem 0 1.5rem 0;
 }
 
 a.hover-no-underline:hover,
@@ -601,10 +639,6 @@ a.hover-no-underline:focus {
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;
-}
-
-.bg-breadcrumb {
-  background: $breadcrumb-bg;
 }
 
 #hero-caption-demo {
