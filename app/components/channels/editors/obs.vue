@@ -113,7 +113,7 @@ export default {
         password: this.password,
       });
 
-      if (this.port && this.password) {
+      if (this.port) {
         this.$emit('formValid');
       } else {
         this.$emit('formInvalid');

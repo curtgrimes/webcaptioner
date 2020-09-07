@@ -54,8 +54,6 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
             ...lineInProgress.splice(0, lineInProgress.length - 1),
           ]);
         }
-
-        console.log('completeLines', completeLines);
       }
       decideIfShouldSendToZoom(completeLines, lineInProgress);
 
@@ -109,7 +107,6 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
   let lastSequenceNumber = 0;
 
   const sendToZoom = throttle(async (transcript) => {
-    // return console.log('**', transcript);
     try {
       let localStorageValues = JSON.parse(
         localStorage.getItem(zoomSequenceNumberLocalStorageKey)
@@ -152,7 +149,7 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
       errorDates.push(new Date());
 
       const errorPeriodSeconds = 30;
-      const maxErrorsInPeriod = 10;
+      const maxErrorsInPeriod = 4;
       const errorPeriodStartDate = new Date(
         Date.now() - 1000 * errorPeriodSeconds
       );

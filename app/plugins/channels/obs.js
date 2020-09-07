@@ -1,195 +1,154 @@
 import OBSWebSocket from 'obs-websocket-js';
+import throttle from 'lodash.throttle';
 
-let obs;
-
-export default ({ $store, $axios, channelId, channelParameters }) => {
+export default async ({ $store, $axios, channelId, channelParameters }) => {
   // Register
 
-  // if (!channelParameters.zoomApiToken) {
-  //   $store.commit('UPDATE_CHANNEL_ERROR', {
-  //     channelId,
-  //     error: 'Zoom API token is missing.',
-  //   });
+  const handleError = (e, maxErrorsInPeriod, errorPeriodSeconds) => {
+    let isAuthenticationRelatedError = e.error
+      ?.toLowerCase()
+      .includes('authentic');
 
-  //   // Turn off the channel because it's not configured correctly
-  //   $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', { channelId, onOrOff: false });
-  //   // No need to unregister here because we haven't registered yet
-  //   return;
-  // }
+    let errorMessage;
 
+    if (isAuthenticationRelatedError) {
+      errorMessage = `OBS replied with "${e.error}" - Is the OBS WebSocket plugin using a password, and does it match the password in Web Captioner?`;
+    } else if (maxErrorsInPeriod >= 0 && errorPeriodSeconds >= 0) {
+      errorMessage = `This channel has been turned off because we received an error back from OBS ${maxErrorsInPeriod} times in the last ${errorPeriodSeconds} seconds that this channel was on. Make sure your port number and password (if you are using one) is correct, OBS is running with the OBS websocket plugin enabled, and try again.`;
+    } else {
+      errorMessage = `This channel has been turned off because we received an error back from OBS. Make sure your port number and password (if you are using one) is correct, OBS is running with the OBS websocket plugin enabled, and try again.`;
+    }
+
+    $store.commit('UPDATE_CHANNEL_ERROR', {
+      channelId,
+      error: errorMessage,
+    });
+
+    // Turn off the channel because it's not configured correctly
+    $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', {
+      channelId,
+      onOrOff: false,
+    });
+  };
+
+  if (!channelParameters.port) {
+    $store.commit('UPDATE_CHANNEL_ERROR', {
+      channelId,
+      error: 'Port number is missing.',
+    });
+
+    // Turn off the channel because it's not configured correctly
+    $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', { channelId, onOrOff: false });
+    // No need to unregister here because we haven't registered yet
+    return;
+  }
+
+  console.log('channelParameters', channelParameters);
   let obs = new OBSWebSocket();
-  obs.connect({ address: 'localhost:5454' }).then(() => {
-    setInterval(() => {
-      obs
-        .send('SendCaptions', { text: 'hello world! ' + new Date() })
-        // .send('GetVersion')
-        .then((data) => console.log(data));
-    }, 1500);
-  });
+  try {
+    await obs.connect({
+      address: `localhost:${channelParameters.port}`,
+      password: channelParameters.password,
+    });
+  } catch (e) {
+    handleError(e);
+  }
 
-  // try {
-  //   new URL(channelParameters.zoomApiToken);
-  // } catch (e) {
-  //   $store.commit('UPDATE_CHANNEL_ERROR', {
-  //     channelId,
-  //     error:
-  //       'This channel has been turned off because the Zoom API token is not a valid URL. Make sure the Zoom API token is correct and try again.',
-  //   });
+  const maxCharactersPerLine = 32;
+  const frequentUpdates = false; // allow for channelParameters.frequentUpdates in the future
 
-  //   // Turn off the channel because it's not configured correctly
-  //   $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', { channelId, onOrOff: false });
-  //   // No need to unregister here because we haven't registered yet
-  //   return;
-  // }
-
-  let zoomTranscriptBuffer = [];
-  let zoomTranscriptCurrentlyDisplayed = [];
-  const zoomMaxCharactersPerLine = 40;
-  let lastSequenceNumber = 0;
-  const zoomSequenceNumberLocalStorageKey =
-    'webcaptioner-channels-zoom-sequence-number';
+  let completeLines = []; // an array of arrays of words
+  let lineInProgress = [];
+  let automaticallyMarkLineCompleteAfterSilenceTimeout;
 
   const unsubscribeFn = $store.subscribe((mutation, state) => {
-    if (
-      [
-        'captioner/APPEND_TRANSCRIPT_STABILIZED',
-        'captioner/APPEND_TRANSCRIPT_FINAL',
-        'captioner/CLEAR_TRANSCRIPT',
-      ].includes(mutation.type)
-    ) {
-      if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
-        zoomTranscriptBuffer.push(mutation.payload.transcript);
-      } else if (
-        (mutation.type === 'captioner/APPEND_TRANSCRIPT_FINAL' &&
-          mutation.payload.clearLimitedSpaceReceivers) ||
-        mutation.type === 'captioner/CLEAR_TRANSCRIPT'
-      ) {
-        // Clear the output (this doesn't work completely yet)
-        zoomTranscriptBuffer = ['\n', '\n'];
+    if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
+      clearTimeout(automaticallyMarkLineCompleteAfterSilenceTimeout);
+      lineInProgress.push(mutation.payload.transcript);
+
+      if (lineInProgress.join(' ').length > maxCharactersPerLine) {
+        // The line is now too long. Save to completeLines.
+        if (lineInProgress.length === 1) {
+          // Save the whole line because we only have one really long word.
+          completeLines.push([...lineInProgress.splice(0)]);
+        } else {
+          // Save everything but the last word, because that last word was
+          // what put us beyond maxCharactersPerLine
+          completeLines.push([
+            ...lineInProgress.splice(0, lineInProgress.length - 1),
+          ]);
+        }
       }
+      decideIfShouldSendToOBS(completeLines, lineInProgress);
+
+      automaticallyMarkLineCompleteAfterSilenceTimeout = setTimeout(() => {
+        // We've waited long enough without getting new text.
+        // Mark the lineInProgress we have now as complete, even
+        // if it doesn't fill a line completely.
+        completeLines.push([...lineInProgress.splice(0)]);
+        decideIfShouldSendToOBS(completeLines, lineInProgress, {
+          forceSend: true,
+        });
+      }, 2000);
     }
   });
 
-  // const errorDates = [];
+  const decideIfShouldSendToOBS = (
+    completeLines = [],
+    lineInProgress = [],
+    { forceSend = false } = {}
+  ) => {
+    let linesToSend = [];
+    if (!frequentUpdates && (completeLines.length >= 2 || forceSend)) {
+      // We have at least two complete lines.
+      linesToSend = completeLines.splice(0, 2);
+      send(lineFormatter(linesToSend));
+    } else if (frequentUpdates) {
+      // Send the last complete line plus the currently in-progress line
+      linesToSend = [
+        ...(completeLines?.[completeLines.length - 1]
+          ? [completeLines[completeLines.length - 1]]
+          : []),
+        ...(lineInProgress.length ? [lineInProgress] : []),
+      ];
+      send(lineFormatter(linesToSend));
 
-  // const zoomSendInterval = setInterval(() => {
-  //   if (!zoomTranscriptBuffer.length) {
-  //     return;
-  //   }
+      // Clean up lines we will no longer need
+      if (completeLines.length > 2) {
+        completeLines.splice(0, completeLines.length - 2);
+      }
+    }
+  };
 
-  //   try {
-  //     let localStorageValues = JSON.parse(
-  //       localStorage.getItem(zoomSequenceNumberLocalStorageKey)
-  //     );
+  const lineFormatter = (lines) => {
+    return lines.map((line) => line.join(' ')).join('\n');
+  };
 
-  //     if (localStorageValues.zoomApiToken === channelParameters.zoomApiToken) {
-  //       // The stored sequenceNumber is for the current API token and not
-  //       // a previous one. Restore the value.
-  //       lastSequenceNumber = Number(localStorageValues.lastSequenceNumber);
-  //     }
-  //   } catch (e) {
-  //     // No local storage value found. Assume we're starting over.
-  //     lastSequenceNumber = 0;
-  //   }
+  let errorDates = [];
 
-  //   // Consume the buffer
-  //   zoomTranscriptCurrentlyDisplayed.push(...zoomTranscriptBuffer);
-  //   zoomTranscriptBuffer = [];
+  const send = throttle(async (text) => {
+    try {
+      await obs.send('SendCaptions', { text });
+    } catch (e) {
+      errorDates.push(new Date());
 
-  //   let apiPath = new URL(channelParameters.zoomApiToken);
-  //   apiPath.searchParams.append('seq', String(lastSequenceNumber));
-  //   apiPath.searchParams.append(
-  //     'lang',
-  //     $store.state.settings.locale.from || 'en-US'
-  //   );
+      const errorPeriodSeconds = 30;
+      const maxErrorsInPeriod = 4;
+      const errorPeriodStartDate = new Date(
+        Date.now() - 1000 * errorPeriodSeconds
+      );
 
-  //   // Add line breaks if necessary
-  //   const firstWordAfterLastLineBreakIndex =
-  //     zoomTranscriptCurrentlyDisplayed.lastIndexOf('\n') + 1; // or this may be '0' if there are no line breaks yet
-  //   for (
-  //     let i = firstWordAfterLastLineBreakIndex;
-  //     i < zoomTranscriptCurrentlyDisplayed.length;
-  //     i++
-  //   ) {
-  //     // Check the length by adding one more word at a time
-  //     // up to but not including last
-  //     const someWordsAfterLastLineBreak = zoomTranscriptCurrentlyDisplayed.slice(
-  //       firstWordAfterLastLineBreakIndex,
-  //       i + 1
-  //     );
-
-  //     if (
-  //       someWordsAfterLastLineBreak.join(' ').length > zoomMaxCharactersPerLine
-  //     ) {
-  //       // Add a line break before the `i`th word
-  //       zoomTranscriptCurrentlyDisplayed.splice(i, 0, '\n');
-  //       break;
-  //     }
-  //   }
-
-  //   // Enforce two lines max by removing content before the
-  //   // first line break if we now have two line breaks
-  //   if (
-  //     zoomTranscriptCurrentlyDisplayed.filter((word) => word === '\n').length >=
-  //     2
-  //   ) {
-  //     const firstLineBreakIndex = zoomTranscriptCurrentlyDisplayed.findIndex(
-  //       (word) => word === '\n'
-  //     );
-
-  //     zoomTranscriptCurrentlyDisplayed.splice(0, firstLineBreakIndex + 1);
-  //   }
-
-  //   const transcript = zoomTranscriptCurrentlyDisplayed
-  //     .join(' ')
-  //     .replace(' \n ', '\n') // remove spaces around line breaks
-  //     .trim();
-
-  //   $axios
-  //     .$post('/api/channels/zoom', {
-  //       apiPath,
-  //       transcript,
-  //     })
-  //     .catch((e) => {
-  //       errorDates.push(new Date());
-
-  //       const errorPeriodSeconds = 30;
-  //       const maxErrorsInPeriod = 10;
-  //       const errorPeriodStartDate = new Date(
-  //         Date.now() - 1000 * errorPeriodSeconds
-  //       );
-
-  //       if (
-  //         errorDates.filter((date) => date > errorPeriodStartDate).length >
-  //         maxErrorsInPeriod
-  //       ) {
-  //         $store.commit('UPDATE_CHANNEL_ERROR', {
-  //           channelId,
-  //           error: `This channel has been turned off because we received an error back from Zoom ${maxErrorsInPeriod} times in the last ${errorPeriodSeconds} seconds that this channel was on. Make sure your Zoom API token is correct and valid for an active meeting and try again. If your meeting is not started yet, wait until your meeting is started before activating this channel. Note that you will need a new Zoom API token for every meeting.`,
-  //         });
-
-  //         // Turn off the channel because it's not configured correctly
-  //         $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', {
-  //           channelId,
-  //           onOrOff: false,
-  //         });
-  //         return;
-  //       }
-  //     });
-
-  //   lastSequenceNumber++;
-  //   localStorage.setItem(
-  //     zoomSequenceNumberLocalStorageKey,
-  //     JSON.stringify({
-  //       lastSequenceNumber,
-  //       zoomApiToken: channelParameters.zoomApiToken,
-  //     })
-  //   );
-  // }, 1000);
+      if (
+        errorDates.filter((date) => date > errorPeriodStartDate).length >
+        maxErrorsInPeriod
+      ) {
+        handleError(e);
+      }
+    }
+  }, 1000);
 
   return () => {
     // Unregister function
     unsubscribeFn();
-    // clearInterval(zoomSendInterval);
   };
 };
