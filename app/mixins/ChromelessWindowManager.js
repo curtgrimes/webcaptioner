@@ -1,7 +1,7 @@
 import throttle from 'lodash.throttle';
 
 function commitToWindow(windowInstance, type, payload) {
-  windowInstance.dispatchEvent(
+  windowInstance?.dispatchEvent(
     new CustomEvent('processVuexMutation', {
       detail: {
         type,
@@ -12,7 +12,7 @@ function commitToWindow(windowInstance, type, payload) {
 }
 
 function actionToWindow(windowInstance, type, payload) {
-  windowInstance.dispatchEvent(
+  windowInstance?.dispatchEvent(
     new CustomEvent('processVuexAction', {
       detail: {
         type,

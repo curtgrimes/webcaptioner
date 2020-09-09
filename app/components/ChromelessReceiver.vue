@@ -31,7 +31,7 @@ export default {
     },250);
     
     if (window.opener) {
-      window.opener.dispatchEvent(new CustomEvent('receiverIsReadyToReceiveMutations'));
+      window?.opener?.dispatchEvent(new CustomEvent('receiverIsReadyToReceiveMutations'));
     }
   },
   methods: {
