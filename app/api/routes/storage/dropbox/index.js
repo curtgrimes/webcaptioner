@@ -118,8 +118,7 @@ dropboxRoute.post('/push', async (req, res) => {
       res.sendStatus(200);
     })
     .catch(function(error) {
-      Sentry.captureException(error);
-      res.sendStatus(400);
+      res.status(400).send(error && error.summary ? error.summary : 'Error');
     });
 });
 
