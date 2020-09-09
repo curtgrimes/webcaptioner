@@ -200,7 +200,6 @@ module.exports = {
           {
             set: '@fortawesome/free-brands-svg-icons',
             icons: [
-              'faPatreon',
               'faApple',
               'faWindows',
               'faAndroid',

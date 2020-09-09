@@ -93,33 +93,6 @@
         <fa icon="trash-alt" />
       </b-button>
     </b-button-group>
-    <!-- <hr /> -->
-    <b-card v-if="false" style="background:#F86753" body-class="text-white p-2">
-      <p class="mb-1">
-        <strong> <fa :icon="['fab', 'patreon']" class="mr-2" />Patreon </strong>
-      </p>
-      <p class="mb-1">
-        Support Web Captioner by becoming a patron and getting access to some
-        cool stuff!
-      </p>
-      <b-button
-        block
-        variant="light"
-        size="sm"
-        :to="localePath('captioner-settings')"
-        >Learn More</b-button
-      >
-      <transition name="fade">
-        <div v-if="patronCount === null" class="text-center">
-          <!-- loading -->
-          <!-- <b-spinner small></b-spinner> -->
-        </div>
-        <div v-else-if="patronCount === false">
-          <!-- failed to load -->
-        </div>
-        <p v-else class="text-center mb-0 mt-1">{{ patronCount }} patrons</p>
-      </transition>
-    </b-card>
     <b-button
       block
       size="sm"
@@ -177,31 +150,10 @@ export default {
   directives: {
     'b-tooltip': VBTooltip,
   },
-  data: function() {
-    return {
-      patronCount: null,
-    };
-  },
   props: {
     shown: {
       type: Boolean,
       default: false,
-    },
-  },
-  watch: {
-    shown: function() {
-      if (this.shown && this.patronCount === null) {
-        this.$axios
-          .get('/api/patreon/patron-count')
-          .then(({ data }) => {
-            if (data) {
-              this.patronCount = data;
-            }
-          })
-          .catch(() => {
-            this.patronCount = false;
-          });
-      }
     },
   },
   methods: {
