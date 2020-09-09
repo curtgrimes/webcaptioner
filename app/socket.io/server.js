@@ -49,7 +49,7 @@ module.exports = {
             }));
 
             redisStandaloneClient.on("message", async (channel, message) => {
-              if (message === 'updateSubscribers') {
+              if (message === 'updateSubscribers' && socket.readyState === socket.OPEN) {
                 socket.send(JSON.stringify({
                   mutation: 'SET_SHARE_SUBSCRIBER_COUNT',
                   subscriberCount: await getSubscriberCount(roomKey),
