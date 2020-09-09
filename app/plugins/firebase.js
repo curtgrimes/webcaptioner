@@ -17,6 +17,7 @@ export default ({
   // Initialize Firebase
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
+    firebase.firestore().settings({ ignoreUndefinedProperties: true });
   }
 
   inject('firebase', firebase);
