@@ -37,6 +37,7 @@
               />
               <span v-else class="d-flex align-items-center">
                 <fa
+                  v-if="channelInfo(addedChannel.type).iconName"
                   :icon="channelInfo(addedChannel.type).iconName"
                   size="lg"
                   class="mr-2"

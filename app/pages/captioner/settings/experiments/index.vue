@@ -288,6 +288,7 @@ export default {
     isValidExperiment: function() {
       return [
         'share',
+        'fab',
         'saveTranscriptWithTimingsToDropbox',
         'captionSpeedSetting',
         ...this.experiments.map((e) => e.id),

@@ -1,4 +1,5 @@
 import dropbox from './dropbox';
+import fab from './fab';
 import obs from './obs';
 import vmix from './vmix';
 import webhook from './webhook';
@@ -6,7 +7,7 @@ import youtube from './youtube';
 import zoom from './zoom';
 
 // Available channels
-const channels = { dropbox, obs, vmix, webhook, youtube, zoom };
+const channels = { dropbox, fab, obs, vmix, webhook, youtube, zoom };
 
 // Every time a channel is registered, it returns a function
 // we need to run if we need to deregister it in the future

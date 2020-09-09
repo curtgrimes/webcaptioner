@@ -15,6 +15,15 @@ const channelsList = [
     configPagePath: `${configPatePathPrefix}dropbox`,
   },
   {
+    id: 'fab',
+    name: 'FAB Subtitler',
+    // iconPath: `${iconPrefix}/fab-subtitler.png`,
+    showNameWithIcon: true,
+    limit: 1,
+    configPagePath: `${configPatePathPrefix}fab`,
+    requiredExperiment: 'fab',
+  },
+  {
     id: 'vmix',
     name: 'vMix',
     iconPath: `${iconPrefix}/vmix.png`,

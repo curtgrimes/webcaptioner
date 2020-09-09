@@ -26,7 +26,7 @@
         @showRemoveButton="showRemoveButton = true"
         @hideRemoveButton="showRemoveButton = false"
       />
-      <template v-slot:modal-footer="{ ok, cancel }">
+      <template v-slot:modal-footer="{ cancel }">
         <b-button
           v-if="updatingExistingChannel && showRemoveButton"
           variant="outline-danger"
@@ -105,16 +105,14 @@ export default {
       // It seems to remain cached after the first import attempt so there isn't much
       // of a performance concern here.
       const component = await import(
-        `~/components/channels/editors/${
-          this.channelTypeToSave || savedChannel.type
-        }`
+        `~/components/channels/editors/${this.channelTypeToSave ||
+          savedChannel.type}`
       );
 
       const editorComponent = () => ({
         component: import(
-          `~/components/channels/editors/${
-            this.channelTypeToSave || savedChannel.type
-          }`
+          `~/components/channels/editors/${this.channelTypeToSave ||
+            savedChannel.type}`
         ),
       });
 
@@ -131,6 +129,7 @@ export default {
   async mounted() {
     this.channels = await this.$store.dispatch('channels/GET_CHANNELS');
 
+    await this.settingsLoaded();
     if (this.reachedLimitForChannelType && this.creatingNewChannel) {
       // Don't allow creating a channel
       this.$route.replace('/captioner/settings/channels');
@@ -159,8 +158,6 @@ export default {
       const existingChannelsOfThisType = this.$store.state.settings.channels.filter(
         (channel) => channel.type === this.$route.query.type
       );
-
-      console.log('here', existingChannelsOfThisType, this.channel);
 
       return existingChannelsOfThisType.length >= this.channel?.limit;
     },
@@ -232,14 +229,6 @@ export default {
     },
     channelInfo(id) {
       return this.channels.find((channel) => channel.id === id);
-    },
-  },
-  watch: {
-    reachedLimitForChannelType() {
-      if (this.reachedLimitForChannelType) {
-        console.log('reachedLimitForChannelType');
-        this.$router.replace('/captioner/settings/channels');
-      }
     },
   },
 };

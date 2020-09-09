@@ -110,7 +110,7 @@ export default {
     handleParameterChange() {
       this.$emit('parametersUpdated', {
         port: this.port,
-        password: this.password,
+        ...(this.password ? { password: this.password } : {}),
       });
 
       if (this.port) {
