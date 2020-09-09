@@ -92,10 +92,10 @@ export default {
   },
 
   SAVE_CHROMELESS_WINDOW_DIMENSIONS: (state, { left, top, width, height }) => {
-    state.settings.chromelessWindow.left = left;
-    state.settings.chromelessWindow.top = top;
-    state.settings.chromelessWindow.width = width;
-    state.settings.chromelessWindow.height = height;
+    state.settings.chromelessWindow.left = left || 0;
+    state.settings.chromelessWindow.top = top || 0;
+    state.settings.chromelessWindow.width = width || 0;
+    state.settings.chromelessWindow.height = height || 0;
   },
 
   SET_SHARE_ON: (state, { on }) => {
