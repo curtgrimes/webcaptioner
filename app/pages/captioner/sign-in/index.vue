@@ -20,7 +20,7 @@
             <b-spinner
               v-show="$store.state.user.signedIn === null || !firebaseUILoaded"
               class="mx-auto mt-4 mb-3"
-              style="width: 4rem; height: 4rem;"
+              style="width: 4rem; height: 4rem"
             />
             <div
               v-show="$store.state.user.signedIn === false && firebaseUILoaded"
@@ -48,9 +48,10 @@ if (process.client) {
 export default {
   transition: 'fade',
 
-  data: function() {
+  data: function () {
     return {
       firebaseUILoaded: false,
+      redirecting: false,
     };
   },
 
@@ -59,35 +60,34 @@ export default {
   },
 
   watch: {
-    '$store.state.user.signedIn': function(signedIn) {
+    '$store.state.user.signedIn': function (signedIn) {
       if (signedIn === true) {
         this.postSignInRedirect();
       }
     },
   },
 
-  mounted: function() {
+  mounted: function () {
     this.initAuth();
   },
   methods: {
-    initAuth: function() {
+    initAuth: function () {
       let ui =
         firebaseui.auth.AuthUI.getInstance() || // if hot reloading the app in nuxt dev environment
         new firebaseui.auth.AuthUI(this.$firebase.auth());
-      let store = this.$store;
-      let postSignInRedirect = this.postSignInRedirect;
+
       let sateSettingsOnNextLogin = () => {
-        store.commit('SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN', true);
+        this.$store.commit('SAVE_SETTINGS_TO_FIRESTORE_ON_NEXT_LOGIN', true);
       };
       ui.start('#firebaseui-auth-container', {
         callbacks: {
-          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+          signInSuccessWithAuthResult: (authResult, redirectUrl) => {
             if (authResult.additionalUserInfo.isNewUser) {
               // User is signing in for the first time. Do an initial save.
               sateSettingsOnNextLogin();
             }
 
-            postSignInRedirect();
+            this.postSignInRedirect();
             return false; // don't redirect
           },
           uiShown: () => {
@@ -107,8 +107,11 @@ export default {
         tosUrl: '/terms-of-service',
       });
     },
-    postSignInRedirect: function() {
-      this.$router.replace('/captioner');
+    postSignInRedirect: function () {
+      if (!this.redirecting) {
+        this.redirecting = true;
+        this.$router.replace('/captioner');
+      }
       this.$store.commit('SHOW_TOAST', { toastName: 'signedIn' });
     },
   },

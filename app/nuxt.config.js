@@ -10,8 +10,6 @@ import wwwRedirectMiddleware from './server/middleware/wwwRedirect.js';
 import wsServer from './socket.io/server';
 import redirectRules from './redirects';
 
-// import gitRevision from 'git-rev-sync';
-
 module.exports = {
   head: {
     title: 'Web Captioner',
@@ -116,7 +114,7 @@ module.exports = {
         langDir: 'lang/',
       },
     ],
-    ['@nuxtjs/sentry'],
+    '@nuxtjs/sentry',
     [
       '@nuxtjs/google-analytics',
       {
@@ -236,12 +234,9 @@ module.exports = {
     { src: '~/plugins/performance.js' },
   ],
   sentry: {
-    public_key: 'REMOVED',
-    project_id: 'REMOVED',
-    config: {
-      // release: gitRevision.short(),
-      environment: process.env.HOSTNAME,
-    },
+    dsn: process.env.SENTRY_DSN,
+    disabled: process.env.NODE_ENV !== 'production',
+    environment: process.env.HOSTNAME,
   },
   axios: {
     proxy: true,
