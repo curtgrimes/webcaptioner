@@ -59,6 +59,10 @@ docs.get(
 
     try {
       let article = await helpscout.article({ categorySlug, articleSlug });
+      if (!article) {
+        throw new Error('Article not found');
+      }
+
       res.cacheControl = {
         maxAge: 60 * 5,
       };
