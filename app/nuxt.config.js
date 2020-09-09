@@ -234,7 +234,9 @@ module.exports = {
     { src: '~/plugins/performance.js' },
   ],
   sentry: {
-    dsn: process.env.SENTRY_DSN,
+    // https://github.com/nuxt-community/sentry-module/pull/203
+    dsn:
+      'REMOVED',
     disabled: process.env.NODE_ENV !== 'production',
     environment: process.env.HOSTNAME,
   },
