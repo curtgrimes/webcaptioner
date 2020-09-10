@@ -66,6 +66,16 @@
     >
       <fa icon="comment-alt" fixed-width class="mr-1" /> Chat with Support
     </b-button>
+    <b-button
+      v-if="$store.state.settings.exp.includes('srt')"
+      :to="'/captioner/srt'"
+      block
+      variant="primary"
+      size="sm"
+      class="mb-2 text-left"
+    >
+      <fa icon="flask" fixed-width class="mr-1" /> Export SRT
+    </b-button>
     <hr />
     <b-button-group class="d-flex mb-2">
       <b-button

@@ -289,6 +289,7 @@ export default {
       return [
         'share',
         'fab',
+        'srt',
         'saveTranscriptWithTimingsToDropbox',
         'captionSpeedSetting',
         ...this.experiments.map((e) => e.id),
