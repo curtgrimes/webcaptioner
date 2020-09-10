@@ -1,3 +1,5 @@
+import throttle from 'lodash.throttle';
+
 export default ({ $store, $axios, channelId, channelParameters }) => {
   // Register
   if (!channelParameters.url) {
@@ -27,61 +29,85 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
     return;
   }
 
-  const webhookSendIntervalMs =
-    channelParameters.origin === 'local' ? 200 : 1000;
-  let transcriptBuffer = [];
-  let transcriptCurrentlyDisplayed = [];
-  const maxCharactersPerLine = 40;
-  let lastSequenceNumber = 0;
-  const sequenceNumberLocalStorageKey =
+  const webhookSequenceNumberLocalStorageKey =
     'webcaptioner-channels-webhook-sequence-number';
+  let buffer = [];
+  let automaticallySendAfterSilenceTimeout;
 
-  const unsubscribeFn = $store.subscribe((mutation, state) => {
-    if (['captioner/APPEND_TRANSCRIPT_STABILIZED'].includes(mutation.type)) {
-      if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
-        transcriptBuffer.push(mutation.payload.transcript);
-      }
+  const unsubscribeFn = $store.subscribe((mutation) => {
+    if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
+      clearTimeout(automaticallySendAfterSilenceTimeout);
+      buffer.push(...mutation.payload.transcript.split(' '));
+
+      decideIfShouldSend();
+
+      automaticallySendAfterSilenceTimeout = setTimeout(() => {
+        // We've waited long enough without getting new text.
+        decideIfShouldSend({
+          forceSend: true,
+        });
+      }, 2000);
     }
   });
 
-  const errorDates = [];
-
-  const webhookSendInterval = setInterval(() => {
-    if (!transcriptBuffer.length) {
-      return;
+  const decideIfShouldSend = ({ forceSend = false } = {}) => {
+    if (
+      buffer.length &&
+      (buffer.length >= channelParameters.chunkingCount || forceSend)
+    ) {
+      send(buffer.splice(0).join(' '));
     }
+  };
 
+  let errorDates = [];
+  let sequence = 0;
+
+  const send = async (transcript) => {
     try {
       let localStorageValues = JSON.parse(
-        localStorage.getItem(sequenceNumberLocalStorageKey)
+        localStorage.getItem(webhookSequenceNumberLocalStorageKey)
       );
 
-      if (localStorageValues.url === channelParameters.url) {
-        // The stored sequenceNumber is for the current API token and not
+      if (localStorageValues.webhookUrl === channelParameters.url) {
+        // The stored sequenceNumber is for the current webhook url and not
         // a previous one. Restore the value.
-        lastSequenceNumber = Number(localStorageValues.lastSequenceNumber);
+        sequence = Number(localStorageValues.sequence);
       }
     } catch (e) {
       // No local storage value found. Assume we're starting over.
-      lastSequenceNumber = 0;
+      sequence = 0;
     }
 
-    // Consume the buffer
-    transcriptCurrentlyDisplayed.push(...transcriptBuffer);
-    transcriptBuffer = [];
+    try {
+      await fetch(channelParameters.url, {
+        // method: channelParameters.method === 'post' ? 'post' : 'put', // put doesn't work with cors
+        method: 'post',
+        mode: 'no-cors',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          transcript,
+          sequence,
+        }),
+      });
 
-    let apiPath = new URL(channelParameters.url);
-
-    const transcript = transcriptCurrentlyDisplayed
-      .join(' ')
-      .replace(' \n ', '\n') // remove spaces around line breaks
-      .trim();
-
-    const webhookErrorHandler = (e) => {
+      // Sending to webhook was successful.
+      // Increment and save the sequence number.
+      sequence++;
+      localStorage.setItem(
+        webhookSequenceNumberLocalStorageKey,
+        JSON.stringify({
+          sequence,
+          webhookUrl: channelParameters.url,
+        })
+      );
+    } catch (e) {
+      console.info('Webhook error:', e);
       errorDates.push(new Date());
 
-      const errorPeriodSeconds = 30;
-      const maxErrorsInPeriod = 10;
+      const errorPeriodSeconds = 60;
+      const maxErrorsInPeriod = 20;
       const errorPeriodStartDate = new Date(
         Date.now() - 1000 * errorPeriodSeconds
       );
@@ -92,7 +118,7 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
       ) {
         $store.commit('UPDATE_CHANNEL_ERROR', {
           channelId,
-          error: `This channel has been turned off because we received an error ${maxErrorsInPeriod} times in the last ${errorPeriodSeconds} seconds that this channel was on. Make sure your webhook URL is correct and your application is returning a 200-level status response code.`,
+          error: `This channel has been turned off because we received an error back from the webhook ${maxErrorsInPeriod} times in the last ${errorPeriodSeconds} seconds that this channel was on. Make sure your webhook URL is correct and the webhook responds with a 200-level code.`,
         });
 
         // Turn off the channel because it's not configured correctly
@@ -102,43 +128,12 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         });
         return;
       }
-    };
-
-    if (channelParameters.origin === 'remote') {
-      // Proxy through server
-      // Not implemented yet
-      // $axios
-      //   .$post('/api/channels/webhook/api', {
-      //     apiPath,
-      //     transcript,
-      //   })
-      //   .catch(webhookErrorHandler);
-    } else {
-      // Call locally from this browser
-      fetch(apiPath.toString(), {
-        method: channelParameters.method === 'post' ? 'post' : 'put',
-        mode: 'cors',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({ transcript, sequence: lastSequenceNumber }),
-      }).catch(webhookErrorHandler);
     }
-
-    transcriptCurrentlyDisplayed = [];
-    lastSequenceNumber++;
-    localStorage.setItem(
-      sequenceNumberLocalStorageKey,
-      JSON.stringify({
-        lastSequenceNumber,
-        url: channelParameters.url,
-      })
-    );
-  }, webhookSendIntervalMs);
+  };
 
   return () => {
     // Unregister function
     unsubscribeFn();
-    clearInterval(webhookSendInterval);
+    clearInterval(automaticallySendAfterSilenceTimeout);
   };
 };

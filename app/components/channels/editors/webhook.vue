@@ -65,7 +65,7 @@
         {{ savedChannel.error }}
       </div>
       <div class="form-group">
-        <label for="url" class="small">URL</label>
+        <label for="url" class="font-weight-bold">URL</label>
         <input
           id="url"
           name="url"
@@ -77,8 +77,8 @@
         />
       </div>
 
-      <div class="form-group">
-        <label for="method" class="small">Method</label>
+      <!-- <div class="form-group">
+        <label for="method" class="font-weight-bold">Method</label>
         <select
           class="form-control"
           id="method"
@@ -88,6 +88,33 @@
           <option value="post">POST</option>
           <option value="put">PUT</option>
         </select>
+      </div> -->
+
+      <div class="form-group mb-0">
+        <label for="chunkingCount" class="font-weight-bold">Chunking</label>
+
+        <input
+          id="chunkingCount"
+          name="chunkingCount"
+          v-model="parameters.chunkingCount"
+          autofocus
+          class="form-control"
+          type="number"
+          placeholder="Chunking"
+          min="1"
+          oninput="validity.valid || (value='');"
+        />
+        <p class="text-muted small mt-2 mb-0">
+          <span v-if="parameters.chunkingCount == 1">
+            Call the webhook immediately with each new word.
+          </span>
+          <span v-else>
+            Only call the webhook when at least
+            {{ parameters.chunkingCount || 'this number of' }}
+            words are ready to send, or after a short delay with no new words
+            spoken.
+          </span>
+        </p>
       </div>
 
       <div class="form-group mb-0" v-if="false">
@@ -159,6 +186,7 @@ export default {
     if (this.savedChannel) {
       this.parameters.url = this.savedChannel.parameters?.url;
       this.parameters.method = this.savedChannel.parameters?.method;
+      this.parameters.chunkingCount = this.savedChannel.parameters?.chunkingCount;
       this.parameters.origin = this.savedChannel.parameters?.origin;
     }
   },
@@ -167,6 +195,7 @@ export default {
       parameters: {
         url: null,
         method: 'post',
+        chunkingCount: 1,
         origin: 'local',
       },
     };
@@ -180,14 +209,20 @@ export default {
     parameters: {
       immediate: true,
       deep: true,
-      handler({ url, method, origin }) {
+      handler({ url, method, origin, chunkingCount }) {
         this.$emit('parametersUpdated', {
           url,
           method,
+          chunkingCount: Number(chunkingCount),
           origin,
         });
 
-        if (url && method) {
+        if (
+          url &&
+          method &&
+          Number.isInteger(Number(chunkingCount)) &&
+          Number(chunkingCount) >= 1
+        ) {
           this.$emit('formValid');
         } else {
           this.$emit('formInvalid');

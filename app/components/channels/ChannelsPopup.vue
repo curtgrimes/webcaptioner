@@ -2,7 +2,7 @@
   <div>
     <b-button
       variant="link"
-      class="p-0 text-dark small"
+      class="p-0 text-dark small font-weight-bold"
       size="sm"
       to="/captioner/settings/channels"
       @click="$root.$emit('bv::hide::popover')"
