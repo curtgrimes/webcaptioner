@@ -33,6 +33,35 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
     'webcaptioner-channels-webhook-sequence-number';
   let buffer = [];
   let automaticallySendAfterSilenceTimeout;
+  let errorDates = [];
+  let sequence = 0;
+
+  const getSavedSequenceNumber = () => {
+    // Get possibly saved sequence number from localStorage
+    try {
+      const localStorageValues = JSON.parse(
+        localStorage.getItem(webhookSequenceNumberLocalStorageKey)
+      );
+
+      const isMoreThan24HoursAgo = (date) =>
+        date.getTime() < new Date().getTime() - 1000 * 60 * 60 * 24;
+
+      if (
+        localStorageValues.webhookUrl === channelParameters.url &&
+        localStorageValues.lastEvent &&
+        !isMoreThan24HoursAgo(new Date(localStorageValues.lastEvent))
+      ) {
+        // The stored sequenceNumber is for the current webhook url and not
+        // a previous one. And it's recent (within the last day) Restore the value.
+        return Number(localStorageValues.sequence);
+      }
+    } catch (e) {
+      // No local storage value found. Assume we're starting over.
+      return 0;
+    }
+
+    return 0;
+  };
 
   const unsubscribeFn = $store.subscribe((mutation) => {
     if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
@@ -48,6 +77,16 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         });
       }, 2000);
     }
+
+    if (mutation.type === 'captioner/SET_SHOULD_BE_ON') {
+      if (mutation.payload.shouldBeOn) {
+        // Captioning started
+        sequence = getSavedSequenceNumber();
+      } else {
+        // Captioning ended
+        updateSequenceNumberLocalStorage(sequence);
+      }
+    }
   });
 
   const decideIfShouldSend = ({ forceSend = false } = {}) => {
@@ -59,26 +98,27 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
     }
   };
 
-  let errorDates = [];
-  let sequence = 0;
+  const updateSequenceNumberLocalStorageThrottled = throttle((sequence) => {
+    updateSequenceNumberLocalStorage(sequence);
+  }, 1000 * 10);
+
+  const updateSequenceNumberLocalStorage = (sequence) => {
+    localStorage.setItem(
+      webhookSequenceNumberLocalStorageKey,
+      JSON.stringify({
+        sequence,
+        webhookUrl: channelParameters.url,
+        lastEvent: new Date(),
+      })
+    );
+  };
 
   const send = async (transcript) => {
     try {
-      let localStorageValues = JSON.parse(
-        localStorage.getItem(webhookSequenceNumberLocalStorageKey)
-      );
-
-      if (localStorageValues.webhookUrl === channelParameters.url) {
-        // The stored sequenceNumber is for the current webhook url and not
-        // a previous one. Restore the value.
-        sequence = Number(localStorageValues.sequence);
-      }
-    } catch (e) {
-      // No local storage value found. Assume we're starting over.
-      sequence = 0;
-    }
-
-    try {
+      // Increment sequence number before
+      // making the call because the call will take
+      // time, and more calls may happen during this time
+      sequence++;
       await fetch(channelParameters.url, {
         // method: channelParameters.method === 'post' ? 'post' : 'put', // put doesn't work with cors
         method: 'post',
@@ -88,20 +128,10 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         },
         body: JSON.stringify({
           transcript,
-          sequence,
+          sequence: sequence - 1, // -1 just because we already incremented it
         }),
       });
-
-      // Sending to webhook was successful.
-      // Increment and save the sequence number.
-      sequence++;
-      localStorage.setItem(
-        webhookSequenceNumberLocalStorageKey,
-        JSON.stringify({
-          sequence,
-          webhookUrl: channelParameters.url,
-        })
-      );
+      updateSequenceNumberLocalStorageThrottled(sequence);
     } catch (e) {
       console.info('Webhook error:', e);
       errorDates.push(new Date());
