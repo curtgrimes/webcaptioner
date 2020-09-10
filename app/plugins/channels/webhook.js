@@ -115,10 +115,13 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
       //   .catch(webhookErrorHandler);
     } else {
       // Call locally from this browser
-      $axios({
-        url: apiPath,
+      fetch(apiPath.toString(), {
         method: channelParameters.method === 'post' ? 'post' : 'put',
-        data: { transcript, sequence: lastSequenceNumber },
+        mode: 'cors',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ transcript, sequence: lastSequenceNumber }),
       }).catch(webhookErrorHandler);
     }
 
