@@ -7,7 +7,10 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
     });
 
     // Turn off the channel because it's not configured correctly
-    $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', { channelId, onOrOff: false });
+    $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', {
+      channelId,
+      onOrOff: false,
+    });
     // No need to unregister here because we haven't registered yet
     return;
   }
@@ -15,7 +18,7 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
   try {
     fabUrl = new URL(`http://localhost`);
     fabUrl.port = channelParameters.port;
-    // await fetch(fabUrl.toString());
+    await fetch(fabUrl.toString());
   } catch (e) {
     console.error('error', e);
     $store.commit('UPDATE_CHANNEL_ERROR', {
@@ -25,7 +28,10 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
     });
 
     // Turn off the channel because it's not configured correctly
-    $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', { channelId, onOrOff: false });
+    $store.commit('TOGGLE_CHANNEL_ON_OR_OFF', {
+      channelId,
+      onOrOff: false,
+    });
     // No need to unregister here because we haven't registered yet
     return;
   }
@@ -34,7 +40,13 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
   // from now on
   fabUrl.pathname = '/speechinterface';
 
-  const sendToFab = async (text) => {
+  // reduce likelihood that words will be receivd out of order with
+  // a buffer
+  const buffer = [];
+  const minBufferSizeBeforeSend = 5;
+  let automaticallySendAfterSilenceTimeout;
+
+  const send = async (text) => {
     fabUrl.searchParams.set('text', text);
     await fetch(fabUrl);
   };
@@ -44,9 +56,27 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
       mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED' &&
       mutation.payload.transcript
     ) {
-      sendToFab(mutation.payload.transcript);
+      clearTimeout(automaticallySendAfterSilenceTimeout);
+      buffer.push(...mutation.payload.transcript.split(' '));
+      decideIfShouldSend();
+
+      automaticallySendAfterSilenceTimeout = setTimeout(() => {
+        // We've waited long enough without getting new text.
+        decideIfShouldSend({
+          forceSend: true,
+        });
+      }, 1000);
     }
   });
+
+  const decideIfShouldSend = ({ forceSend = false } = {}) => {
+    if (
+      buffer.length &&
+      (buffer.length >= minBufferSizeBeforeSend || forceSend)
+    ) {
+      send(buffer.splice(0).join(' '));
+    }
+  };
 
   return () => {
     // Unregister function
