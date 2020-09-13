@@ -18,7 +18,7 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
   try {
     fabUrl = new URL(`http://localhost`);
     fabUrl.port = channelParameters.port;
-    await fetch(fabUrl.toString());
+    // await fetch(fabUrl.toString());
   } catch (e) {
     console.error('error', e);
     $store.commit('UPDATE_CHANNEL_ERROR', {
