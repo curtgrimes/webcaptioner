@@ -1,7 +1,7 @@
-const dateFormat = require('date-fns/format')
+import { format as dateFormat } from 'date-fns';
 
 export default {
-    methods: {
-        dateFormat,
-    },
-}
+  methods: {
+    dateFormat,
+  },
+};

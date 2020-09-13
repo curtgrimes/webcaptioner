@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     formatDate: function(date) {
-      return this.dateFormat(date, 'MMM. D, YYYY');
+      return this.dateFormat(date, 'MMM. D, yyyy');
     },
   },
 };

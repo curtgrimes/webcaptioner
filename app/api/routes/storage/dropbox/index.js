@@ -94,7 +94,7 @@ dropboxRoute.post('/push', async (req, res) => {
   let textUpload = dropboxClient.filesUpload({
     path:
       '/Transcripts/' +
-      dateFormat(sessionStartDate, 'YYYY-MM-DD HH.mm.ss') +
+      dateFormat(new Date(sessionStartDate), 'yyyy-MM-dd HH.mm.ss') +
       '.txt',
     contents: text,
     mode: 'overwrite',
@@ -105,7 +105,7 @@ dropboxRoute.post('/push', async (req, res) => {
     ? dropboxClient.filesUpload({
         path:
           '/Transcripts/' +
-          dateFormat(sessionStartDate, 'YYYY-MM-DD HH.mm.ss') +
+          dateFormat(new Date(sessionStartDate), 'yyyy-MM-dd HH.mm.ss') +
           '.webcaptioner-timings.json',
         contents: JSON.stringify(timings),
         mode: 'overwrite',
