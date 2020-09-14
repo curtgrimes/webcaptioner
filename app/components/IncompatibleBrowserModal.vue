@@ -5,7 +5,22 @@
     no-close-on-esc
     no-close-on-backdrop
   >
-    <p>{{ $t('incompatibleBrowser.message.i0') }}</p>
+    <p>
+      <i18n path="incompatibleBrowser.message.i0" tag="span">
+        <template v-slot:reliesOnTechnologyCalledWebSpeechAPI>
+          <a
+            href="/help/getting-started/web-speech-api"
+            target="_blank"
+            class="text-secondary"
+            >{{
+              $t(
+                'incompatibleBrowser.message.reliesOnTechnologyCalledWebSpeechAPI'
+              )
+            }}</a
+          >
+        </template>
+      </i18n>
+    </p>
     <p>
       <i18n path="incompatibleBrowser.message.i1" tag="span">
         <template v-slot:switchToGoogleChrome>
@@ -21,6 +36,7 @@
           <a
             href="https://feedback.webcaptioner.com/posts/28/make-web-captioner-work-on-browsers-other-than-chrome"
             target="_blank"
+            class="text-secondary"
             >{{ $t('incompatibleBrowser.message.castAVoteHere') }}</a
           >
         </template>
@@ -30,9 +46,12 @@
       <div class="row">
         <div class="col-sm-6">
           <p class="ml-sm-3 mt-sm-2 mb-sm-0">
-            <a href="/help/general/browser-compatibility/" target="_blank">{{
-              $t('incompatibleBrowser.whyJustChrome')
-            }}</a>
+            <a
+              href="/help/getting-started/web-speech-api"
+              target="_blank"
+              class="text-secondary"
+              >{{ $t('incompatibleBrowser.whyJustChrome') }}</a
+            >
           </p>
         </div>
         <div class="col-sm-6 text-sm-right">

@@ -146,6 +146,7 @@ module.exports = {
               'faFileAlt',
               'faFileWord',
               'faExclamationTriangle',
+              'faQuestionCircle',
               'faTimes',
               'faMicrophone',
               'faDesktop',
