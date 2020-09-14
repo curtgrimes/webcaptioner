@@ -15,114 +15,120 @@
           <pre>{{ srt }}</pre>
         </div>
         <div class="col-4 col-lg-3 bg-white border-left my-n3">
-          <div class="sticky-top py-3">
-            <b-form-group label="Format" class="small">
-              <b-form-radio
-                v-model="format"
-                name="format"
-                value="srt"
-                class="mt-n1"
-                size="sm"
-                >SRT (SubRip)</b-form-radio
-              >
-              <b-form-radio v-model="format" name="format" value="sbv" size="sm"
-                >SBV (SubViewer)</b-form-radio
-              >
-              <b-form-radio
-                v-model="format"
-                name="format"
-                value="webvtt"
-                size="sm"
-                >WebVTT</b-form-radio
-              >
-              <b-form-radio
-                v-model="format"
-                name="format"
-                value="audacity"
-                size="sm"
-                >Audacity Label
-                <a
-                  href="https://manual.audacityteam.org/man/importing_and_exporting_labels.html"
-                  target="_blank"
-                  ><fa icon="question-circle" /></a
-              ></b-form-radio>
-              <b-form-radio
-                v-model="format"
-                name="format"
-                value="json"
-                size="sm"
-                >JSON (Word timings)</b-form-radio
-              >
-            </b-form-group>
+          <div class="sticky-top py-3 d-flex flex-column" style="">
+            <div style="min-height: 0">
+              <b-form-group label="Format" class="small">
+                <b-form-radio
+                  v-model="format"
+                  name="format"
+                  value="srt"
+                  class="mt-n1"
+                  size="sm"
+                  >SRT (SubRip)</b-form-radio
+                >
+                <b-form-radio
+                  v-model="format"
+                  name="format"
+                  value="sbv"
+                  size="sm"
+                  >SBV (SubViewer)</b-form-radio
+                >
+                <b-form-radio
+                  v-model="format"
+                  name="format"
+                  value="webvtt"
+                  size="sm"
+                  >WebVTT</b-form-radio
+                >
+                <b-form-radio
+                  v-model="format"
+                  name="format"
+                  value="audacity"
+                  size="sm"
+                  >Audacity Label
+                  <a
+                    href="https://manual.audacityteam.org/man/importing_and_exporting_labels.html"
+                    target="_blank"
+                    ><fa icon="question-circle" /></a
+                ></b-form-radio>
+                <b-form-radio
+                  v-model="format"
+                  name="format"
+                  value="json"
+                  size="sm"
+                  >JSON (Word timings)</b-form-radio
+                >
+              </b-form-group>
 
-            <b-form-group
-              label="Maximum lines per group"
-              class="small"
-              v-if="!['audacity', 'json'].includes(format)"
-            >
-              <b-form-input
-                v-model="linesPerGroup"
-                type="number"
-                trim
-                size="sm"
-                min="1"
-                oninput="validity.valid||(value='');"
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group
-              label="Maximum characters per line"
-              class="small"
-              v-if="!['json'].includes(format)"
-            >
-              <b-form-input
-                v-model="maxLineLengthCharacters"
-                type="number"
-                trim
-                size="sm"
-                min="1"
-                oninput="validity.valid||(value='');"
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group
-              label="Start new group after pausing for this many milliseconds"
-              class="small"
-              v-if="!['json'].includes(format)"
-            >
-              <b-form-input
-                v-model="newGroupAfterPauseMilliseconds"
-                type="number"
-                trim
-                size="sm"
-                min="1"
-                oninput="validity.valid||(value='');"
-              ></b-form-input>
-            </b-form-group>
-
-            <div class="mb-2 d-flex">
-              <b-button
-                size="sm"
-                block
-                variant="light"
-                class="ml-auto"
-                @click="copyToClipboard()"
-                :disabled="copyToClipboardSuccess || !this.srt"
+              <b-form-group
+                label="Maximum lines per group"
+                class="small"
+                v-if="!['audacity', 'json'].includes(format)"
               >
-                <span v-if="copyToClipboardSuccess">Copied!</span>
-                <span v-else>Copy to clipboard</span>
-              </b-button>
+                <b-form-input
+                  v-model="linesPerGroup"
+                  type="number"
+                  trim
+                  size="sm"
+                  min="1"
+                  oninput="validity.valid||(value='');"
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group
+                label="Maximum characters per line"
+                class="small"
+                v-if="!['json'].includes(format)"
+              >
+                <b-form-input
+                  v-model="maxLineLengthCharacters"
+                  type="number"
+                  trim
+                  size="sm"
+                  min="1"
+                  oninput="validity.valid||(value='');"
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group
+                label="Start new group after pausing for this many milliseconds"
+                class="small"
+                v-if="!['json'].includes(format)"
+              >
+                <b-form-input
+                  v-model="newGroupAfterPauseMilliseconds"
+                  type="number"
+                  trim
+                  size="sm"
+                  min="1"
+                  oninput="validity.valid||(value='');"
+                ></b-form-input>
+              </b-form-group>
             </div>
-            <div class="d-flex">
-              <b-button
-                variant="secondary"
-                @click="saveFile()"
-                class="ml-auto"
-                :disabled="!this.srt"
-                block
-                >Save <span v-if="format === 'srt'">SRT</span
-                ><span v-else>WebVTT</span></b-button
-              >
+            <div style="min-height: 0">
+              <div class="mb-2 d-flex">
+                <b-button
+                  size="sm"
+                  block
+                  variant="light"
+                  class="ml-auto"
+                  @click="copyToClipboard()"
+                  :disabled="copyToClipboardSuccess || !this.srt"
+                >
+                  <span v-if="copyToClipboardSuccess">Copied!</span>
+                  <span v-else>Copy to clipboard</span>
+                </b-button>
+              </div>
+              <div class="d-flex">
+                <b-button
+                  variant="secondary"
+                  @click="saveFile()"
+                  class="ml-auto"
+                  :disabled="!this.srt"
+                  block
+                  >Save {{ getSaveButtonLabel(format) }}</b-button
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -406,6 +412,22 @@ export default {
           return 'text/plain';
         case 'json':
           return 'application/json';
+      }
+    },
+    getSaveButtonLabel(format) {
+      switch (format) {
+        case 'srt':
+          return 'SRT';
+        case 'sbv':
+          return 'SBV';
+        case 'webvtt':
+          return 'WebVTT';
+        case 'audacity':
+          return 'Audacity Label File';
+        case 'json':
+          return 'JSON';
+        default:
+          return 'File';
       }
     },
     getCaptionFileHeader() {
