@@ -7,7 +7,7 @@ import throttle from 'lodash.throttle';
 import { normalizeSettings } from '~/mixins/settingsNormalizer';
 
 var saveSettingsToFirestore = throttle((state, db) => {
-  let settings = state.settings;
+  let settings = { ...state.settings };
 
   // Make channels a plain array
   settings.channels = [...(settings.channels || [])];
