@@ -84,7 +84,7 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         sequence = getSavedSequenceNumber();
       } else {
         // Captioning ended
-        updateSequenceNumberLocalStorage(sequence);
+        updateSequenceNumberLocalStorage(sequence); // do it immediately instead of throttled
       }
     }
   });

@@ -36,6 +36,50 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
   let completeLines = []; // an array of arrays of words
   let lineInProgress = [];
   let automaticallyMarkLineCompleteAfterSilenceTimeout;
+  let sequence = 0;
+
+  const getSavedSequenceNumber = () => {
+    // Get possibly saved sequence number from localStorage
+    try {
+      const localStorageValues = JSON.parse(
+        localStorage.getItem(zoomSequenceNumberLocalStorageKey)
+      );
+
+      if (localStorageValues.zoomApiToken === channelParameters.zoomApiToken) {
+        // The stored sequenceNumber is for the current Zoom url (meeting) and not
+        // a previous one.
+        return Boolean(Number(localStorageValues.sequence))
+          ? Number(localStorageValues.sequence)
+          : 0;
+      }
+    } catch (e) {
+      // No local storage value found. Assume we're starting over.
+      return 0;
+    }
+
+    return 0;
+  };
+
+  const updateSequenceNumberLocalStorage = (sequence) => {
+    localStorage.setItem(
+      zoomSequenceNumberLocalStorageKey,
+      JSON.stringify({
+        sequence,
+        zoomApiToken: channelParameters.zoomApiToken,
+      })
+    );
+  };
+
+  const sequenceNumberUpdater = () => {
+    updateSequenceNumberLocalStorage(sequence);
+  };
+
+  window.addEventListener('beforeunload', sequenceNumberUpdater);
+
+  if ($store.state.captioner.shouldBeOn) {
+    // Captioning already in progress when this channel was turned on
+    sequence = getSavedSequenceNumber();
+  }
 
   const unsubscribeFn = $store.subscribe((mutation, state) => {
     if (mutation.type === 'captioner/APPEND_TRANSCRIPT_STABILIZED') {
@@ -66,6 +110,14 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
           forceSend: true,
         });
       }, 2000);
+    } else if (mutation.type === 'captioner/SET_SHOULD_BE_ON') {
+      if (mutation.payload.shouldBeOn) {
+        // Captioning started
+        sequence = getSavedSequenceNumber();
+      } else {
+        // Captioning ended
+        updateSequenceNumberLocalStorage(sequence);
+      }
     }
   });
 
@@ -104,47 +156,25 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
   };
 
   let errorDates = [];
-  let lastSequenceNumber = 0;
 
   const sendToZoom = throttle(async (transcript) => {
-    try {
-      let localStorageValues = JSON.parse(
-        localStorage.getItem(zoomSequenceNumberLocalStorageKey)
-      );
-
-      if (localStorageValues.zoomApiToken === channelParameters.zoomApiToken) {
-        // The stored sequenceNumber is for the current API token and not
-        // a previous one. Restore the value.
-        lastSequenceNumber = Number(localStorageValues.lastSequenceNumber);
-      }
-    } catch (e) {
-      // No local storage value found. Assume we're starting over.
-      lastSequenceNumber = 0;
-    }
-
     let apiPath = new URL(channelParameters.zoomApiToken);
-    apiPath.searchParams.append('seq', String(lastSequenceNumber));
+    apiPath.searchParams.append('seq', String(sequence));
     apiPath.searchParams.append(
       'lang',
       $store.state.settings.locale.from || 'en-US'
     );
 
     try {
+      // Increment sequence number before
+      // making the call because the call will take
+      // time, and more calls may happen during this time
+      sequence++;
+      updateSequenceNumberLocalStorage(sequence);
       await $axios.$post('/api/channels/zoom', {
         apiPath,
         transcript,
       });
-
-      // Sending to zoom was successful.
-      // Increment and save the sequence number.
-      lastSequenceNumber++;
-      localStorage.setItem(
-        zoomSequenceNumberLocalStorageKey,
-        JSON.stringify({
-          lastSequenceNumber,
-          zoomApiToken: channelParameters.zoomApiToken,
-        })
-      );
     } catch (e) {
       errorDates.push(new Date());
 
@@ -177,5 +207,6 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
     // Unregister function
     unsubscribeFn();
     clearInterval(automaticallyMarkLineCompleteAfterSilenceTimeout);
+    window.removeEventListener('beforeunload', sequenceNumberUpdater);
   };
 };
