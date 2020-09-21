@@ -11,125 +11,160 @@
       hide-footer
     >
       <div class="row">
-        <div class="col-8 col-lg-9">
-          <pre>{{ srt }}</pre>
+        <div
+          class="col-8 col-lg-9 my-n3 py-3"
+          style="overflow: auto; max-height: calc(70vh + 4.5rem)"
+        >
+          <pre v-if="output" class="small">{{ output }}</pre>
+          <span v-else class="text-muted small">No transcript to export</span>
         </div>
-        <div class="col-4 col-lg-3 bg-white border-left my-n3">
-          <div class="sticky-top py-3 d-flex flex-column" style="">
-            <div style="min-height: 0">
-              <b-form-group label="Format" class="small">
-                <b-form-radio
-                  v-model="format"
-                  name="format"
-                  value="srt"
-                  class="mt-n1"
-                  size="sm"
-                  >SRT (SubRip)</b-form-radio
-                >
-                <b-form-radio
-                  v-model="format"
-                  name="format"
-                  value="sbv"
-                  size="sm"
-                  >SBV (SubViewer)</b-form-radio
-                >
-                <b-form-radio
-                  v-model="format"
-                  name="format"
-                  value="webvtt"
-                  size="sm"
-                  >WebVTT</b-form-radio
-                >
-                <b-form-radio
-                  v-model="format"
-                  name="format"
-                  value="audacity"
-                  size="sm"
-                  >Audacity Label
-                  <a
-                    href="https://manual.audacityteam.org/man/importing_and_exporting_labels.html"
-                    target="_blank"
-                    ><fa icon="question-circle" /></a
-                ></b-form-radio>
-                <b-form-radio
-                  v-model="format"
-                  name="format"
-                  value="json"
-                  size="sm"
-                  >JSON (Word timings)</b-form-radio
-                >
-              </b-form-group>
-
-              <b-form-group
-                label="Maximum lines per group"
-                class="small"
-                v-if="!['audacity', 'json'].includes(format)"
+        <div class="col-4 col-lg-3 bg-white rounded-right border-left my-n3">
+          <div
+            class="mx-n3 px-3 pb-1 py-3"
+            style="margin-bottom: 4.5rem; overflow-y: auto; max-height: 70vh"
+          >
+            <b-form-group label="Format" class="small mb-2">
+              <b-form-radio v-model="format" name="text" value="text" size="sm"
+                >Text (.txt)</b-form-radio
               >
-                <b-form-input
-                  v-model="linesPerGroup"
-                  type="number"
-                  trim
-                  size="sm"
-                  min="1"
-                  oninput="validity.valid||(value='');"
-                ></b-form-input>
-              </b-form-group>
-
-              <b-form-group
-                label="Maximum characters per line"
-                class="small"
-                v-if="!['json'].includes(format)"
+              <b-form-radio v-model="format" name="format" value="srt" size="sm"
+                >SubRip (.srt)</b-form-radio
               >
-                <b-form-input
-                  v-model="maxLineLengthCharacters"
-                  type="number"
-                  trim
-                  size="sm"
-                  min="1"
-                  oninput="validity.valid||(value='');"
-                ></b-form-input>
-              </b-form-group>
-
-              <b-form-group
-                label="Start new group after pausing for this many milliseconds"
-                class="small"
-                v-if="!['json'].includes(format)"
+              <b-form-radio v-model="format" name="format" value="sbv" size="sm"
+                >SubViewer (.sbv)</b-form-radio
               >
-                <b-form-input
-                  v-model="newGroupAfterPauseMilliseconds"
-                  type="number"
-                  trim
-                  size="sm"
-                  min="1"
-                  oninput="validity.valid||(value='');"
-                ></b-form-input>
-              </b-form-group>
-            </div>
-            <div style="min-height: 0">
-              <div class="mb-2 d-flex">
+              <b-form-radio
+                v-model="format"
+                name="format"
+                value="webvtt"
+                size="sm"
+                >WebVTT</b-form-radio
+              >
+              <b-form-radio
+                v-model="format"
+                name="format"
+                value="audacity"
+                size="sm"
+                >Audacity Label
+                <a
+                  href="https://manual.audacityteam.org/man/importing_and_exporting_labels.html"
+                  target="_blank"
+                  ><fa icon="question-circle" /></a
+              ></b-form-radio>
+              <b-form-radio
+                v-model="format"
+                name="format"
+                value="json"
+                size="sm"
+                >JSON (Word timings)</b-form-radio
+              >
+            </b-form-group>
+            <hr class="py-1" />
+            <b-button
+              @click="showOptions = !showOptions"
+              :disabled="!enableOptions"
+              variant="light"
+              size="sm"
+              class="contains-chevron"
+              :class="{ showing: showOptions }"
+            >
+              <fa icon="chevron-down" fixed-width />
+              Options
+            </b-button>
+            <transition name="fade-in">
+              <div v-if="showOptions" class="pt-3 mb-n1">
+                <b-form-group
+                  label="Maximum group size"
+                  class="small"
+                  v-if="!['audacity', 'json'].includes(format)"
+                >
+                  <b-input-group append="lines" size="sm">
+                    <b-form-input
+                      v-model="linesPerGroup"
+                      type="number"
+                      trim
+                      size="sm"
+                      min="1"
+                      oninput="validity.valid||(value='');"
+                    ></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+
+                <b-form-group
+                  label="Maximum line length"
+                  class="small"
+                  v-if="!['json'].includes(format)"
+                >
+                  <b-input-group append="chars." size="sm">
+                    <b-form-input
+                      v-model="maxLineLengthCharacters"
+                      type="number"
+                      trim
+                      size="sm"
+                      min="1"
+                      oninput="validity.valid||(value='');"
+                    ></b-form-input>
+                  </b-input-group>
+                </b-form-group>
+
+                <b-form-group
+                  label="Start new group after pause in speech"
+                  class="small"
+                  v-if="!['json'].includes(format)"
+                >
+                  <b-input-group append="secs." size="sm">
+                    <b-form-input
+                      v-model="newGroupAfterPauseSeconds"
+                      type="number"
+                      trim
+                      size="sm"
+                      min="0.5"
+                      step="0.1"
+                      oninput="validity.valid||(value='');"
+                    ></b-form-input>
+                  </b-input-group>
+                </b-form-group>
                 <b-button
+                  variant="link"
+                  class="text-secondary p-0 small mt-n2"
                   size="sm"
-                  block
-                  variant="light"
-                  class="ml-auto"
-                  @click="copyToClipboard()"
-                  :disabled="copyToClipboardSuccess || !this.srt"
-                >
-                  <span v-if="copyToClipboardSuccess">Copied!</span>
-                  <span v-else>Copy to clipboard</span>
-                </b-button>
-              </div>
-              <div class="d-flex">
-                <b-button
-                  variant="secondary"
-                  @click="saveFile()"
-                  class="ml-auto"
-                  :disabled="!this.srt"
-                  block
-                  >Save {{ getSaveButtonLabel(format) }}</b-button
+                  v-if="!settingsAreDefaults"
+                  @click="resetToDefaults()"
+                  >Reset to defaults</b-button
                 >
               </div>
-            </div>
+            </transition>
+          </div>
+          <div
+            class="p-3 d-flex bg-light border-top rounded-right"
+            style="
+              height: 4.5rem;
+              position: absolute;
+              left: 0;
+              right: 0;
+              bottom: 0;
+            "
+          >
+            <b-button
+              variant="secondary"
+              @click="saveFile()"
+              class="w-100 mr-1"
+              :disabled="!this.output"
+              >Export</b-button
+            >
+            <b-button
+              size="sm"
+              variant="outline-dark"
+              class="ml-auto"
+              @click="copyToClipboard()"
+              :disabled="copyToClipboardSuccess || !this.output"
+              v-b-tooltip.hover.top="
+                copyToClipboardSuccess ? 'Copied!' : 'Copy to clipboard'
+              "
+            >
+              <fa icon="check" v-if="copyToClipboardSuccess" fixed-width />
+              <fa icon="copy" v-else fixed-width />
+            </b-button>
           </div>
         </div>
       </div>
@@ -142,6 +177,11 @@ import transcript from '~/components/Transcript.vue';
 import { format as formatDate } from 'date-fns';
 
 const routeName = 'save-to-file';
+const defaults = {
+  maxLineLengthCharacters: 42,
+  linesPerGroup: 2,
+  newGroupAfterPauseSeconds: 2,
+};
 
 export default {
   components: {
@@ -151,19 +191,41 @@ export default {
     return {
       showModal: true,
       copyToClipboardSuccess: false,
-      maxLineLengthCharacters: 42,
-      linesPerGroup: 2,
-      newGroupAfterPauseMilliseconds: 2000,
-      format: 'srt',
+      maxLineLengthCharacters: defaults.maxLineLengthCharacters,
+      linesPerGroup: defaults.linesPerGroup,
+      newGroupAfterPauseSeconds: defaults.newGroupAfterPauseSeconds,
+      format: 'text',
+      showOptions: false,
+      enableOptions: true,
+
+      showLineLengthGuide: false,
     };
   },
   computed: {
+    settingsAreDefaults() {
+      return (
+        this.maxLineLengthCharacters == defaults.maxLineLengthCharacters &&
+        this.linesPerGroup == defaults.linesPerGroup &&
+        this.newGroupAfterPauseSeconds == defaults.newGroupAfterPauseSeconds
+      );
+    },
     stabilizedTranscript() {
       return this.$store.state.captioner.transcript.stabilizedWithTimings;
     },
-    srt() {
+    output() {
+      if (!this.stabilizedTranscript.length) {
+        return '';
+      }
+
       if (this.format === 'json') {
         return JSON.stringify(this.stabilizedTranscript, null, 4);
+      }
+
+      if (this.format === 'text') {
+        return (
+          this.getCaptionFileHeader() +
+          this.stabilizedTranscript.map((t) => t.text).join(' ')
+        );
       }
 
       const linesPerGroup = this.format === 'audacity' ? 1 : this.linesPerGroup;
@@ -178,10 +240,10 @@ export default {
           // There hasn't been too much time since the last word
           // There is a previous item
           !this.stabilizedTranscript[i - 1] ||
-          // It happened less than newGroupAfterPauseMilliseconds MS before the current item
+          // It happened less than newGroupAfterPauseSeconds before the current item
           this.stabilizedTranscript[i].time -
             this.stabilizedTranscript[i - 1].time <=
-            this.newGroupAfterPauseMilliseconds
+            this.newGroupAfterPauseSeconds * 1000
         ) {
           // Don't start a new line group (for now)
 
@@ -203,9 +265,11 @@ export default {
             }
 
             if (
-              (thisLineGroup[j]?.map((word) => word.text).join().length || 0) <=
+              (thisLineGroup[j]?.map((word) => word.text).join().length || 0) +
+                (wordToAdd.text.length + 1) <=
               this.maxLineLengthCharacters
             ) {
+              // +1 for space
               // It fits on the jth line. Add it.
               thisLineGroup[j].push(wordToAdd);
               break;
@@ -371,10 +435,30 @@ export default {
         this.$refs.modal.hide();
       }
     },
+    format: {
+      immediate: true,
+      handler() {
+        switch (this.format) {
+          case 'text':
+          case 'json':
+            // These formats don't have any options
+            this.showOptions = false;
+            this.enableOptions = false;
+            break;
+          default:
+            this.enableOptions = true;
+        }
+      },
+    },
   },
   methods: {
+    resetToDefaults() {
+      this.maxLineLengthCharacters = defaults.maxLineLengthCharacters;
+      this.linesPerGroup = defaults.linesPerGroup;
+      this.newGroupAfterPauseSeconds = defaults.newGroupAfterPauseSeconds;
+    },
     copyToClipboard() {
-      navigator?.clipboard?.writeText(this.srt).then(
+      navigator?.clipboard?.writeText(this.output).then(
         () => {
           this.copyToClipboardSuccess = true;
           setTimeout(() => {
@@ -394,6 +478,7 @@ export default {
           return 'sbv';
         case 'webvtt':
           return 'vtt';
+        case 'text':
         case 'audacity':
           return 'txt';
         case 'json':
@@ -408,26 +493,11 @@ export default {
           return 'text/sbv';
         case 'webvtt':
           return 'text/vtt';
+        case 'txt':
         case 'audacity':
           return 'text/plain';
         case 'json':
           return 'application/json';
-      }
-    },
-    getSaveButtonLabel(format) {
-      switch (format) {
-        case 'srt':
-          return 'SRT';
-        case 'sbv':
-          return 'SBV';
-        case 'webvtt':
-          return 'WebVTT';
-        case 'audacity':
-          return 'Audacity Label File';
-        case 'json':
-          return 'JSON';
-        default:
-          return 'File';
       }
     },
     getCaptionFileHeader() {
@@ -436,6 +506,10 @@ export default {
           return ``;
         case 'sbv':
           return ``;
+        case 'text':
+          return `Transcript generated by Web Captioner
+on ${formatDate(new Date(), 'PPpp')}
+https://webcaptioner.com\n\n`;
         case 'webvtt':
           return `WEBVTT Kind: captions${
             this.$store.state?.settings?.locale?.from
@@ -444,7 +518,7 @@ export default {
           }
 
 NOTE
-Generated by Web Captioner
+Transcript generated by Web Captioner
 on ${formatDate(new Date(), 'PPpp')}
 https://webcaptioner.com\n\n`;
         default:
@@ -452,7 +526,7 @@ https://webcaptioner.com\n\n`;
       }
     },
     saveFile() {
-      const file = new Blob([this.srt], {
+      const file = new Blob([this.output], {
         type: this.getFileType(),
       });
       console.log(file);
@@ -484,3 +558,13 @@ https://webcaptioner.com\n\n`;
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.contains-chevron .fa-chevron-down {
+  transition: transform 0.3s;
+}
+
+.contains-chevron.showing .fa-chevron-down {
+  transform: rotate(180deg) translateY(0.05rem);
+}
+</style>

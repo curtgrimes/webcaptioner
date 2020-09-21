@@ -151,6 +151,7 @@ module.exports = {
               'faMicrophone',
               'faDesktop',
               'faExternalLinkAlt',
+              'faCopy',
               'faSave',
               'faSyncAlt',
               'faSearch',
