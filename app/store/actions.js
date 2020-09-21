@@ -16,13 +16,7 @@ var saveSettingsToFirestore = throttle((state, db) => {
     .doc(state.user.uid)
     .collection('settings')
     .doc('user')
-    .set(clone(state.settings))
-    .then(function() {
-      // console.log('Document successfully written!');
-    })
-    .catch(function(error) {
-      // console.error('Error writing document: ', error);
-    });
+    .set(clone(state.settings));
 }, 5000);
 
 function eventLogger(commit, state, { action, payload }) {
