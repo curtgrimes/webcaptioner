@@ -197,7 +197,7 @@ export default {
         // and we found an instance of the captioning template in an input
         this.captionElementGuid = captionElementGuid;
         this.$emit('parametersUpdated', {
-          vmixAddress: this.vmixAddress,
+          vmixAddress: this.vmixAddress.toString(),
           captionElementGuid: this.captionElementGuid,
           silentlyUseLocalhostInsteadOfGivenHost: this
             .silentlyUseLocalhostInsteadOfGivenHost,

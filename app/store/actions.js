@@ -12,12 +12,25 @@ var saveSettingsToFirestore = throttle((state, db) => {
     return;
   }
 
-  db.collection('users')
-    .doc(state.user.uid)
-    .collection('settings')
-    .doc('user')
-    .set(clone(state.settings));
-}, 5000);
+  let settings = { ...state.settings };
+
+  // Make channels a plain array
+  settings.channels = [...(settings.channels || [])];
+
+  try {
+    db.collection('users')
+      .doc(state.user.uid)
+      .collection('settings')
+      .doc('user')
+      .set(settings);
+  } catch (e) {
+    throw new Error(
+      `Could not save settings: "${
+        e.message
+      }".  Tried to save: ${JSON.stringify(settings)}`
+    );
+  }
+}, 8000);
 
 function eventLogger(commit, state, { action, payload }) {
   if (Date.now() < state.eventLog.onUntilStopTime) {
