@@ -201,7 +201,7 @@ export default ({ $store, $axios, channelId, channelParameters }) => {
         return;
       }
     }
-  }, 1000);
+  }, 2500);
 
   return () => {
     // Unregister function
