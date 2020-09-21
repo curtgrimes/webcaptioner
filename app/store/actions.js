@@ -4,24 +4,19 @@ import RemoteEventBus from '~/mixins/RemoteEventBus';
 import ChromelessWindowManager from '~/mixins/ChromelessWindowManager';
 import get from 'lodash.get';
 import throttle from 'lodash.throttle';
+import clone from 'lodash.clone';
 import { normalizeSettings } from '~/mixins/settingsNormalizer';
 
 var saveSettingsToFirestore = throttle((state, db) => {
-  let settings = { ...state.settings };
-
-  // Make channels a plain array
-  settings.channels = [...(settings.channels || [])];
+  if (!state.user.uid) {
+    return;
+  }
 
   db.collection('users')
     .doc(state.user.uid)
     .collection('settings')
     .doc('user')
-    .set({
-      ...settings,
-      ...{
-        version: state.version,
-      },
-    })
+    .set(clone(state.settings))
     .then(function() {
       // console.log('Document successfully written!');
     })
