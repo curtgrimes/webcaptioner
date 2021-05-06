@@ -103,6 +103,7 @@ export default {
       if (window && window.Beacon) {
         // @ts-ignore
         Beacon('config', {
+          hideAvatars: true,
           display: {
             style: on ? 'iconAndText' : 'manual',
           },
