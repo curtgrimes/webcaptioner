@@ -72,7 +72,7 @@ let taskDefinition = {
           'HELPSCOUT_DOCS_COLLECTION_ID',
         ]),
         {
-          name: 'HOSTNAME',
+          name: 'HOST_PUBLIC',
           value: process.env.CI_ENVIRONMENT_URL,
         },
       ],

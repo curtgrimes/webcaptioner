@@ -87,7 +87,7 @@ module.exports = {
           'FIREBASE_STORAGE_BUCKET',
           'FIREBASE_MESSAGING_SENDER_ID',
           'GOOGLE_CAST_APP_ID',
-          'HOSTNAME',
+          'HOST_PUBLIC',
           'STRIPE_API_KEY_PUBLIC',
         ],
       },
@@ -239,7 +239,7 @@ module.exports = {
     dsn:
       'REMOVED',
     disabled: process.env.NODE_ENV !== 'production',
-    environment: process.env.HOSTNAME,
+    environment: process.env.HOST_PUBLIC,
   },
   axios: {
     proxy: true,

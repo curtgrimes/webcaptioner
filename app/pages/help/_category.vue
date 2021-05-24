@@ -1,7 +1,5 @@
 <template>
-  <div class="container mt-4 pb-5">
-    <nuxt-child />
-  </div>
+  <nuxt-child />
 </template>
 
 <script>

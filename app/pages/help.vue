@@ -5,5 +5,8 @@
 <script>
 export default {
   layout: 'site',
+  meta: {
+    theme: 'water',
+  },
 };
 </script>

@@ -18,7 +18,7 @@ dropboxRoute.get('/auth', async (req, res, next) => {
   res.redirect(
     302,
     dropboxClient.getAuthenticationUrl(
-      process.env.HOSTNAME + '/captioner/settings/channels/new?type=dropbox'
+      process.env.HOST_PUBLIC + '/captioner/settings/channels/new?type=dropbox'
     )
   );
 });

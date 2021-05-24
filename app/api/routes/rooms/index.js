@@ -170,7 +170,7 @@ rooms.post('/', async (req, res, next) => {
   res.send(JSON.stringify({
     roomId,
     ownerKey,
-    url: 'https://webcaptioner.com/s/' + roomId,
+    url: `${process.env.HOST_PUBLIC}/s/${roomId}`,
 
     // Vanity URLs never expire
     expires: req.body.urlType === 'random',

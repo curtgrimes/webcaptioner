@@ -1,36 +1,41 @@
 const charges = require('express').Router();
-const stripe = require("stripe")(process.env.STRIPE_API_KEY_SECRET);
+const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET);
 
-charges.post('/', async (req, res, next) => {
-    const {amount, email, token} = req.body;
+charges.post('/checkout-session', async (req, res) => {
+  const { amount: unit_amount } = req.body;
 
-    if (!amount || !email || !token) {
-        res.sendStatus(400);
-        return;
-    }
+  if (!unit_amount) {
+    return res.status(400).send('amount is required');
+  }
 
-    stripe.customers.create({
-        email,
-        source: token,
-    })
-    .then(customer =>
-      stripe.charges.create({
-        amount,
-        description: "One-time donation to Web Captioner",
-        currency: "usd",
-        customer: customer.id,
-        receipt_email: email,
-      }))
-    .then(charge => {
-        // res.send(JSON.stringify({receiptEmail: charge.receipt_email}));
-        res.sendStatus(200);
-        return;
-    })
-    .catch((e) => {
-        res.status(400).json({
-            message: e.type && e.type === 'StripeInvalidRequestError' ? e.message : 'Something went wrong.'
-        });
+  let stripeSession;
+  try {
+    stripeSession = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Donation',
+              description: 'One-time donation to Web Captioner',
+            },
+            unit_amount,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      submit_type: 'donate',
+      success_url: `${process.env.HOST_PUBLIC}/donate/thank-you`,
+      cancel_url: `${process.env.HOST_PUBLIC}/donate`,
     });
+  } catch (e) {
+    console.error('Payment error', e);
+    return res.sendStatus(400);
+  }
+
+  res.json({ id: stripeSession.id });
 });
 
 module.exports = charges;

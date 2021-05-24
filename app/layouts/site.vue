@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white min-vh-100 layout-site">
+  <div class="bg-white">
     <div class="bg-primary sticky-top">
       <b-navbar
         toggleable="lg"
@@ -7,10 +7,7 @@
         class="navbar navbar-light navbar-expand-md"
       >
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <a
-          href="https://webcaptioner.com/"
-          class="navbar-brand d-none d-md-block"
-        >
+        <a href="/" class="navbar-brand d-none d-md-block">
           <img
             src="/static/img/logo-inverse.svg"
             width="22"
@@ -20,10 +17,7 @@
           />
           Web Captioner
         </a>
-        <a
-          href="https://webcaptioner.com/"
-          class="navbar-brand d-md-none mx-auto"
-        >
+        <a href="/" class="navbar-brand d-md-none mx-auto">
           <img
             src="/static/img/logo-inverse.svg"
             width="28"
@@ -34,19 +28,19 @@
         </a>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
-            <b-nav-item href="https://webcaptioner.com/blog"> Blog </b-nav-item>
+            <b-nav-item href="/blog"> Blog </b-nav-item>
             <b-nav-item
-              href="/help"
+              to="/help"
               :class="
                 $route.name && $route.name.startsWith('help') ? 'active' : ''
               "
             >
               Help Center
             </b-nav-item>
-            <b-nav-item href="https://webcaptioner.com/community">
+            <b-nav-item href="/community`">
               Community
             </b-nav-item>
-            <b-nav-item href="https://webcaptioner.com/donate">
+            <b-nav-item to="/donate">
               Donate
             </b-nav-item>
             <b-nav-item
@@ -59,7 +53,92 @@
         </b-collapse>
       </b-navbar>
     </div>
-    <nuxt />
+    <div
+      :class="{ 'container py-5': !($route.name || '').startsWith('help___') }"
+    >
+      <nuxt />
+    </div>
+    <div class="jumbotron bg-primary bg-zigzag">
+      <div class="container pt-5 pb-4">
+        <div class="row">
+          <div class="col-12 col-md">
+            <a href="/">
+              <img
+                class="mb-2"
+                src="/static/img/logo-inverse.svg"
+                alt=""
+                width="35"
+                height="35"
+              />
+              <span
+                class="d-block text-black font-weight-bold"
+                style="font-size:1.75rem;line-height:2rem;"
+              >
+                Web Captioner
+              </span>
+            </a>
+          </div>
+          <div class="col-6 col-md">
+            <h5 class="text-dark">Find out more</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-secondary" href="/blog">Blog</a></li>
+              <li>
+                <nuxt-link class="text-secondary" to="/donate"
+                  >Donate</nuxt-link
+                >
+              </li>
+              <li>
+                <a class="text-secondary" href="/privacy-policy"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a class="text-secondary" href="/terms-of-service"
+                  >Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5 class="text-dark">Community</h5>
+            <ul class="list-unstyled text-small">
+              <li>
+                <a
+                  class="text-secondary"
+                  href="https://facebook.com/webcaptioner"
+                  >Facebook</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-secondary"
+                  href="https://twitter.com/webcaptioner"
+                  >Twitter</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5 class="text-dark">Support</h5>
+            <ul class="list-unstyled text-small">
+              <li>
+                <nuxt-link class="text-secondary" to="/help"
+                  >Help Center</nuxt-link
+                >
+              </li>
+              <li>
+                <a
+                  class="text-secondary"
+                  href="https://www.facebook.com/groups/webcaptioner/"
+                  >Facebook Group</a
+                >
+              </li>
+              <li><a class="text-secondary" href="/feedback">Feedback</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -69,22 +148,6 @@ export default {
     if (this.$route.path?.startsWith('/help')) {
       this.showHelpButton(true);
     }
-
-    // Open details element if location.hash. points to one
-    function openTarget() {
-      const hash = location.hash.substring(1);
-      if (!hash) {
-        return;
-      }
-
-      const details = document.getElementById(hash);
-      if (details && details.tagName.toLowerCase() === 'details') {
-        details.open = true;
-        details.querySelector('summary')?.focus();
-      }
-    }
-    window.addEventListener('hashchange', openTarget);
-    openTarget();
   },
   beforeDestroy() {
     this.showHelpButton(false);
@@ -97,6 +160,13 @@ export default {
         this.showHelpButton(false);
       }
     },
+  },
+  head() {
+    return {
+      bodyAttrs: {
+        class: 'bg-primary',
+      },
+    };
   },
   methods: {
     showHelpButton(on) {

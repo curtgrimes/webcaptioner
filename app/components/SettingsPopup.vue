@@ -40,7 +40,7 @@
       {{ $t('navbar.menu.about') }}</b-button
     >
     <b-button
-      href="/donate"
+      to="/donate"
       block
       variant="light"
       size="sm"
@@ -64,7 +64,7 @@
       size="sm"
       class="mb-2 text-left"
     >
-      <fa icon="comment-alt" fixed-width class="mr-1" /> Chat with Support
+      <fa icon="comment-alt" fixed-width class="mr-1" /> Instant Answers
     </b-button>
     <b-button
       v-if="$store.state.settings.exp.includes('srt')"

@@ -2,7 +2,9 @@
   <div>
     <div class="jumbotron d-flex flex-column justify-content-center rounded-0">
       <div class="container">
-        <h1 class="text-center mb-4">Web Captioner Help Center</h1>
+        <h1 class="text-center mb-4">
+          Web Captioner Help Center
+        </h1>
         <!-- <div class="row mb-4">
           <div class="col-md-8 mx-auto">
             <div class="input-group">
@@ -98,7 +100,7 @@ export default {
       // }
     }
   },
-  data: function () {
+  data: function() {
     return {
       articles: {
         gettingStarted: [],
