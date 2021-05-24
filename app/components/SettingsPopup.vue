@@ -35,28 +35,42 @@
       </div>
       <hr />
     </div>
-    <b-button href="/" block variant="light" size="sm" class="mb-2 text-left"
+    <a
+      href="/"
+      :target="
+        this.$store.state.captioner.transcript.interim ||
+        this.$store.state.captioner.transcript.final
+          ? '_blank'
+          : '_self'
+      "
+      class="btn btn-light btn-sm btn-block mb-2 text-left"
       ><fa icon="info-circle" fixed-width class="mr-1" />
-      {{ $t('navbar.menu.about') }}</b-button
-    >
-    <b-button
+      {{ $t('navbar.menu.about') }}
+    </a>
+    <nuxt-link
       to="/donate"
-      block
-      variant="light"
-      size="sm"
-      class="mb-2 text-left"
+      :target="
+        this.$store.state.captioner.transcript.interim ||
+        this.$store.state.captioner.transcript.final
+          ? '_blank'
+          : '_self'
+      "
+      class="btn btn-light btn-sm btn-block mb-2 text-left"
     >
       <fa icon="heart" fixed-width class="mr-1" /> Donate
-    </b-button>
-    <b-button
-      :to="'/help'"
-      block
-      variant="light"
-      size="sm"
-      class="mb-2 text-left"
+    </nuxt-link>
+    <nuxt-link
+      to="/help"
+      :target="
+        this.$store.state.captioner.transcript.interim ||
+        this.$store.state.captioner.transcript.final
+          ? '_blank'
+          : '_self'
+      "
+      class="btn btn-light btn-sm btn-block mb-2 text-left"
     >
       <fa icon="info-circle" fixed-width /> Help Center
-    </b-button>
+    </nuxt-link>
     <b-button
       @click="$emit('dismiss') && $store.dispatch('START_SUPPORT_POPUP')"
       block
