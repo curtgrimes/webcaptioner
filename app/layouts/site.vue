@@ -58,10 +58,10 @@
     >
       <nuxt />
     </div>
-    <div class="jumbotron bg-primary bg-zigzag">
+    <div class=" bg-primary bg-zigzag">
       <div class="container pt-5 pb-4">
         <div class="row">
-          <div class="col-12 col-md">
+          <div class="col-12 col-md mb-4 mb-md-0">
             <a href="/">
               <img
                 class="mb-2"
@@ -78,7 +78,7 @@
               </span>
             </a>
           </div>
-          <div class="col-6 col-md">
+          <div class="col-sm-6 col-md">
             <h5 class="text-dark">Find out more</h5>
             <ul class="list-unstyled text-small">
               <li><a class="text-secondary" href="/blog">Blog</a></li>
@@ -99,7 +99,7 @@
               </li>
             </ul>
           </div>
-          <div class="col-6 col-md">
+          <div class="col-sm-6 col-md">
             <h5 class="text-dark">Community</h5>
             <ul class="list-unstyled text-small">
               <li>
@@ -118,7 +118,7 @@
               </li>
             </ul>
           </div>
-          <div class="col-6 col-md">
+          <div class="col-sm-6 col-md">
             <h5 class="text-dark">Support</h5>
             <ul class="list-unstyled text-small">
               <li>
