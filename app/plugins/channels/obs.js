@@ -1,5 +1,6 @@
 import OBSWebSocket from 'obs-websocket-js';
 import throttle from 'lodash.throttle';
+import compareVersions from 'compare-versions';
 
 export default async ({ $store, $axios, channelId, channelParameters }) => {
   // Register
@@ -15,6 +16,8 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
       errorMessage = `OBS replied with "${e.error}" - Is the OBS WebSocket plugin using a password, and does it match the password in Web Captioner?`;
     } else if (maxErrorsInPeriod >= 0 && errorPeriodSeconds >= 0) {
       errorMessage = `This channel has been turned off because we received an error back from OBS ${maxErrorsInPeriod} times in the last ${errorPeriodSeconds} seconds that this channel was on. Make sure your port number and password (if you are using one) is correct, OBS is running with the OBS websocket plugin enabled, and try again.`;
+    } else if (e.message?.includes('version')) {
+      errorMessage = e.message;
     } else {
       errorMessage = `This channel has been turned off because we received an error back from OBS. Make sure your port number and password (if you are using one) is correct, OBS is running with the OBS websocket plugin enabled, and try again.`;
     }
@@ -49,6 +52,37 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
       address: `localhost:${channelParameters.port}`,
       password: channelParameters.password,
     });
+
+    const minimumObsStudioVersionRequired = '26.1';
+    const minimumObsWebsocketVersionRequired = '4.9.0';
+
+    const { obsStudioVersion, obsWebsocketVersion } = await obs.send(
+      'GetVersion'
+    );
+
+    if (
+      compareVersions.compare(
+        obsStudioVersion,
+        minimumObsStudioVersionRequired,
+        '<'
+      )
+    ) {
+      throw new Error(
+        `You must upgrade OBS Studio to at least version ${minimumObsStudioVersionRequired}. You have OBS Studio version ${obsStudioVersion}.`
+      );
+    }
+
+    if (
+      compareVersions.compare(
+        obsWebsocketVersion,
+        minimumObsWebsocketVersionRequired,
+        '<'
+      )
+    ) {
+      throw new Error(
+        `You must upgrade the OBS Websocket plugin to at least version ${minimumObsWebsocketVersionRequired}. You have OBS Websocket plugin version ${obsWebsocketVersion}.`
+      );
+    }
   } catch (e) {
     handleError(e);
   }

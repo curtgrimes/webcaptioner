@@ -22,14 +22,25 @@
         class="p-0 mr-auto d-flex align-items-center"
         size="sm"
         variant="link"
+        style="text-decoration:none"
       >
-        <img
+        <span
+          class="d-flex align-items-center"
           v-if="channelIconPath(channel.type)"
-          :src="channelIconPath(channel.type)"
-          class="w-100 transition-all"
-          style="max-width:60px"
-          :class="{ desaturated: !channel.on }"
-        />
+        >
+          <img
+            :src="channelIconPath(channel.type)"
+            style="max-width:5rem;max-height:2rem"
+            :class="{ desaturated: !channel.on }"
+          />
+          <span
+            v-if="channelShowNameWithIcon(channel.type)"
+            class="pl-1"
+            style="flex-shrink: 0;color:#000"
+          >
+            {{ channelName(channel.type) }}
+          </span>
+        </span>
         <span v-else class="text-dark">
           <fa
             v-if="channelIconName(channel.type)"
@@ -86,6 +97,10 @@ export default {
     channelIconName(channelType) {
       return this.channels.find((channel) => channel.id === channelType)
         ?.iconName;
+    },
+    channelShowNameWithIcon(channelType) {
+      return this.channels.find((channel) => channel.id === channelType)
+        ?.showNameWithIcon;
     },
     channelName(channelType) {
       return this.channels.find((channel) => channel.id === channelType)?.name;
