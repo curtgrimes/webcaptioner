@@ -16,31 +16,27 @@
     <ol>
       <li>
         Make sure you are using
-        <a href="https://obsproject.com/">OBS Studio</a> version 25 or later.
+        <a href="https://obsproject.com/">OBS Studio</a> version 26.1 or later.
       </li>
       <li>
         Download and install the
         <a href="https://github.com/Palakis/obs-websocket/releases/latest"
           >OBS Websocket plugin</a
-        >.
-        <div class="alert alert-warning small p-3 my-1">
-          <strong>MacOS users:</strong> Due to
-          <a href="https://github.com/Palakis/obs-websocket/pull/546"
-            >this issue</a
-          >, you must use
-          <a href="/static/obs-websocket-macos-74c1856.pkg"
-            >this MacOS installer</a
-          >
-          until OBS Websocket releases a new version after 4.8.0.
-        </div>
+        >
+        version 4.9.0 or later.
       </li>
       <li>Restart OBS if you currently have it open.</li>
       <li>In OBS, go to Tools > WebSockets Server Settings.</li>
       <li>
         Enable the WebSockets server and set the port number and password. The
-        password is optional but recommended.
+        password is optional but recommended. If you are unsure of what port to
+        use, try 8080.
       </li>
-      <li>Update the port number and password below.</li>
+      <li>
+        Update the port number and password below with the same port number and
+        password (if you have one) that you set in the OBS WebSockets server
+        settings above.
+      </li>
     </ol>
     <div class="card card-body">
       <div

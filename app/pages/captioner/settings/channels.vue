@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Channels let you connect Web Captioner with other services.</p>
+    <p>Connect Web Captioner with other services.</p>
     <b-alert
       :show="Boolean($store.state.channels.channelsPageMessage)"
       dismissible
@@ -26,60 +26,58 @@
           class="card card-body transition-all"
           v-if="addedChannel && channelInfo(addedChannel.type)"
           :class="addedChannel.on ? 'shadow bg-white' : 'bg-light'"
+          :style="{ opacity: addedChannel.on ? 1 : 0.75 }"
         >
-          <div class="row no-gutters">
-            <div class="col-4 col-md-2">
+          <div class="d-flex flex-wrap">
+            <span
+              v-if="channelInfo(addedChannel.type).iconPath"
+              class="d-flex align-items-center col-12 col-md-auto p-0"
+              style="flex-shrink: 0"
+            >
               <img
-                v-if="channelInfo(addedChannel.type).iconPath"
                 :src="channelInfo(addedChannel.type).iconPath"
-                class="w-100 transition-all"
+                class="transition-all"
+                style="max-height:2.5rem"
                 :class="!addedChannel.on ? 'desaturated' : ''"
               />
-              <span v-else class="d-flex align-items-center">
-                <fa
-                  v-if="channelInfo(addedChannel.type).iconName"
-                  :icon="channelInfo(addedChannel.type).iconName"
-                  size="lg"
-                  class="mr-2"
-                />
-                <span class="font-weight-bold">
-                  {{ channelInfo(addedChannel.type).name }}</span
-                >
+              <span
+                v-if="channelInfo(addedChannel.type).showNameWithIcon"
+                class="pl-2"
+                style="flex-shrink: 0"
+              >
+                {{ channelInfo(addedChannel.type).name }}
               </span>
-              <transition name="fade">
-                <span
-                  class="text-muted small d-md-none"
-                  v-if="!addedChannel.on"
-                >
-                  Channel off
-                  <span v-if="addedChannel.error" class="text-danger">
-                    (Error)
-                  </span>
+            </span>
+            <span v-else class="d-flex align-items-center flex-wrap">
+              <fa
+                v-if="channelInfo(addedChannel.type).iconName"
+                :icon="channelInfo(addedChannel.type).iconName"
+                size="lg"
+                class="mr-2"
+              />
+              <span class="font-weight-bold">
+                {{ channelInfo(addedChannel.type).name }}
+              </span>
+            </span>
+            <div class="ml-auto d-flex align-items-center">
+              <div
+                class="text-muted small d-flex"
+                style="flex-shrink: 0"
+                v-if="!addedChannel.on"
+              >
+                <span>Channel off</span>
+                <span v-if="addedChannel.error" class="text-danger pl-1">
+                  (Error)
                 </span>
-              </transition>
-            </div>
-            <div
-              class="col-8 col-md-10 d-flex align-items-center justify-content-center flex-wrap"
-            >
-              <transition name="fade">
-                <span
-                  class="text-muted small ml-4 d-none d-md-inline-block"
-                  v-if="!addedChannel.on"
-                >
-                  Channel off
-                  <span v-if="addedChannel.error" class="text-danger">
-                    (Error)
-                  </span>
-                </span>
-              </transition>
+              </div>
               <b-button
                 size="sm"
-                class="py-2 px-3 my-n2 ml-auto mr-4"
+                class="py-2 px-3 mr-4 ml-2 d-flex align-items-center"
                 :variant="addedChannel.on ? 'light' : 'outline-dark'"
                 :to="`/captioner/settings/channels/${addedChannel.id}`"
                 :style="!addedChannel.on ? 'border-color: #ccc' : ''"
               >
-                <fa icon="cog" /> Configure
+                <fa icon="cog" class="mr-2" /> Configure
               </b-button>
               <b-form-checkbox
                 switch

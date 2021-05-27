@@ -247,11 +247,6 @@ input[type='color'] {
   color: theme-color('dark');
 }
 
-.modal a:not(.dropdown-item):not(a.btn) {
-  color: theme-color('dark');
-  font-weight: bold;
-}
-
 /* Custom modal animation */
 
 .modal.fade .modal-dialog,
