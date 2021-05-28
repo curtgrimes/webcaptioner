@@ -63,7 +63,7 @@ export default () => {
 
     // word must be unchaged for this many MS before being considered stable
     // (0 for the 'real-time' setting)
-    stabilizedThresholdMs: 0,
+    stabilizedThresholdMs: 500,
 
     locale: {
       from: null,
