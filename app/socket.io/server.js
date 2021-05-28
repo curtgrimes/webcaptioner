@@ -43,17 +43,28 @@ module.exports = {
             redisStandaloneClient = redis.getNewClient();
             redisStandaloneClient.subscribe(roomKey + ':owner');
 
-            socket.send(JSON.stringify({
-              mutation: 'SET_SHARE_SUBSCRIBER_COUNT',
-              subscriberCount: await getSubscriberCount(roomKey),
-            }));
+            try {
+              socket.send(JSON.stringify({
+                mutation: 'SET_SHARE_SUBSCRIBER_COUNT',
+                subscriberCount: await getSubscriberCount(roomKey),
+              }));
+            }
+            catch (e) {
+              console.error('Socket send error', e);
+            }
 
             redisStandaloneClient.on("message", async (channel, message) => {
               if (message === 'updateSubscribers' && socket.readyState === socket.OPEN) {
-                socket.send(JSON.stringify({
-                  mutation: 'SET_SHARE_SUBSCRIBER_COUNT',
-                  subscriberCount: await getSubscriberCount(roomKey),
-                }));
+                try {
+                  socket.send(
+                    JSON.stringify({
+                      mutation: 'SET_SHARE_SUBSCRIBER_COUNT',
+                      subscriberCount: await getSubscriberCount(roomKey),
+                    })
+                  );
+                } catch (e) {
+                  console.error('Socket send error', e);
+                }
               }
             });
           } else {
@@ -139,6 +150,7 @@ module.exports = {
                   }
                 } catch (e) {
                   // Unable to parse message
+                  console.error('Socket error', e);
                 }
               }
             });
