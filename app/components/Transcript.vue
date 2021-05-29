@@ -23,12 +23,9 @@
       ref="scroller"
     >
       <span class="transcript-scroller-child">
-        <span
-          v-if="
-            $store.state.settings.stabilizedThresholdMs !== 0 &&
-              stabilizedTranscript
-          "
-          >{{ stabilizedTranscript }}</span
+        <span v-if="$store.state.settings.stabilizedThresholdMs !== 0">{{
+          stabilizedTranscript
+        }}</span
         ><span
           v-else
           :class="{ 'd-block w-100': finalTranscriptEndsInNewline }"
