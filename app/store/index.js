@@ -28,7 +28,6 @@ let mutationInterceptorPlugin = (store) => {
         'captioner/APPEND_TRANSCRIPT_STABILIZED',
         'captioner/APPEND_TRANSCRIPT_FINAL',
         'captioner/CLEAR_TRANSCRIPT_INTERIM',
-        'captioner/VOLUME_TOO_LOW',
         'captioner/SET_WAITING_FOR_INITIAL_TRANSCRIPT',
         'captioner/SET_MICROPHONE_NAME',
         'share/SET_EXPIRED',
