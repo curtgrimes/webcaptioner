@@ -710,13 +710,6 @@ export const mutations = {
     });
   },
 
-  VOLUME_TOO_LOW(state, { volumeTooLow }) {
-    state.volume.tooLow = volumeTooLow;
-  },
-  VOLUME_TOO_HIGH(state, { volumeTooHigh }) {
-    state.volume.tooHigh = volumeTooHigh;
-  },
-
   SET_MICROPHONE_NAME(state, { microphoneName }) {
     state.microphoneName = microphoneName;
   },

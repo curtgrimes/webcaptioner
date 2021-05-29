@@ -165,7 +165,7 @@
     </div>
     <hr />
     <label for="show-volume-meter" class="mb-0">
-      Show volume meter when volume level is low
+      Show volume meter when volume is too quiet or loud
     </label>
     <b-form-checkbox
       id="show-volume-meter"

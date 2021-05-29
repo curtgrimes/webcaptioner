@@ -1,260 +1,216 @@
 <template>
-  <div
-    v-if="$store.state.settings.controls.volumeMeter.show && captioningOn && (lastVolumeTooLowEventIsRecent || volumeTooLow || lastVolumeTooHighEventIsRecent || volumeTooHigh)"
-  >
-    <b-button
-      variant="white"
-      class="meter-outer mr-2 border-0 text-left text-danger px-2 bg-white h-100"
-    >
-      <fa icon="exclamation-triangle" class="mr-1" />
-      <span
-        v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh"
-      >{{$t('captioner.volumeMeter.tooQuiet')}}</span>
-      <span
-        v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow"
-      >{{$t('captioner.volumeMeter.tooLoud')}}</span>
-      <b-button
-        variant="danger"
-        class="meter-inner border-0 px-0 text-left rounded-0"
-        v-bind:style="{width: (volumeLevel * 100) + '%'}"
+  <transition name="fade">
+    <div v-if="showMessage" class="d-flex align-items-center text-white small">
+      <span v-if="volumeTooLow">Too quiet</span>
+      <span v-else-if="volumeTooHigh">Too loud</span>
+      <span v-else>
+        <fa icon="check-circle" class="text-success" /> Good volume
+      </span>
+
+      <button
+        v-if="volumeTooLow || volumeTooHigh"
+        @click="openArticle"
+        class="btn btn-link text-white btn-sm p-1"
+        v-b-tooltip.hover
+        title="Help"
       >
-        <span class="px-2">
-          <fa icon="exclamation-triangle" class="mr-1" />
-          <span
-            v-if="(volumeTooLow || lastVolumeTooLowEventIsRecent) && !volumeTooHigh"
-          >{{$t('captioner.volumeMeter.tooQuiet')}}</span>
-          <span
-            v-else-if="(volumeTooHigh || lastVolumeTooHighEventIsRecent) && !volumeTooLow"
-          >{{$t('captioner.volumeMeter.tooLoud')}}</span>
-        </span>
-      </b-button>
-    </b-button>
-  </div>
+        <fa icon="question-circle" />
+      </button>
+      <div class="volume-meter">
+        <div
+          class="unit"
+          v-for="unitVolume in [0.9, 0.8, 0.3, 0.05, 0.01]"
+          :key="unitVolume"
+          :class="{ active: volume >= unitVolume }"
+        ></div>
+      </div>
+    </div>
+  </transition>
 </template>
 
-<style scoped>
-.meter-outer {
-  width: 150px;
-  position: relative;
-  overflow: hidden;
-  cursor: default !important;
-}
+<style lang="scss" scoped>
+.volume-meter {
+  height: 100%;
+  margin: 0 0.5rem;
+  width: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
-.meter-inner {
-  width: 20px;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  transition: width 250ms;
-  cursor: default !important;
+  .unit {
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 16%;
+    width: 100%;
+
+    transition: background-color 100ms;
+
+    &.active {
+      &:nth-child(1) {
+        background-color: rgb(194, 23, 23);
+      }
+
+      &:nth-child(2) {
+        background-color: rgb(189, 138, 0);
+      }
+
+      &:nth-child(3) {
+        background-color: rgb(60, 167, 46);
+      }
+
+      &:nth-child(4) {
+        background-color: rgb(60, 167, 46);
+      }
+
+      &:nth-child(5) {
+        background-color: rgb(60, 167, 46);
+      }
+    }
+  }
 }
 </style>
 
-
 <script>
-import AudioStreamMeter from 'audio-stream-meter';
-import clamp from 'lodash.clamp';
-import { BButton } from 'bootstrap-vue';
+// https://stackoverflow.com/a/62732195/1253034
+
+let stream;
+let audioContext;
+let node;
 
 export default {
-  components: {
-    BButton,
-  },
-  props: [],
   data: function() {
     return {
-      volumeLevel: 0,
-      latestVolumeLevelReadings: [],
-      lastVolumeTooLowEvent: null,
-      lastVolumeTooHighEvent: null,
-      now: Date.now(),
+      volume: 0,
 
-      audioContext: null,
-      stream: null,
-      audioMeter: null,
-      dateUpdateInterval: null,
-      recordVolumeReadingsInterval: null,
+      messageWarmupPeriod: 0,
+      messageCooldownPeriod: 0,
     };
   },
   watch: {
-    captioningOn: function(captioningOn) {
-      if (captioningOn) {
+    '$store.state.captioner.shouldBeOn'() {
+      if (this.$store.state.captioner.shouldBeOn) {
         this.initAudioStream();
       } else {
-        this.closeAudioStream();
+        this.stopAudioStream();
       }
     },
-    volumeTooLow: function(newValue, oldValue) {
-      if (typeof newValue !== 'undefined' && newValue != oldValue) {
-        this.$store.commit('captioner/VOLUME_TOO_LOW', {
-          volumeTooLow: newValue,
-        });
+    '$store.state.captioner.transcript.waitingForInitial'() {
+      if (!this.$store.state.captioner.transcript.waitingForInitial) {
+        // We just received our first transcript after starting captioning.
+        // If the meter would have shown due to a cooldown period at this
+        // moment, force the cooldown period to zero to prevent the volume
+        // meter possibly showing unnecessarily at this moment.
+        this.messageCooldownPeriod = 0;
       }
+    },
+    volumeTooHighOrLow() {
+      if (this.volumeTooHighOrLow) {
+        if (this.messageCooldownPeriod > 0) {
+          // We are already in a cooldown period, so the message is showing.
+          // Don't do a warmup period.
+        } else {
+          // Start the warmup period. If the volume is still too high/low
+          // at the end of the warmup period, then the message will show.
+          this.messageWarmupPeriod = 7;
+        }
+      } else {
+        /* Volume is no longer too high or low, but we want to continue
+        to show the message for a short period of time so it doesn't disappear
+        without the user being able to see it. */
 
-      if (newValue) {
-        this.lastVolumeTooLowEvent = Date.now();
-      }
-    },
-    volumeTooHigh: function(newValue, oldValue) {
-      if (typeof newValue !== 'undefined' && newValue != oldValue) {
-        this.$store.commit('captioner/VOLUME_TOO_HIGH', {
-          volumeTooHigh: newValue,
-        });
-      }
-      if (newValue) {
-        this.lastVolumeTooHighEvent = Date.now();
+        /* Cooldown period depends on sample rate in volume-meter-module.
+        This gets decremented each sample after a volume high/low event.
+        Avoid doing this with timeouts/intervals for performance and 
+        to prevent browser from throttling this. */
+        this.messageCooldownPeriod = 30;
       }
     },
   },
   beforeMount: function() {
-    if (this.captioningOn) {
+    if (this.$store.state.captioner.shouldBeOn) {
       this.initAudioStream();
     }
   },
   beforeDestroy: function() {
-    this.closeAudioStream();
+    this.stopAudioStream();
   },
   methods: {
-    initAudioStream: function() {
-      let self = this;
+    async initAudioStream() {
+      if (audioContext) {
+        // We already initialized an audio context. Resume it.
+        audioContext.resume();
+        return;
+      }
 
-      let constraints = {
+      stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           autoGainControl: false,
         },
+      });
+
+      // Get the name of the device
+      this.$store.commit('captioner/SET_MICROPHONE_NAME', {
+        microphoneName: stream?.getTracks()?.[0].label,
+      });
+
+      audioContext = audioContext || new AudioContext();
+      await audioContext.audioWorklet.addModule(
+        '/static/captioner/volume-meter-module.js'
+      );
+      let microphone = audioContext.createMediaStreamSource(stream);
+      node = new AudioWorkletNode(audioContext, 'volume-meter');
+
+      node.port.onmessage = ({ data: volume }) => {
+        this.volume = volume;
+        if (this.messageCooldownPeriod > 0) {
+          this.messageCooldownPeriod -= 1;
+        }
+        if (this.messageWarmupPeriod > 0) {
+          this.messageWarmupPeriod -= 1;
+          this.messageCooldownPeriod = 0;
+        }
       };
 
-      let streamHandler = function(stream) {
-        self.stream = stream; // save reference to stream so we can close it later
-
-        // Get the name of the device
-        const tracks = self.stream.getTracks();
-        if (tracks && tracks[0] && tracks[0].label) {
-          if (self.microphoneName != tracks[0].label) {
-            // It has a new name
-            self.microphoneName = tracks[0].label;
-          }
-        }
-
-        self.audioContext = self.audioContext || new AudioContext();
-
-        let mediaStream = self.audioContext.createMediaStreamSource(stream);
-        self.audioMeter = AudioStreamMeter.audioStreamProcessor(
-          self.audioContext,
-          function() {
-            self.volumeLevel = clamp(self.audioMeter.volume * 4, 0, 1);
-          },
-          {
-            // https://www.npmjs.com/package/audio-stream-meter
-            volumeFall: 0.85,
-            bufferSize: 4096,
-          }
-        );
-        mediaStream.connect(self.audioMeter);
-      };
-
-      if (typeof navigator.mediaDevices.getUserMedia === 'function') {
-        // Use the current promise-based version of getUserMedia.
-        // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-        navigator.mediaDevices.getUserMedia(constraints).then(streamHandler);
-      } else {
-        // Use the deprecated version of getUserMedia that was a property of navigator
-        // and uses a callback function.
-        // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getUserMedia
-
-        // It was also prefixed.
-        navigator.getUserMedia =
-          navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia ||
-          navigator.msGetUserMedia;
-
-        navigator.getUserMedia(constraints, streamHandler, () => {});
-      }
-
-      this.dateUpdateInterval = setInterval(() => {
-        this.now = Date.now();
-      }, 1000);
-
-      this.recordVolumeReadingsInterval = setInterval(() => {
-        if (this.volumeLevel && this.volumeLevel > 0) {
-          this.latestVolumeLevelReadings.push(this.volumeLevel);
-          this.latestVolumeLevelReadings = this.latestVolumeLevelReadings.slice(
-            -10
-          );
-        }
-      }, 300);
+      microphone.connect(node).connect(audioContext.destination);
     },
-    closeAudioStream: function() {
-      clearInterval(this.dateUpdateInterval);
-      clearInterval(this.recordVolumeReadingsInterval);
-
-      // Stop audio meter
-      if (this.audioMeter) {
-        this.audioMeter.close();
-      }
-
-      // Close all the media stream tracks (should just be one)
-      if (this.stream) {
-        this.stream.getTracks().forEach((track) => track.stop());
-      }
+    stopAudioStream() {
+      node?.disconnect();
+      node = null;
+      audioContext?.close();
+      audioContext = null;
+      stream.getTracks().forEach((track) => track.stop());
     },
-    averageVolumeReading: function() {
-      let sum = 0;
-      for (let i = 0; i < this.latestVolumeLevelReadings.length; i++) {
-        sum += this.latestVolumeLevelReadings[i];
-      }
-
-      return sum / this.latestVolumeLevelReadings.length;
+    openArticle() {
+      window.Beacon('article', '5f4af585042863444aa0ff88');
     },
   },
   computed: {
-    microphoneName: {
-      get() {
-        return this.$store.state.captioner.microphoneName;
-      },
-      set(microphoneName) {
-        this.$store.commit('captioner/SET_MICROPHONE_NAME', { microphoneName });
-      },
+    showMessage() {
+      return (
+        this.$store.state.settings.controls.volumeMeter.show &&
+        this.$store.state.captioner.shouldBeOn &&
+        !this.$store.state.captioner.transcript.waitingForInitial &&
+        this.messageWarmupPeriod <= 0 &&
+        (this.volumeTooHighOrLow || this.messageCooldownPeriod > 0)
+      );
     },
-    captioningOn: function() {
-      return this.$store.state.captioner.on;
+    volumeTooHighOrLow() {
+      return this.volumeTooLow || this.volumeTooHigh;
     },
     volumeTooLow: function() {
-      let volumeTooLowThreshold =
+      const volumeTooLowThreshold =
         this.$store.state.settings.controls.volumeMeter.sensitivity === 'high'
-          ? 0.25 // high sensitivity setting
+          ? 0.2 // high sensitivity setting
           : 0.05; // low sensitivity setting
-      return this.averageVolumeReading() < volumeTooLowThreshold;
+      return this.volume < volumeTooLowThreshold;
     },
     volumeTooHigh: function() {
-      let volumeTooHighThreshold =
-        this.$store.state.settings.controls.volumeMeter.sensitivity === 'high'
-          ? 0.92 // high sensitivity setting
-          : 0.98; // low sensitivity setting
-      return this.averageVolumeReading() > volumeTooHighThreshold;
+      // high threshold doesn't respond to sensitivity setting
+      // because volume-meter-module is basically clipping it at 1.
+      // So it's possible there are values above 1, but anothing already above
+      // 1 is probably too loud.
+      const volumeTooHighThreshold = 0.95;
+      return this.volume > volumeTooHighThreshold;
     },
-    lastVolumeTooLowEventIsRecent: function() {
-      // Last volume too low event was < x seconds ago
-      return this.now - this.lastVolumeTooLowEvent < 1000 * 0.5;
-    },
-    lastVolumeTooHighEventIsRecent: function() {
-      // Last volume too high event was < x seconds ago
-      return this.now - this.lastVolumeTooHighEvent < 1000 * 0.5;
-    },
-    // backgroundColor () {
-    //   return this.$store.state.settings.appearance.background.color;
-    // },
-    // finalTranscript () {
-    //   this.scrollToBottom();
-    //   return this.$store.state.captioner.transcript.final;
-    // },
-    // interimTranscript () {
-    //   this.scrollToBottom();
-    //   return ' ' + this.$store.state.captioner.transcript.interim;
-    // },
   },
 };
 </script>
