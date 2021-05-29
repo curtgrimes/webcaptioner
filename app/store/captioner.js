@@ -477,7 +477,7 @@ export const actions = {
             if (
               now >
               state.transcript.cursorable[i][j].firstSeen +
-                Math.max(rootState.settings.stabilizedThresholdMs, 100) // hardcoded minimum
+                Math.max(rootState.settings.stabilizedThresholdMs, 500) // hardcoded minimum
             ) {
               // This word is stable
               Vue.set(state.transcript.cursorable[i][j], 'stable', true);
