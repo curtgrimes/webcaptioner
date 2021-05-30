@@ -235,11 +235,23 @@ module.exports = {
     { src: '~/plugins/performance.js' },
   ],
   sentry: {
-    // https://github.com/nuxt-community/sentry-module/pull/203
     dsn:
       'REMOVED',
     disabled: process.env.NODE_ENV !== 'production',
     environment: process.env.HOST_PUBLIC,
+    sourceMapStyle: 'hidden-source-map',
+    tracing: {
+      tracesSampleRate: 0.05,
+      vueOptions: {
+        tracing: true,
+        tracingOptions: {
+          hooks: ['mount', 'update'],
+          timeout: 2000,
+          trackComponents: true,
+        },
+      },
+      browserOptions: {},
+    },
   },
   axios: {
     proxy: true,
