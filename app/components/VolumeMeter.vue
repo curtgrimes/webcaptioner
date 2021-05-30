@@ -177,7 +177,7 @@ export default {
       node = null;
       audioContext?.close();
       audioContext = null;
-      stream.getTracks().forEach((track) => track.stop());
+      stream?.getTracks().forEach((track) => track.stop());
     },
     openArticle() {
       window.Beacon('article', '5f4af585042863444aa0ff88');
