@@ -34,6 +34,7 @@
       placement="auto"
       trigger="focus"
       :show.sync="showFontSelectorPopover"
+      @shown="$refs.fontSearchInput.focus()"
     >
       <template slot="title">
         <b-button
@@ -196,8 +197,6 @@ export default {
   },
   watch: {
     showFontSelectorPopover: async function() {
-      this.$refs.fontSearchInput.focus();
-
       if (this.showFontSelectorPopover && !this.popularFonts.length) {
         // Hydrate popular fonts
         this.loading = true;
