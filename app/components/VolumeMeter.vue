@@ -178,6 +178,11 @@ export default {
           return;
         }
 
+        if (e.name === 'NotFoundError') {
+          // User doesn't have a microphone
+          return;
+        }
+
         // Some other error happened that we may want to log
         throw e;
       }
