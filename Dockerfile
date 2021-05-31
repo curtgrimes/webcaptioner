@@ -5,6 +5,7 @@ FROM node:12.2
 # ENV SASS_BINARY_NAME linux-x64-59_binding.node
 
 ENV GOOGLE_APPLICATION_CREDENTIALS ./app/config/google-application-credentials.json
+ARG SENTRY_AUTH_TOKEN_PRIVATE=$SENTRY_AUTH_TOKEN_PRIVATE
 
 # Install Hugo
 ADD https://github.com/gohugoio/hugo/releases/download/v0.37.1/hugo_0.37.1_Linux-64bit.tar.gz /tmp
