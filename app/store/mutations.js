@@ -405,21 +405,4 @@ export default {
   UPDATE_LAST_STABILIZED_TRANSCRIPT_SYNC_DATE: (state, { date }) => {
     state.integrations.storage.lastStabilizedTranscriptSyncDate = date;
   },
-
-  SET_EVENT_LOG: (state, { eventLog }) => {
-    state.eventLog.log = eventLog;
-  },
-
-  APPEND_EVENT_LOG: (state, { event }) => {
-    if (Date.now() < state.eventLog.onUntilStopTime) {
-      state.eventLog.log.push({
-        time: Date.now(),
-        event: CircularJson.stringify(event),
-      });
-    }
-  },
-
-  SET_EVENT_LOG_STOP_TIME: (state, { stopTime }) => {
-    state.eventLog.onUntilStopTime = stopTime;
-  },
 };

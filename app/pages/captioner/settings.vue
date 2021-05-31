@@ -152,7 +152,7 @@ export default {
     BBadge,
     BButton,
   },
-  data: function () {
+  data: function() {
     return {
       logTimeRemainingMinutes: '00',
       logTimeRemainingSeconds: '00',
@@ -199,16 +199,14 @@ export default {
       ],
     };
   },
-  mounted: function () {
+  mounted: function() {
     let self = this;
     this.escShortcut = new Combokeys(document.documentElement);
-    this.escShortcut.bind('esc', function () {
+    this.escShortcut.bind('esc', function() {
       self.$router.push('/captioner');
     });
-
-    this.startLogTimer();
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     if (this.escShortcut) {
       this.escShortcut.detach();
     }
@@ -218,9 +216,6 @@ export default {
     }
   },
   watch: {
-    eventLogStopTime: function () {
-      this.startLogTimer();
-    },
     $route(to, from) {
       // Scroll to top of settings page
       if (this.$refs.settingsView) {
@@ -228,65 +223,20 @@ export default {
       }
     },
   },
-  methods: {
-    startLogTimer: function () {
-      if (this.eventLogStopTime) {
-        let logTick = () => {
-          let now = Date.now();
-          if (now < this.eventLogStopTime) {
-            let minutesDecimal =
-              (this.eventLogStopTime - Date.now()) / 1000 / 60;
-            this.logTimeRemainingMinutes = (
-              Math.floor(minutesDecimal) + ''
-            ).padStart(2, '0');
-            this.logTimeRemainingSeconds = (
-              Math.floor((minutesDecimal - this.logTimeRemainingMinutes) * 60) +
-              ''
-            ).padStart(2, '0');
-          } else {
-            if (this.tickInterval) {
-              clearInterval(this.tickInterval);
-            }
-
-            this.logTimeRemainingMinutes = this.logTimeRemainingSeconds = '00';
-          }
-        };
-
-        if (this.tickInterval) {
-          clearInterval(this.tickInterval);
-        }
-
-        logTick();
-        this.tickInterval = setInterval(logTick, 100);
-      }
-    },
-  },
   computed: {
-    eventLog: function () {
-      return (
-        Boolean(this.$store.state.eventLog.onUntilStopTime) ||
-        this.$store.state.eventLog.log.length > 0
-      );
-    },
-    eventLogCount: function () {
-      return this.$store.state.eventLog.log.length;
-    },
-    eventLogStopTime: function () {
-      return this.$store.state.eventLog.onUntilStopTime;
-    },
-    currentlyOnExperiments: function () {
+    currentlyOnExperiments: function() {
       return this.$route.path === '/captioner/settings/experiments';
     },
-    experiments: function () {
+    experiments: function() {
       return this.$store.state.settings.exp;
     },
-    showBackButton: function () {
+    showBackButton: function() {
       return this.$route.path !== '/captioner/settings';
     },
-    navbarTitle: function () {
+    navbarTitle: function() {
       return this.$store.state.settingsPageTitle || '';
     },
-    largerLayout: function () {
+    largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },
   },

@@ -59,26 +59,6 @@ let mutationInterceptorPlugin = (store) => {
         });
       }
     }
-
-    if (type !== 'APPEND_EVENT_LOG') {
-      // prevent loop
-      if (Date.now() < state.eventLog.onUntilStopTime) {
-        store.commit('APPEND_EVENT_LOG', {
-          event: {
-            event: 'mutation',
-            type,
-            payload:
-              type === 'route/ROUTE_CHANGED'
-                ? {
-                    from: payload.from.path,
-                    to: payload.to.path,
-                  }
-                : payload,
-          },
-          omitFromGoogleAnalytics: true,
-        });
-      }
-    }
   });
 };
 
@@ -130,10 +110,6 @@ export const state = () => ({
   },
   notifications: {
     showFirstSignInMessage: false,
-  },
-  eventLog: {
-    onUntilStopTime: null,
-    log: [],
   },
   delayedEvents: [],
   help: {

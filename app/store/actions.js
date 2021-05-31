@@ -32,26 +32,9 @@ var saveSettingsToFirestore = throttle((state, db) => {
   }
 }, 8000);
 
-function eventLogger(commit, state, { action, payload }) {
-  if (Date.now() < state.eventLog.onUntilStopTime) {
-    commit('APPEND_EVENT_LOG', {
-      event: {
-        event: 'action',
-        action,
-        payload,
-      },
-      omitFromGoogleAnalytics: true,
-    });
-  }
-}
-
 export default {
   SET_LOCALE_FROM_USER_DEFAULT: ({ commit, dispatch, state }) => {
     return new Promise((resolve, reject) => {
-      eventLogger(commit, state, {
-        action: 'SET_LOCALE_FROM_USER_DEFAULT',
-      });
-
       commit('SET_LOCALE_USER_DEFAULT', {
         locale: userLocale,
       });
@@ -117,10 +100,6 @@ export default {
   },
 
   START_DETACHED_MODE: ({ commit, state }) => {
-    eventLogger(commit, state, {
-      action: 'START_DETACHED_MODE',
-    });
-
     ChromelessWindowManager.methods.start(
       RemoteEventBus,
       {
@@ -440,10 +419,6 @@ export default {
 
   RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, state, dispatch }) => {
     return new Promise((resolve, reject) => {
-      eventLogger(commit, state, {
-        action: 'RESTORE_SETTINGS_FROM_LOCALSTORAGE',
-      });
-
       if (!localStorage) {
         commit('SET_SETTINGS_LOADED', true);
         resolve();
@@ -477,10 +452,6 @@ export default {
   },
 
   SAVE_SETTINGS: function({ state, commit, dispatch }) {
-    eventLogger(commit, state, {
-      action: 'SAVE_SETTINGS',
-    });
-
     if (localStorage) {
       localStorage.setItem(
         'webcaptioner-settings',
@@ -497,10 +468,6 @@ export default {
   },
 
   SHOW_INCOMPATIBLE_BROWSER_MODAL: ({ commit, state }) => {
-    eventLogger(commit, state, {
-      action: 'SHOW_INCOMPATIBLE_BROWSER_MODAL',
-    });
-
     // Just need to toggle it on for a second for the modal to appear
     commit('SET_INCOMPATIBLE_BROWSER_MODAL_VISIBLE');
     setTimeout(function() {

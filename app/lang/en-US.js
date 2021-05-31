@@ -94,26 +94,6 @@ export default {
       whatsNewInWebCaptioner: "What's New in @:app.webCaptioner",
       getStarted: 'Get Started',
     },
-    eventLog: {
-      eventLog: 'Event Log',
-      instructions: {
-        i0:
-          'Reproduce the issue you were having, and then copy this log and {sendItToMeOnFacebook}. The log includes the content of your current transcription, if any. You can leave this page and continue to use Web Captioner like normal.',
-        i1:
-          "For performance reasons, logging will automatically shut off after {loggingDurationMinutes} minutes. You can still copy the log after it shuts off as long as you don't reload the page.",
-        sendItToMeOnFacebook: 'send it to me on Facebook',
-      },
-      copyLog: 'Copy Log',
-      stopLogging: 'Stop Logging',
-      restartLogging: 'Restart Logging',
-      loggingTurnsOffIn:
-        'Logging turns off in {timeRemainingMinutes}:{timeRemainingSeconds}',
-      loggingOff: 'Logging Off',
-      eventsHidden:
-        "{notShowingCount} events are hidden, but they'll be included when you copy the log.",
-      autoScroll: 'Auto scroll',
-      events: 'No events | 1 event | {count} events',
-    },
     experiments: {
       experiments: 'Experiments',
       description:
