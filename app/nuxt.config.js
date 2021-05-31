@@ -247,7 +247,7 @@ module.exports = {
       authToken: process.env.SENTRY_AUTH_TOKEN_PRIVATE,
     },
     tracing: {
-      tracesSampleRate: 0.05,
+      tracesSampleRate: 0.25,
       vueOptions: {
         tracing: true,
         tracingOptions: {
