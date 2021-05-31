@@ -135,12 +135,6 @@ export default {
   },
   methods: {
     async initAudioStream() {
-      if (audioContext) {
-        // We already initialized an audio context. Resume it.
-        audioContext.resume();
-        return;
-      }
-
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           audio: {
@@ -153,7 +147,7 @@ export default {
           microphoneName: stream?.getTracks()?.[0].label,
         });
 
-        audioContext = audioContext || new AudioContext();
+        audioContext = new AudioContext();
         await audioContext.audioWorklet.addModule(
           '/static/captioner/volume-meter-module.js'
         );
