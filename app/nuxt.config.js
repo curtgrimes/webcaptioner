@@ -241,6 +241,11 @@ module.exports = {
     environment: process.env.HOST_PUBLIC,
     publishRelease: true,
     sourceMapStyle: 'hidden-source-map',
+    webpackConfig: {
+      org: 'web-captioner',
+      project: 'web-captioner',
+      authToken: process.env.SENTRY_AUTH_TOKEN_PRIVATE,
+    },
     tracing: {
       tracesSampleRate: 0.05,
       vueOptions: {
@@ -254,6 +259,9 @@ module.exports = {
       browserOptions: {},
     },
   },
+  bootstrapVue: {
+    icons: false,
+  },
   axios: {
     proxy: true,
     timeout: 7000, // ms
@@ -265,6 +273,7 @@ module.exports = {
    */
   build: {
     babel: {
+      compact: true, // https://github.com/bootstrap-vue/bootstrap-vue/issues/5627#issuecomment-668487772
       plugins: [
         [
           '@babel/plugin-proposal-optional-chaining',

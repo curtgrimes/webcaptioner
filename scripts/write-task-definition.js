@@ -53,6 +53,7 @@ let taskDefinition = {
           'GOOGLE_CAST_APP_ID',
           'SENTRY_SECURITY_TOKEN',
           'SENTRY_DSN',
+          'SENTRY_AUTH_TOKEN_PRIVATE',
           'REDIS_URL',
           'ADMIN_TOKEN',
           'TWITCH_APP_CLIENT_ID',
