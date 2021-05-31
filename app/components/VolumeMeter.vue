@@ -141,36 +141,46 @@ export default {
         return;
       }
 
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          autoGainControl: false,
-        },
-      });
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            autoGainControl: false,
+          },
+        });
 
-      // Get the name of the device
-      this.$store.commit('captioner/SET_MICROPHONE_NAME', {
-        microphoneName: stream?.getTracks()?.[0].label,
-      });
+        // Get the name of the device
+        this.$store.commit('captioner/SET_MICROPHONE_NAME', {
+          microphoneName: stream?.getTracks()?.[0].label,
+        });
 
-      audioContext = audioContext || new AudioContext();
-      await audioContext.audioWorklet.addModule(
-        '/static/captioner/volume-meter-module.js'
-      );
-      let microphone = audioContext.createMediaStreamSource(stream);
-      node = new AudioWorkletNode(audioContext, 'volume-meter');
+        audioContext = audioContext || new AudioContext();
+        await audioContext.audioWorklet.addModule(
+          '/static/captioner/volume-meter-module.js'
+        );
+        let microphone = audioContext.createMediaStreamSource(stream);
+        node = new AudioWorkletNode(audioContext, 'volume-meter');
 
-      node.port.onmessage = ({ data: volume }) => {
-        this.volume = volume;
-        if (this.messageCooldownPeriod > 0) {
-          this.messageCooldownPeriod -= 1;
+        node.port.onmessage = ({ data: volume }) => {
+          this.volume = volume;
+          if (this.messageCooldownPeriod > 0) {
+            this.messageCooldownPeriod -= 1;
+          }
+          if (this.messageWarmupPeriod > 0) {
+            this.messageWarmupPeriod -= 1;
+            this.messageCooldownPeriod = 0;
+          }
+        };
+
+        microphone.connect(node).connect(audioContext.destination);
+      } catch (e) {
+        if (e.name === 'NotAllowedError') {
+          // User denied microphone access
+          return;
         }
-        if (this.messageWarmupPeriod > 0) {
-          this.messageWarmupPeriod -= 1;
-          this.messageCooldownPeriod = 0;
-        }
-      };
 
-      microphone.connect(node).connect(audioContext.destination);
+        // Some other error happened that we may want to log
+        throw e;
+      }
     },
     stopAudioStream() {
       node?.disconnect();
