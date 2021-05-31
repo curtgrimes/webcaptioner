@@ -419,10 +419,23 @@ export default {
 
   RESTORE_SETTINGS_FROM_LOCALSTORAGE: ({ commit, state, dispatch }) => {
     return new Promise((resolve, reject) => {
-      if (!localStorage) {
-        commit('SET_SETTINGS_LOADED', true);
-        resolve();
-        return;
+      try {
+        if (!localStorage) {
+          commit('SET_SETTINGS_LOADED', true);
+          resolve();
+          return;
+        }
+      } catch (e) {
+        if (e.name === 'SecurityError') {
+          // Cookies/local storage blocked
+          // Can't access local storage
+          commit('SET_SETTINGS_LOADED', true);
+          resolve();
+          return;
+        }
+
+        // Unknown (new?) error that we probably should log
+        throw e;
       }
 
       const localStorageParsed = JSON.parse(
@@ -452,14 +465,25 @@ export default {
   },
 
   SAVE_SETTINGS: function({ state, commit, dispatch }) {
-    if (localStorage) {
-      localStorage.setItem(
-        'webcaptioner-settings',
-        JSON.stringify({
-          settings: state.settings,
-          version: state.version,
-        })
-      );
+    try {
+      if (localStorage) {
+        localStorage.setItem(
+          'webcaptioner-settings',
+          JSON.stringify({
+            settings: state.settings,
+            version: state.version,
+          })
+        );
+      }
+    } catch (e) {
+      if (e.name === 'SecurityError') {
+        // Cookies/local storage blocked
+        // Can't access local storage
+        return;
+      }
+
+      // Unknown (new?) error that we probably should log
+      throw e;
     }
 
     if (state.user.uid) {
