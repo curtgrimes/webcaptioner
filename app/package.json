@@ -63,7 +63,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@nuxtjs/axios": "^5.4.1",
     "@nuxtjs/google-analytics": "^2.4.0",
-    "@nuxtjs/sentry": "^4.3.5",
+    "@nuxtjs/sentry": "^5.1.0",
     "@nuxtjs/style-resources": "^0.1.2",
     "@stripe/stripe-js": "^1.15.0",
     "audio-stream-meter": "^1.0.5",
