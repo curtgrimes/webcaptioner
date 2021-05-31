@@ -37,8 +37,7 @@ export default {
     saveToFile: {
       title: 'Save to File',
       description: 'Save your current transcript to a file.',
-      transcriptEmptyMessage:
-        "Psst... you know you don't have anything to save yet, right?",
+      transcriptEmptyMessage: "You don't have a transcript to save right now.",
       textFile: 'Text File',
       text: 'Text',
       wordDocument: 'Word Document',

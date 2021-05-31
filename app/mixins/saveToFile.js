@@ -3,7 +3,9 @@ export default {
     saveToTextFile({ transcript, dateFormatter, onDone }) {
       transcript = transcript.replace('\n', '\r\n');
       var a = document.createElement('a');
-      a.href = 'data:text/plain;base64,' + btoa(transcript);
+      a.href =
+        'data:text/plain;base64,' +
+        btoa(unescape(encodeURIComponent(transcript)));
       a.textContent = 'download';
       a.download =
         'web-captioner-' +
@@ -31,7 +33,9 @@ export default {
     },
     saveToJSONFile({ settings, onDone }) {
       var a = document.createElement('a');
-      a.href = 'data:text/plain;base64,' + btoa(settings);
+      a.href =
+        'data:text/plain;base64,' +
+        btoa(unescape(encodeURIComponent(settings)));
       a.textContent = 'download';
       a.download = 'web-captioner-settings.json';
       a.click();
