@@ -239,6 +239,7 @@ module.exports = {
       'REMOVED',
     disabled: process.env.NODE_ENV !== 'production',
     environment: process.env.HOST_PUBLIC,
+    publishRelease: true,
     sourceMapStyle: 'hidden-source-map',
     tracing: {
       tracesSampleRate: 0.05,
