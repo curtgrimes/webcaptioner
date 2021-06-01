@@ -177,6 +177,11 @@ export default {
           return;
         }
 
+        if (e.name === 'NotReadableError') {
+          // Could not start audio source for some reason
+          return;
+        }
+
         // Some other error happened that we may want to log
         throw e;
       }
