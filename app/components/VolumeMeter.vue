@@ -151,6 +151,12 @@ export default {
         await audioContext.audioWorklet.addModule(
           '/static/captioner/volume-meter-module.js'
         );
+
+        if (!audioContext) {
+          // We can't continue
+          return;
+        }
+
         let microphone = audioContext.createMediaStreamSource(stream);
         node = new AudioWorkletNode(audioContext, 'volume-meter');
 
