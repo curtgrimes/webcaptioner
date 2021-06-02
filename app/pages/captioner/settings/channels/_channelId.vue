@@ -132,7 +132,7 @@ export default {
     await this.settingsLoaded();
     if (this.reachedLimitForChannelType && this.creatingNewChannel) {
       // Don't allow creating a channel
-      this.$route.replace('/captioner/settings/channels');
+      this.$router.replace('/captioner/settings/channels');
     } else {
       this.$refs['modal'].show();
     }
