@@ -10,7 +10,9 @@
         <div class="pb-2 h4">
           <fa icon="exclamation-triangle" size="3x" />
         </div>
-        <p class="lead">{{$t('settings.exportRestore.somethingWrongWithFile')}}</p>
+        <p class="lead">
+          {{ $t('settings.exportRestore.somethingWrongWithFile') }}
+        </p>
       </div>
       <div slot="modal-footer">
         <b-button
@@ -18,13 +20,20 @@
           variant="secondary"
           ref="invalidSettingsFileModalOkButton"
           @click="hideInvalidSettingsFileModal()"
-        >{{$t('common.ok')}}</b-button>
+          >{{ $t('common.ok') }}</b-button
+        >
       </div>
     </b-modal>
-    <b-modal ref="confirmRestore" hide-header @shown="focusConfirmRestoreModalOkButton()">
+    <b-modal
+      ref="confirmRestore"
+      hide-header
+      @shown="focusConfirmRestoreModalOkButton()"
+    >
       <div class="py-2">
-        <h2>{{$t('settings.exportRestore.restoreSettingsQuestion')}}</h2>
-        <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
+        <h2>{{ $t('settings.exportRestore.restoreSettingsQuestion') }}</h2>
+        <p class="lead">
+          {{ $t('settings.exportRestore.settingsWillBeLost') }}
+        </p>
       </div>
       <div slot="modal-footer">
         <b-button
@@ -32,18 +41,26 @@
           variant="secondary"
           ref="confirmRestoreModalOkButton"
           @click="restoreSettings()"
-        >{{$t('settings.exportRestore.restore')}}</b-button>
+          >{{ $t('settings.exportRestore.restore') }}</b-button
+        >
         <b-button
           class="float-right"
           variant="link"
           @click="cancelConfirmRestoreModal()"
-        >{{$t('common.cancel')}}</b-button>
+          >{{ $t('common.cancel') }}</b-button
+        >
       </div>
     </b-modal>
-    <b-modal ref="confirmReset" hide-header @shown="focusConfirmResetModalOkButton()">
+    <b-modal
+      ref="confirmReset"
+      hide-header
+      @shown="focusConfirmResetModalOkButton()"
+    >
       <div class="py-2">
-        <h2>{{$t('settings.exportRestore.resetSettingsQuestion')}}</h2>
-        <p class="lead">{{$t('settings.exportRestore.settingsWillBeLost')}}</p>
+        <h2>{{ $t('settings.exportRestore.resetSettingsQuestion') }}</h2>
+        <p class="lead">
+          {{ $t('settings.exportRestore.settingsWillBeLost') }}
+        </p>
       </div>
       <div slot="modal-footer">
         <b-button
@@ -51,12 +68,14 @@
           variant="danger"
           ref="confirmResetModalOkButton"
           @click="resetSettings()"
-        >{{$t('settings.exportRestore.reset')}}</b-button>
+          >{{ $t('settings.exportRestore.reset') }}</b-button
+        >
         <b-button
           class="float-right"
           variant="link"
           @click="cancelConfirmResetModal()"
-        >{{$t('common.cancel')}}</b-button>
+          >{{ $t('common.cancel') }}</b-button
+        >
       </div>
     </b-modal>
     <b-modal
@@ -69,28 +88,36 @@
       <div class="pb-2 h4">
         <fa icon="check-circle" size="3x" />
       </div>
-      <h2>{{$t('settings.exportRestore.restoredSettings')}}</h2>
+      <h2>{{ $t('settings.exportRestore.restoredSettings') }}</h2>
     </b-modal>
-    <b-modal class="text-center" ref="resetSuccessModal" ok-only hide-header ok-variant="secondary">
+    <b-modal
+      class="text-center"
+      ref="resetSuccessModal"
+      ok-only
+      hide-header
+      ok-variant="secondary"
+    >
       <div class="pb-2 h4">
         <fa icon="check-circle" size="3x" />
       </div>
-      <h2>{{$t('settings.exportRestore.settingsReset')}}</h2>
+      <h2>{{ $t('settings.exportRestore.settingsReset') }}</h2>
     </b-modal>
     <div class="card mb-3">
       <div class="card-body">
-        <h3>{{$t('settings.exportRestore.export')}}</h3>
-        <p>{{$t('settings.exportRestore.exportDescription')}}</p>
+        <h3>{{ $t('settings.exportRestore.export') }}</h3>
+        <p>{{ $t('settings.exportRestore.exportDescription') }}</p>
         <button
           class="btn btn-secondary d-inline-block"
           @click="exportSettings()"
-        >{{$t('settings.exportRestore.export')}}</button>
+        >
+          {{ $t('settings.exportRestore.export') }}
+        </button>
       </div>
     </div>
     <div class="card mb-3">
       <div class="card-body">
-        <h3>{{$t('settings.exportRestore.restore')}}</h3>
-        <p>{{$t('settings.exportRestore.restoreDescription')}}</p>
+        <h3>{{ $t('settings.exportRestore.restore') }}</h3>
+        <p>{{ $t('settings.exportRestore.restoreDescription') }}</p>
         <input
           ref="settingsFileUpload"
           type="file"
@@ -101,12 +128,11 @@
     </div>
     <div class="card mb-3">
       <div class="card-body">
-        <h3>{{$t('settings.exportRestore.reset')}}</h3>
-        <p>{{$t('settings.exportRestore.resetDescription')}}</p>
-        <button
-          class="btn btn-danger d-inline-block"
-          @click="confirmReset()"
-        >{{$t('settings.exportRestore.reset')}}</button>
+        <h3>{{ $t('settings.exportRestore.reset') }}</h3>
+        <p>{{ $t('settings.exportRestore.resetDescription') }}</p>
+        <button class="btn btn-danger d-inline-block" @click="confirmReset()">
+          {{ $t('settings.exportRestore.reset') }}
+        </button>
       </div>
     </div>
   </div>
@@ -115,7 +141,6 @@
 <script>
 import saveToFile from '~/mixins/saveToFile';
 import getDefaultSettings from '~/store/settingsState';
-import Vue from 'vue';
 import { BButton, BModal } from 'bootstrap-vue';
 
 export default {
@@ -139,20 +164,15 @@ export default {
         settings: JSON.stringify(this.$store.state.settings),
       });
     },
-    loadSettingsFile: function(event) {
-      let input = event.target;
-
-      var reader = new FileReader();
-      reader.onload = () => {
-        let result = reader.result;
-        try {
-          this.importedSettings = JSON.parse(reader.result);
-          this.$refs.confirmRestore.show();
-        } catch (e) {
-          this.$refs.invalidSettingsFile.show();
-        }
-      };
-      reader.readAsText(input.files[0]);
+    async loadSettingsFile(event) {
+      try {
+        this.importedSettings = JSON.parse(
+          await event.target?.files?.[0].text()
+        );
+        this.$refs.confirmRestore.show();
+      } catch (e) {
+        this.$refs.invalidSettingsFile.show();
+      }
     },
     restoreSettings: function() {
       this.$store
