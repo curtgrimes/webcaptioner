@@ -266,11 +266,7 @@ module.exports = {
     proxy: true,
     timeout: 7000, // ms
   },
-  // Nuxt loading bar
   loading: false,
-  /*
-   ** Build configuration
-   */
   build: {
     babel: {
       compact: true, // https://github.com/bootstrap-vue/bootstrap-vue/issues/5627#issuecomment-668487772
@@ -283,16 +279,7 @@ module.exports = {
         ],
       ],
     },
-    // analyze: true,
     extend(config, { isDev, isClient }) {
-      // if (isDev && isClient) {
-      //   config.module.rules.push({
-      //     enforce: 'pre',
-      //     test: /\.(js|vue)$/,
-      //     loader: 'eslint-loader',
-      //     exclude: [/node_modules/, /middleware/, ],
-      //   });
-      // }
       if (process.client) {
         config.devtool = '#source-map';
       }
