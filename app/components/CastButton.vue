@@ -142,9 +142,8 @@
 }
 </style>
 
-
 <script>
-import loadScript from 'load-script';
+import loadScript from 'load-script2';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
 import { BButton, BModal, VBTooltip } from 'bootstrap-vue';
 
@@ -158,24 +157,25 @@ export default {
   directives: {
     'b-tooltip': VBTooltip,
   },
-  data: function () {
+  data: function() {
     return {
       session: null,
       receiversAvailable: false,
     };
   },
   methods: {
-    initializeCastApi: function () {
+    initializeCastApi: function() {
       let self = this;
+
       let sessionRequest = new chrome.cast.SessionRequest(
         this.$env.GOOGLE_CAST_APP_ID
       );
-      const onReceivedMessage = function (namespace, message) {
+      const onReceivedMessage = function(namespace, message) {
         // console.log('Received message:');
         // console.log(namespace, message);
       };
 
-      const sessionListener = function (e) {
+      const sessionListener = function(e) {
         self.session = e;
         self.session.addUpdateListener(sessionUpdateListener);
         self.session.addMessageListener(namespace, onReceivedMessage);
@@ -213,23 +213,23 @@ export default {
 
       chrome.cast.initialize(
         apiConfig,
-        function (e) {
+        function(e) {
           // Initialized, but not connected to anything yet
           self.connected = false;
         },
-        function (e) {
+        function(e) {
           // console.log(e);
         }
       );
     },
-    initConnection: function () {
+    initConnection: function() {
       this.initWithMessage();
     },
-    initWithMessage: function (message) {
+    initWithMessage: function(message) {
       let self = this;
       self.connecting = true;
       chrome.cast.requestSession(
-        function (e) {
+        function(e) {
           self.connecting = false;
           self.connected = true;
           self.session = e;
@@ -265,7 +265,8 @@ export default {
             this.sendMessage(message);
           }
         },
-        function (e) {
+        function(e) {
+          console.error('error', e);
           self.connecting = false;
           self.connected = false;
           self.receiverName = null;
@@ -277,27 +278,27 @@ export default {
         }
       );
     },
-    sendMessage: function (message) {
+    sendMessage: function(message) {
       if (this.session != null) {
         this.session.sendMessage(
           namespace,
           message,
-          function () {},
-          function (e) {}
+          function() {},
+          function(e) {}
         );
       } else {
         this.initWithMessage(message);
       }
     },
-    stop: function () {
+    stop: function() {
       let self = this;
       this.session.stop(
-        function () {
+        function() {
           self.connected = false;
           self.session = null;
           self.receiverName = null;
         },
-        function (e) {
+        function(e) {
           // console.log("error: ");
           // console.log(e);
         }
@@ -341,7 +342,7 @@ export default {
         });
       },
     },
-    largerLayout: function () {
+    largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },
   },
@@ -360,26 +361,15 @@ export default {
       }
     },
   },
-  mounted: function () {
+  async mounted() {
     window['__onGCastApiAvailable'] = (isAvailable) => {
       if (isAvailable) {
-        let initializeCastApiTimeout = setInterval(() => {
-          if (chrome && chrome.cast && chrome.cast.SessionRequest) {
-            // https://sentry.io/web-captioner/web-captioner/issues/833431149
-            this.initializeCastApi();
-            clearTimeout(initializeCastApiTimeout);
-          }
-        }, 200);
+        this.initializeCastApi();
       }
     };
 
-    loadScript(
-      'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1',
-      { async: false },
-      function (err, script) {
-        // if (err) {}
-        // else {}
-      }
+    await loadScript(
+      'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'
     );
 
     RemoteEventBus.$on('sendMutationToReceivers', ({ mutation, payload }) => {
