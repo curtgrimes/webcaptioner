@@ -149,16 +149,16 @@ export default {
 
         audioContext = new AudioContext();
 
-        if (!audioContext) {
-          // We can't continue
-          return;
-        }
-
         try {
           await audioContext.audioWorklet.addModule(
             '/static/captioner/volume-meter-module.js'
           );
         } catch (e) {
+          // We can't continue
+          return;
+        }
+
+        if (!audioContext) {
           // We can't continue
           return;
         }
