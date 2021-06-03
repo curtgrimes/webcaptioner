@@ -134,6 +134,7 @@ export default {
       // Don't allow creating a channel
       this.$router.replace('/captioner/settings/channels');
     } else {
+      await this.$nextTick();
       this.$refs['modal'].show();
     }
   },
