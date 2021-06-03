@@ -164,7 +164,16 @@ export default {
         }
 
         let microphone = audioContext.createMediaStreamSource(stream);
-        node = new AudioWorkletNode(audioContext, 'volume-meter');
+
+        try {
+          node = new AudioWorkletNode(audioContext, 'volume-meter');
+        } catch (e) {
+          if (e.name === 'InvalidStateError') {
+            // Sometimes users get this and I'm not sure why
+            // InvalidStateError: Failed to construct 'AudioWorkletNode': AudioWorkletNode cannot be created: The node name 'volume-meter' is not defined in AudioWorkletGlobalScope.
+            return;
+          }
+        }
 
         node.port.onmessage = ({ data: volume }) => {
           this.volume = volume;
