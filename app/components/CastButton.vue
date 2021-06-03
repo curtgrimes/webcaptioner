@@ -143,13 +143,20 @@
 </style>
 
 <script>
-import loadScript from 'load-script2';
 import RemoteEventBus from '~/mixins/RemoteEventBus';
 import { BButton, BModal, VBTooltip } from 'bootstrap-vue';
 
 const namespace = 'urn:x-cast:com.webcaptioner.cast.captioner';
 
 export default {
+  head: {
+    script: [
+      {
+        src:
+          'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1',
+      },
+    ],
+  },
   components: {
     BButton,
     BModal,
@@ -165,6 +172,11 @@ export default {
   },
   methods: {
     initializeCastApi: function() {
+      if (!chrome.cast) {
+        // Could not initialize
+        return;
+      }
+
       let self = this;
 
       let sessionRequest = new chrome.cast.SessionRequest(
@@ -362,15 +374,15 @@ export default {
     },
   },
   async mounted() {
-    window['__onGCastApiAvailable'] = (isAvailable) => {
-      if (isAvailable) {
-        this.initializeCastApi();
-      }
-    };
-
-    await loadScript(
-      'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'
-    );
+    if (chrome.cast) {
+      this.initializeCastApi();
+    } else {
+      window['__onGCastApiAvailable'] = (isAvailable) => {
+        if (isAvailable) {
+          this.initializeCastApi();
+        }
+      };
+    }
 
     RemoteEventBus.$on('sendMutationToReceivers', ({ mutation, payload }) => {
       if (this.session) {
