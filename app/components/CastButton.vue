@@ -374,7 +374,7 @@ export default {
     },
   },
   async mounted() {
-    if (chrome.cast) {
+    if (chrome?.cast) {
       this.initializeCastApi();
     } else {
       window['__onGCastApiAvailable'] = (isAvailable) => {
