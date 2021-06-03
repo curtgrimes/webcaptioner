@@ -17,7 +17,7 @@ const channelsList = [
   {
     id: 'fab',
     name: 'FAB Subtitler',
-    // iconPath: `${iconPrefix}/fab-subtitler.png`,
+    iconPath: `${iconPrefix}/fab.png`,
     showNameWithIcon: true,
     limit: 1,
     configPagePath: `${configPatePathPrefix}fab`,

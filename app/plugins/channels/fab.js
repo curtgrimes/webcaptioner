@@ -18,13 +18,12 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
   try {
     fabUrl = new URL(`http://localhost`);
     fabUrl.port = channelParameters.port;
-    // await fetch(fabUrl.toString());
+    await $axios.$get(fabUrl.toString());
   } catch (e) {
     console.error('error', e);
     $store.commit('UPDATE_CHANNEL_ERROR', {
       channelId,
-      error:
-        'Cannot connect to FAB Subtitler. Make sure the port number is correct and try again.',
+      error: `Cannot connect to FAB Subtitler. Make sure the port number is correct and try again. Error: ${e}`,
     });
 
     // Turn off the channel because it's not configured correctly
@@ -48,7 +47,7 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
 
   const send = async (text) => {
     fabUrl.searchParams.set('text', text);
-    await fetch(fabUrl);
+    await $axios.$get(fabUrl);
   };
 
   const unsubscribeFn = $store.subscribe((mutation) => {

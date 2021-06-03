@@ -223,10 +223,16 @@ export default {
             'After speech is converted to text, convert the text back to speech using speech synthesis.',
         },
         {
+          id: 'fab',
+          name: 'FAB Subtitler integration',
+          description:
+            'Add an experimental FAB Subtitler closed caption integration. After you add this experiment, go to Channels to set it up.',
+        },
+        {
           id: 'youtube',
           name: 'YouTube integration',
           description:
-            'Add an experimental YouTube live closed captions integration. After you add this experiment, go to Channels to set it up.',
+            'Add an experimental YouTube live closed caption integration. After you add this experiment, go to Channels to set it up.',
         },
       ],
 
