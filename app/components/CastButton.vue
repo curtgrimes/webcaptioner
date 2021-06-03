@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     initializeCastApi: function() {
-      if (!chrome.cast) {
+      if (!chrome?.cast) {
         // Could not initialize
         return;
       }
