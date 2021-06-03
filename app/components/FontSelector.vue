@@ -6,11 +6,12 @@
         class="bg-white border fontPreviewButton"
         id="font-selector-popover-start"
         :disabled="!selectedFont"
-        :style="{fontFamily: selectedFontFamily, fontWeight, fontStyle}"
+        :style="{ fontFamily: selectedFontFamily, fontWeight, fontStyle }"
         style="text-transform: none"
         v-b-tooltip.hover
         :title="selectedFontFamily"
-      >{{selectedFontFamily}}</b-button>
+        >{{ selectedFontFamily }}</b-button
+      >
       <b-dropdown
         @show="showFontSelectorPopover = false"
         :disabled="!selectedFont"
@@ -20,14 +21,19 @@
         variant="dark"
       >
         <b-dropdown-item
-          v-for="(variant, index) in (selectedFont ? selectedFont.variants : [])"
+          v-for="(variant, index) in selectedFont ? selectedFont.variants : []"
           :key="selectedFont.family + variant + index"
           @click="selectedFontVariant = variant"
           style="text-transform: capitalize"
-        >{{variant}}</b-dropdown-item>
+          >{{ variant }}</b-dropdown-item
+        >
       </b-dropdown>
     </b-button-group>
-    <font-stylesheet v-if="selectedFont" v-model="selectedFont.fontFamily" />
+    <font-stylesheet
+      v-if="selectedFont"
+      :font-family="selectedFont.fontFamily"
+      :font-variant="selectedFontVariant"
+    />
 
     <b-popover
       target="font-selector-popover-start"
@@ -44,8 +50,8 @@
           aria-label="Close"
           class="float-right p-0 text-dark"
         >
-          <fa icon="times" />
-        </b-button>Font
+          <fa icon="times" /> </b-button
+        >Font
       </template>
 
       <b-form-input
@@ -60,17 +66,24 @@
       <p
         v-show="!fontSearch && !searching"
         class="small font-weight-bold text-muted text-uppercase mb-1"
-      >Popular</p>
+      >
+        Popular
+      </p>
 
       <div class="fontListGroupWrap">
-        <div v-show="!fontResults.length && !loading" class="text-muted text-center">No results.</div>
+        <div
+          v-show="!fontResults.length && !loading"
+          class="text-muted text-center"
+        >
+          No results.
+        </div>
         <b-spinner v-if="loading" small class="d-block mx-auto"></b-spinner>
         <b-list-group>
           <b-list-group-item
             v-for="(font, index) in fontResults"
             :key="font.fontFamily + index"
             button
-            :style="{fontFamily: font.fontFamily}"
+            :style="{ fontFamily: font.fontFamily }"
             class="px-0"
             @click="selectFont(font)"
           >
@@ -78,14 +91,16 @@
               <span class="col-3 text-center">
                 <span
                   class="d-block"
-                  v-if="selectedFont && selectedFont.fontFamily === font.fontFamily"
+                  v-if="
+                    selectedFont && selectedFont.fontFamily === font.fontFamily
+                  "
                 >
                   <fa icon="check-circle" />
                 </span>
               </span>
-              <span class="col-9 pl-0">{{font.fontFamily}}</span>
+              <span class="col-9 pl-0">{{ font.fontFamily }}</span>
             </span>
-            <font-stylesheet v-if="font" v-model="font.fontFamily" />
+            <font-stylesheet v-if="font" :font-family="font.fontFamily" />
           </b-list-group-item>
         </b-list-group>
       </div>
@@ -244,4 +259,3 @@ export default {
   text-overflow: ellipsis;
 }
 </style>
-

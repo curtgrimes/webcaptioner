@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex w-100 flex-column" style="height: 100vh;">
     <div v-if="transcriptExists" class="d-flex flex-grow-1">
-      <transcript show-typed-live-read-only></transcript>
+      <transcript show-typed-live-read-only simple-scrolling></transcript>
     </div>
     <nav
       v-if="transcriptExists"

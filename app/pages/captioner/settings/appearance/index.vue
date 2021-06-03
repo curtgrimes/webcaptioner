@@ -1,24 +1,28 @@
 <template>
   <div class="settings-appearance-view">
-    <h3 class="mt-0 mt-sm-3">{{$t('settings.appearance.text')}}</h3>
+    <h3 class="mt-0 mt-sm-3">{{ $t('settings.appearance.text') }}</h3>
     <div class="form-group row">
-      <font-stylesheet v-model="fontFamily" />
-      <label
-        for="text-color"
-        class="col-sm-6 col-form-label"
-      >{{$t('settings.appearance.fontFamily')}}</label>
+      <font-stylesheet :font-family="fontFamily" />
+      <label for="text-color" class="col-sm-6 col-form-label">{{
+        $t('settings.appearance.fontFamily')
+      }}</label>
       <div class="col-sm-6">
         <Font-Selector
           v-if="$store.state.settingsLoaded"
           :fontFamily="fontFamily"
-          @update:fontFamily="value => fontFamily = value"
+          @update:fontFamily="(value) => (fontFamily = value)"
           :fontVariant="fontVariant"
-          @update:fontVariant="value => fontVariant = value"
+          @update:fontVariant="(value) => (fontVariant = value)"
         ></Font-Selector>
         <b-spinner v-else></b-spinner>
-        <p class="mt-2 mb-0 small text-muted" v-if="fontFamily.includes('OpenDyslexic')">
+        <p
+          class="mt-2 mb-0 small text-muted"
+          v-if="fontFamily.includes('OpenDyslexic')"
+        >
           Learn more about
-          <a href="https://www.opendyslexic.org/" target="_blank">OpenDyslexic</a>.
+          <a href="https://www.opendyslexic.org/" target="_blank"
+            >OpenDyslexic</a
+          >.
         </p>
       </div>
     </div>
@@ -41,7 +45,9 @@
           class="btn btn-info btn-sm ml-auto d-block mb-4"
           v-if="textColorInterim !== textColor"
           @click="textColorInterim = textColor"
-        >{{$t('settings.appearance.useRegularTextColor')}}</button>
+        >
+          {{ $t('settings.appearance.useRegularTextColor') }}
+        </button>
       </div>
     </div>
 
@@ -78,7 +84,8 @@
       <label
         for="capitalization-uppercase"
         class="col-sm-6 col-form-label pt-0"
-      >{{$t('settings.appearance.capitalization')}}</label>
+        >{{ $t('settings.appearance.capitalization') }}</label
+      >
       <div class="col-sm-6">
         <div class="custom-control custom-radio mt-1">
           <input
@@ -89,10 +96,9 @@
             id="capitalization-uppercase"
             value="uppercase"
           />
-          <label
-            class="custom-control-label"
-            for="capitalization-uppercase"
-          >{{$t('settings.appearance.uppercase')}}</label>
+          <label class="custom-control-label" for="capitalization-uppercase">{{
+            $t('settings.appearance.uppercase')
+          }}</label>
         </div>
         <div class="custom-control custom-radio">
           <input
@@ -106,7 +112,8 @@
           <label
             class="custom-control-label"
             for="capitalization-first-letter-only"
-          >{{$t('settings.appearance.firstLetterOfEachWord')}}</label>
+            >{{ $t('settings.appearance.firstLetterOfEachWord') }}</label
+          >
         </div>
         <div class="custom-control custom-radio">
           <input
@@ -118,9 +125,11 @@
             value="initial"
           />
           <label class="custom-control-label" for="capitalization-initial">
-            {{$t('settings.appearance.properNouns')}}
+            {{ $t('settings.appearance.properNouns') }}
             <br />
-            <p class="small mb-0">{{$t('settings.appearance.properNounsDescription')}}</p>
+            <p class="small mb-0">
+              {{ $t('settings.appearance.properNounsDescription') }}
+            </p>
           </label>
         </div>
       </div>
@@ -128,30 +137,52 @@
 
     <div class="row">
       <div class="col-6">
-        <label class="col-form-label">{{$t('settings.appearance.alignment')}}</label>
+        <label class="col-form-label">{{
+          $t('settings.appearance.alignment')
+        }}</label>
         <div class="card bg-dark sticky-top" style="top:120px">
-          <div
-            class="card-header bg-dark text-white small px-2 py-1"
-          >{{$t('settings.appearance.preview')}}</div>
+          <div class="card-header bg-dark text-white small px-2 py-1">
+            {{ $t('settings.appearance.preview') }}
+          </div>
           <div
             class="text-preview-mockup-wrap main-preview w-100 d-flex"
-            v-bind:style="{backgroundColor: backgroundColor, padding: (alignmentPadding/2)+'em'}"
+            v-bind:style="{
+              backgroundColor: backgroundColor,
+              padding: alignmentPadding / 2 + 'em',
+            }"
             v-bind:class="previewWrapTextPositionClass"
           >
             <div
               class="text-preview-mockup p-1 d-flex"
               style="cursor:default"
-              v-bind:style="{color: textColor}"
+              v-bind:style="{ color: textColor }"
               v-bind:class="previewTextPositionClass"
-            >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligdiam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauriula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
+            >
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est
+              ligula, tristique at lectus aliquet, pellentesque rutrum diam.
+              Fusce molestie mauris nec congueat lectus aliquet, pellentesque
+              rutrum diam. Fusce molestie mauris necligulamauris necligula,
+              tristique at lectus aliquet, pellentesque rutrum diam. Fusce
+              molestie mauris nec congueat lectus aliquet, pellentesque rutrum
+              diam. Fus Fusce molestie mauris nec congueat lectus aliquet,
+              pellentesque rutrum diam. Fusce molestie mauris necligulamauris
+              necligdiam. Fusce molestie mauris nec congueat lectus aliquet,
+              pellentesque rutrum diam. Fusce molestie mauriula, tristique at
+              lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris
+              nec congueat lectus aliquet, pellentesque rutrum diam. Fus Fusce
+              molestie mauris nec congueat lectus aliquet, pellentesque rutrum
+              diam. Fusce molestie mauris necligulamauris necligula, tristique
+              at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris
+              nec congueat lectus aliquet, pellentesque rutrum diam. Fusce
+              molestie mauris nec congue placerat.
+            </div>
           </div>
         </div>
       </div>
       <div class="col-6">
-        <label
-          for="horizontal-alignment-full"
-          class="col-form-label"
-        >{{$t('settings.appearance.horizontalAlignment')}}</label>
+        <label for="horizontal-alignment-full" class="col-form-label">{{
+          $t('settings.appearance.horizontalAlignment')
+        }}</label>
         <div class="btn-group btn-group-toggle d-flex flex-wrap">
           <label
             class="btn btn-primary btn-block text-left p-2 m-0 w-50"
@@ -166,15 +197,24 @@
               autocomplete="off"
               checked
             />
-            {{$t('settings.appearance.full')}}
+            {{ $t('settings.appearance.full') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup w-100 p-1"
-                v-bind:style="{color: textColor}"
-              >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris necligulamauris necligula, tristique at lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+                est ligula, tristique at lectus aliquet, pellentesque rutrum
+                diam. Fusce molestie mauris nec congueat lectus aliquet,
+                pellentesque rutrum diam. Fusce molestie mauris necligulamauris
+                necligula, tristique at lectus aliquet, pellentesque rutrum
+                diam. Fusce molestie mauris nec congueat lectus aliquet,
+                pellentesque rutrum diam. Fusce molestie mauris nec congue
+                placerat.
+              </div>
             </div>
           </label>
           <label
@@ -189,15 +229,20 @@
               value="left"
               autocomplete="off"
             />
-            {{$t('settings.appearance.left')}}
+            {{ $t('settings.appearance.left') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup w-50 p-1"
-                v-bind:style="{color: textColor}"
-              >Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Quis autem vel eum iure reprehenderit qui in ea voluptate velit
+                esse quam nihil molestiae consequatur, vel illum qui dolorem eum
+                fugiat quo voluptas nulla quam nihil molestiae consequatur, vel
+                illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+              </div>
             </div>
           </label>
           <label
@@ -212,15 +257,22 @@
               value="middle"
               autocomplete="off"
             />
-            {{$t('settings.appearance.middle')}}
+            {{ $t('settings.appearance.middle') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup w-50 mx-auto p-1"
-                v-bind:style="{color: textColor}"
-              >Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et.</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Nam libero tempore, cum soluta nobis est eligendi optio cumque
+                nihil impedit quo minus id quod maxime placeat facere possimus,
+                omnis voluptas assumenda est, omnis dolor repellendus.
+                Temporibus autem quibusdam et aut officiis autem quibusdam et
+                aut officiis debitis aut rerum necessitatibus saepe eveniet ut
+                et.
+              </div>
             </div>
           </label>
           <label
@@ -235,22 +287,27 @@
               value="right"
               autocomplete="off"
             />
-            {{$t('settings.appearance.right')}}
+            {{ $t('settings.appearance.right') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup w-50 ml-auto p-1"
-                v-bind:style="{color: textColor}"
-              >Ut enim ad minima veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Ut enim ad minima veniam, quis nostrum ullam corporis suscipit
+                laboriosam, nisi ut aliquid ex ea commodi veniam, quis nostrum
+                ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                commodi veniam, quis nostrum ullam corporis suscipit laboriosam,
+                nisi ut aliquid ex ea commodi consequatur?
+              </div>
             </div>
           </label>
         </div>
-        <label
-          for="vertical-alignment-full"
-          class="mt-3 mb-0 col-form-label"
-        >{{$t('settings.appearance.verticalAlignment')}}</label>
+        <label for="vertical-alignment-full" class="mt-3 mb-0 col-form-label">{{
+          $t('settings.appearance.verticalAlignment')
+        }}</label>
         <div class="btn-group btn-group-toggle d-flex flex-wrap">
           <label
             class="btn btn-primary btn-block text-left p-2 m-0 w-50"
@@ -264,15 +321,23 @@
               value="full"
               autocomplete="off"
             />
-            {{$t('settings.appearance.full')}}
+            {{ $t('settings.appearance.full') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup w-100 p-1"
-                v-bind:style="{color: textColor}"
-              >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce est ligula, tristique at lectus aliquet, pellentesque veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi rutrum diam. Fusce molestie mauris nec congueat lectus aliquet, pellentesque rutrum diam. Fusce molestie mauris nec congue placerat.</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+                est ligula, tristique at lectus aliquet, pellentesque veniam,
+                quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid
+                ex ea commodi veniam, quis nostrum ullam corporis suscipit
+                laboriosam, nisi ut aliquid ex ea commodi rutrum diam. Fusce
+                molestie mauris nec congueat lectus aliquet, pellentesque rutrum
+                diam. Fusce molestie mauris nec congue placerat.
+              </div>
             </div>
           </label>
           <label
@@ -287,16 +352,21 @@
               value="top"
               autocomplete="off"
             />
-            {{$t('settings.appearance.top')}}
+            {{ $t('settings.appearance.top') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup h-50 p-1"
                 style="overflow:hidden"
-                v-bind:style="{color: textColor}"
-              >Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequaturiure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Quis autem vel eum iure reprehenderit qui in ea voluptate velit
+                esse quam nihil molestiae consequaturiure reprehenderit qui in
+                ea voluptate velit esse quam nihil molestiae consequatur, vel
+                illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+              </div>
             </div>
           </label>
           <label
@@ -311,15 +381,21 @@
               value="middle"
               autocomplete="off"
             />
-            {{$t('settings.appearance.middle')}}
+            {{ $t('settings.appearance.middle') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-center"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup h-50 my-auto p-1"
-                v-bind:style="{color: textColor}"
-              >Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et.</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Nam libero tempore, cum soluta nobis est eligendi optio cumque
+                nihil impedit quo minus id quod maxime placeat facere possimus,
+                omnis voluptas assumenda est, omnis dolor repellendus.
+                Temporibus autem quibusdam et aut officiis debitis aut rerum
+                necessitatibus saepe eveniet ut et.
+              </div>
             </div>
           </label>
           <label
@@ -334,15 +410,20 @@
               value="bottom"
               autocomplete="off"
             />
-            {{$t('settings.appearance.bottom')}}
+            {{ $t('settings.appearance.bottom') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-end"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup h-50 mt-auto p-1"
-                v-bind:style="{color: textColor}"
-              >Ut enim ad minima veniam, qeligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimusuis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Ut enim ad minima veniam, qeligendi optio cumque nihil impedit
+                quo minus id quod maxime placeat facere possimusuis nostrum
+                ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                commodi consequatur?
+              </div>
             </div>
           </label>
           <label
@@ -358,24 +439,26 @@
               value="lowerThird"
               autocomplete="off"
             />
-            {{$t('settings.appearance.lowerThird')}}
+            {{ $t('settings.appearance.lowerThird') }}
             <div
               class="text-preview-mockup-wrap w-100 mt-2 d-flex align-items-end"
-              v-bind:style="{backgroundColor: backgroundColor}"
+              v-bind:style="{ backgroundColor: backgroundColor }"
             >
               <div
                 class="text-preview-mockup h-25 ml-auto p-1"
-                v-bind:style="{color: textColor}"
-              >Ut enim ad minima veniam, quis nostrum ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</div>
+                v-bind:style="{ color: textColor }"
+              >
+                Ut enim ad minima veniam, quis nostrum ullam corporis suscipit
+                laboriosam, nisi ut aliquid ex ea commodi consequatur?
+              </div>
             </div>
           </label>
         </div>
 
         <div class="form-group row mt-2">
-          <label
-            for="alignment-padding"
-            class="col-12 col-form-label"
-          >{{$t('settings.appearance.padding')}}</label>
+          <label for="alignment-padding" class="col-12 col-form-label">{{
+            $t('settings.appearance.padding')
+          }}</label>
           <div class="col-12">
             <div class="input-group">
               <input
@@ -398,13 +481,21 @@
 
     <hr class="my-4" />
 
-    <h3>{{$t('settings.appearance.background')}}</h3>
+    <h3>{{ $t('settings.appearance.background') }}</h3>
 
     <form-group-input
       :label="$t('settings.appearance.backgroundColor')"
       type="color"
       v-model="backgroundColor"
-      :hint="'RGB ('+ backgroundColorRGBValues.r + ', '+ backgroundColorRGBValues.g +', '+ backgroundColorRGBValues.b +')'"
+      :hint="
+        'RGB (' +
+          backgroundColorRGBValues.r +
+          ', ' +
+          backgroundColorRGBValues.g +
+          ', ' +
+          backgroundColorRGBValues.b +
+          ')'
+      "
     />
 
     <form-group-input
@@ -419,7 +510,7 @@
 
     <hr class="my-4" />
 
-    <h3>{{$t('settings.appearance.textShadow')}}</h3>
+    <h3>{{ $t('settings.appearance.textShadow') }}</h3>
 
     <form-group-input
       :label="$t('settings.appearance.shadowColor')"

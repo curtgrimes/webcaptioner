@@ -7,6 +7,8 @@
       backgroundColor,
       fontFamily,
       fontSize,
+      fontStyle,
+      fontWeight,
       lineHeight,
       letterSpacing,
       textTransform,
@@ -19,24 +21,23 @@
     <span
       v-bind:class="textPositionClass"
       class="transcript-scroller"
-      @scroll="onManualScroll"
       ref="scroller"
     >
       <span class="transcript-scroller-child">
         <span v-if="$store.state.settings.stabilizedThresholdMs !== 0">{{
-          stabilizedTranscript
+          $store.state.captioner.transcript.stabilized
         }}</span
         ><span
           v-else
           :class="{ 'd-block w-100': finalTranscriptEndsInNewline }"
-          >{{ finalTranscript }}</span
+          >{{ $store.state.captioner.transcript.final }}</span
         ><span
           v-if="
-            interimTranscript &&
+            $store.state.captioner.transcript.interim &&
               $store.state.settings.stabilizedThresholdMs === 0
           "
           v-bind:style="{ color: interimColor }"
-          >{{ interimTranscript }}</span
+          >{{ $store.state.captioner.transcript.interim }}</span
         ><span
           v-show="typingModeOn && showTypedLiveReadOnly !== true"
           :contenteditable="typingModeOn"
@@ -46,23 +47,67 @@
           class="transcriptTyped combokeys"
         ></span
         ><span
-          v-if="showTypedLiveReadOnly && typedTranscript"
+          v-if="
+            showTypedLiveReadOnly && $store.state.captioner.transcript.typed
+          "
           class="d-block"
-          >{{ typedTranscript }}</span
-        ><br v-if="finalTranscriptEndsInNewline && !interimTranscript"/><br
-          v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"
-      /></span>
+          >{{ $store.state.captioner.transcript.typed }}</span
+        ><br
+          v-if="
+            finalTranscriptEndsInNewline &&
+              !$store.state.captioner.transcript.interim
+          "/><br
+          v-if="typedTranscriptEndsInNewline && showTypedLiveReadOnly"/><span
+          ref="scrollerEndMarker"
+        ></span
+      ></span>
     </span>
     <transition name="fade">
       <b-button
         class="autoscrollButton"
-        v-if="!scrollerIsAtBottom() && !autoScrollEnabled"
-        @click="autoScrollEnabled = true"
+        ref="autoscrollButton"
+        v-if="!isScrolledNearToEnd"
+        @click="scrollToEnd({ immediate: true })"
       >
-        <fa icon="chevron-down" class="backToLatestIcon mr-2" />Back to Latest
+        <fa icon="chevron-down" size="2x" class="backToLatestIcon" />
       </b-button>
     </transition>
-    <font-stylesheet v-if="$store.state.settingsLoaded" v-model="fontFamily" />
+    <b-popover
+      v-if="!isScrolledNearToEnd"
+      :target="() => $refs.autoscrollButton"
+      placement="top"
+      triggers="hover"
+      custom-class="wider shadow"
+      variant="dark"
+    >
+      <div
+        class="d-flex align-items-end"
+        style="overflow:hidden;max-height:5rem"
+      >
+        <div
+          style="padding:0.25rem 0.5rem;user-select: none"
+          v-bind:style="{
+            color,
+            backgroundColor,
+            fontFamily,
+            fontStyle,
+            fontWeight,
+            textTransform,
+          }"
+        >
+          {{
+            $store.state.captioner.transcript.final +
+              ' ' +
+              $store.state.captioner.transcript.interim
+          }}
+        </div>
+      </div>
+    </b-popover>
+    <font-stylesheet
+      v-if="$store.state.settingsLoaded"
+      :font-family="fontFamily"
+      :font-variant="$store.state.settings.appearance.text.fontVariant"
+    />
   </div>
 </template>
 
@@ -80,71 +125,41 @@ export default {
   },
   props: {
     showTypedLiveReadOnly: Boolean,
-    allowDisableAutoScroll: {
-      type: Boolean,
-      default: false,
-    },
     delay: {
       type: Number,
       default: 0,
     },
+    simpleScrolling: Boolean,
   },
   mixins: [hexToRGB],
   data: function() {
     return {
       transcriptTypedForDisplay: '',
-      autoScrollEnabled: true,
-      autoScrolling: false,
+      scrolledToEndObserver: null,
+      isScrolledNearToEnd: true,
     };
   },
   methods: {
-    scrollToBottom: async function() {
-      if (!this.$refs.scroller) {
-        return;
-      }
-
-      if (
-        this.autoScrollEnabled ||
-        this.scrollerIsAtBottom() // Start autoscrolling again if we were already at the bottom
-      ) {
-        await this.$nextTick();
-
-        // This is how much it needs to scroll to reach the bottom
-        const scrollDistancePixels =
-          this.$refs.scroller.scrollHeight -
-          this.$refs.scroller.scrollTop -
-          this.$refs.scroller.clientHeight;
-
-        const maxSmoothScrollDistance = this.$refs.scroller.clientHeight / 2;
-
-        this.$refs.scroller.scrollTo({
-          top: this.$refs.scroller.scrollHeight,
-
-          // Only smooth scroll if it will be smooth scrolling a short distance
-          behavior:
-            scrollDistancePixels <= maxSmoothScrollDistance ? 'smooth' : 'auto',
-        });
-      }
+    async scrollToEnd({
+      immediate = this.simpleScrolling || document.hidden,
+    } = {}) {
+      await this.$nextTick();
+      this.$refs.scrollerEndMarker?.scrollIntoView({
+        behavior: immediate ? 'auto' : 'smooth',
+      });
     },
-    onManualScroll: function() {
-      return; // issue where this is happening when not manually scrolling. temporarily disable
+    startScrollWatcher() {
+      this.scrolledToEndObserver = new IntersectionObserver(
+        (intersections) => {
+          this.isScrolledNearToEnd = intersections[0]?.isIntersecting;
+        },
+        {
+          root: this.$refs.scroller,
+          rootMargin: '0px 0px 100px 0px',
+        }
+      );
 
-      if (!this.autoScrollEnabled && this.scrollerIsAtBottom()) {
-        // Was previously enabled, but scrolled to bottom. Enable again.
-        this.autoScrollEnabled = true;
-      } else if (!this.scrollerIsAtBottom() && this.allowDisableAutoScroll) {
-        this.autoScrollEnabled = false;
-      }
-    },
-    scrollerIsAtBottom: function() {
-      if (this.$refs.scroller) {
-        return (
-          this.$refs.scroller.scrollTop + this.$refs.scroller.offsetHeight >=
-          this.$refs.scroller.scrollHeight
-        );
-      } else {
-        return true;
-      }
+      this.scrolledToEndObserver.observe(this.$refs.scrollerEndMarker);
     },
     typedTranscriptDidChange: function() {
       this.$store.commit('captioner/SET_TRANSCRIPT_TYPED', {
@@ -157,18 +172,25 @@ export default {
       }
     },
   },
-  mounted: function() {
-    this.scrollToBottom();
+  mounted() {
+    this.scrollToEnd({ immediate: true });
+
+    if (!this.simpleScrolling) {
+      this.startScrollWatcher();
+    }
 
     new Combokeys(this.$refs.typedTranscript).bind('esc', () => {
       this.$store.dispatch('captioner/stopTypingMode');
     });
   },
+  beforeDestroy() {
+    this.scrolledToEndObserver?.disconnect();
+  },
   watch: {
     typingModeOn: function(on) {
       if (on) {
         // Turned on. Copy the transcript over once.
-        this.transcriptTypedForDisplay = this.typedTranscript;
+        this.transcriptTypedForDisplay = this.$store.state.captioner.transcript.typed;
 
         // Add a space on the end if one doesn't already exist
         if (
@@ -204,6 +226,26 @@ export default {
         this.transcriptTypedForDisplay = '';
       }
     },
+    '$store.state.captioner.transcript.final'() {
+      if (this.isScrolledNearToEnd) {
+        this.scrollToEnd();
+      }
+    },
+    '$store.state.captioner.transcript.interim'() {
+      if (this.isScrolledNearToEnd) {
+        this.scrollToEnd();
+      }
+    },
+    '$store.state.captioner.transcript.stabilized'() {
+      if (this.isScrolledNearToEnd) {
+        this.scrollToEnd();
+      }
+    },
+    '$store.state.captioner.transcript.typed'() {
+      if (this.isScrolledNearToEnd) {
+        this.scrollToEnd();
+      }
+    },
   },
   computed: {
     // Appearance
@@ -224,6 +266,34 @@ export default {
     },
     fontFamily() {
       return this.$store.state.settings.appearance.text.fontFamily;
+    },
+    fontStyle() {
+      if (
+        this.$store.state.settings.appearance.text.fontVariant
+          ?.toLowerCase()
+          .includes('italic')
+      ) {
+        return 'italic';
+      } else {
+        return 'normal';
+      }
+    },
+    fontWeight() {
+      // Remove 'italic' from the fontVariant string and assume what
+      // remains is the font weight. Works for all the Google Font
+      // variant values I've seen so far (700italic, regular, italic, etc.)
+      const fontWeight = this.$store.state.settings.appearance.text.fontVariant
+        ?.toLowerCase()
+        .replace('italic', '')
+        .trim();
+
+      // Transform into font-weight property that CSS uses
+      switch (fontWeight) {
+        case 'regular':
+          return 'normal';
+        default:
+          return fontWeight;
+      }
     },
     fontSize() {
       return this.$store.state.settings.appearance.text.textSize + 'em';
@@ -278,25 +348,8 @@ export default {
         ')'
       );
     },
-
-    finalTranscript() {
-      this.scrollToBottom();
-      return this.$store.state.captioner.transcript.final;
-    },
-    interimTranscript() {
-      this.scrollToBottom();
-      return this.$store.state.captioner.transcript.interim;
-    },
-    stabilizedTranscript() {
-      this.scrollToBottom();
-      return this.$store.state.captioner.transcript.stabilized;
-    },
     typingModeOn() {
       return this.$store.state.captioner.typingModeOn;
-    },
-    typedTranscript() {
-      this.scrollToBottom();
-      return this.$store.state.captioner.transcript.typed;
     },
     finalTranscriptEndsInNewline() {
       // Used to determine if we need to display the final transcript inline-block
@@ -354,6 +407,13 @@ export default {
     largerLayout: function() {
       return this.$store.state.settings.controls.layout.larger;
     },
+    transcriptEndPreview() {
+      return (
+        this.$store.state.captioner.transcript.final +
+        ' ' +
+        this.$store.state.captioner.transcript.interim
+      ).substr(-250);
+    },
   },
 };
 </script>
@@ -366,17 +426,34 @@ export default {
 }
 
 .autoscrollButton {
+  padding: 1.75rem;
   position: absolute;
-  right: 20px;
-  bottom: 20px;
-  overflow: hidden;
+  bottom: 2rem;
+  left: 50%;
+  margin-left: -1.5rem;
+
+  border-radius: 10rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .backToLatestIcon {
-  animation: hover 1s infinite;
+  animation: wiggle-y 1s infinite;
 }
 
-@keyframes hover {
+.popoverTextLeftGradient {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rem;
+  background: linear-gradient(90deg, #fff, transparent);
+}
+
+@keyframes wiggle-y {
   0%,
   100% {
     transform: translateY(0);

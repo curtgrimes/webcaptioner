@@ -206,6 +206,15 @@ input[type='color'] {
   border-left: none;
 }
 
+.popover.wider {
+  width: 500px !important;
+  max-width: 95vw;
+
+  .popover-body {
+    padding: 0.25rem;
+  }
+}
+
 .navbar-expand .dropup .dropdown-menu {
   bottom: initial;
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-grow-1">
     <div class="d-flex flex-grow-1 position-relative">
-      <transcript :allow-disable-auto-scroll="true"/>
+      <transcript />
       <toast-group>
         <!-- <toast-welcome/> -->
         <toast-donation/>
