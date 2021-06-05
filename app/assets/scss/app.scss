@@ -361,6 +361,7 @@ html.static-site body {
 }
 
 .transcript {
+  background-color: rgba(0, 0, 0, 0);
   flex-grow: 1;
   width: 100%;
   line-height: 5rem;
@@ -371,6 +372,7 @@ html.static-site body {
   font-family: 'Cousine', monopsace;
   word-break: break-word;
   white-space: pre-wrap;
+  transition: background-color 200ms;
 }
 
 .transcript-scroller {
