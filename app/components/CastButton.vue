@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     initializeCastApi: function() {
-      if (!chrome?.cast) {
+      if (!window.chrome?.cast) {
         // Could not initialize
         return;
       }
@@ -374,7 +374,7 @@ export default {
     },
   },
   async mounted() {
-    if (chrome?.cast) {
+    if (window.chrome?.cast) {
       this.initializeCastApi();
     } else {
       window['__onGCastApiAvailable'] = (isAvailable) => {
