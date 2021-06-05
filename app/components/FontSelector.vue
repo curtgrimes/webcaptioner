@@ -44,7 +44,10 @@
       placement="auto"
       trigger="focus"
       :show.sync="showFontSelectorPopover"
-      @shown="$refs.fontSearchInput.focus()"
+      @shown="
+        $refs.fontSearchInput.focus();
+        initVisibleFontsObserver();
+      "
     >
       <template slot="title">
         <b-button
@@ -74,7 +77,7 @@
         Popular
       </p>
 
-      <div class="fontListGroupWrap">
+      <div class="fontListGroupWrap" ref="fontListGroupWrap">
         <div
           v-show="!fontResults.length && !loading"
           class="text-muted text-center"
@@ -82,7 +85,7 @@
           No results.
         </div>
         <b-spinner v-if="loading" small class="d-block mx-auto"></b-spinner>
-        <b-list-group>
+        <b-list-group ref="fontListGroup">
           <b-list-group-item
             v-for="(font, index) in fontResults"
             :key="font.fontFamily + index"
@@ -90,6 +93,8 @@
             :style="{ fontFamily: `'${font.fontFamily}'` }"
             class="px-0"
             @click="selectFont(font)"
+            ref="fontListGroupItem"
+            :data-font-family="font.fontFamily"
           >
             <span class="row m-0">
               <span class="col-3 text-center">
@@ -104,9 +109,13 @@
               </span>
               <span class="col-9 pl-0">{{ font.fontFamily }}</span>
             </span>
-            <font-stylesheet v-if="font" :font-family="font.fontFamily" />
           </b-list-group-item>
         </b-list-group>
+        <font-stylesheet
+          v-for="fontFamily of visibleFonts"
+          :font-family="fontFamily"
+          :key="fontFamily"
+        />
       </div>
     </b-popover>
   </div>
@@ -166,6 +175,10 @@ export default {
       selectedFontFamily: null,
       selectedFontVariant: null,
       loading: true,
+
+      visibleFonts: [],
+      visibleFontsObserver: null,
+      fontListMutationObserver: null,
     };
   },
   created: function() {
@@ -180,6 +193,10 @@ export default {
         this.selectedFont = fontLookup;
       }
     }
+  },
+  beforeDestroy() {
+    this.fontListMutationObserver?.disconnect();
+    this.visibleFontsObserver?.disconnect();
   },
   methods: {
     selectFont: function(font) {
@@ -201,6 +218,45 @@ export default {
       } else {
         return font.variants[0];
       }
+    },
+    initVisibleFontsObserver() {
+      this.fontListMutationObserver = new MutationObserver((mutations) => {
+        // Child nodes were changed. Update our observers
+        this.$refs.fontListGroupItem.forEach((fontListGroupItem) =>
+          this.visibleFontsObserver.observe(fontListGroupItem)
+        );
+      });
+
+      this.fontListMutationObserver.observe(this.$refs.fontListGroup, {
+        childList: true,
+      });
+
+      this.visibleFontsObserver = new IntersectionObserver(
+        (intersections) => {
+          intersections
+            // Get only newly visible font list items
+            .filter((intersection) => intersection.isIntersecting)
+
+            .forEach((intersection) => {
+              // We don't need to observe it anymore
+              this.visibleFontsObserver.unobserve(intersection.target);
+
+              const fontFamily = intersection.target.dataset.fontFamily;
+              if (this.visibleFonts.indexOf(fontFamily) === -1) {
+                // We haven't made this fontFamily visible yet
+                this.visibleFonts.push(fontFamily);
+              }
+            });
+        },
+        {
+          root: this.$refs.fontListGroupWrap,
+          rootMargin: '50px 0px',
+        }
+      );
+
+      this.$refs.fontListGroupItem.forEach((fontListGroupItem) =>
+        this.visibleFontsObserver.observe(fontListGroupItem)
+      );
     },
   },
   computed: {
@@ -243,11 +299,16 @@ export default {
       this.$emit('update:fontVariant', this.selectedFontVariant);
     },
     fontSearch: throttle(async function() {
-      this.searching = true;
-      this.fontResults = await this.$axios.$get(
-        '/api/fonts?search=' + this.fontSearch
-      );
-      this.searching = false;
+      if (this.fontSearch) {
+        this.searching = true;
+        this.fontResults = await this.$axios.$get(
+          '/api/fonts?search=' + this.fontSearch
+        );
+        this.searching = false;
+      } else {
+        // No search query; show popular fonts instead
+        this.fontResults = this.popularFonts;
+      }
     }, 500),
   },
 };
