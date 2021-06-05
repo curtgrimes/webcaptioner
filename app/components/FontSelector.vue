@@ -6,8 +6,12 @@
         class="bg-white border fontPreviewButton"
         id="font-selector-popover-start"
         :disabled="!selectedFont"
-        :style="{ fontFamily: selectedFontFamily, fontWeight, fontStyle }"
-        style="text-transform: none"
+        :style="{
+          fontFamily: `'${selectedFontFamily}'`,
+          fontWeight,
+          fontStyle,
+          textTransform: 'none',
+        }"
         v-b-tooltip.hover
         :title="selectedFontFamily"
         >{{ selectedFontFamily }}</b-button
@@ -83,7 +87,7 @@
             v-for="(font, index) in fontResults"
             :key="font.fontFamily + index"
             button
-            :style="{ fontFamily: font.fontFamily }"
+            :style="{ fontFamily: `'${font.fontFamily}'` }"
             class="px-0"
             @click="selectFont(font)"
           >

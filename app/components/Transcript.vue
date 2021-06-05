@@ -5,7 +5,7 @@
     v-bind:style="{
       color,
       backgroundColor,
-      fontFamily,
+      fontFamily: `'${fontFamily}'`,
       fontSize,
       fontStyle,
       fontWeight,
@@ -89,7 +89,7 @@
           v-bind:style="{
             color,
             backgroundColor,
-            fontFamily,
+            fontFamily: `'${fontFamily}'`,
             fontStyle,
             fontWeight,
             textTransform,
