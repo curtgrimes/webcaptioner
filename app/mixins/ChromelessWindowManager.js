@@ -46,7 +46,9 @@ export default {
       }
 
       RemoteEventBus.$on('sendMutationToReceivers', ({ mutation, payload }) => {
-        commitToWindow(chromelessWindow, mutation, payload);
+        if (chromelessWindow) {
+          commitToWindow(chromelessWindow, mutation, payload);
+        }
       });
 
       function restoreSettings() {
