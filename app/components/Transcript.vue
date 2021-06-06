@@ -163,7 +163,7 @@ export default {
     },
     typedTranscriptDidChange: function() {
       this.$store.commit('captioner/SET_TRANSCRIPT_TYPED', {
-        transcriptTyped: this.$refs.typedTranscript.innerText,
+        transcriptTyped: this.$refs.typedTranscript?.innerText || '',
       });
     },
     focusIfInTypingMode: function() {
