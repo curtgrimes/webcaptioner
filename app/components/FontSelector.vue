@@ -222,7 +222,7 @@ export default {
     initVisibleFontsObserver() {
       this.fontListMutationObserver = new MutationObserver((mutations) => {
         // Child nodes were changed. Update our observers
-        this.$refs.fontListGroupItem.forEach((fontListGroupItem) =>
+        (this.$refs.fontListGroupItem || []).forEach((fontListGroupItem) =>
           this.visibleFontsObserver.observe(fontListGroupItem)
         );
       });
@@ -254,7 +254,7 @@ export default {
         }
       );
 
-      this.$refs.fontListGroupItem.forEach((fontListGroupItem) =>
+      (this.$refs.fontListGroupItem || []).forEach((fontListGroupItem) =>
         this.visibleFontsObserver.observe(fontListGroupItem)
       );
     },
