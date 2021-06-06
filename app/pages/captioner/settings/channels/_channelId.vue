@@ -135,7 +135,7 @@ export default {
       this.$router.replace('/captioner/settings/channels');
     } else {
       await this.$nextTick();
-      this.$refs['modal'].show();
+      this.$refs['modal']?.show();
     }
   },
   computed: {
