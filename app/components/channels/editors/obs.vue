@@ -48,7 +48,27 @@
         </strong>
         {{ savedChannel.error }}
       </div>
-      <label for="port" class="small">Server Port</label>
+      <div class="d-flex">
+        <label for="port" class="small mr-auto"
+          >Server <span v-if="showHostField">Host and</span> Port</label
+        >
+        <a
+          href="javascript:void(0)"
+          class="small"
+          @click="showHostField = !showHostField"
+          >{{ showHostField ? 'Hide' : '' }} Advanced Settings</a
+        >
+      </div>
+      <input
+        v-if="showHostField"
+        id="host"
+        name="host"
+        v-model="host"
+        autofocus
+        class="form-control mb-3"
+        type="text"
+        placeholder="Server Host"
+      />
       <input
         id="port"
         name="port"
@@ -92,19 +112,25 @@ export default {
     },
   },
   mounted() {
+    this.host = this.savedChannel?.parameters?.host || 'localhost';
     this.port = this.savedChannel?.parameters?.port;
     this.password = this.savedChannel?.parameters?.password;
+
+    this.showHostField = this.host && this.host !== 'localhost';
   },
   data() {
     return {
+      host: null,
       port: 4444,
       password: null,
       showPassword: false,
+      showHostField: false,
     };
   },
   methods: {
     handleParameterChange() {
       this.$emit('parametersUpdated', {
+        host: this.host,
         port: this.port,
         ...(this.password ? { password: this.password } : {}),
       });
@@ -117,6 +143,17 @@ export default {
     },
   },
   watch: {
+    showHostField() {
+      if (!this.showHostField) {
+        this.host = null;
+      }
+    },
+    host: {
+      immediate: true,
+      handler() {
+        this.handleParameterChange();
+      },
+    },
     port: {
       immediate: true,
       handler() {

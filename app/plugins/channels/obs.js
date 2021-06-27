@@ -49,7 +49,9 @@ export default async ({ $store, $axios, channelId, channelParameters }) => {
   let obs = new OBSWebSocket();
   try {
     await obs.connect({
-      address: `localhost:${channelParameters.port}`,
+      address: `${channelParameters.host || 'localhost'}:${
+        channelParameters.port
+      }`,
       password: channelParameters.password,
     });
 
