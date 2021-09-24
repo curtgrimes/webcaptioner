@@ -13,14 +13,12 @@
       title="Signed in"
       variant="info"
       v-model="$store.state.visibleToasts.signedIn"
-      >You are signed in!</b-toast
-    >
+    >You are signed in!</b-toast>
     <b-toast
       title="Signed out"
       variant="info"
       v-model="$store.state.visibleToasts.signedOut"
-      >You have signed out.</b-toast
-    >
+    >You have signed out.</b-toast>
     <navbar></navbar>
   </div>
 </template>
@@ -183,19 +181,39 @@ export default {
     this.redirectSettingsRouteOnMobile(this.$route.name); // if navigating to settings page on load
 
     function isChromium() {
-      for (
-        let i = 0, u = 'Chromium', l = u.length;
-        i < navigator.plugins.length;
-        i++
-      ) {
-        if (
-          navigator.plugins[i].name != null &&
-          navigator.plugins[i].name.substr(0, l) === u
-        ) {
+      if (navigator.userAgentData.brands) {
+        const hasChromiumBrand = navigator.userAgentData.brands.find(
+          (b) => b.brand === 'Chromium'
+        );
+        const hasGoogleChromeBrand = navigator.userAgentData.brands.find(
+          (b) => b.brand === 'Google Chrome'
+        );
+
+        // Chrome will have the brands "Chromium" and "Google Chrome"
+        // while Chromium will just have the brand "Chromium"
+        if (hasChromiumBrand && !hasGoogleChromeBrand) {
+          // This is Chromium
           return true;
         }
+      } else {
+        // Possibly older version of Chrome or Chromium that does not have
+        // navigator.userAgentData.brands
+
+        for (
+          let i = 0, u = 'Chromium', l = u.length;
+          i < navigator.plugins.length;
+          i++
+        ) {
+          if (
+            navigator.plugins[i].name != null &&
+            navigator.plugins[i].name.substr(0, l) === u
+          ) {
+            return true;
+          }
+        }
+
+        return false;
       }
-      return false;
     }
 
     const isEdge = () => {
