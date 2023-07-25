@@ -181,6 +181,12 @@ export default {
     this.redirectSettingsRouteOnMobile(this.$route.name); // if navigating to settings page on load
 
     function isChromium() {
+      if (window.location.protocol === 'http:') {
+        // navigator.userAgentData is unavailable in secure contexts. Assume
+        // this is running locally. Just skip this check.
+        return;
+      }
+
       if (navigator.userAgentData.brands) {
         const hasChromiumBrand = navigator.userAgentData.brands.find(
           (b) => b.brand === 'Chromium'
