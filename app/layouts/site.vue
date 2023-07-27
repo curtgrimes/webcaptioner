@@ -37,7 +37,7 @@
             >
               Help Center
             </b-nav-item>
-            <b-nav-item href="/community`">
+            <b-nav-item href="/community">
               Community
             </b-nav-item>
             <b-nav-item to="/donate">
