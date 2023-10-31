@@ -72,7 +72,7 @@ export const state = () => ({
     uid: null,
     shouldSaveSettingsOnNextSignIn: false,
   },
-  settingsLoaded: false,
+  settingsLoaded: false || !process.env.FIREBASE_API_KEY,
   settings: {
     ...getSettingsState(),
   },
