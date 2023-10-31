@@ -136,7 +136,7 @@ export default {
   methods: {
     async initAudioStream() {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
+        stream = await navigator.mediaDevices?.getUserMedia({
           audio: {
             autoGainControl: false,
           },
