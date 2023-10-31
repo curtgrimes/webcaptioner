@@ -88,7 +88,6 @@
             }"
             :variant="captioningToggleButtonVariant"
             @click="captioningToggleButtonClick"
-            :disabled="$store.state.user.signedIn === null"
           >
             <div :class="{ 'px-4 py-2': largerLayout }">
               <span v-if="!this.captioningOn">
