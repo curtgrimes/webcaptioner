@@ -78,9 +78,14 @@ If you are not using this feature, you don't need the Redis server.
 
 ### Firebase
 
-This project uses Firebase for user authentication ([Firebase Authentication](https://firebase.google.com/docs/auth/)) and data storage ([Cloud Firestore](https://firebase.google.com/docs/firestore/)). Stored data included a user's preferences (under the `settings` key) and some other settings related to the "share captions" feature/experiment. Firebase can be configured with the `FIREBASE_*` environment variables listed in [.env.sample](./app/.env.sample).
+This project uses Firebase for user authentication ([Firebase Authentication](https://firebase.google.com/docs/auth/)) and data storage ([Cloud Firestore](https://firebase.google.com/docs/firestore/)). Firebase can be configured with the `FIREBASE_*` environment variables listed in [.env.sample](./app/.env.sample).
 
-Firestore had a "users" collection. See [firestore-collection-example.json](./firestore-collection-example.json) for an example of what a user record looked like.
+Firestore had a "users" collection, and each user record had these properties:
+
+- `settings` - values related to a user's preferences. The user could edit these things through the Web Captioner UI.
+- `privileges` - some toggles for experimental features that I would change manually through the Firebase console on a per-user basis.
+
+See [firestore-collection-example.json](./firestore-collection-example.json) for an example of what a user record looked like.
 
 ## Contributing
 
