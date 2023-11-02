@@ -1,0 +1,101 @@
+{
+    "__collections__": {
+        "users": {
+            "00a7k4yCz5XhNopQsSTuhWbYZiZ2": {
+                "__collections__": {
+                    "privileges": {
+                        "share": {
+                            "telnet": true,
+                            "vanity": "delilah",
+                            "customDomain": "test.example.com",
+                            "__collections__": {}
+                        }
+                    },
+                    "rooms": {
+                        "Os1Z8vtWGw6Xi18bKaPL": {
+                            "__collections__": {}
+                        }
+                    },
+                    "settings": {
+                        "user": {
+                            "wordReplacements": [],
+                            "controls": {
+                                "layout": {
+                                    "larger": false
+                                },
+                                "volumeMeter": {
+                                    "show": true,
+                                    "sensitivity": "low"
+                                }
+                            },
+                            "alwaysAutostartOnLoad": true,
+                            "locale": {
+                                "userDefault": "en-CA",
+                                "from": "en-US"
+                            },
+                            "afterNoAudio": {
+                                "seconds": 2,
+                                "action": "lineBreak5"
+                            },
+                            "stabilizedThresholdMs": 0,
+                            "roomLeaderToken": null,
+                            "appearance": {
+                                "shadow": {
+                                    "color": "#000000",
+                                    "blurRadius": "0",
+                                    "offsetX": "0.05",
+                                    "offsetY": "0.05",
+                                    "opacity": "100"
+                                },
+                                "background": {
+                                    "color": "#000000",
+                                    "opacity": "100"
+                                },
+                                "text": {
+                                    "textSize": "2.5",
+                                    "textColorInterim": "#ffffff",
+                                    "letterSpacing": "0.1",
+                                    "fontVariant": "regular",
+                                    "textColor": "#ffffff",
+                                    "fontFamily": "Cousine",
+                                    "lineHeight": "1.6",
+                                    "alignment": {
+                                        "padding": "0.25",
+                                        "vertical": "full",
+                                        "horizontal": "full"
+                                    },
+                                    "textTransform": "uppercase"
+                                }
+                            },
+                            "channels": [],
+                            "censor": {
+                                "replaceWith": "nothing",
+                                "on": false
+                            },
+                            "donationDate": null,
+                            "share": {
+                                "expires": true,
+                                "ownerKey": null,
+                                "vanity": "",
+                                "url": null,
+                                "roomId": null,
+                                "urlType": "random",
+                                "expireDate": null,
+                                "on": false
+                            },
+                            "exp": [],
+                            "roomMembershipId": null,
+                            "chromelessWindow": {
+                                "top": 0,
+                                "left": 0,
+                                "width": 0,
+                                "height": 0
+                            },
+                            "__collections__": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
