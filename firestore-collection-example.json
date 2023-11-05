@@ -13,7 +13,16 @@
                     },
                     "settings": {
                         "user": {
-                            "wordReplacements": [],
+                            "wordReplacements": [
+                                {
+                                    "from": "foo",
+                                    "to": "bar"
+                                },
+                                {
+                                    "from": "baz",
+                                    "to": "bat"
+                                }
+                            ],
                             "controls": {
                                 "layout": {
                                     "larger": false
@@ -62,7 +71,65 @@
                                     "textTransform": "uppercase"
                                 }
                             },
-                            "channels": [],
+                            "channels": [
+                                {
+                                    "type": "obs",
+                                    "id": "a9fb76ce-135e-40a0-21b4-4b2e5b692feb",
+                                    "parameters": {
+                                        "password": "12345",
+                                        "port": "8080",
+                                        "host": "localhost"
+                                    },
+                                    "on": true
+                                },
+                                {
+                                    "id": "f0ece498-e411-40d0-b397-50020ac08ea6",
+                                    "error": null,
+                                    "type": "zoom",
+                                    "parameters": {
+                                        "zoomApiToken": "https://wmcc.zoom.us/closedcaption?id=foobar",
+                                        "frequentUpdates": false
+                                    }
+                                },
+                                {
+                                    "type": "webhook",
+                                    "id": "ead4dadb-65d7-43c8-ace3-fbd75fe062a7",
+                                    "parameters": {
+                                        "method": "post",
+                                        "url": ""
+                                    },
+                                    "on": false
+                                },
+                                {
+                                    "type": "youtube",
+                                    "error": null,
+                                    "id": "aade064a-1c5f-46ea-9f29-e9435d5dc77e",
+                                    "parameters": {
+                                        "url": "http://upload.youtube.com/closedcaption?cid=foobar"
+                                    },
+                                    "on": true
+                                },
+                                {
+                                    "type": "vmix",
+                                    "error": null,
+                                    "id": "2e4bf69b-9373-4dc8-b36a-2007f77bc90a",
+                                    "parameters": {
+                                        "silentlyUseLocalhostInsteadOfGivenHost": true,
+                                        "captionElementGuid": "faae064a-1c5f-46ea-9f29-e9435d5dc77e",
+                                        "vmixAddress": "http://192.168.1.1:8088/API"
+                                    },
+                                    "on": true
+                                },
+                                {
+                                    "type": "fab",
+                                    "id": "0f3d5337c-3daa-4674-aaab-2aaf1a6ea2be",
+                                    "error": "Cannot connect to FAB Subtitler. Make sure the port number is correct and try again. Error: Error: Network Error",
+                                    "parameters": {
+                                        "port": "443"
+                                    },
+                                    "on": false
+                                }
+                            ],
                             "censor": {
                                 "replaceWith": "nothing",
                                 "on": false
